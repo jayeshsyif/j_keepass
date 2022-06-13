@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -147,7 +148,7 @@ public class LoadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(LoadActivity.this, android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
                 dialog.setContentView(R.layout.info_layout);
-                MaterialButton closeInfoBtn = dialog.findViewById(R.id.closeInfoBtn);
+                FloatingActionButton closeInfoBtn = dialog.findViewById(R.id.floatCloseInfoBtn);
                 closeInfoBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
