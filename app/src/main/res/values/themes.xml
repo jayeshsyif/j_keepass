@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.J_KeePass" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kp_grey</item>
+        <item name="colorPrimaryVariant">@color/kp_white</item>
+        <item name="colorOnPrimary">@color/kp_white</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kp_light_blue</item>
+        <item name="colorSecondaryVariant">@color/kp_dark_blue</item>
+        <item name="colorOnSecondary">@color/kp_dark_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/kp_grey</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.J_KeePass.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.J_KeePass.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.J_KeePass.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

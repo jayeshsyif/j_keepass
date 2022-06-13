@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/kp_grey"
+    tools:context=".LoadActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/kp_card_view_margin"
+        android:backgroundTint="@color/kp_white"
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/kp_margin"
+            android:orientation="vertical"
+            android:weightSum="6">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/kp_dark_blue"
+                android:textStyle="bold"></TextView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="80"
+                    android:gravity="bottom"
+                    android:text="@string/kdbxFile"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textStyle="italic"></TextView>
+
+                <TextView
+                    android:id="@+id/kdbxFilePath"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:gravity="bottom"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textStyle="italic"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/openBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_button_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:drawableLeft="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
+                    android:text="@string/open"
+                    android:textAllCaps="true"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textStyle="bold">
+
+                </com.google.android.material.button.MaterialButton>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/createBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_button_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:drawableLeft="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
+                    android:text="@string/create"
+                    android:textAllCaps="true"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textStyle="bold">
+
+                </com.google.android.material.button.MaterialButton>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_margin"
+                    android:layout_weight="30"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/kdbxPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/kp_white"
+                        android:hint="@string/enterPassword"
+                        android:inputType="textPassword"
+                        android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/okBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_button_margin"
+                    android:layout_weight="70"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:src="@drawable/ic_login_fill0_wght300_grad_25_opsz24"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textStyle="bold"
+                    app:tint="@color/kp_dark_blue"></ImageButton>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:autoLink="web"
+                    android:gravity="bottom|left"
+                    android:text="@string/credit"
+                    android:textAlignment="gravity"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textColorLink="@color/kp_dark_blue"
+                    android:textStyle="italic"></TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            app:fabSize="mini"
+            android:layout_marginEnd="0pt"
+            android:backgroundTint="@color/kp_light_blue"
+            app:tint="@color/kp_dark_blue"
+            app:srcCompat="@drawable/ic_info_fill0_wght300_grad_25_opsz24" />
+    </androidx.cardview.widget.CardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
