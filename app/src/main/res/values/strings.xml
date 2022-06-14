@@ -9,6 +9,12 @@
     <string name="enterPassword">Enter Password</string>
     <string name="ok">Ok</string>
     <string name="close">Close</string>
+    <string name="newText">New</string>
+    <string name="getRandomPwd">New Random Password</string>
+    <string name="addGroup">Add Group</string>
+    <string name="addEntry">Add Entry</string>
+
+    <string name="save">Save</string>
 
     <string name="processingFile">Please wait processing file.</string>
     <string name="permissionNotGranted">Permission Not Granted!</string>
@@ -27,7 +33,10 @@
 
     <string name="url">URL</string>
 
-    <string name="notes">notes</string>
+    <string name="notes">Notes</string>
+
+
+    <string name="groupNameEmptyErrorMsg">Group Name cannot be empty!</string>
 
     <string name="copiedToClipboard">Copied to clipboard!</string>
 

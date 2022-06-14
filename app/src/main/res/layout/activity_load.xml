@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/kp_margin"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:weightSum="100">
 
@@ -26,6 +27,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/kp_margin"
                 android:layout_weight="40"
+                android:fontFamily="@font/righteous"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textAlignment="center"
@@ -40,16 +42,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/kp_margin"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_margin"
-                        android:layout_weight="1"
                         android:orientation="horizontal"
                         android:weightSum="100">
 
@@ -57,10 +57,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="80"
+                            android:fontFamily="@font/righteous"
                             android:gravity="bottom"
                             android:text="@string/kdbxFile"
                             android:textAlignment="gravity"
                             android:textColor="@color/kp_dark_blue"
+                            android:textSize="@dimen/kp_small_text_size"
                             android:textStyle="italic"></TextView>
 
                         <TextView
@@ -68,9 +70,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
                             android:gravity="bottom"
                             android:textAlignment="gravity"
                             android:textColor="@color/kp_dark_blue"
+                            android:textSize="@dimen/kp_small_text_size"
                             android:textStyle="italic"></TextView>
                     </LinearLayout>
 
@@ -78,7 +82,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_margin"
-                        android:layout_weight="1"
                         android:orientation="horizontal"
                         android:weightSum="2">
 
@@ -90,6 +93,7 @@
                             android:layout_weight="1"
                             android:backgroundTint="@color/kp_light_blue"
                             android:drawableLeft="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
+                            android:fontFamily="@font/righteous"
                             android:text="@string/open"
                             android:textAllCaps="true"
                             android:textColor="@color/kp_dark_blue"
@@ -105,6 +109,7 @@
                             android:layout_weight="1"
                             android:backgroundTint="@color/kp_light_blue"
                             android:drawableLeft="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
+                            android:fontFamily="@font/righteous"
                             android:text="@string/create"
                             android:textAllCaps="true"
                             android:textColor="@color/kp_dark_blue"
@@ -117,7 +122,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_margin"
-                        android:layout_weight="1"
                         android:orientation="horizontal"
                         android:weightSum="100">
 
@@ -135,6 +139,8 @@
                                 android:backgroundTint="@color/kp_white"
                                 android:hint="@string/enterPassword"
                                 android:inputType="textPassword"
+                                android:fontFamily="@font/righteous"
+                                android:textColor="@color/kp_dark_blue"
                                 android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,6 +151,7 @@
                             android:layout_margin="@dimen/kp_button_margin"
                             android:layout_weight="70"
                             android:backgroundTint="@color/kp_light_blue"
+                            android:contentDescription="@string/ok"
                             android:src="@drawable/ic_login_fill0_wght300_grad_25_opsz24"
                             android:textColor="@color/kp_dark_blue"
                             android:textStyle="bold"
@@ -171,25 +178,27 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:autoLink="web"
-                    android:gravity="bottom|left"
+                    android:fontFamily="@font/righteous"
+                    android:gravity="bottom|start"
                     android:text="@string/credit"
                     android:textAlignment="gravity"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kp_dark_blue"
                     android:textColorLink="@color/kp_dark_blue"
+                    android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic"></TextView>
             </LinearLayout>
         </LinearLayout>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
-            app:fabSize="mini"
             android:layout_marginEnd="0pt"
             android:backgroundTint="@color/kp_light_blue"
-            app:tint="@color/kp_dark_blue"
-            app:srcCompat="@drawable/ic_info_fill0_wght300_grad_25_opsz24" />
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
+            app:tint="@color/kp_dark_blue" />
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

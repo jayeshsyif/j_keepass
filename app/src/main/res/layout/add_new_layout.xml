@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/kp_card_view_margin"
+        android:layout_weight="1"
+        android:backgroundTint="@color/kp_white"
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:drawableLeft="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
+                    android:drawableTint="@color/kp_dark_blue"
+                    android:fontFamily="@font/righteous"
+                    android:text="@string/getRandomPwd"
+                    android:textColor="@color/kp_dark_blue">
+
+                </com.google.android.material.button.MaterialButton>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addNewGroupfloatBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:drawableLeft="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
+                    android:drawableTint="@color/kp_dark_blue"
+                    android:fontFamily="@font/righteous"
+                    android:text="@string/addGroup"
+                    android:textColor="@color/kp_dark_blue">
+
+                </com.google.android.material.button.MaterialButton>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:drawableLeft="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
+                    android:drawableTint="@color/kp_dark_blue"
+                    android:fontFamily="@font/righteous"
+                    android:text="@string/addEntry"
+                    android:textColor="@color/kp_dark_blue">
+
+                </com.google.android.material.button.MaterialButton>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addNewfloatCloseInfoBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="0pt"
+        android:backgroundTint="@color/kp_light_blue"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_close_fill0_wght300_grad_25_opsz24"
+        app:tint="@color/kp_dark_blue" />
+</LinearLayout>

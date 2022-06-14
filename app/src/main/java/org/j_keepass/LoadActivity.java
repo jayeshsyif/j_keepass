@@ -54,12 +54,12 @@ public class LoadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(LoadActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(LoadActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             READ_EXTERNAL_STORAGE);
                 }
 
-                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
                     chooseFile.setType("*/*");
                     chooseFile = Intent.createChooser(chooseFile, "Choose a file");
@@ -101,6 +101,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 if (proceed) {
                     KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
+                    Common.creds = creds;
                     InputStream inputStream = null;
                     try {
                         inputStream = getContentResolver().openInputStream(kdbxFileUri);
@@ -126,6 +127,7 @@ public class LoadActivity extends AppCompatActivity {
                     if (database != null) {
                         try {
                             Common.database = database;
+                            Common.kdbxFileUri = kdbxFileUri;
                             Intent intent = new Intent(LoadActivity.this, ListActivity.class);
                             startActivity(intent);
                         } catch (Exception e) {

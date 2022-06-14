@@ -45,7 +45,8 @@
             android:text="test"
             android:textAlignment="gravity"
             android:textAllCaps="false"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:fontFamily="@font/righteous"
+            android:textSize="@dimen/kp_group_list_text_size"
             android:textStyle="bold">
 
         </TextView>

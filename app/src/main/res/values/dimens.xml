@@ -1,5 +1,5 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin">10pt</dimen>
     <dimen name="kp_card_view_margin">5pt</dimen>
     <dimen name="kp_card_view_padding">5pt</dimen>
     <dimen name="kp_card_view_radius">10pt</dimen>
@@ -9,7 +9,18 @@
     <dimen name="kp_group_name_text_size">16pt</dimen>
     <dimen name="kp_group_name_margin">7pt</dimen>
     <dimen name="kp_group_list_icon_size">25pt</dimen>
+    <dimen name="kp_group_list_text_size">8pt</dimen>
     <dimen name="kp_group_icon_margin">2pt</dimen>
 
     <dimen name="kp_info_margin_top">20pt</dimen>
+
+
+    <dimen name="fab_new_margin">10pt</dimen>
+    <dimen name="fab_new_random_pwd_bottom_margin">40pt</dimen>
+    <dimen name="fab_new_group_bottom_margin">70pt</dimen>
+    <dimen name="fab_new_right_margin">40pt</dimen>
+    <dimen name="fab_new_padding">5pt</dimen>
+    <dimen name="fab_new_entry_bottom_margin">100pt</dimen>
+
+    <dimen name="kp_small_text_size">5pt</dimen>
 </resources>

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.j_keepass">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -34,6 +34,12 @@
             android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
         <activity
             android:name=".ViewEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+
+        <activity
+            android:name=".AddGroupActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>

@@ -1,6 +1,10 @@
 package org.j_keepass;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,6 +12,8 @@ import android.widget.AdapterView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.j_keepass.adapter.ListGroupAdapter;
@@ -31,6 +37,8 @@ public class ListActivity extends AppCompatActivity {
 
         binding = ActivityListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.floatAdd.shrink();
 
         if (Common.database == null) {
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
@@ -90,7 +98,13 @@ public class ListActivity extends AppCompatActivity {
             binding.floatAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Snackbar.make(v, R.string.devInProgress, Snackbar.LENGTH_SHORT).show();
+                    if (!binding.floatAdd.isExtended()) {
+                        binding.floatAdd.extend();
+                    } else {
+                        binding.floatAdd.shrink();
+                    }
+                    AlertDialog alertDialog = getDialog();
+                    alertDialog.show();
                 }
             });
             binding.groupName.setText(groupName);
@@ -101,6 +115,37 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return false;
+    }
+
+    private AlertDialog getDialog() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(ListActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.add_new_layout, null);
+        alert.setView(mView);
+        final AlertDialog alertDialog = alert.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        FloatingActionButton closeInfoBtn = mView.findViewById(R.id.addNewfloatCloseInfoBtn);
+        closeInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (!binding.floatAdd.isExtended()) {
+                    binding.floatAdd.extend();
+                } else {
+                    binding.floatAdd.shrink();
+                }
+            }
+        });
+        MaterialButton addGroup = mView.findViewById(R.id.addNewGroupfloatBtn);
+        addGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListActivity.this, AddGroupActivity.class);
+                startActivity(intent);
+            }
+        });
+        return alertDialog;
     }
 
 }

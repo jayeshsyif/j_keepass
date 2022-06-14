@@ -26,6 +26,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/kp_group_name_margin"
                 android:layout_weight="80"
+                android:fontFamily="@font/righteous"
                 android:gravity="top"
                 android:text="@string/entryName"
                 android:textAlignment="gravity"
@@ -49,10 +50,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
                         android:gravity="top"
                         android:text="@string/userName"
                         android:textAlignment="gravity"
                         android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
                         android:textStyle="italic"></TextView>
 
                     <LinearLayout
@@ -67,6 +70,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/kp_group_name_margin"
                             android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
                             android:gravity="left|center"
                             android:text="@string/userName"
                             android:textAlignment="gravity"
@@ -97,10 +101,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
                         android:gravity="top"
                         android:text="@string/password"
                         android:textAlignment="gravity"
                         android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
                         android:textStyle="italic"></TextView>
 
 
@@ -125,8 +131,9 @@
                                 android:clickable="false"
                                 android:cursorVisible="false"
                                 android:focusable="false"
-                                android:hint="@string/enterPassword"
+                                android:fontFamily="@font/righteous"
                                 android:inputType="textPassword"
+                                android:textColor="@color/kp_dark_blue"
                                 android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,10 +160,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
                         android:gravity="top"
                         android:text="@string/url"
                         android:textAlignment="gravity"
                         android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
                         android:textStyle="italic"></TextView>
 
                     <LinearLayout
@@ -171,6 +180,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/kp_group_name_margin"
                             android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
                             android:gravity="left|center"
                             android:text="@string/url"
                             android:textAlignment="gravity"
@@ -200,10 +210,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
                         android:gravity="top"
                         android:text="@string/notes"
                         android:textAlignment="gravity"
                         android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
                         android:textStyle="italic"></TextView>
 
                     <LinearLayout
@@ -218,6 +230,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/kp_group_name_margin"
                             android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
                             android:gravity="left|center"
                             android:singleLine="false"
                             android:text="@string/notes"
