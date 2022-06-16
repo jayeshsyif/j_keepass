@@ -27,12 +27,13 @@ import org.linguafranca.pwdb.kdbx.simple.SimpleGroup;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class AddGroupActivity extends AppCompatActivity {
 
     private AddNewGroupLayoutBinding binding;
-    private static final int WRITE_EXTERNAL_STORAGE = 200;
+    private static final int MANAGE_DOCUMENTS = 200;
     public static final int PICK_FILE_WRITE_RESULT_CODE = 2;
 
     @Override
@@ -75,19 +76,15 @@ public class AddGroupActivity extends AppCompatActivity {
                         group.addGroup(newGroup);
                         if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(AddGroupActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    WRITE_EXTERNAL_STORAGE);
+                                    MANAGE_DOCUMENTS);
                         }
 
                         if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                            ParcelFileDescriptor pfd = null;
-                            FileOutputStream fileOutputStream = null;
+                            OutputStream fileOutputStream = null;
                             try {
-                                pfd = getContentResolver().
-                                        openFileDescriptor(Common.kdbxFileUri, "w");
-                                fileOutputStream =
-                                        new FileOutputStream(pfd.getFileDescriptor());
-
+                                getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                fileOutputStream = getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
                                 Common.database.save(Common.creds, fileOutputStream);
 
                                 Intent intent = new Intent(AddGroupActivity.this, ListActivity.class);
@@ -98,17 +95,11 @@ public class AddGroupActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 Log.e("KP ", "KP ", e);
                                 Snackbar.make(v, "" + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                binding.addGroupNotes.setText(e.getMessage());
                             } finally {
                                 if (fileOutputStream != null) {
                                     try {
                                         fileOutputStream.close();
-                                    } catch (IOException e) {
-                                    }
-                                }
-
-                                if (pfd != null) {
-                                    try {
-                                        pfd.close();
                                     } catch (IOException e) {
                                     }
                                 }

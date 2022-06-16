@@ -31,6 +31,7 @@ import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class LoadActivity extends AppCompatActivity {
@@ -54,14 +55,21 @@ public class LoadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(LoadActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(LoadActivity.this, new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             READ_EXTERNAL_STORAGE);
                 }
 
-                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     chooseFile.setType("*/*");
+                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
                     chooseFile = Intent.createChooser(chooseFile, "Choose a file");
                     startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
                 } else {
@@ -79,62 +87,74 @@ public class LoadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Snackbar.make(v, R.string.processingFile, Snackbar.LENGTH_SHORT).show();
-                boolean proceed = true;
-                String kdbxPassword = null;
-                Database<?, ?, ?, ?> database = null;
-                if (kdbxPasswordET.getText() != null) {
-                    kdbxPassword = kdbxPasswordET.getText().toString();
-                    if (kdbxPassword == null || kdbxPassword.length() <= 0) {
-                        Snackbar.make(v, R.string.emptyPasswordError, Snackbar.LENGTH_LONG).show();
-                        proceed = false;
-                    }
-                } else {
-                    Snackbar.make(v, R.string.emptyPasswordError, Snackbar.LENGTH_LONG).show();
-                    proceed = false;
-                }
-
-                if (proceed) {
-                    if (kdbxFileUri == null) {
-                        Snackbar.make(v, R.string.emptyFileError, Snackbar.LENGTH_LONG).show();
-                        proceed = false;
-                    }
-                }
-                if (proceed) {
-                    KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
-                    Common.creds = creds;
-                    InputStream inputStream = null;
-                    try {
-                        inputStream = getContentResolver().openInputStream(kdbxFileUri);
-                    } catch (FileNotFoundException e) {
-                        proceed = false;
-                        Snackbar.make(v, R.string.invalidFileError + " " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                    if (inputStream != null) {
-                        try {
-                            database = SimpleDatabase.load(creds, inputStream);
-                        } catch (Exception e) {
-                            proceed = false;
-                            Snackbar.make(v, R.string.invalidFileError + " " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                        }
-                        if (database == null) {
-                            Snackbar.make(v, R.string.noDBError, Snackbar.LENGTH_LONG).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean proceed = true;
+                        String kdbxPassword = null;
+                        Database<?, ?, ?, ?> database = null;
+                        if (kdbxPasswordET.getText() != null) {
+                            kdbxPassword = kdbxPasswordET.getText().toString();
+                            if (kdbxPassword == null || kdbxPassword.length() <= 0) {
+                                Snackbar.make(v, R.string.emptyPasswordError, Snackbar.LENGTH_LONG).show();
+                                proceed = false;
+                            }
+                        } else {
+                            Snackbar.make(v, R.string.emptyPasswordError, Snackbar.LENGTH_LONG).show();
                             proceed = false;
                         }
-                    }
-                }
 
-                if (proceed) {
-                    if (database != null) {
-                        try {
-                            Common.database = database;
-                            Common.kdbxFileUri = kdbxFileUri;
-                            Intent intent = new Intent(LoadActivity.this, ListActivity.class);
-                            startActivity(intent);
-                        } catch (Exception e) {
-                            Snackbar.make(v, R.string.unableToNavigateError, Snackbar.LENGTH_LONG).show();
+                        if (proceed) {
+                            if (kdbxFileUri == null) {
+                                Snackbar.make(v, R.string.emptyFileError, Snackbar.LENGTH_LONG).show();
+                                proceed = false;
+                            }
+                        }
+                        if (proceed) {
+                            KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
+                            Common.creds = creds;
+                            InputStream inputStream = null;
+                            try {
+                                inputStream = getContentResolver().openInputStream(kdbxFileUri);
+                            } catch (FileNotFoundException e) {
+                                proceed = false;
+                                Snackbar.make(v, R.string.invalidFileError + " " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                            }
+                            if (inputStream != null) {
+                                try {
+                                    database = SimpleDatabase.load(creds, inputStream);
+                                } catch (Exception e) {
+                                    proceed = false;
+                                    Snackbar.make(v, R.string.invalidFileError + " " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                }
+                                if (database == null) {
+                                    Snackbar.make(v, R.string.noDBError, Snackbar.LENGTH_LONG).show();
+                                    proceed = false;
+                                }
+                            }
+
+                            if (inputStream != null) {
+                                try {
+                                    inputStream.close();
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
+
+                        if (proceed) {
+                            if (database != null) {
+                                try {
+                                    Common.database = database;
+                                    Common.kdbxFileUri = kdbxFileUri;
+                                    Intent intent = new Intent(LoadActivity.this, ListActivity.class);
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    Snackbar.make(v, R.string.unableToNavigateError, Snackbar.LENGTH_LONG).show();
+                                }
+                            }
                         }
                     }
-                }
+                }).start();
             }
         });
 
@@ -171,6 +191,8 @@ public class LoadActivity extends AppCompatActivity {
                     kdbxFileUri = data.getData();
                     String fileName = "";
                     try {
+
+                        getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         Cursor returnCursor =
                                 getContentResolver().query(kdbxFileUri, null, null, null, null);
                         int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
