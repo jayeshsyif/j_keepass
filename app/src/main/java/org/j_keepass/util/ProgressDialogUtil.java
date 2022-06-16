@@ -63,7 +63,7 @@ public class ProgressDialogUtil {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.getWindow().setGravity(Gravity.CENTER);
         ProgressBar progressBar = mView.findViewById(R.id.progressBar);
         progressBar.setProgress(0);
         TextView progressBarTextView = mView.findViewById(R.id.progressBarText);
