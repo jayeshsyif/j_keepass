@@ -1,5 +1,6 @@
 package org.j_keepass.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,11 +27,11 @@ import java.util.ArrayList;
 
 public class ListGroupAdapter extends BaseAdapter {
     private ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<Pair<Object, Boolean>>();
-    private Context context;
+    private Activity activity;
 
-    public ListGroupAdapter(Context context, ArrayList<Pair<Object, Boolean>> pairs) {
+    public ListGroupAdapter(ArrayList<Pair<Object, Boolean>> pairs, Activity activity) {
         this.pairs = pairs;
-        this.context = context;
+        this.activity = activity;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ListGroupAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.activity_list_adapter_view, parent, false);
+        convertView = LayoutInflater.from(activity).inflate(R.layout.activity_list_adapter_view, parent, false);
         TextView tx = convertView.findViewById(R.id.adapterText);
         //LinearLayout mainIL = convertView.findViewById(R.id.adapterMainLinearLayout);
         ImageView adapterIconImageView = convertView.findViewById(R.id.adapterIconImageView);
@@ -69,11 +70,12 @@ public class ListGroupAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         Common.group = localGroup;
-                        Intent intent = new Intent(context, ListActivity.class);
+                        Intent intent = new Intent(activity, ListActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("click","group");
+                        bundle.putString("click", "group");
                         intent.putExtras(bundle);
-                        context.startActivity(intent);
+                        activity.startActivity(intent);
+                        activity.finish();
                     }
                 });
             } else {
@@ -85,11 +87,12 @@ public class ListGroupAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         Common.entry = localEntry;
-                        Intent intent = new Intent(context, ViewEntryActivity.class);
+                        Intent intent = new Intent(activity, ViewEntryActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("click","entry");
+                        bundle.putString("click", "entry");
                         intent.putExtras(bundle);
-                        context.startActivity(intent);
+                        activity.startActivity(intent);
+                        activity.finish();
                     }
                 });
             }

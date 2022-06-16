@@ -86,7 +86,7 @@ public class ListActivity extends AppCompatActivity {
                     }
                 }
 
-                ListGroupAdapter listGroupAdapter = new ListGroupAdapter(this, pairs);
+                ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, this);
                 binding.groupListView.setAdapter(listGroupAdapter);
                 binding.groupListView.setFooterDividersEnabled(false);
                 binding.groupListView.setHeaderDividersEnabled(false);
@@ -143,9 +143,25 @@ public class ListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ListActivity.this, AddGroupActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         return alertDialog;
     }
 
+    @Override
+    public void onBackPressed() {
+        if( Common.group != null) {
+            Common.group = Common.group.getParent();
+            Intent intent = new Intent(this, ListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("click", "group");
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        }else
+        {
+            super.onBackPressed();
+        }
+    }
 }

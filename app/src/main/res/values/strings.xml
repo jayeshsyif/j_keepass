@@ -17,7 +17,7 @@
     <string name="save">Save</string>
 
     <string name="processingFile">Please wait processing file.</string>
-    <string name="permissionNotGranted">Permission Not Granted!</string>
+    <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
     <string name="emptyPasswordError">Password cannot be Empty.</string>
     <string name="emptyFileError">Please select kdbx File. File not found!</string>
     <string name="invalidFileError">Invalid kdbx File.</string>
@@ -32,6 +32,8 @@
     <string name="password">Password</string>
 
     <string name="url">URL</string>
+    <string name="loading">Loading ...</string>
+    <string name="saving">Saving ...</string>
 
     <string name="notes">Notes</string>
 

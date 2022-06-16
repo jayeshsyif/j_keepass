@@ -1,16 +1,20 @@
 package org.j_keepass;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +30,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.databinding.ActivityLoadBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
@@ -86,30 +91,36 @@ public class LoadActivity extends AppCompatActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, R.string.processingFile, Snackbar.LENGTH_SHORT).show();
+                final AlertDialog alertDialog = Util.getLoading(getLayoutInflater(), LoadActivity.this);
+                Util.showLoadingDialog(alertDialog);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         boolean proceed = true;
                         String kdbxPassword = null;
                         Database<?, ?, ?, ?> database = null;
+                        Util.setLoadingProgress(alertDialog, 20);
                         if (kdbxPasswordET.getText() != null) {
                             kdbxPassword = kdbxPasswordET.getText().toString();
                             if (kdbxPassword == null || kdbxPassword.length() <= 0) {
+                                Util.dismissLoadingDialog(alertDialog);
                                 Snackbar.make(v, R.string.emptyPasswordError, Snackbar.LENGTH_LONG).show();
                                 proceed = false;
                             }
                         } else {
+                            Util.dismissLoadingDialog(alertDialog);
                             Snackbar.make(v, R.string.emptyPasswordError, Snackbar.LENGTH_LONG).show();
                             proceed = false;
                         }
-
+                        Util.setLoadingProgress(alertDialog, 30);
                         if (proceed) {
                             if (kdbxFileUri == null) {
+                                Util.dismissLoadingDialog(alertDialog);
                                 Snackbar.make(v, R.string.emptyFileError, Snackbar.LENGTH_LONG).show();
                                 proceed = false;
                             }
                         }
+                        Util.setLoadingProgress(alertDialog, 40);
                         if (proceed) {
                             KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
                             Common.creds = creds;
@@ -117,22 +128,26 @@ public class LoadActivity extends AppCompatActivity {
                             try {
                                 inputStream = getContentResolver().openInputStream(kdbxFileUri);
                             } catch (FileNotFoundException e) {
+                                Util.dismissLoadingDialog(alertDialog);
                                 proceed = false;
                                 Snackbar.make(v, R.string.invalidFileError + " " + e.getMessage(), Snackbar.LENGTH_LONG).show();
                             }
+                            Util.setLoadingProgress(alertDialog, 60);
                             if (inputStream != null) {
                                 try {
                                     database = SimpleDatabase.load(creds, inputStream);
                                 } catch (Exception e) {
+                                    Util.dismissLoadingDialog(alertDialog);
                                     proceed = false;
                                     Snackbar.make(v, R.string.invalidFileError + " " + e.getMessage(), Snackbar.LENGTH_LONG).show();
                                 }
                                 if (database == null) {
+                                    Util.dismissLoadingDialog(alertDialog);
                                     Snackbar.make(v, R.string.noDBError, Snackbar.LENGTH_LONG).show();
                                     proceed = false;
                                 }
                             }
-
+                            Util.setLoadingProgress(alertDialog, 90);
                             if (inputStream != null) {
                                 try {
                                     inputStream.close();
@@ -144,11 +159,15 @@ public class LoadActivity extends AppCompatActivity {
                         if (proceed) {
                             if (database != null) {
                                 try {
+                                    Util.setLoadingProgress(alertDialog, 100);
                                     Common.database = database;
                                     Common.kdbxFileUri = kdbxFileUri;
+                                    Util.dismissLoadingDialog(alertDialog);
                                     Intent intent = new Intent(LoadActivity.this, ListActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 } catch (Exception e) {
+                                    Util.dismissLoadingDialog(alertDialog);
                                     Snackbar.make(v, R.string.unableToNavigateError, Snackbar.LENGTH_LONG).show();
                                 }
                             }
