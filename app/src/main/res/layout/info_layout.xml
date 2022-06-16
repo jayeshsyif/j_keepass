@@ -20,7 +20,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/kp_margin"
                 android:layout_marginTop="@dimen/kp_info_margin_top"
                 android:layout_marginRight="@dimen/kp_margin"
@@ -67,7 +67,7 @@
                     android:text="@string/developerName"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/kp_dark_blue"
-                    android:textStyle="bold"></TextView>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                     android:fontFamily="@font/righteous"
                     android:textStyle="italic"
                     android:textSize="@dimen/kp_small_text_size"
-                    android:textColor="@color/kp_dark_blue"></TextView>
+                    android:textColor="@color/kp_dark_blue" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -159,7 +159,7 @@
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kp_dark_blue"
-                    android:textColorLink="@color/kp_dark_blue"></TextView>
+                    android:textColorLink="@color/kp_dark_blue" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -171,8 +171,7 @@
                     android:text="@string/changeLogsVer1Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
-                    android:textColorLink="@color/kp_dark_blue"></TextView>
+                    android:textColor="@color/kp_dark_blue" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -185,7 +184,7 @@
                     android:textAlignment="gravity"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textColor="@color/kp_dark_blue"
-                    android:textColorLink="@color/kp_dark_blue"></TextView>
+                    android:textColorLink="@color/kp_dark_blue" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -197,7 +196,7 @@
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kp_dark_blue"
-                    android:textColorLink="@color/kp_dark_blue"></TextView>
+                    android:textColorLink="@color/kp_dark_blue" />
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>

@@ -33,7 +33,7 @@
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold" />
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/kp_dark_blue"
                             android:textSize="@dimen/kp_small_text_size"
-                            android:textStyle="italic"></TextView>
+                            android:textStyle="italic" />
 
                         <TextView
                             android:id="@+id/kdbxFilePath"
@@ -75,7 +75,7 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/kp_dark_blue"
                             android:textSize="@dimen/kp_small_text_size"
-                            android:textStyle="italic"></TextView>
+                            android:textStyle="italic" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -137,11 +137,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:backgroundTint="@color/kp_white"
+                                android:fontFamily="@font/righteous"
                                 android:hint="@string/enterPassword"
                                 android:inputType="textPassword"
-                                android:fontFamily="@font/righteous"
                                 android:textColor="@color/kp_dark_blue"
-                                android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
+                                android:textColorHint="@color/kp_dark_blue" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <ImageButton
@@ -155,7 +155,7 @@
                             android:src="@drawable/ic_login_fill0_wght300_grad_25_opsz24"
                             android:textColor="@color/kp_dark_blue"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue"></ImageButton>
+                            app:tint="@color/kp_dark_blue" />
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
@@ -165,13 +165,12 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/kp_margin"
                 android:layout_weight="40"
-                android:orientation="vertical"
-                android:weightSum="2">
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"></View>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -185,7 +184,7 @@
                     android:textColor="@color/kp_dark_blue"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
-                    android:textStyle="italic"></TextView>
+                    android:textStyle="italic" />
             </LinearLayout>
         </LinearLayout>
 
@@ -198,7 +197,8 @@
             android:backgroundTint="@color/kp_light_blue"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
-            app:tint="@color/kp_dark_blue" />
+            app:tint="@color/kp_dark_blue"
+            android:contentDescription="@string/devInProgress" />
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,20 +1,16 @@
 package org.j_keepass;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
 
-import org.j_keepass.databinding.ActivityLoadBinding;
 import org.j_keepass.databinding.ActivityViewEntryBinding;
 import org.j_keepass.util.Common;
-import org.linguafranca.pwdb.Database;
+import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Entry;
 
 public class ViewEntryActivity extends AppCompatActivity {
@@ -30,7 +26,6 @@ public class ViewEntryActivity extends AppCompatActivity {
             Intent intent = new Intent(ViewEntryActivity.this, LoadActivity.class);
             startActivity(intent);
         } else {
-            Database<?, ?, ?, ?> database = Common.database;
             Entry<?, ?, ?, ?> entry = null;
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
@@ -47,47 +42,43 @@ public class ViewEntryActivity extends AppCompatActivity {
                 binding.entryUrl.setText(entry.getUrl());
                 binding.entryNotes.setText(entry.getNotes());
 
-                binding.userNameCopy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ClipboardManager clipboard = (ClipboardManager)
-                                getSystemService(Context.CLIPBOARD_SERVICE);
+                binding.userNameCopy.setOnClickListener(v -> {
+                    ClipboardManager clipboard = (ClipboardManager)
+                            getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (binding.entryUserName.getText() != null) {
                         ClipData clip = ClipData.newPlainText("username", binding.entryUserName.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        Snackbar.make(v, R.string.copiedToClipboard, Snackbar.LENGTH_SHORT).show();
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
                     }
                 });
 
-                binding.entryPasswordCopy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ClipboardManager clipboard = (ClipboardManager)
-                                getSystemService(Context.CLIPBOARD_SERVICE);
+                binding.entryPasswordCopy.setOnClickListener(v -> {
+                    ClipboardManager clipboard = (ClipboardManager)
+                            getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (binding.entryPassword.getText() != null) {
                         ClipData clip = ClipData.newPlainText("password", binding.entryPassword.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        Snackbar.make(v, R.string.copiedToClipboard, Snackbar.LENGTH_SHORT).show();
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
                     }
                 });
 
-                binding.entryUrlCopy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ClipboardManager clipboard = (ClipboardManager)
-                                getSystemService(Context.CLIPBOARD_SERVICE);
+                binding.entryUrlCopy.setOnClickListener(v -> {
+                    ClipboardManager clipboard = (ClipboardManager)
+                            getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (binding.entryUrl.getText() != null) {
                         ClipData clip = ClipData.newPlainText("password", binding.entryUrl.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        Snackbar.make(v, R.string.copiedToClipboard, Snackbar.LENGTH_SHORT).show();
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
                     }
                 });
 
-                binding.entryNotesCopy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ClipboardManager clipboard = (ClipboardManager)
-                                getSystemService(Context.CLIPBOARD_SERVICE);
+                binding.entryNotesCopy.setOnClickListener(v -> {
+                    ClipboardManager clipboard = (ClipboardManager)
+                            getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (binding.entryNotes.getText() != null) {
                         ClipData clip = ClipData.newPlainText("password", binding.entryNotes.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        Snackbar.make(v, R.string.copiedToClipboard, Snackbar.LENGTH_SHORT).show();
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
                     }
                 });
             }
@@ -96,7 +87,7 @@ public class ViewEntryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if( Common.group != null) {
+        if (Common.group != null) {
             Common.group = Common.group.getParent();
             Intent intent = new Intent(this, ListActivity.class);
             Bundle bundle = new Bundle();
@@ -104,8 +95,7 @@ public class ViewEntryActivity extends AppCompatActivity {
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
-        }else
-        {
+        } else {
             super.onBackPressed();
         }
     }

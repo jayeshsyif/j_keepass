@@ -28,16 +28,17 @@
                 android:weightSum="2">
 
                 <ProgressBar
-                    android:id="@+id/loadingProgressBar"
+                    android:id="@+id/progressBar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:progressTint="@color/kp_dark_blue"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:progressBackgroundTint="@color/kp_dark_blue"></ProgressBar>
+                    android:scaleY="2"
+                    android:progressBackgroundTint="@color/kp_dark_blue"
+                    android:progressTint="@color/kp_light_blue_3"></ProgressBar>
 
                 <TextView
-                    android:id="@+id/kdbxFilePath"
+                    android:id="@+id/progressBarText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

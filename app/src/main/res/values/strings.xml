@@ -32,8 +32,11 @@
     <string name="password">Password</string>
 
     <string name="url">URL</string>
+
     <string name="loading">Loading ...</string>
+    <string name="loadingWithPercentage">Loading ... ($per$%)</string>
     <string name="saving">Saving ...</string>
+    <string name="savingWithPercentage">Saving ... ($per$%)</string>
 
     <string name="notes">Notes</string>
 

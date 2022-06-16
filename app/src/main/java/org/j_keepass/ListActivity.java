@@ -1,25 +1,23 @@
 package org.j_keepass;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.j_keepass.adapter.ListGroupAdapter;
 import org.j_keepass.databinding.ActivityListBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.Pair;
+import org.j_keepass.util.ProgressDialogUtil;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -28,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
-    private AppBarConfiguration appBarConfiguration;
+
     private ActivityListBinding binding;
 
     @Override
@@ -43,71 +41,76 @@ public class ListActivity extends AppCompatActivity {
         if (Common.database == null) {
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
             startActivity(intent);
+            finish();
         } else {
-            String groupName = "NA";
-            int id = -1;
-            Database<?, ?, ?, ?> database = Common.database;
-            Group<?, ?, ?, ?> group = null;
-            Bundle bundle = getIntent().getExtras();
-            if (bundle != null) {
-                String click = bundle.getString("click");
-                if (click != null && click.equalsIgnoreCase("group")) {
-                    group = Common.group;
-                }
-            }
 
-            if (group == null) {
-                group = database.getRootGroup();
-            }
-            if (group != null) {
-                groupName = group.getName();
-                ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<Pair<Object, Boolean>>();
-                {
-
-                    //groups
-                    List<?> groups = group.getGroups();
-                    for (int gCount = 0; gCount < groups.size(); gCount++) {
-                        Group<?, ?, ?, ?> localGroup = (Group<?, ?, ?, ?>) groups.get(gCount);
-                        Pair<Object, Boolean> pair = new Pair<Object, Boolean>();
-                        pair.first = localGroup;
-                        pair.second = true;
-                        pairs.add(pair);
+            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
+            new Thread(() -> {
+                String groupName = "NA";
+                Database<?, ?, ?, ?> database = Common.database;
+                Group<?, ?, ?, ?> group = null;
+                Bundle bundle = getIntent().getExtras();
+                if (bundle != null) {
+                    String click = bundle.getString("click");
+                    if (click != null && click.equalsIgnoreCase("group")) {
+                        group = Common.group;
                     }
                 }
-                {
-                    //entries
-                    List<?> entries = group.getEntries();
-                    for (int eCount = 0; eCount < entries.size(); eCount++) {
-                        Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) entries.get(eCount);
-                        Pair<Object, Boolean> pair = new Pair<Object, Boolean>();
-                        pair.first = localEntry;
-                        pair.second = false;
-                        pairs.add(pair);
-                    }
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
+                if (group == null) {
+                    group = database.getRootGroup();
                 }
+                if (group != null) {
+                    groupName = group.getName();
+                    ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<>();
+                    {
 
-                ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, this);
-                binding.groupListView.setAdapter(listGroupAdapter);
-                binding.groupListView.setFooterDividersEnabled(false);
-                binding.groupListView.setHeaderDividersEnabled(false);
-                binding.groupListView.setDivider(null);
-                binding.groupListView.setDividerHeight(0);
-
-            }
-
-            binding.floatAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!binding.floatAdd.isExtended()) {
-                        binding.floatAdd.extend();
-                    } else {
-                        binding.floatAdd.shrink();
+                        //groups
+                        List<?> groups = group.getGroups();
+                        for (int gCount = 0; gCount < groups.size(); gCount++) {
+                            Group<?, ?, ?, ?> localGroup = (Group<?, ?, ?, ?>) groups.get(gCount);
+                            Pair<Object, Boolean> pair = new Pair<>();
+                            pair.first = localGroup;
+                            pair.second = true;
+                            pairs.add(pair);
+                        }
                     }
-                    AlertDialog alertDialog = getDialog();
-                    alertDialog.show();
+                    {
+                        //entries
+                        List<?> entries = group.getEntries();
+                        for (int eCount = 0; eCount < entries.size(); eCount++) {
+                            Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) entries.get(eCount);
+                            Pair<Object, Boolean> pair = new Pair<>();
+                            pair.first = localEntry;
+                            pair.second = false;
+                            pairs.add(pair);
+                        }
+                    }
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+                    ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, ListActivity.this);
+                    binding.groupListView.setAdapter(listGroupAdapter);
+                    binding.groupListView.setFooterDividersEnabled(false);
+                    binding.groupListView.setHeaderDividersEnabled(false);
+                    binding.groupListView.setDivider(null);
+                    binding.groupListView.setDividerHeight(0);
+
                 }
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                binding.groupName.setText(groupName);
+            }).start();
+
+            binding.floatAdd.setOnClickListener(v -> {
+                if (!binding.floatAdd.isExtended()) {
+                    binding.floatAdd.extend();
+                } else {
+                    binding.floatAdd.shrink();
+                }
+                AlertDialog alertDialog1 = getDialog();
+                alertDialog1.show();
             });
-            binding.groupName.setText(groupName);
+
         }
 
     }
@@ -124,34 +127,28 @@ public class ListActivity extends AppCompatActivity {
         final AlertDialog alertDialog = alert.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
         FloatingActionButton closeInfoBtn = mView.findViewById(R.id.addNewfloatCloseInfoBtn);
-        closeInfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-                if (!binding.floatAdd.isExtended()) {
-                    binding.floatAdd.extend();
-                } else {
-                    binding.floatAdd.shrink();
-                }
+        closeInfoBtn.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            if (!binding.floatAdd.isExtended()) {
+                binding.floatAdd.extend();
+            } else {
+                binding.floatAdd.shrink();
             }
         });
         MaterialButton addGroup = mView.findViewById(R.id.addNewGroupfloatBtn);
-        addGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ListActivity.this, AddGroupActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        addGroup.setOnClickListener(v -> {
+            Intent intent = new Intent(ListActivity.this, AddGroupActivity.class);
+            startActivity(intent);
+            finish();
         });
         return alertDialog;
     }
 
     @Override
     public void onBackPressed() {
-        if( Common.group != null) {
+        if (Common.group != null) {
             Common.group = Common.group.getParent();
             Intent intent = new Intent(this, ListActivity.class);
             Bundle bundle = new Bundle();
@@ -159,8 +156,7 @@ public class ListActivity extends AppCompatActivity {
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
-        }else
-        {
+        } else {
             super.onBackPressed();
         }
     }

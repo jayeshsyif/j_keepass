@@ -63,38 +63,13 @@
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_group_name_margin"
                         android:layout_weight="20"
+                        android:backgroundTint="@color/kp_dark_blue"
                         android:fontFamily="@font/righteous"
                         android:gravity="left|center"
                         android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/kp_dark_blue"
-                        android:backgroundTint="@color/kp_dark_blue"
                         android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="top"
-                        android:text="@string/notes"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic"></TextView>
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/addGroupNotes"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:layout_weight="20"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="left|center"
-                        android:singleLine="false"
-                        android:lines="5"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
 
                 </LinearLayout>
             </ScrollView>
