@@ -36,4 +36,16 @@ public class ToastUtil {
         snackbarLayout.addView(customSnackView, 0);
         snackbar.show();
     }
+
+    static public void showToast(LayoutInflater layoutInflater, View
+            v, KpCustomException exception) {
+
+        if(exception.isUseId())
+        {
+            showToast(layoutInflater, v, exception.getResourceId());
+        }else
+        {
+            showToast(layoutInflater, v, exception.getMessage());
+        }
+    }
 }

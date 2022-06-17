@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 
+import org.j_keepass.EditEntryActivity;
 import org.j_keepass.EditGroupActivity;
 import org.j_keepass.ListActivity;
 import org.j_keepass.R;
@@ -107,8 +108,16 @@ public class ListGroupAdapter extends BaseAdapter {
                     activity.startActivity(intent);
                     activity.finish();
                 });
-                edit.setOnClickListener(v -> ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.devInProgress));
-                delete.setOnClickListener(v -> ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.devInProgress));
+                edit.setOnClickListener(v -> {
+                    Common.entry = localEntry;
+                    Intent intent = new Intent(activity, EditEntryActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("click", "entry");
+                    intent.putExtras(bundle);
+                    activity.startActivity(intent);
+                    activity.finish();
+                });
+                delete.setOnClickListener(v -> deleteEntry(v, activity, localEntry));
             }
         }
         return convertView;
@@ -133,6 +142,65 @@ public class ListGroupAdapter extends BaseAdapter {
                 } else {
                     parent.removeGroup(group);
                     Common.group = parent;
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                        OutputStream fileOutputStream = null;
+                        try {
+                            activity.getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                            fileOutputStream = activity.getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                            Common.database.save(Common.creds, fileOutputStream);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            Intent intent = new Intent(activity, ListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        } catch (NoSuchMethodError e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } catch (Exception e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } finally {
+                            if (fileOutputStream != null) {
+                                try {
+                                    fileOutputStream.close();
+                                } catch (Exception e) {
+                                    //do nothing
+                                }
+                            }
+                        }
+                    } else {
+                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
+                    }
+                }
+            }).start();
+        });
+        confirmDialog.first.show();
+    }
+
+    private void deleteEntry(View v, Activity activity, Entry entry) {
+
+        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
+        confirmDialog.second.setOnClickListener(viewObj -> {
+
+
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+
+            new Thread(() -> {
+                String groupName = null;
+                Group parent = Common.group;
+
+                if (parent == null) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null");
+                } else {
+                    parent.removeEntry(entry);
                     if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;

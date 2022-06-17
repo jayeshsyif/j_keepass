@@ -143,6 +143,13 @@ public class ListActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        MaterialButton addEntry = mView.findViewById(R.id.addNewEntryfloatBtn);
+        addEntry.setOnClickListener(v -> {
+            Intent intent = new Intent(ListActivity.this, AddEntryActivity.class);
+            startActivity(intent);
+            finish();
+        });
         return alertDialog;
     }
 

@@ -32,6 +32,7 @@
     <string name="entryName">Entry Name</string>
     <string name="userName">User name</string>
     <string name="password">Password</string>
+    <string name="entryTitle">Title</string>
 
     <string name="url">URL</string>
 
@@ -46,6 +47,11 @@
 
 
     <string name="groupNameEmptyErrorMsg">Group Name cannot be empty!</string>
+
+
+    <string name="entryTitleEmptyErrorMsg">Title cannot be empty!</string>
+    <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>
+    <string name="entryPasswordEmptyErrorMsg">Password cannot be empty!</string>
 
     <string name="copiedToClipboard">Copied to clipboard!</string>
 

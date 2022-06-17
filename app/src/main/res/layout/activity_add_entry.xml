@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/kp_grey"
+    tools:context=".AddEntryActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/kp_card_view_margin"
+        android:backgroundTint="@color/kp_white"
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/newEntryTitleNameHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_group_name_margin"
+                android:layout_weight="80"
+                android:fontFamily="@font/righteous"
+                android:gravity="top"
+                android:text="@string/entryName"
+                android:textAlignment="gravity"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/kp_dark_blue"
+                android:textSize="@dimen/kp_group_name_text_size"
+                android:textStyle="bold"></TextView>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:background="@color/kp_light_blue">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="top"
+                        android:text="@string/entryTitle"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/newEntryTitleName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/kp_group_name_margin"
+                            android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
+                            android:gravity="left|center"
+                            android:hint="@string/entryTitle"
+                            android:textAlignment="gravity"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/kp_dark_blue"
+                            android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="80">
+
+                            <ImageButton
+                                android:id="@+id/newEntryTitleNameCopy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                                android:textAlignment="gravity"
+                                app:tint="@color/kp_dark_blue"></ImageButton>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="top"
+                        android:text="@string/userName"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/newEntryUserName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/kp_group_name_margin"
+                            android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
+                            android:gravity="left|center"
+                            android:hint="@string/userName"
+                            android:textAlignment="gravity"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/kp_dark_blue"
+                            android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="80">
+
+                            <ImageButton
+                                android:id="@+id/newEntryUserNameCopy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                                android:textAlignment="gravity"
+                                app:tint="@color/kp_dark_blue"></ImageButton>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="top"
+                        android:text="@string/password"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic"></TextView>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/kp_margin"
+                            android:layout_weight="20"
+                            app:passwordToggleEnabled="true">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/newEntryPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@android:color/transparent"
+                                android:fontFamily="@font/righteous"
+                                android:inputType="textPassword"
+                                android:hint="@string/password"
+                                android:textColor="@color/kp_dark_blue"
+                                android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="80">
+
+                            <ImageButton
+                                android:id="@+id/newEntryPasswordCopy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                                android:textAlignment="gravity"
+                                app:tint="@color/kp_dark_blue"></ImageButton>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="top"
+                        android:text="@string/url"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/newEntryUrl"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/kp_group_name_margin"
+                            android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
+                            android:gravity="left|center"
+                            android:hint="@string/url"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/kp_dark_blue"
+                            android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="80">
+
+                            <ImageButton
+                                android:id="@+id/newEntryUrlCopy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                                android:textAlignment="gravity"
+                                app:tint="@color/kp_dark_blue"></ImageButton>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_group_name_margin"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="top"
+                        android:text="@string/notes"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/newEntryNotes"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/kp_group_name_margin"
+                            android:layout_weight="20"
+                            android:fontFamily="@font/righteous"
+                            android:gravity="left|center"
+                            android:lines="5"
+                            android:singleLine="false"
+                            android:hint="@string/notes"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/kp_dark_blue"
+                            android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="80">
+
+                            <ImageButton
+                                android:id="@+id/newEntryNotesCopy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                                android:textAlignment="gravity"
+                                app:tint="@color/kp_dark_blue"></ImageButton>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/saveNewEntry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_new_margin"
+            android:backgroundTint="@color/kp_dark_blue"
+            android:text="@string/save"
+            android:textColor="@color/kp_white"
+            app:icon="@drawable/ic_save_fill0_wght300_grad_25_opsz24"
+            app:iconTint="@color/kp_white"
+            app:tint="@color/kp_white" />
+    </androidx.cardview.widget.CardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
