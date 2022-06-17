@@ -1,7 +1,10 @@
 package org.j_keepass.adapter;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +13,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.button.MaterialButton;
+
+import org.j_keepass.EditGroupActivity;
 import org.j_keepass.ListActivity;
 import org.j_keepass.R;
 import org.j_keepass.ViewEntryActivity;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.Pair;
+import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Triplet;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class ListGroupAdapter extends BaseAdapter {
@@ -72,6 +83,16 @@ public class ListGroupAdapter extends BaseAdapter {
                     activity.startActivity(intent);
                     activity.finish();
                 });
+                edit.setOnClickListener(v -> {
+                    Common.group = localGroup;
+                    Intent intent = new Intent(activity, EditGroupActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("click", "group");
+                    intent.putExtras(bundle);
+                    activity.startActivity(intent);
+                    activity.finish();
+                });
+                delete.setOnClickListener(v -> deleteGroup(v, activity, localGroup));
             } else {
                 Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) pair.first;
                 tx.setText(localEntry.getTitle());
@@ -86,12 +107,70 @@ public class ListGroupAdapter extends BaseAdapter {
                     activity.startActivity(intent);
                     activity.finish();
                 });
+                edit.setOnClickListener(v -> ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.devInProgress));
+                delete.setOnClickListener(v -> ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.devInProgress));
             }
-
         }
-        edit.setOnClickListener(v -> Snackbar.make(v, R.string.devInProgress, Snackbar.LENGTH_SHORT).show());
-        delete.setOnClickListener(v -> Snackbar.make(v, R.string.devInProgress, Snackbar.LENGTH_SHORT).show());
         return convertView;
     }
 
+    private void deleteGroup(View v, Activity activity, Group group) {
+
+        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
+        confirmDialog.second.setOnClickListener(viewObj -> {
+
+
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+
+            new Thread(() -> {
+                String groupName = null;
+                Group parent = Common.group;
+
+                if (parent == null) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Parent is null");
+                } else {
+                    parent.removeGroup(group);
+                    Common.group = parent;
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                        OutputStream fileOutputStream = null;
+                        try {
+                            activity.getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                            fileOutputStream = activity.getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                            Common.database.save(Common.creds, fileOutputStream);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            Intent intent = new Intent(activity, ListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        } catch (NoSuchMethodError e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } catch (Exception e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } finally {
+                            if (fileOutputStream != null) {
+                                try {
+                                    fileOutputStream.close();
+                                } catch (Exception e) {
+                                    //do nothing
+                                }
+                            }
+                        }
+                    } else {
+                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
+                    }
+                }
+            }).start();
+        });
+        confirmDialog.first.show();
+    }
 }

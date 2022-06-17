@@ -95,6 +95,9 @@ public class AddGroupActivity extends AppCompatActivity {
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 finish();
+                            } catch (NoSuchMethodError e) {
+                                ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
                             } catch (Exception e) {
                                 ProgressDialogUtil.dismissSavingDialog(alertDialog);
                                 ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());

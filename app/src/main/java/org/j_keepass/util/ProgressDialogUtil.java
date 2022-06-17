@@ -16,7 +16,9 @@ import org.j_keepass.R;
 public class ProgressDialogUtil {
 
 
-    enum TYPE_OF_PROGREES {LOADING, SAVING, PROCESSING, NONE};
+    enum TYPE_OF_PROGREES {LOADING, SAVING, PROCESSING, NONE}
+
+    ;
 
 
     static public AlertDialog getLoading(LayoutInflater layoutInflater, Context context) {
@@ -57,44 +59,53 @@ public class ProgressDialogUtil {
     static public AlertDialog getProgressDialog(LayoutInflater layoutInflater, Context
             context, TYPE_OF_PROGREES typeOfProgrees) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        View mView = layoutInflater.inflate(R.layout.progress_layout, null);
-        alert.setView(mView);
-        final AlertDialog alertDialog = alert.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        alertDialog.getWindow().setGravity(Gravity.CENTER);
-        ProgressBar progressBar = mView.findViewById(R.id.progressBar);
-        progressBar.setProgress(0);
-        TextView progressBarTextView = mView.findViewById(R.id.progressBarText);
-        String progressWithPercentage = context.getString(R.string.loading);
-        if (typeOfProgrees == TYPE_OF_PROGREES.LOADING) {
-            progressWithPercentage = context.getString(R.string.loadingWithPercentage);
-            progressWithPercentage = progressWithPercentage.replace("$per$", "" + 0);
-            progressBarTextView.setText(progressWithPercentage);
-        } else if (typeOfProgrees == TYPE_OF_PROGREES.SAVING) {
-            progressWithPercentage = context.getString(R.string.savingWithPercentage);
-            progressWithPercentage = progressWithPercentage.replace("$per$", "" + 0);
-            progressBarTextView.setText(progressWithPercentage);
-        }
+        AlertDialog alertDialog = null;
+        try {
 
+            View mView = layoutInflater.inflate(R.layout.progress_layout, null);
+            alert.setView(mView);
+            alertDialog = alert.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            alertDialog.getWindow().setGravity(Gravity.CENTER);
+            ProgressBar progressBar = mView.findViewById(R.id.progressBar);
+            progressBar.setProgress(0);
+            TextView progressBarTextView = mView.findViewById(R.id.progressBarText);
+            String progressWithPercentage = context.getString(R.string.loading);
+            if (typeOfProgrees == TYPE_OF_PROGREES.LOADING) {
+                progressWithPercentage = context.getString(R.string.loadingWithPercentage);
+                progressWithPercentage = progressWithPercentage.replace("$per$", "" + 0);
+                progressBarTextView.setText(progressWithPercentage);
+            } else if (typeOfProgrees == TYPE_OF_PROGREES.SAVING) {
+                progressWithPercentage = context.getString(R.string.savingWithPercentage);
+                progressWithPercentage = progressWithPercentage.replace("$per$", "" + 0);
+                progressBarTextView.setText(progressWithPercentage);
+            }
+        } catch (Exception e) {
+            alertDialog = alert.create();
+        }
         return alertDialog;
     }
 
     static public void setProgress(AlertDialog alertDialog, int progress, TYPE_OF_PROGREES
             typeOfProgrees) {
-        ProgressBar progressBar = alertDialog.findViewById(R.id.progressBar);
-        progressBar.setProgress(progress);
-        String progressWithPercentage = alertDialog.getContext().getString(R.string.loading);
-        TextView progressBarTextView = alertDialog.findViewById(R.id.progressBarText);
-        if (typeOfProgrees == TYPE_OF_PROGREES.LOADING) {
-            progressWithPercentage = alertDialog.getContext().getString(R.string.loadingWithPercentage);
-            progressWithPercentage = progressWithPercentage.replace("$per$", "" + progress);
-        } else if (typeOfProgrees == TYPE_OF_PROGREES.SAVING) {
-            progressWithPercentage = alertDialog.getContext().getString(R.string.savingWithPercentage);
-            progressWithPercentage = progressWithPercentage.replace("$per$", "" + progress);
+        try {
+            ProgressBar progressBar = alertDialog.findViewById(R.id.progressBar);
+            progressBar.setProgress(progress);
+            String progressWithPercentage = alertDialog.getContext().getString(R.string.loading);
+            TextView progressBarTextView = alertDialog.findViewById(R.id.progressBarText);
+            if (typeOfProgrees == TYPE_OF_PROGREES.LOADING) {
+                progressWithPercentage = alertDialog.getContext().getString(R.string.loadingWithPercentage);
+                progressWithPercentage = progressWithPercentage.replace("$per$", "" + progress);
+            } else if (typeOfProgrees == TYPE_OF_PROGREES.SAVING) {
+                progressWithPercentage = alertDialog.getContext().getString(R.string.savingWithPercentage);
+                progressWithPercentage = progressWithPercentage.replace("$per$", "" + progress);
+            }
+            progressBarTextView.setText(progressWithPercentage);
+        } catch (Exception e) {
+            //do nothing
         }
-        progressBarTextView.setText(progressWithPercentage);
     }
 
 }

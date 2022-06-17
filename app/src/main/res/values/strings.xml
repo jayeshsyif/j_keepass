@@ -27,6 +27,8 @@
     <string name="groupName">Group Name</string>
     <string name="groupNameDesc">\n It indicates Group Name.</string>
 
+    <string name="enterGroupName">Enter Group Name</string>
+
     <string name="entryName">Entry Name</string>
     <string name="userName">User name</string>
     <string name="password">Password</string>
@@ -37,6 +39,8 @@
     <string name="loadingWithPercentage">Loading ... ($per$%)</string>
     <string name="saving">Saving ...</string>
     <string name="savingWithPercentage">Saving ... ($per$%)</string>
+
+    <string name="areYouSure">Are you sure?</string>
 
     <string name="notes">Notes</string>
 
@@ -54,4 +58,9 @@
     <string name="changeLogs">Change Logs</string>
     <string name="changeLogsVer1Text">Version 1</string>
     <string name="changeLogsVer1ChangesText">   Initial build which opens simple kdbx KeePass database and Read(show) all groups and credentials in it.</string>
+    <string name="changeLogsVer2Text">Version 2</string>
+    <string name="changeLogsVer2ChangesText">   New font. Add group working.</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
