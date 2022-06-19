@@ -1,6 +1,7 @@
 package org.j_keepass;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,7 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.databinding.ActivityLoadBinding;
+import org.j_keepass.util.BannerDialogUtil;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
@@ -37,6 +42,7 @@ public class LoadActivity extends AppCompatActivity {
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,18 @@ public class LoadActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Common.database = null;
+
+        Dialog banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
+        banner.show();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(7000);
+            } catch (InterruptedException e) {
+                //do nothing
+            }
+            banner.dismiss();
+        }).start();
 
         MaterialButton openBtn = binding.openBtn;
         openBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +125,7 @@ public class LoadActivity extends AppCompatActivity {
                         if (proceed) {
                             if (kdbxFileUri == null) {
                                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                ToastUtil.showToast(getLayoutInflater(), v,R.string.emptyFileError);
+                                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError);
                                 proceed = false;
                             }
                         }
@@ -121,7 +139,7 @@ public class LoadActivity extends AppCompatActivity {
                             } catch (FileNotFoundException e) {
                                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                                 proceed = false;
-                                ToastUtil.showToast(getLayoutInflater(), v,R.string.invalidFileError + " " + e.getMessage());
+                                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
                             }
                             ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
                             if (inputStream != null) {
@@ -130,11 +148,11 @@ public class LoadActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                                     proceed = false;
-                                    ToastUtil.showToast(getLayoutInflater(), v,R.string.invalidFileError + " " + e.getMessage());
+                                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
                                 }
                                 if (database == null) {
                                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                    ToastUtil.showToast(getLayoutInflater(), v,R.string.noDBError);
+                                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError);
                                     proceed = false;
                                 }
                             }
@@ -159,7 +177,7 @@ public class LoadActivity extends AppCompatActivity {
                                     finish();
                                 } catch (Exception e) {
                                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                    ToastUtil.showToast(getLayoutInflater(), v,R.string.unableToNavigateError);
+                                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
                                 }
                             }
                         }
@@ -172,7 +190,7 @@ public class LoadActivity extends AppCompatActivity {
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.showToast(getLayoutInflater(), v,R.string.devInProgress);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.devInProgress);
             }
         });
         binding.floatInfo.setOnClickListener(new View.OnClickListener() {

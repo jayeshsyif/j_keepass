@@ -23,6 +23,7 @@
             android:weightSum="100">
 
             <TextView
+                android:id="@+id/appNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/kp_margin"
@@ -36,8 +37,10 @@
                 android:textStyle="bold" />
 
             <ScrollView
+                android:id="@+id/loadScrollview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="20">
 
                 <LinearLayout
@@ -177,10 +180,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:autoLink="web"
-                    android:fontFamily="@font/righteous"
                     android:gravity="bottom|start"
                     android:text="@string/credit"
                     android:textAlignment="gravity"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kp_dark_blue"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
@@ -195,10 +198,10 @@
             android:layout_gravity="top|end"
             android:layout_marginEnd="0pt"
             android:backgroundTint="@color/kp_light_blue"
+            android:contentDescription="@string/devInProgress"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
-            app:tint="@color/kp_dark_blue"
-            android:contentDescription="@string/devInProgress" />
+            app:tint="@color/kp_dark_blue" />
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

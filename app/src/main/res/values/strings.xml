@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">J KeePass</string>
+    <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
     <string name="title_activity_load">LoadActivity</string>
 
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
@@ -66,6 +67,8 @@
     <string name="changeLogsVer1ChangesText">   Initial build which opens simple kdbx KeePass database and Read(show) all groups and credentials in it.</string>
     <string name="changeLogsVer2Text">Version 2</string>
     <string name="changeLogsVer2ChangesText">   New font. Add group working.</string>
+    <string name="changeLogsVer3Text">Version 3</string>
+    <string name="changeLogsVer3ChangesText">   Edit and delete group working. Add, edit and delete Entry(credential) working.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
