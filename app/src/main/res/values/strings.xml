@@ -65,10 +65,12 @@
     <string name="changeLogs">Change Logs</string>
     <string name="changeLogsVer1Text">Version 1</string>
     <string name="changeLogsVer1ChangesText">   Initial build which opens simple kdbx KeePass database and Read(show) all groups and credentials in it.</string>
+    <string name="changeLogsVer11Text">Version 1.1</string>
+    <string name="changeLogsVer11ChangesText">   New font. Add group working.</string>
     <string name="changeLogsVer2Text">Version 2</string>
-    <string name="changeLogsVer2ChangesText">   New font. Add group working.</string>
-    <string name="changeLogsVer3Text">Version 3</string>
-    <string name="changeLogsVer3ChangesText">   Edit and delete group working. Add, edit and delete Entry(credential) working.</string>
+    <string name="changeLogsVer2ChangesText">   Edit and delete group working. Add, edit and delete Entry(credential) working.</string>
+    <string name="changeLogsVer21Text">Version 2.1</string>
+    <string name="changeLogsVer21ChangesText">   Minor fix. can view/open kdbx directly into app. Random password generator added.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

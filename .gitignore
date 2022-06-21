@@ -1,4 +1,7 @@
 *.iml
+*.apk
+*.ap_
+*.aab
 .gradle
 /local.properties
 /.idea/caches
@@ -13,3 +16,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/release/*
+Release/*
+!/Libraries/Release/*
+*.class
