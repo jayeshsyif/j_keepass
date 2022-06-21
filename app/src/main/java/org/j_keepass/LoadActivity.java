@@ -47,6 +47,7 @@ public class LoadActivity extends AppCompatActivity {
 
         try {
             org.apache.commons.codec.binary.Base64.encodeBase64String("".getBytes());
+            Common.isCodecAvailable = true;
         }catch (NoSuchMethodError e)
         {
             Common.isCodecAvailable = false;
