@@ -42,27 +42,38 @@ public class LoadActivity extends AppCompatActivity {
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
 
-    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityLoadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        boolean isFileAvialable = false;
+        if (getIntent() != null && getIntent().getData() != null) {
+            kdbxFileUri = getIntent().getData();
+            isFileAvialable = true;
+        } else {
+            isFileAvialable = false;
+        }
 
         Common.database = null;
 
-        Dialog banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
-        banner.show();
+        if (isFileAvialable) {
+            loadFile();
+        } else {
+            Dialog banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
+            banner.show();
+            Thread bannerThreasd = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    //do nothing
+                }
+                banner.dismiss();
+            });
+            bannerThreasd.start();
+        }
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                //do nothing
-            }
-            banner.dismiss();
-        }).start();
 
         MaterialButton openBtn = binding.openBtn;
         openBtn.setOnClickListener(new View.OnClickListener() {
@@ -217,21 +228,7 @@ public class LoadActivity extends AppCompatActivity {
             case PICK_FILE_OPEN_RESULT_CODE:
                 if (resultCode == -1) {
                     kdbxFileUri = data.getData();
-                    String fileName = "";
-                    try {
-
-                        getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        Cursor returnCursor =
-                                getContentResolver().query(kdbxFileUri, null, null, null, null);
-                        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                        returnCursor.moveToFirst();
-                        fileName = returnCursor.getString(nameIndex);
-
-                    } catch (Exception e) {
-                        fileName = e.getMessage();
-                    }
-
-                    binding.kdbxFilePath.setText(fileName);
+                    loadFile();
                 }
 
                 break;
@@ -247,5 +244,22 @@ public class LoadActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Common.database = null;
+    }
+
+    private void loadFile() {
+        String fileName = "";
+        try {
+            getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Cursor returnCursor =
+                    getContentResolver().query(kdbxFileUri, null, null, null, null);
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            fileName = returnCursor.getString(nameIndex);
+
+        } catch (Exception e) {
+            fileName = e.getMessage();
+        }
+
+        binding.kdbxFilePath.setText(fileName);
     }
 }
