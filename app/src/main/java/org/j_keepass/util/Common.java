@@ -15,4 +15,6 @@ public class Common {
     public static Entry<?, ?, ?, ?> entry;
     public static KdbxCreds creds;
     public static Uri kdbxFileUri;
+
+    public static boolean isCodecAvailable = false;
 }

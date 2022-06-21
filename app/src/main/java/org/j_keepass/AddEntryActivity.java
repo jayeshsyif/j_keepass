@@ -213,5 +213,9 @@ public class AddEntryActivity extends AppCompatActivity {
         if (binding.newEntryUserName.getText() == null || binding.newEntryUserName.getText().toString() == null || binding.newEntryUserName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryUsernameEmptyErrorMsg);
         }
+        if( !Common.isCodecAvailable)
+        {
+            throw new KpCustomException(R.string.devInProgress);
+        }
     }
 }

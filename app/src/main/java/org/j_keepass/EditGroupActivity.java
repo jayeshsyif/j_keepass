@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import org.j_keepass.databinding.EditNewGroupLayoutBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Group;
@@ -36,10 +37,10 @@ public class EditGroupActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             if(Common.group != null) {
-                binding.addGroupName.setText(Common.group.getName());
-                binding.addGroupTitleName.setText(Common.group.getName());
+                binding.editGroupName.setText(Common.group.getName());
+                binding.editGroupTitleName.setText(Common.group.getName());
             }
-            binding.addGroupName.addTextChangedListener(new TextWatcher() {
+            binding.editGroupName.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -51,8 +52,8 @@ public class EditGroupActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (binding.addGroupName.getText() != null) {
-                        binding.addGroupTitleName.setText(binding.addGroupName.getText().toString());
+                    if (binding.editGroupName.getText() != null) {
+                        binding.editGroupTitleName.setText(binding.editGroupName.getText().toString());
                     }
                 }
             });
@@ -61,19 +62,18 @@ public class EditGroupActivity extends AppCompatActivity {
                 ProgressDialogUtil.showSavingDialog(alertDialog);
 
                 new Thread(() -> {
-                    String groupName = null;
-                    if (binding.addGroupName.getText() == null) {
+                    boolean proceed = false;
+                    try {
+                        validate();
+                        proceed = true;
+                    } catch (KpCustomException e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.groupNameEmptyErrorMsg);
-                    } else {
-                        groupName = binding.addGroupName.getText().toString();
+                        ToastUtil.showToast(getLayoutInflater(), v, e);
                     }
-                    if (groupName == null || groupName.length() <= 0) {
-                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.groupNameEmptyErrorMsg);
-                    } else {
+
+                    if (proceed) {
                         Group group = Common.group;
-                        group.setName(groupName);
+                        group.setName(binding.editGroupName.getText().toString());
                         group.setParent(group.getParent());
                         Common.group = group.getParent();
 
@@ -139,6 +139,16 @@ public class EditGroupActivity extends AppCompatActivity {
             finish();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void validate() throws KpCustomException {
+
+        if (binding.editGroupName.getText() == null) {
+            throw new KpCustomException(R.string.groupNameEmptyErrorMsg);
+        }
+        if (!Common.isCodecAvailable) {
+            throw new KpCustomException(R.string.devInProgress);
         }
     }
 }

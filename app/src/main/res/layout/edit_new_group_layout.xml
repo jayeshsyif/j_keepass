@@ -21,7 +21,7 @@
             android:weightSum="100">
 
             <TextView
-                android:id="@+id/addGroupTitleName"
+                android:id="@+id/editGroupTitleName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/kp_group_name_margin"
@@ -58,7 +58,7 @@
                         android:textStyle="italic"></TextView>
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/addGroupName"
+                        android:id="@+id/editGroupName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_group_name_margin"

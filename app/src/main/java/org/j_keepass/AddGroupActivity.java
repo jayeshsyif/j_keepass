@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import org.j_keepass.databinding.AddNewGroupLayoutBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Group;
@@ -58,20 +59,20 @@ public class AddGroupActivity extends AppCompatActivity {
                 ProgressDialogUtil.showSavingDialog(alertDialog);
 
                 new Thread(() -> {
-                    String groupName = null;
-                    if (binding.addGroupName.getText() == null) {
+
+                    boolean proceed = false;
+                    try {
+                        validate();
+                        proceed = true;
+                    } catch (KpCustomException e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.groupNameEmptyErrorMsg);
-                    } else {
-                        groupName = binding.addGroupName.getText().toString();
+                        ToastUtil.showToast(getLayoutInflater(), v, e);
                     }
-                    if (groupName == null || groupName.length() <= 0) {
-                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.groupNameEmptyErrorMsg);
-                    } else {
+
+                    if (proceed) {
                         Group group = Common.group;
                         Group newGroup = Common.database.newGroup();
-                        newGroup.setName(groupName);
+                        newGroup.setName(binding.addGroupName.getText().toString());
                         newGroup.setParent(group);
                         group.addGroup(newGroup);
                         if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -136,6 +137,16 @@ public class AddGroupActivity extends AppCompatActivity {
             finish();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void validate() throws KpCustomException {
+
+        if (binding.addGroupName.getText() == null) {
+            throw new KpCustomException(R.string.groupNameEmptyErrorMsg);
+        }
+        if (!Common.isCodecAvailable) {
+            throw new KpCustomException(R.string.devInProgress);
         }
     }
 }

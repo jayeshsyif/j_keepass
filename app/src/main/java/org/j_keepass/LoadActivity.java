@@ -1,7 +1,6 @@
 package org.j_keepass;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -11,10 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -48,6 +44,18 @@ public class LoadActivity extends AppCompatActivity {
 
         binding = ActivityLoadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        try {
+            org.apache.commons.codec.binary.Base64.encodeBase64String("".getBytes());
+        }catch (NoSuchMethodError e)
+        {
+            Common.isCodecAvailable = false;
+        }catch (Exception e)
+        {
+            Common.isCodecAvailable = false;
+        }
+
+
         boolean isFileAvialable = false;
         if (getIntent() != null && getIntent().getData() != null) {
             kdbxFileUri = getIntent().getData();
@@ -73,6 +81,7 @@ public class LoadActivity extends AppCompatActivity {
             });
             bannerThreasd.start();
         }
+
 
 
         MaterialButton openBtn = binding.openBtn;
