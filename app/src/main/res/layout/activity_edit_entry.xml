@@ -73,6 +73,7 @@
                             android:fontFamily="@font/righteous"
                             android:gravity="left|center"
                             android:hint="@string/entryTitle"
+                            android:singleLine="true"
                             android:textAlignment="gravity"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:textColor="@color/kp_dark_blue"
@@ -124,6 +125,7 @@
                             android:fontFamily="@font/righteous"
                             android:gravity="left|center"
                             android:hint="@string/userName"
+                            android:singleLine="true"
                             android:textAlignment="gravity"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:textColor="@color/kp_dark_blue"
@@ -182,6 +184,7 @@
                                 android:fontFamily="@font/righteous"
                                 android:inputType="textPassword"
                                 android:hint="@string/password"
+                                android:singleLine="true"
                                 android:textColor="@color/kp_dark_blue"
                                 android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
                         </com.google.android.material.textfield.TextInputLayout>
@@ -234,6 +237,7 @@
                             android:hint="@string/url"
                             android:textAlignment="gravity"
                             android:textColor="@color/kp_dark_blue"
+                            android:singleLine="true"
                             android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
 
                         <LinearLayout

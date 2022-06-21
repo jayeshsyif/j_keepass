@@ -68,10 +68,10 @@
                         android:fontFamily="@font/righteous"
                         android:gravity="left|center"
                         android:hint="@string/enterGroupName"
+                        android:singleLine="true"
                         android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/kp_dark_blue"
-                        android:textColorHint="@color/kp_dark_blue"
                         android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
 
                 </LinearLayout>

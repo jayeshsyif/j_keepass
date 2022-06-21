@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import org.j_keepass.EditEntryActivity;
 import org.j_keepass.EditGroupActivity;
@@ -66,7 +67,7 @@ public class ListGroupAdapter extends BaseAdapter {
         convertView = LayoutInflater.from(activity).inflate(R.layout.activity_list_adapter_view, parent, false);
         TextView tx = convertView.findViewById(R.id.adapterText);
         //LinearLayout mainIL = convertView.findViewById(R.id.adapterMainLinearLayout);
-        ImageView adapterIconImageView = convertView.findViewById(R.id.adapterIconImageView);
+        ShapeableImageView adapterIconImageView = convertView.findViewById(R.id.adapterIconImageView);
         ImageView edit = convertView.findViewById(R.id.editGroupBtn);
         ImageView delete = convertView.findViewById(R.id.deleteGroupBtn);
         Pair<Object, Boolean> pair = getItem(position);

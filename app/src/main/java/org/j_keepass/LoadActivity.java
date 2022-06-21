@@ -57,7 +57,7 @@ public class LoadActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                Thread.sleep(7000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 //do nothing
             }

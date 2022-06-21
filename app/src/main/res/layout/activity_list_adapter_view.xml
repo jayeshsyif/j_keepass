@@ -3,87 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/kp_card_view_margin"
-    android:backgroundTint="@android:color/transparent"
-    android:padding="@dimen/kp_card_view_padding">
+    android:backgroundTint="@android:color/transparent">
 
 
-    <LinearLayout
-        android:id="@+id/adapterMainLinearLayout"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/kp_light_blue"
-        android:orientation="horizontal"
-        android:weightSum="100">
+        android:layout_margin="@dimen/kp_card_view_margin"
+        android:backgroundTint="@color/kp_white"
+        app:cardCornerRadius="2pt">
 
         <LinearLayout
+            android:id="@+id/adapterMainLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="45"
+            android:background="@color/kp_light_blue"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="100">
 
-            <ImageView
-                android:id="@+id/adapterIconImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="45"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/adapterIconImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_folder_fill0_wght300_grad_25_opsz24"
+                    android:textAlignment="center"
+                    app:tint="@color/kp_dark_blue" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/adapterText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="20"
+                android:fontFamily="@font/righteous"
+                android:gravity="center_vertical"
+                android:text="@string/groupName"
+                android:textAlignment="gravity"
+                android:textAllCaps="false"
+                android:textSize="@dimen/kp_group_list_text_size"
+                android:textStyle="bold">
+
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/ic_folder_fill0_wght300_grad_25_opsz24"
-                android:textAlignment="center"
-                app:tint="@color/kp_dark_blue" />
+                android:layout_weight="35"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <ImageButton
+                    android:id="@+id/editGroupBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/kp_button_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
+                    android:textStyle="bold"
+                    app:tint="@color/kp_dark_blue" />
+
+                <ImageButton
+                    android:id="@+id/deleteGroupBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/kp_button_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
+                    android:textColor="@color/kp_dark_blue"
+                    android:textStyle="bold"
+                    app:tint="@color/kp_dark_blue" />
+            </LinearLayout>
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/adapterText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/kp_margin"
-            android:layout_weight="20"
-            android:gravity="center_vertical"
-            android:text="@string/groupName"
-            android:textAlignment="gravity"
-            android:textAllCaps="false"
-            android:fontFamily="@font/righteous"
-            android:textSize="@dimen/kp_group_list_text_size"
-            android:textStyle="bold">
-
-        </TextView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="35"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <ImageButton
-                android:id="@+id/editGroupBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/kp_button_margin"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
-                android:textStyle="bold"
-                app:tint="@color/kp_dark_blue" />
-
-            <ImageButton
-                android:id="@+id/deleteGroupBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/kp_button_margin"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
-                android:textColor="@color/kp_dark_blue"
-                android:textStyle="bold"
-                app:tint="@color/kp_dark_blue" />
-        </LinearLayout>
-
-    </LinearLayout>
-
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

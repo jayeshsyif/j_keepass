@@ -67,6 +67,7 @@
                         android:fontFamily="@font/righteous"
                         android:gravity="left|center"
                         android:textAlignment="gravity"
+                        android:singleLine="true"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/kp_dark_blue"
                         android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>

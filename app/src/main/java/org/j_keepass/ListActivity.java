@@ -21,6 +21,7 @@ import org.j_keepass.util.ProgressDialogUtil;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
+import org.linguafranca.pwdb.kdbx.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +151,12 @@ public class ListActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        MaterialButton newRandonPasswordFloatBtn = mView.findViewById(R.id.newRandonPasswordFloatBtn);
+        newRandonPasswordFloatBtn.setOnClickListener(v -> {
+
+        });
+
         return alertDialog;
     }
 

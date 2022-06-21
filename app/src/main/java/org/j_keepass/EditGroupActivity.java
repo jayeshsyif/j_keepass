@@ -127,4 +127,18 @@ public class EditGroupActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (Common.group != null) {
+            Intent intent = new Intent(this, ListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("click", "group");
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
