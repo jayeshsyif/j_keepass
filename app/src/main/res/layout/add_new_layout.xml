@@ -42,6 +42,54 @@
 
                 </com.google.android.material.button.MaterialButton>
 
+                <LinearLayout
+                    android:id="@+id/randomPasswordLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="100"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_margin"
+                        android:layout_weight="20"
+                        app:passwordToggleEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/randomPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:backgroundTint="@android:color/transparent"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:fontFamily="@font/righteous"
+                            android:inputType="textPassword"
+                            android:textColor="@color/kp_dark_blue"
+                            android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="80">
+
+                        <ImageButton
+                            android:id="@+id/randomPasswordCopy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                            android:textAlignment="gravity"
+                            app:tint="@color/kp_dark_blue"></ImageButton>
+
+                    </LinearLayout>
+                </LinearLayout>
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addNewGroupfloatBtn"
                     android:layout_width="match_parent"

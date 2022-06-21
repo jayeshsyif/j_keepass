@@ -1,27 +1,34 @@
 package org.j_keepass;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.adapter.ListGroupAdapter;
 import org.j_keepass.databinding.ActivityListBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.Pair;
+import org.j_keepass.util.PasswordGenerator;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
-import org.linguafranca.pwdb.kdbx.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,11 +159,27 @@ public class ListActivity extends AppCompatActivity {
             finish();
         });
 
+        LinearLayout randomPasswordLayout = mView.findViewById(R.id.randomPasswordLayout);
+        TextInputEditText randomPassword = mView.findViewById(R.id.randomPassword);
+        ImageButton randomPasswordCopy = mView.findViewById(R.id.randomPasswordCopy);
         MaterialButton newRandonPasswordFloatBtn = mView.findViewById(R.id.newRandonPasswordFloatBtn);
         newRandonPasswordFloatBtn.setOnClickListener(v -> {
-
+            if (randomPasswordLayout.getVisibility() == View.GONE) {
+                randomPassword.setText(new PasswordGenerator().generate(10));
+                randomPasswordLayout.setVisibility(View.VISIBLE);
+            } else {
+                randomPasswordLayout.setVisibility(View.GONE);
+            }
         });
-
+        randomPasswordCopy.setOnClickListener(v -> {
+            if (randomPassword.getText() != null) {
+                ClipboardManager clipboard = (ClipboardManager)
+                        getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("password", randomPassword.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
+            }
+        });
         return alertDialog;
     }
 
