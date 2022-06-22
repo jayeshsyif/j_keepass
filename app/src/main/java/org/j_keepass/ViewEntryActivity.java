@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,6 +38,10 @@ public class ViewEntryActivity extends AppCompatActivity {
             }
 
             if (entry != null) {
+                LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                binding.entryScrollView.setLayoutAnimation(lac);
+                binding.entryScrollView.startLayoutAnimation();
+
                 binding.entryTitleName.setText(entry.getTitle());
                 binding.entryUserName.setText(entry.getUsername());
                 binding.entryPassword.setText(entry.getPassword());

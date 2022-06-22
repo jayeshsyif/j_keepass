@@ -81,7 +81,7 @@ public class LoadActivity extends AppCompatActivity {
             banner.show();
             Thread bannerThreasd = new Thread(() -> {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     //do nothing
                 }
@@ -173,11 +173,29 @@ public class LoadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(LoadActivity.this, android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
                 dialog.setContentView(R.layout.info_layout);
-                ImageButton link = dialog.findViewById(R.id.link);
-                link.setOnClickListener(new View.OnClickListener() {
+                ImageButton llink = dialog.findViewById(R.id.llink);
+                llink.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.linkedin.com/in/jayesh-ganatra-76051056"));
+                        startActivity(intent);
+                    }
+                });
+
+                ImageButton elink = dialog.findViewById(R.id.elink);
+                elink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.linkedin.com/in/jayesh-ganatra-76051056"));
+                        startActivity(intent);
+                    }
+                });
+
+                ImageButton glink = dialog.findViewById(R.id.glink);
+                glink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://play.google.com/store/apps/dev?id=7560962222107226464"));
                         startActivity(intent);
                     }
                 });

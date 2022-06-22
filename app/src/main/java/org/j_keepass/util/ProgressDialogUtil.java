@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+
 import org.j_keepass.R;
 
 
@@ -48,11 +50,19 @@ public class ProgressDialogUtil {
     }
 
     static public void dismissSavingDialog(AlertDialog alertDialog) {
-        alertDialog.dismiss();
+        try {
+            alertDialog.dismiss();
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 
     static public void showSavingDialog(AlertDialog alertDialog) {
-        alertDialog.show();
+        try {
+            alertDialog.show();
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 
 
@@ -67,7 +77,7 @@ public class ProgressDialogUtil {
             alertDialog = alert.create();
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
             alertDialog.getWindow().setGravity(Gravity.CENTER);
             ProgressBar progressBar = mView.findViewById(R.id.progressBar);
             progressBar.setProgress(0);

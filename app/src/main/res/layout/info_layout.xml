@@ -98,19 +98,7 @@
                     </ImageButton>
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_margin"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        android:visibility="invisible"
-                        app:tint="@color/kp_dark_blue">
-
-                    </ImageButton>
-
-                    <ImageButton
-                        android:id="@+id/link"
+                        android:id="@+id/llink"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
@@ -122,13 +110,25 @@
                     </ImageButton>
 
                     <ImageButton
+                        android:id="@+id/elink"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        android:visibility="invisible"
+                        app:tint="@color/kp_dark_blue">
+
+                    </ImageButton>
+
+                    <ImageButton
+                        android:id="@+id/glink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/kp_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
                         app:tint="@color/kp_dark_blue"></ImageButton>
 
                     <ImageButton

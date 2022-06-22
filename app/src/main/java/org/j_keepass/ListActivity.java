@@ -72,6 +72,7 @@ public class ListActivity extends AppCompatActivity {
                 ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
                 if (group == null) {
                     group = database.getRootGroup();
+                    Common.group = group;
                 }
 
                 LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.

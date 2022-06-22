@@ -7,8 +7,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.ScrollView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 
 import org.j_keepass.R;
 
@@ -26,8 +29,9 @@ public class ConfirmDialogUtil {
             alertDialog = alert.create();
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
             alertDialog.getWindow().setGravity(Gravity.CENTER);
+            ((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton yes = mView.findViewById(R.id.confirmYes);
             MaterialButton no = mView.findViewById(R.id.confirmNo);
             no.setOnClickListener(v -> {
@@ -41,5 +45,13 @@ public class ConfirmDialogUtil {
         }
         triplet.first = alertDialog;
         return triplet;
+    }
+
+    static public void showDialog(AlertDialog alertDialog) {
+        try {
+            alertDialog.show();
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 }

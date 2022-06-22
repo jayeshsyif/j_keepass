@@ -129,7 +129,6 @@ public class ListGroupAdapter extends BaseAdapter {
         Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
         confirmDialog.second.setOnClickListener(viewObj -> {
 
-
             final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSavingDialog(alertDialog);
 
@@ -181,7 +180,7 @@ public class ListGroupAdapter extends BaseAdapter {
                 }
             }).start();
         });
-        confirmDialog.first.show();
+        ConfirmDialogUtil.showDialog(confirmDialog.first);
     }
 
     private void deleteEntry(View v, Activity activity, Entry entry) {

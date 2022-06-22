@@ -16,6 +16,7 @@
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <ScrollView
+            android:id="@+id/confirmScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
