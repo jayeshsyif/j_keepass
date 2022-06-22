@@ -208,6 +208,9 @@ public class ListActivity extends AppCompatActivity {
             finish();
         } else {
             super.onBackPressed();
+            Intent intent = new Intent(ListActivity.this, LoadActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 }

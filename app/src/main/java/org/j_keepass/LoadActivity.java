@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -23,20 +24,26 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.j_keepass.databinding.ActivityLoadBinding;
 import org.j_keepass.util.BannerDialogUtil;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Database;
+import org.linguafranca.pwdb.Entry;
+import org.linguafranca.pwdb.Group;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class LoadActivity extends AppCompatActivity {
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
+    public static final int PICK_FOLDER_OPEN_RESULT_CODE = 2;
     private ActivityLoadBinding binding;
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
+    private boolean isCreate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +55,12 @@ public class LoadActivity extends AppCompatActivity {
         try {
             org.apache.commons.codec.binary.Base64.encodeBase64String("".getBytes());
             Common.isCodecAvailable = true;
-        }catch (NoSuchMethodError e)
-        {
+        } catch (NoSuchMethodError e) {
             Common.isCodecAvailable = false;
-        }catch (Exception e)
-        {
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+        } catch (Exception e) {
             Common.isCodecAvailable = false;
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
         }
 
 
@@ -84,7 +91,6 @@ public class LoadActivity extends AppCompatActivity {
         }
 
 
-
         MaterialButton openBtn = binding.openBtn;
         openBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +116,6 @@ public class LoadActivity extends AppCompatActivity {
                 } else {
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
                 }
-
-
             }
         });
 
@@ -126,81 +130,10 @@ public class LoadActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean proceed = true;
-                        String kdbxPassword = null;
-                        Database<?, ?, ?, ?> database = null;
-                        ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
-                        if (kdbxPasswordET.getText() != null) {
-                            kdbxPassword = kdbxPasswordET.getText().toString();
-                            if (kdbxPassword == null || kdbxPassword.length() <= 0) {
-                                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyPasswordError);
-                                proceed = false;
-                            }
+                        if (isCreate) {
+                            createFile(alertDialog, v);
                         } else {
-                            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                            ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyPasswordError);
-                            proceed = false;
-                        }
-                        ProgressDialogUtil.setLoadingProgress(alertDialog, 30);
-                        if (proceed) {
-                            if (kdbxFileUri == null) {
-                                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError);
-                                proceed = false;
-                            }
-                        }
-                        ProgressDialogUtil.setLoadingProgress(alertDialog, 40);
-                        if (proceed) {
-                            KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
-                            Common.creds = creds;
-                            InputStream inputStream = null;
-                            try {
-                                inputStream = getContentResolver().openInputStream(kdbxFileUri);
-                            } catch (FileNotFoundException e) {
-                                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                proceed = false;
-                                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
-                            }
-                            ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
-                            if (inputStream != null) {
-                                try {
-                                    database = SimpleDatabase.load(creds, inputStream);
-                                } catch (Exception e) {
-                                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                    proceed = false;
-                                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
-                                }
-                                if (database == null) {
-                                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError);
-                                    proceed = false;
-                                }
-                            }
-                            ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
-                            if (inputStream != null) {
-                                try {
-                                    inputStream.close();
-                                } catch (Exception e) {
-                                }
-                            }
-                        }
-
-                        if (proceed) {
-                            if (database != null) {
-                                try {
-                                    ProgressDialogUtil.setLoadingProgress(alertDialog, 100);
-                                    Common.database = database;
-                                    Common.kdbxFileUri = kdbxFileUri;
-                                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                    Intent intent = new Intent(LoadActivity.this, ListActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } catch (Exception e) {
-                                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
-                                }
-                            }
+                            process(alertDialog, v);
                         }
                     }
                 }).start();
@@ -211,7 +144,28 @@ public class LoadActivity extends AppCompatActivity {
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.devInProgress);
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(LoadActivity.this, new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            READ_EXTERNAL_STORAGE);
+                }
+
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+                    chooseFile.setType("*/*");
+                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    chooseFile.putExtra(Intent.EXTRA_TITLE, "database.kdbx");
+
+                    chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
+                    startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+                } else {
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                }
             }
         });
         binding.floatInfo.setOnClickListener(new View.OnClickListener() {
@@ -237,10 +191,18 @@ public class LoadActivity extends AppCompatActivity {
         switch (requestCode) {
             case PICK_FILE_OPEN_RESULT_CODE:
                 if (resultCode == -1) {
+                    isCreate = false;
                     kdbxFileUri = data.getData();
                     loadFile();
                 }
-
+                break;
+            case PICK_FOLDER_OPEN_RESULT_CODE:
+                if (resultCode == -1) {
+                    isCreate = true;
+                    kdbxFileUri = data.getData();
+                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword);
+                    loadFile();
+                }
                 break;
         }
     }
@@ -260,6 +222,10 @@ public class LoadActivity extends AppCompatActivity {
         String fileName = "";
         try {
             getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (Exception e) {
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+        }
+        try {
             Cursor returnCursor =
                     getContentResolver().query(kdbxFileUri, null, null, null, null);
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
@@ -271,5 +237,165 @@ public class LoadActivity extends AppCompatActivity {
         }
 
         binding.kdbxFilePath.setText(fileName);
+    }
+
+    private void process(AlertDialog alertDialog, View v) {
+        boolean proceed = true;
+        String kdbxPassword = null;
+        Database<?, ?, ?, ?> database = null;
+        ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
+        try {
+            Validate();
+        } catch (KpCustomException e) {
+            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+            ToastUtil.showToast(getLayoutInflater(), v, e);
+            proceed = false;
+        }
+        TextInputEditText kdbxPasswordET = binding.kdbxPassword;
+        ProgressDialogUtil.setLoadingProgress(alertDialog, 30);
+        if (proceed) {
+            if (kdbxFileUri == null) {
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError);
+                proceed = false;
+            }
+        }
+        ProgressDialogUtil.setLoadingProgress(alertDialog, 40);
+        kdbxPassword = kdbxPasswordET.getText().toString();
+        if (proceed) {
+            KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
+            Common.creds = creds;
+            InputStream inputStream = null;
+            try {
+                inputStream = getContentResolver().openInputStream(kdbxFileUri);
+            } catch (FileNotFoundException e) {
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                proceed = false;
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
+            }
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
+            if (inputStream != null) {
+                try {
+                    database = SimpleDatabase.load(creds, inputStream);
+                } catch (Exception e) {
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                    proceed = false;
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
+                }
+                if (database == null) {
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError);
+                    proceed = false;
+                }
+            }
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        if (proceed) {
+            if (database != null) {
+                try {
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 100);
+                    Common.database = database;
+                    Common.kdbxFileUri = kdbxFileUri;
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                    Intent intent = new Intent(LoadActivity.this, ListActivity.class);
+                    startActivity(intent);
+                    finish();
+                } catch (Exception e) {
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
+                }
+            }
+        }
+    }
+
+    private void createFile(AlertDialog alertDialog, View v) {
+        boolean proceed = true;
+        ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
+        try {
+            Validate();
+        } catch (KpCustomException e) {
+            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+            ToastUtil.showToast(getLayoutInflater(), v, e);
+            proceed = false;
+        }
+        if (proceed) {
+            TextInputEditText kdbxPasswordET = binding.kdbxPassword;
+            String kdbxPassword = kdbxPasswordET.getText().toString();
+            KdbxCreds creds = new KdbxCreds(kdbxPassword.getBytes());
+            Common.creds = creds;
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 30);
+            Database<?, ?, ?, ?> database = new SimpleDatabase();
+            Group g = database.newGroup("Dummy Group");
+            Entry e1 =database.newEntry("Dummy Entry 1");
+            g.addEntry(e1);
+            Entry e2 =database.newEntry("Dummy Entry 2");
+            g.addEntry(e2);
+            Group rootGroup = database.getRootGroup();
+            rootGroup.setName("Root");
+            rootGroup.addGroup(g);
+            OutputStream fileOutputStream = null;
+            try {
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 40);
+                fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+                database.save(creds, fileOutputStream);
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+            } catch (NoSuchMethodError e) {
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+            } catch (Exception e) {
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                Log.e("KP","KP error ",e);
+            } finally {
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (Exception e) {
+                        //do nothing
+                    }
+                }
+            }
+            if (proceed) {
+                if (database != null) {
+                    try {
+                        ProgressDialogUtil.setLoadingProgress(alertDialog, 100);
+                        Common.database = database;
+                        Common.kdbxFileUri = kdbxFileUri;
+                        ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                        Intent intent = new Intent(LoadActivity.this, ListActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+                        ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
+                    }
+                }
+            }
+        }
+    }
+
+    private void Validate() throws KpCustomException {
+        TextInputEditText kdbxPasswordET = binding.kdbxPassword;
+        if (kdbxPasswordET.getText() != null) {
+            String kdbxPassword = kdbxPasswordET.getText().toString();
+            if (kdbxPassword == null || kdbxPassword.length() <= 0) {
+                throw new KpCustomException(R.string.emptyPasswordError);
+            }
+        } else {
+            throw new KpCustomException(R.string.emptyPasswordError);
+        }
+
+        if (!Common.isCodecAvailable) {
+            throw new KpCustomException(R.string.devInProgress);
+        }
     }
 }
