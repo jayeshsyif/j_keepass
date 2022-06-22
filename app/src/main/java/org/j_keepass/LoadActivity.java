@@ -173,6 +173,14 @@ public class LoadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(LoadActivity.this, android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
                 dialog.setContentView(R.layout.info_layout);
+                ImageButton link = dialog.findViewById(R.id.link);
+                link.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.linkedin.com/in/jayesh-ganatra-76051056"));
+                        startActivity(intent);
+                    }
+                });
                 FloatingActionButton closeInfoBtn = dialog.findViewById(R.id.floatCloseInfoBtn);
                 closeInfoBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -333,9 +341,9 @@ public class LoadActivity extends AppCompatActivity {
             ProgressDialogUtil.setLoadingProgress(alertDialog, 30);
             Database<?, ?, ?, ?> database = new SimpleDatabase();
             Group g = database.newGroup("Dummy Group");
-            Entry e1 =database.newEntry("Dummy Entry 1");
+            Entry e1 = database.newEntry("Dummy Entry 1");
             g.addEntry(e1);
-            Entry e2 =database.newEntry("Dummy Entry 2");
+            Entry e2 = database.newEntry("Dummy Entry 2");
             g.addEntry(e2);
             Group rootGroup = database.getRootGroup();
             rootGroup.setName("Root");
@@ -354,7 +362,7 @@ public class LoadActivity extends AppCompatActivity {
             } catch (Exception e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
-                Log.e("KP","KP error ",e);
+                Log.e("KP", "KP error ", e);
             } finally {
                 if (fileOutputStream != null) {
                     try {

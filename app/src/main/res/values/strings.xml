@@ -72,6 +72,8 @@
     <string name="changeLogsVer2ChangesText">   Edit and delete group working. Add, edit and delete Entry(credential) working.</string>
     <string name="changeLogsVer21Text">Version 2.1</string>
     <string name="changeLogsVer21ChangesText">   Minor fix. can view/open kdbx directly into app. Random password generator added.</string>
+    <string name="changeLogsVer3Text">Version 3</string>
+    <string name="changeLogsVer3ChangesText">   Can create new kdbx directly into app. added new animations.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
