@@ -10,8 +10,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,6 +73,11 @@ public class ListActivity extends AppCompatActivity {
                 if (group == null) {
                     group = database.getRootGroup();
                 }
+
+                LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                binding.groupListView.setLayoutAnimation(lac);
+                binding.groupListView.startLayoutAnimation();
+
                 if (group != null) {
                     groupName = group.getName();
                     ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<>();
@@ -136,6 +144,10 @@ public class ListActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        ScrollView newFloatScrollView = mView.findViewById(R.id.newFloatScrollView);
+        newFloatScrollView.setAnimation(AnimationUtils.makeInAnimation(this, true));
+
         FloatingActionButton closeInfoBtn = mView.findViewById(R.id.addNewfloatCloseInfoBtn);
         closeInfoBtn.setOnClickListener(v -> {
             alertDialog.dismiss();
@@ -165,8 +177,9 @@ public class ListActivity extends AppCompatActivity {
         MaterialButton newRandonPasswordFloatBtn = mView.findViewById(R.id.newRandonPasswordFloatBtn);
         newRandonPasswordFloatBtn.setOnClickListener(v -> {
             if (randomPasswordLayout.getVisibility() == View.GONE) {
-                randomPassword.setText(new PasswordGenerator().generate(10));
+                randomPassword.setText(new PasswordGenerator().generate(20));
                 randomPasswordLayout.setVisibility(View.VISIBLE);
+                randomPasswordLayout.startAnimation(AnimationUtils.makeInAnimation(mView.getContext(), true));
             } else {
                 randomPasswordLayout.setVisibility(View.GONE);
             }

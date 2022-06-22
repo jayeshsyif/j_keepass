@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -36,6 +38,10 @@ public class AddGroupActivity extends AppCompatActivity {
             Intent intent = new Intent(AddGroupActivity.this, LoadActivity.class);
             startActivity(intent);
         } else {
+
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+            binding.addGroupScrollView.setLayoutAnimation(lac);
+            binding.addGroupScrollView.startLayoutAnimation();
 
             binding.addGroupName.addTextChangedListener(new TextWatcher() {
                 @Override

@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -40,6 +42,11 @@ public class AddEntryActivity extends AppCompatActivity {
             Intent intent = new Intent(AddEntryActivity.this, LoadActivity.class);
             startActivity(intent);
         } else {
+
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+            binding.addEntryScrollView.setLayoutAnimation(lac);
+            binding.addEntryScrollView.startLayoutAnimation();
+
             {
 
                 binding.newEntryTitleName.addTextChangedListener(new TextWatcher() {
