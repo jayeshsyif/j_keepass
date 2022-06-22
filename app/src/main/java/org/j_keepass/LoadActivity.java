@@ -245,24 +245,26 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void loadFile() {
-        String fileName = "";
-        try {
-            getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        } catch (Exception e) {
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
-        }
-        try {
-            Cursor returnCursor =
-                    getContentResolver().query(kdbxFileUri, null, null, null, null);
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            fileName = returnCursor.getString(nameIndex);
+        if( kdbxFileUri != null) {
+            String fileName = "";
+            try {
+                getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } catch (Exception e) {
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+            }
+            try {
+                Cursor returnCursor =
+                        getContentResolver().query(kdbxFileUri, null, null, null, null);
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                returnCursor.moveToFirst();
+                fileName = returnCursor.getString(nameIndex);
 
-        } catch (Exception e) {
-            fileName = e.getMessage();
-        }
+            } catch (Exception e) {
+                fileName = e.getMessage();
+            }
 
-        binding.kdbxFilePath.setText(fileName);
+            binding.kdbxFilePath.setText(fileName);
+        }
     }
 
     private void process(AlertDialog alertDialog, View v) {
@@ -346,6 +348,7 @@ public class LoadActivity extends AppCompatActivity {
         ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
         try {
             Validate();
+            ValidateCodec();
         } catch (KpCustomException e) {
             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
             ToastUtil.showToast(getLayoutInflater(), v, e);
@@ -420,6 +423,8 @@ public class LoadActivity extends AppCompatActivity {
             throw new KpCustomException(R.string.emptyPasswordError);
         }
 
+    }
+    private void ValidateCodec() throws KpCustomException {
         if (!Common.isCodecAvailable) {
             throw new KpCustomException(R.string.devInProgress);
         }
