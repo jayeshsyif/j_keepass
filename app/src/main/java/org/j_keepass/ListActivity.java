@@ -199,7 +199,7 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (Common.group != null) {
+        if (Common.group != null && !Common.group.isRootGroup()) {
             Common.group = Common.group.getParent();
             Intent intent = new Intent(this, ListActivity.class);
             Bundle bundle = new Bundle();
