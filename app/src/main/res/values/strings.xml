@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">J KeePass</string>
+    <string name="app_name">JKeePass</string>
     <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
     <string name="title_activity_load">LoadActivity</string>
 
