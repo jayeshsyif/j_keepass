@@ -200,7 +200,7 @@ public class LoadActivity extends AppCompatActivity {
                 elink.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://twowayresume.com/jayesh/"));
+                        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://flowcv.me/jayesh-ganatra"));
                         startActivity(intent);
                     }
                 });
