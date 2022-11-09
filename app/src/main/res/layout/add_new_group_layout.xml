@@ -73,6 +73,7 @@
                         android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/kp_dark_blue"
+                        android:textColorHint="@color/kp_grey"
                         android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
 
                 </LinearLayout>

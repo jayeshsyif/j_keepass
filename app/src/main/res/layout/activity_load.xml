@@ -133,6 +133,10 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/kp_margin"
                             android:layout_weight="30"
+                            app:passwordToggleTint="@color/kp_grey"
+                            app:boxStrokeColor="@color/kp_grey"
+                            app:hintTextColor="@color/kp_grey"
+                            android:textColorHint="@color/kp_grey"
                             app:passwordToggleEnabled="true">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -142,9 +146,8 @@
                                 android:backgroundTint="@color/kp_white"
                                 android:fontFamily="@font/righteous"
                                 android:hint="@string/enterPassword"
-                                android:inputType="textPassword"
                                 android:textColor="@color/kp_dark_blue"
-                                android:textColorHint="@color/kp_dark_blue" />
+                                android:inputType="textPassword" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <ImageButton
