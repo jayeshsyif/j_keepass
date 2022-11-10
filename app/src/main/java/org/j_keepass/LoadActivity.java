@@ -332,6 +332,7 @@ public class LoadActivity extends AppCompatActivity {
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 100);
                     Common.database = database;
                     Common.kdbxFileUri = kdbxFileUri;
+                    Common.group = database.getRootGroup();
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     Intent intent = new Intent(LoadActivity.this, ListActivity.class);
                     startActivity(intent);

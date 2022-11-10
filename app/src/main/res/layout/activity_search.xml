@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/kp_grey"
-    tools:context=".ListActivity">
+    tools:context=".SearchActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -27,19 +27,20 @@
                 android:layout_weight="80"
                 android:weightSum="100">
 
-                <TextView
-                    android:id="@+id/groupName"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/searchKey"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="20"
                     android:fontFamily="@font/righteous"
                     android:gravity="top"
-                    android:text="@string/groupName"
+                    android:hint="@string/search"
+                    android:textColorHint="@color/kp_grey"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_group_name_text_size"
-                    android:textStyle="bold"></TextView>
+                    android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -48,17 +49,17 @@
                     android:gravity="top"
                     android:orientation="horizontal">
                     <ImageButton
-                        android:id="@+id/addFloat"
+                        android:id="@+id/backFloat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top"
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
+                        android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
                         app:tint="@color/kp_dark_blue" />
 
                     <ImageButton
-                        android:id="@+id/searchFloat"
+                        android:id="@+id/searchBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top"
@@ -71,7 +72,7 @@
             </LinearLayout>
 
             <ListView
-                android:id="@+id/groupListView"
+                android:id="@+id/searchListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="20"></ListView>

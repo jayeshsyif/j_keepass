@@ -50,6 +50,8 @@
     <string name="groupNameEmptyErrorMsg">Group Name cannot be empty!</string>
 
 
+    <string name="search">Search</string>
+
     <string name="entryTitleEmptyErrorMsg">Title cannot be empty!</string>
     <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>
     <string name="entryPasswordEmptyErrorMsg">Password cannot be empty!</string>
