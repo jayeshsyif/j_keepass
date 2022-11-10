@@ -47,6 +47,7 @@ public class ListActivity extends AppCompatActivity {
         binding = ActivityListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.floatAdd.shrink();
 
         if (Common.database == null) {
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
@@ -117,15 +118,16 @@ public class ListActivity extends AppCompatActivity {
                 binding.groupName.setText(groupName);
             }).start();
 
-            binding.addFloat.setOnClickListener(v -> {
+            binding.floatAdd.setOnClickListener(v -> {
+                if (!binding.floatAdd.isExtended()) {
+                    binding.floatAdd.extend();
+                } else {
+                    binding.floatAdd.shrink();
+                }
                 AlertDialog alertDialog1 = getDialog();
                 alertDialog1.show();
             });
-            binding.searchFloat.setOnClickListener( v -> {
-                Intent intent = new Intent(ListActivity.this, SearchActivity.class);
-                startActivity(intent);
-                finish();
-            });
+
         }
 
     }
@@ -142,7 +144,7 @@ public class ListActivity extends AppCompatActivity {
         final AlertDialog alertDialog = alert.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.getWindow().setGravity(Gravity.CENTER);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
 
         ScrollView newFloatScrollView = mView.findViewById(R.id.newFloatScrollView);
         newFloatScrollView.setAnimation(AnimationUtils.makeInAnimation(this, true));
@@ -150,7 +152,11 @@ public class ListActivity extends AppCompatActivity {
         FloatingActionButton closeInfoBtn = mView.findViewById(R.id.addNewfloatCloseInfoBtn);
         closeInfoBtn.setOnClickListener(v -> {
             alertDialog.dismiss();
-
+            if (!binding.floatAdd.isExtended()) {
+                binding.floatAdd.extend();
+            } else {
+                binding.floatAdd.shrink();
+            }
         });
         MaterialButton addGroup = mView.findViewById(R.id.addNewGroupfloatBtn);
         addGroup.setOnClickListener(v -> {
@@ -162,6 +168,13 @@ public class ListActivity extends AppCompatActivity {
         MaterialButton addEntry = mView.findViewById(R.id.addNewEntryfloatBtn);
         addEntry.setOnClickListener(v -> {
             Intent intent = new Intent(ListActivity.this, AddEntryActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        MaterialButton search = mView.findViewById(R.id.searchfloatBtn);
+        search.setOnClickListener(v -> {
+            Intent intent = new Intent(ListActivity.this, SearchActivity.class);
             startActivity(intent);
             finish();
         });

@@ -11,6 +11,7 @@
     <string name="ok">Ok</string>
     <string name="close">Close</string>
     <string name="newText">New</string>
+    <string name="menuText">Menu</string>
     <string name="getRandomPwd">New Random Password</string>
     <string name="addGroup">Add Group</string>
     <string name="addEntry">Add Entry</string>

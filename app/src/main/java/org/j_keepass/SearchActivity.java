@@ -30,9 +30,6 @@ public class SearchActivity extends AppCompatActivity {
         binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.backFloat.setOnClickListener( v -> {
-            this.onBackPressed();
-        });
 
         if (Common.database == null) {
             Intent intent = new Intent(SearchActivity.this, LoadActivity.class);

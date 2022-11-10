@@ -124,6 +124,21 @@
                     android:textColor="@color/kp_dark_blue">
 
                 </com.google.android.material.button.MaterialButton>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/searchfloatBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_margin"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/kp_light_blue"
+                    android:drawableLeft="@drawable/ic_search_fill0_wght300_grad_25_opsz24"
+                    android:drawableTint="@color/kp_dark_blue"
+                    android:fontFamily="@font/righteous"
+                    android:text="@string/search"
+                    android:textColor="@color/kp_dark_blue">
+
+                </com.google.android.material.button.MaterialButton>
             </LinearLayout>
         </ScrollView>
 
