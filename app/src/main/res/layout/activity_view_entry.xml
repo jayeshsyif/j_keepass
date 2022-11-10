@@ -122,6 +122,10 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/kp_margin"
                             android:layout_weight="20"
+                            app:passwordToggleTint="@color/kp_grey"
+                            app:boxStrokeColor="@color/kp_grey"
+                            app:hintTextColor="@color/kp_grey"
+                            android:textColorHint="@color/kp_grey"
                             app:passwordToggleEnabled="true">
 
                             <com.google.android.material.textfield.TextInputEditText

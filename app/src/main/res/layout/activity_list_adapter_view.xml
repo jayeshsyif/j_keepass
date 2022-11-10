@@ -47,13 +47,12 @@
                 android:layout_margin="@dimen/kp_margin"
                 android:layout_weight="20"
                 android:fontFamily="@font/righteous"
-                android:textColor="@color/kp_grey"
+                android:textColor="@color/kp_dark_blue"
                 android:gravity="center_vertical"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
                 android:textAllCaps="false"
-                android:textSize="@dimen/kp_group_list_text_size"
-                android:textStyle="bold">
+                android:textSize="@dimen/kp_group_list_text_size">
 
             </TextView>
 

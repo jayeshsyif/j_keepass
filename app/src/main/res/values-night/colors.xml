@@ -6,9 +6,9 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#98AFC7</color>
     <color name="kp_grey">#62686c</color>
-    <color name="kp_white">#ffffff</color>
+    <color name="kp_white">#98AFC7</color>
     <color name="kp_light_blue">#eef7fe</color>
     <color name="kp_dark_blue">#1A237E</color>
     <color name="kp_green">#b5dabf</color>

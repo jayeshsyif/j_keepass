@@ -107,20 +107,7 @@ public class LoadActivity extends AppCompatActivity {
 
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    String[] mimeTypes = {"application/octet-stream","application/x-kdbx", "application/x-kdb"};
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        chooseFile.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
-                        if (mimeTypes.length > 0) {
-                            chooseFile.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-                        }
-                    } else {
-                        String mimeTypesStr = "";
-
-                        for (String mimeType : mimeTypes) {
-                            mimeTypesStr += mimeType + "|";
-                        }
-                    }
-
+                    chooseFile.setType("*/*");
                     chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
                             | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                             | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
