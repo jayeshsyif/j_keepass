@@ -54,7 +54,7 @@ public class ViewEntryActivity extends AppCompatActivity {
                     if (binding.entryUserName.getText() != null) {
                         ClipData clip = ClipData.newPlainText("username", binding.entryUserName.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
+                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("User name"));
                     }
                 });
 
@@ -64,7 +64,7 @@ public class ViewEntryActivity extends AppCompatActivity {
                     if (binding.entryPassword.getText() != null) {
                         ClipData clip = ClipData.newPlainText("password", binding.entryPassword.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
+                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("Password"));
                     }
                 });
 
@@ -74,7 +74,7 @@ public class ViewEntryActivity extends AppCompatActivity {
                     if (binding.entryUrl.getText() != null) {
                         ClipData clip = ClipData.newPlainText("password", binding.entryUrl.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
+                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("URL"));
                     }
                 });
 
@@ -84,8 +84,11 @@ public class ViewEntryActivity extends AppCompatActivity {
                     if (binding.entryNotes.getText() != null) {
                         ClipData clip = ClipData.newPlainText("password", binding.entryNotes.getText().toString());
                         clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
+                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("Notes"));
                     }
+                });
+                binding.entryPasswordCopyFloatBtn.setOnClickListener( v -> {
+                    binding.entryPasswordCopy.performClick();
                 });
             }
         }
@@ -106,5 +109,9 @@ public class ViewEntryActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+    private String getCopiedStringWithKey(String key)
+    {
+        return key+" "+getResources().getString(R.string.copiedToClipboard);
     }
 }

@@ -304,12 +304,14 @@
             </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/entryPasswordCopyFloatBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
             android:backgroundTint="@color/kp_dark_blue"
             android:textColor="@color/kp_white"
+            android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
             app:iconTint="@color/kp_white"
             app:tint="@color/kp_white" />
     </androidx.cardview.widget.CardView>
