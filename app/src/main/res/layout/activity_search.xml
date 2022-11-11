@@ -34,7 +34,6 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
                 android:textColorHint="@color/kp_grey"
-                android:textSize="@dimen/kp_group_name_text_size"
                 android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
 
 
@@ -43,7 +42,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="20"></ListView>
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/kp_white"
+                app:labelVisibilityMode="unlabeled"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/backFloatBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
+                        android:textStyle="bold"
+                        app:tint="@color/kp_dark_blue" />
+
+                    <ImageButton
+                        android:id="@+id/searchFloatBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textStyle="bold"
+                        app:tint="@color/kp_dark_blue" />
+                </LinearLayout>
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

@@ -57,6 +57,9 @@
     <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>
     <string name="entryPasswordEmptyErrorMsg">Password cannot be empty!</string>
 
+    <string name="emptySearchKeyErrorMsg">Please enter some text to Search!</string>
+    <string name="noEntriesSearchKeyErrorMsg">No entries found.</string>
+
     <string name="copiedToClipboard">Copied to clipboard!</string>
 
     <string name="devInProgress">Development yet to be done!</string>
@@ -81,8 +84,8 @@
     <string name="changeLogsVer31ChangesText">   Dark mode bug fixes.</string>
     <string name="changeLogsVer4Text">Version 4.0</string>
     <string name="changeLogsVer4ChangesText">   Added experiment Dark mode support.</string>
-    <string name="changeLogsVer41Text">Version 4.1</string>
-    <string name="changeLogsVer41ChangesText">   Global search support added.</string>
+    <string name="changeLogsVer5Text">Version 5.0</string>
+    <string name="changeLogsVer5ChangesText">   Global search support added. Design changes.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

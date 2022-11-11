@@ -13,6 +13,7 @@ import org.j_keepass.databinding.ActivitySearchBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -23,6 +24,7 @@ import java.util.List;
 public class SearchActivity extends AppCompatActivity {
 
     private ActivitySearchBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ public class SearchActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            binding.searchBtn.setOnClickListener( v -> {
+            binding.searchBtn.setOnClickListener(v -> {
                 final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), SearchActivity.this);
                 ProgressDialogUtil.showLoadingDialog(alertDialog);
                 ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
@@ -44,48 +46,61 @@ public class SearchActivity extends AppCompatActivity {
                     String groupName = "NA";
                     Database<?, ?, ?, ?> database = Common.database;
 
-                    List<?> searchedEntries = database.findEntries(binding.searchKey.getText().toString());
+                    if (binding.searchKey.getText() == null || binding.searchKey.getText().toString().length() <= 0) {
+                        ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.emptySearchKeyErrorMsg);
+                    } else {
+                        List<?> searchedEntries = database.findEntries(binding.searchKey.getText().toString());
 
-                    Group<?, ?, ?, ?> group = null;
-                    group = Common.group;
+                        if (searchedEntries == null || searchedEntries.size() <= 0) {
+                            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                            ToastUtil.showToast(getLayoutInflater(), v, R.string.noEntriesSearchKeyErrorMsg);
+                        } else {
+                            Group<?, ?, ?, ?> group = null;
+                            group = Common.group;
 
-                    ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
-                    if (group == null) {
-                        group = database.getRootGroup();
-                        Common.group = group;
-                    }
-
-                    LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-                    binding.searchListView.setLayoutAnimation(lac);
-                    binding.searchListView.startLayoutAnimation();
-
-                    if (group != null) {
-                        groupName = group.getName();
-                        ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<>();
-
-                        {
-                            //entries
-                            for (int eCount = 0; eCount < searchedEntries.size(); eCount++) {
-                                Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) searchedEntries.get(eCount);
-                                Pair<Object, Boolean> pair = new Pair<>();
-                                pair.first = localEntry;
-                                pair.second = false;
-                                pairs.add(pair);
+                            ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
+                            if (group == null) {
+                                group = database.getRootGroup();
+                                Common.group = group;
                             }
-                        }
-                        ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
-                        ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, this);
-                        binding.searchListView.setAdapter(listGroupAdapter);
-                        binding.searchListView.setFooterDividersEnabled(false);
-                        binding.searchListView.setHeaderDividersEnabled(false);
-                        binding.searchListView.setDivider(null);
-                        binding.searchListView.setDividerHeight(0);
 
+                            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                            binding.searchListView.setLayoutAnimation(lac);
+                            binding.searchListView.startLayoutAnimation();
+
+                            if (group != null) {
+                                groupName = group.getName();
+                                ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<>();
+
+                                {
+                                    //entries
+                                    for (int eCount = 0; eCount < searchedEntries.size(); eCount++) {
+                                        Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) searchedEntries.get(eCount);
+                                        Pair<Object, Boolean> pair = new Pair<>();
+                                        pair.first = localEntry;
+                                        pair.second = false;
+                                        pairs.add(pair);
+                                    }
+                                }
+                                ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+                                ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, this);
+                                binding.searchListView.setAdapter(listGroupAdapter);
+                                binding.searchListView.setFooterDividersEnabled(false);
+                                binding.searchListView.setHeaderDividersEnabled(false);
+                                binding.searchListView.setDivider(null);
+                                binding.searchListView.setDividerHeight(0);
+
+                            }
+                            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                        }
                     }
-                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 }
             });
         }
+        binding.backFloatBtn.setOnClickListener(v -> {
+            this.onBackPressed();
+        });
     }
 
     @Override

@@ -126,6 +126,16 @@ public class AddGroupActivity extends AppCompatActivity {
                 }).start();
             });
         }
+
+        binding.searchFloatBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        binding.backFloatBtn.setOnClickListener(v -> {
+            this.onBackPressed();
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

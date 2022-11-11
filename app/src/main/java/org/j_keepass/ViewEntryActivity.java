@@ -89,6 +89,9 @@ public class ViewEntryActivity extends AppCompatActivity {
                 });
             }
         }
+        binding.backFloatBtn.setOnClickListener(v -> {
+            this.onBackPressed();
+        });
     }
 
     @Override
