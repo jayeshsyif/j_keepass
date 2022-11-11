@@ -52,6 +52,7 @@
 
 
     <string name="search">Search</string>
+    <string name="enterToSearch">Enter here text to search ....</string>
 
     <string name="entryTitleEmptyErrorMsg">Title cannot be empty!</string>
     <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>
@@ -85,7 +86,7 @@
     <string name="changeLogsVer4Text">Version 4.0</string>
     <string name="changeLogsVer4ChangesText">   Added experiment Dark mode support.</string>
     <string name="changeLogsVer5Text">Version 5.0</string>
-    <string name="changeLogsVer5ChangesText">   Global search support added. Design changes.</string>
+    <string name="changeLogsVer5ChangesText">   Global search support added. Over all Design changes.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

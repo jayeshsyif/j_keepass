@@ -121,9 +121,8 @@ public class LoadActivity extends AppCompatActivity {
         });
 
 
-        ImageButton okBtn = binding.okBtn;
         TextInputEditText kdbxPasswordET = binding.kdbxPassword;
-        okBtn.setOnClickListener(new View.OnClickListener() {
+        binding.okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), LoadActivity.this);

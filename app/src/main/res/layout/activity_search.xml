@@ -29,7 +29,7 @@
                 android:layout_margin="@dimen/kp_group_name_margin"
                 android:fontFamily="@font/righteous"
                 android:gravity="top"
-                android:hint="@string/search"
+                android:hint="@string/enterToSearch"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
