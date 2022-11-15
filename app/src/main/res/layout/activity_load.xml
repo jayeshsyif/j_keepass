@@ -99,6 +99,7 @@
                             android:text="@string/open"
                             android:textAllCaps="true"
                             android:textColor="@color/kp_dark_blue"
+                            android:drawableTint="@color/kp_dark_blue"
                             android:textStyle="bold">
 
                         </com.google.android.material.button.MaterialButton>
@@ -115,6 +116,7 @@
                             android:text="@string/create"
                             android:textAllCaps="true"
                             android:textColor="@color/kp_dark_blue"
+                            android:drawableTint="@color/kp_dark_blue"
                             android:textStyle="bold">
 
                         </com.google.android.material.button.MaterialButton>

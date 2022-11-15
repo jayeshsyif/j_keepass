@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JKeePass</string>
     <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
@@ -5,8 +6,8 @@
 
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
     <string name="kdbxFile">kdbx File: </string>
-    <string name="open">Open</string>
-    <string name="create">Create</string>
+    <string name="open">ખોલો</string>
+    <string name="create">બનાવો</string>
     <string name="enterPassword">Enter Password</string>
     <string name="ok">Ok</string>
     <string name="close">Close</string>
