@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">JKeePass</string>
-    <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
-    <string name="title_activity_load">LoadActivity</string>
+    <string name="app_name">JKeePass(जेकीपास)</string>
+    <string name="app_desc">100% सुरक्षित, विज्ञापन-मुक्त और सुरक्षित। पासवर्ड प्रबंधन अनुप्रयोग। </string>
+    <string name="title_activity_load">JKeePass(जेकीपास)</string>
 
-    <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
-    <string name="kdbxFile">kdbx File: </string>
-    <string name="open">Open</string>
-    <string name="create">Create</string>
-    <string name="enterPassword">Enter Password</string>
-    <string name="ok">Ok</string>
-    <string name="close">Close</string>
-    <string name="newText">New</string>
-    <string name="menuText">Menu</string>
-    <string name="getRandomPwd">New Random Password</string>
+    <string name="credit">श्रेय: KeePass Password Safe (https://keepass.info/)</string>
+    <string name="kdbxFile">kdbx फ़ाइल: </string>
+    <string name="open">खोलो</string>
+    <string name="create">बनाएं</string>
+    <string name="enterPassword">पास वर्ड दर्ज करें</string>
+    <string name="ok">ठीक है</string>
+    <string name="close">बंद करे</string>
+    <string name="newText">नया</string>
+    <string name="menuText">मेनू</string>
+    <string name="getRandomPwd">नया रैंडम पासवर्ड</string>
     <string name="addGroup">Add Group</string>
     <string name="addEntry">Add Entry</string>
 
-    <string name="save">Save</string>
+    <string name="save">सहेजें</string>
 
     <string name="processingFile">Please wait processing file.</string>
     <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
@@ -39,10 +39,10 @@
 
     <string name="url">URL</string>
 
-    <string name="loading">Loading ...</string>
-    <string name="loadingWithPercentage">Loading ... ($per$%)</string>
-    <string name="saving">Saving ...</string>
-    <string name="savingWithPercentage">Saving ... ($per$%)</string>
+    <string name="loading">लोडिंग ...</string>
+    <string name="loadingWithPercentage">लोडिंग ... ($per$%)</string>
+    <string name="saving">बचत ...</string>
+    <string name="savingWithPercentage">बचत ... ($per$%)</string>
 
     <string name="areYouSure">Are you sure?</string>
 

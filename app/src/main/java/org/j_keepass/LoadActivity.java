@@ -161,7 +161,7 @@ public class LoadActivity extends AppCompatActivity {
 
         TextInputEditText kdbxPasswordET = binding.kdbxPassword;
 
-        kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
+        /*kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 closeKeyboard();
@@ -170,7 +170,7 @@ public class LoadActivity extends AppCompatActivity {
                 return true;
             }
             return false;
-        });
+        });*/
 
         binding.okBtn.setOnClickListener(new View.OnClickListener() {
             @Override

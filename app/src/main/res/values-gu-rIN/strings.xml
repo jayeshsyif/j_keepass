@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">JKeePass</string>
-    <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
-    <string name="title_activity_load">LoadActivity</string>
+    <string name="app_name">JKeePass(જેકીપાસ)</string>
+    <string name="app_desc">100% સલામત, જાહેરાત-મુક્ત અને સુરક્ષિત. પાસવર્ડ મેનેજમેન્ટ એપ્લિકેશન.</string>
+    <string name="title_activity_load">JKeePass(જેકીપાસ)</string>
 
-    <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
-    <string name="kdbxFile">kdbx File: </string>
+    <string name="credit">ક્રેડિટ: KeePass Password Safe (https://keepass.info/)</string>
+    <string name="kdbxFile">kdbx ફાઈલ: </string>
     <string name="open">ખોલો</string>
     <string name="create">બનાવો</string>
-    <string name="enterPassword">Enter Password</string>
-    <string name="ok">Ok</string>
-    <string name="close">Close</string>
-    <string name="newText">New</string>
-    <string name="menuText">Menu</string>
-    <string name="getRandomPwd">New Random Password</string>
-    <string name="addGroup">Add Group</string>
-    <string name="addEntry">Add Entry</string>
+    <string name="enterPassword">પાસવર્ડ દાખલ કરો</string>
+    <string name="ok">બરાબર</string>
+    <string name="close">બંધ</string>
+    <string name="newText">નવું</string>
+    <string name="menuText">મેનુ</string>
+    <string name="getRandomPwd">નવો રેન્ડમ પાસવર્ડ</string>
+    <string name="addGroup">ઉમેરો Group</string>
+    <string name="addEntry">ઉમેરો Entry</string>
 
-    <string name="save">Save</string>
+    <string name="save">સેવ કરો</string>
 
     <string name="processingFile">Please wait processing file.</string>
     <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
@@ -30,19 +30,19 @@
     <string name="groupName">Group Name</string>
     <string name="groupNameDesc">\n It indicates Group Name.</string>
 
-    <string name="enterGroupName">Enter Group Name</string>
+    <string name="enterGroupName">દાખલ કરો Group Name</string>
 
-    <string name="entryName">Entry Name</string>
+    <string name="entryName">દાખલ કરો Name</string>
     <string name="userName">User name</string>
     <string name="password">Password</string>
     <string name="entryTitle">Title</string>
 
     <string name="url">URL</string>
 
-    <string name="loading">Loading ...</string>
-    <string name="loadingWithPercentage">Loading ... ($per$%)</string>
-    <string name="saving">Saving ...</string>
-    <string name="savingWithPercentage">Saving ... ($per$%)</string>
+    <string name="loading">લોડિંગ ...</string>
+    <string name="loadingWithPercentage">લોડિંગ ... ($per$%)</string>
+    <string name="saving">બચત ...</string>
+    <string name="savingWithPercentage">બચત ... ($per$%)</string>
 
     <string name="areYouSure">Are you sure?</string>
 
