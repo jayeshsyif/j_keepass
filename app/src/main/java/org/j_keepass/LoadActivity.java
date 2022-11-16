@@ -5,16 +5,18 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -52,7 +54,30 @@ public class LoadActivity extends AppCompatActivity {
 
         binding = ActivityLoadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        int currentNightMode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active on device
+                binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active on device
+                binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
+                break;
+        }
 
+        binding.themeFloatBtn.setOnClickListener(v -> {
+            switch (currentNightMode) {
+                case Configuration.UI_MODE_NIGHT_NO:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
+                    break;
+                case Configuration.UI_MODE_NIGHT_YES:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
+                    break;
+            }
+        });
         try {
             org.apache.commons.codec.binary.Base64.encodeBase64String("".getBytes());
             Common.isCodecAvailable = true;

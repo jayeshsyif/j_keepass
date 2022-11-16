@@ -90,6 +90,8 @@
     <string name="changeLogsVer5ChangesText">   Global search support added. Over all Design changes.</string>
     <string name="changeLogsVer51Text">Version 5.1</string>
     <string name="changeLogsVer51ChangesText">   Better dark mode support. Minor bug fixes</string>
+    <string name="changeLogsVer52Text">Version 5.2</string>
+    <string name="changeLogsVer52ChangesText">   Added button to switch dark/light. Minor bug fixes</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 </resources>
