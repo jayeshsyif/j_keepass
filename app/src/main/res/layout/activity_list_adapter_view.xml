@@ -27,8 +27,10 @@
                 android:gravity="center|left"
                 android:layout_margin="@dimen/kp_card_view_margin"
                 android:layout_weight="1"
-                android:text="ICICI Bank &#8594; login"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="ICICI Bank - login"
+                android:textSize="@dimen/kp_small_text_size"
+                android:textAppearance="?android:attr/textAppearance"
+                android:textStyle="italic"
                 android:textColor="@color/kp_dark_blue"></TextView>
 
             <LinearLayout

@@ -78,6 +78,9 @@ public class ListGroupAdapter extends BaseAdapter {
         if(isGroupInfoTobeShown)
         {
             adapterGroupInfo.setVisibility(View.VISIBLE);
+            adapterGroupInfo.setOnClickListener(v -> {
+                tx.performClick();
+            });
         }
         ImageView edit = convertView.findViewById(R.id.editGroupBtn);
         ImageView delete = convertView.findViewById(R.id.deleteGroupBtn);
@@ -135,7 +138,8 @@ public class ListGroupAdapter extends BaseAdapter {
                     String path = localEntry.getPath();
                     if(path != null)
                     {
-                        //path = path.replace("/"," &#8594; ");
+                        path = path.substring(1, path.length());
+                        path = path.replace("/"," \u002D ");
                         adapterGroupInfo.setText(path);
                     }
                 }

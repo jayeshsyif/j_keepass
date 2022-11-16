@@ -47,6 +47,7 @@ public class SearchActivity extends AppCompatActivity {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     closeKeyboard();
                     binding.searchBtn.performClick();
+                    binding.searchBtn.requestFocus();
                     return true;
                 }
                 return false;
@@ -68,7 +69,8 @@ public class SearchActivity extends AppCompatActivity {
                         if (searchedEntries == null || searchedEntries.size() <= 0) {
                             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                             ToastUtil.showToast(getLayoutInflater(), v, R.string.noEntriesSearchKeyErrorMsg);
-                        } else {
+                        }
+                        {
                             Group<?, ?, ?, ?> group = null;
                             group = Common.group;
 

@@ -165,8 +165,8 @@ public class LoadActivity extends AppCompatActivity {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 closeKeyboard();
-                binding.okBtn.requestFocus();
                 binding.okBtn.performClick();
+                binding.okBtn.requestFocus();
                 return true;
             }
             return false;
