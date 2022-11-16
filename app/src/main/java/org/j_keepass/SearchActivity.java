@@ -98,6 +98,7 @@ public class SearchActivity extends AppCompatActivity {
                                 }
                                 ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
                                 ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, this);
+                                listGroupAdapter.setGroupInfoTobeShown(true);
                                 binding.searchListView.setAdapter(listGroupAdapter);
                                 binding.searchListView.setFooterDividersEnabled(false);
                                 binding.searchListView.setHeaderDividersEnabled(false);

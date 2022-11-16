@@ -38,10 +38,15 @@ import java.util.ArrayList;
 public class ListGroupAdapter extends BaseAdapter {
     private final ArrayList<Pair<Object, Boolean>> pairs;
     private final Activity activity;
+    private boolean isGroupInfoTobeShown = false;
 
     public ListGroupAdapter(ArrayList<Pair<Object, Boolean>> pairs, Activity activity) {
         this.pairs = pairs;
         this.activity = activity;
+    }
+
+    public void setGroupInfoTobeShown(boolean groupInfoTobeShown) {
+        isGroupInfoTobeShown = groupInfoTobeShown;
     }
 
     @Override
@@ -68,6 +73,12 @@ public class ListGroupAdapter extends BaseAdapter {
         TextView tx = convertView.findViewById(R.id.adapterText);
         //LinearLayout mainIL = convertView.findViewById(R.id.adapterMainLinearLayout);
         ShapeableImageView adapterIconImageView = convertView.findViewById(R.id.adapterIconImageView);
+        TextView adapterGroupInfo = convertView.findViewById(R.id.adapterGroupInfo);
+        adapterGroupInfo.setVisibility(View.GONE);
+        if(isGroupInfoTobeShown)
+        {
+            adapterGroupInfo.setVisibility(View.VISIBLE);
+        }
         ImageView edit = convertView.findViewById(R.id.editGroupBtn);
         ImageView delete = convertView.findViewById(R.id.deleteGroupBtn);
         Pair<Object, Boolean> pair = getItem(position);
@@ -119,6 +130,15 @@ public class ListGroupAdapter extends BaseAdapter {
                     activity.finish();
                 });
                 delete.setOnClickListener(v -> deleteEntry(v, activity, localEntry));
+                if(isGroupInfoTobeShown)
+                {
+                    String path = localEntry.getPath();
+                    if(path != null)
+                    {
+                        //path = path.replace("/"," &#8594; ");
+                        adapterGroupInfo.setText(path);
+                    }
+                }
             }
         }
         return convertView;

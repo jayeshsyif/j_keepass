@@ -107,6 +107,7 @@ public class ListActivity extends AppCompatActivity {
                     }
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
                     ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, ListActivity.this);
+                    listGroupAdapter.setGroupInfoTobeShown(false);
                     binding.groupListView.setAdapter(listGroupAdapter);
                     binding.groupListView.setFooterDividersEnabled(false);
                     binding.groupListView.setHeaderDividersEnabled(false);
