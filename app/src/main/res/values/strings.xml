@@ -52,7 +52,7 @@
 
 
     <string name="search">Search</string>
-    <string name="enterToSearch">Enter here text to search ....</string>
+    <string name="enterToSearch">Type here to search ....</string>
 
     <string name="entryTitleEmptyErrorMsg">Title cannot be empty!</string>
     <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>
@@ -65,6 +65,8 @@
 
     <string name="devInProgress">Development yet to be done!</string>
     <string name="writePermissionNotGotError">Write permission not got!</string>
+
+    <string name="themeModeInfoNotGotError">Unable to get mode info. Using light mode.</string>
 
     <string name="developer">Developer</string>
     <string name="developerName">Jayesh Bharat Ganatra</string>

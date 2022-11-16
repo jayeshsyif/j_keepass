@@ -67,6 +67,8 @@
     <string name="devInProgress">Development yet to be done!</string>
     <string name="writePermissionNotGotError">Write permission not got!</string>
 
+    <string name="themeModeInfoNotGotError">Unable to get mode info. Using light mode.</string>
+
     <string name="developer">Developer</string>
     <string name="developerName">Jayesh Bharat Ganatra</string>
     <string name="fullStack">Full stack developer</string>

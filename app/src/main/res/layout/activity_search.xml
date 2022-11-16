@@ -31,6 +31,7 @@
                 android:gravity="top"
                 android:hint="@string/enterToSearch"
                 android:textAlignment="gravity"
+                android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
                 android:textColorHint="@color/kp_grey"

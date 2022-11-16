@@ -1,10 +1,14 @@
 package org.j_keepass;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,6 +42,15 @@ public class SearchActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            binding.searchKey.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    closeKeyboard();
+                    binding.searchBtn.performClick();
+                    return true;
+                }
+                return false;
+            });
             binding.searchBtn.setOnClickListener(v -> {
                 final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), SearchActivity.this);
                 ProgressDialogUtil.showLoadingDialog(alertDialog);
@@ -123,5 +136,28 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return false;
+    }
+
+    private void closeKeyboard() {
+        // this will give us the view
+        // which is currently focus
+        // in this layout
+        View view = this.getCurrentFocus();
+
+        // if nothing is currently
+        // focus then this will protect
+        // the app from crash
+        if (view != null) {
+
+            // now assign the system
+            // service to InputMethodManager
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
+        }
     }
 }

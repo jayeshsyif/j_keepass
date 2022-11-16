@@ -3,6 +3,7 @@ package org.j_keepass;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -11,7 +12,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -47,6 +50,7 @@ public class LoadActivity extends AppCompatActivity {
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
     private boolean isCreate = false;
+    private int currentNightMode = Configuration.UI_MODE_NIGHT_NO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,28 +58,37 @@ public class LoadActivity extends AppCompatActivity {
 
         binding = ActivityLoadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        int currentNightMode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                // Night mode is not active on device
-                binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
-                break;
-            case Configuration.UI_MODE_NIGHT_YES:
-                // Night mode is active on device
-                binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
-                break;
+
+        try {
+            currentNightMode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            switch (currentNightMode) {
+                case Configuration.UI_MODE_NIGHT_NO:
+                    // Night mode is not active on device
+                    binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
+                    break;
+                case Configuration.UI_MODE_NIGHT_YES:
+                    // Night mode is active on device
+                    binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
+                    break;
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError);
         }
 
         binding.themeFloatBtn.setOnClickListener(v -> {
-            switch (currentNightMode) {
-                case Configuration.UI_MODE_NIGHT_NO:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
-                    break;
-                case Configuration.UI_MODE_NIGHT_YES:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
-                    break;
+            try {
+                switch (currentNightMode) {
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
+                        break;
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
+                        break;
+                }
+            } catch (Exception e) {
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError);
             }
         });
         try {
@@ -147,6 +160,18 @@ public class LoadActivity extends AppCompatActivity {
 
 
         TextInputEditText kdbxPasswordET = binding.kdbxPassword;
+
+        kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                closeKeyboard();
+                binding.okBtn.requestFocus();
+                binding.okBtn.performClick();
+                return true;
+            }
+            return false;
+        });
+
         binding.okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,7 +295,7 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void loadFile() {
-        if( kdbxFileUri != null) {
+        if (kdbxFileUri != null) {
             String fileName = "";
             try {
                 getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -450,9 +475,33 @@ public class LoadActivity extends AppCompatActivity {
         }
 
     }
+
     private void ValidateCodec() throws KpCustomException {
         if (!Common.isCodecAvailable) {
             throw new KpCustomException(R.string.devInProgress);
+        }
+    }
+
+    private void closeKeyboard() {
+        // this will give us the view
+        // which is currently focus
+        // in this layout
+        View view = this.getCurrentFocus();
+
+        // if nothing is currently
+        // focus then this will protect
+        // the app from crash
+        if (view != null) {
+
+            // now assign the system
+            // service to InputMethodManager
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
         }
     }
 }
