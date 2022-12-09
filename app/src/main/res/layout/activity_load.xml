@@ -49,58 +49,28 @@
                     android:layout_margin="@dimen/kp_margin"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_margin"
-                        android:orientation="horizontal"
-                        android:weightSum="100">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="80"
-                            android:fontFamily="@font/righteous"
-                            android:gravity="bottom"
-                            android:text="@string/kdbxFile"
-                            android:textAlignment="gravity"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textSize="@dimen/kp_small_text_size"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/kdbxFilePath"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="20"
-                            android:fontFamily="@font/righteous"
-                            android:gravity="bottom"
-                            android:textAlignment="gravity"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textSize="@dimen/kp_small_text_size"
-                            android:textStyle="italic" />
-                    </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/openImportLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_margin"
                         android:orientation="horizontal"
                         android:weightSum="2">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/openBtn"
+                            android:id="@+id/importBtn"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_button_margin"
+                            android:layout_marginLeft="@dimen/kp_button_margin"
+                            android:layout_marginRight="@dimen/kp_button_margin"
                             android:layout_weight="1"
                             android:backgroundTint="@color/kp_light_blue"
                             android:drawableLeft="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
+                            android:drawableTint="@color/kp_dark_blue"
                             android:fontFamily="@font/righteous"
-                            android:text="@string/open"
+                            android:text="@string/importStr"
                             android:textAllCaps="true"
                             android:textColor="@color/kp_dark_blue"
-                            android:drawableTint="@color/kp_dark_blue"
                             android:textStyle="bold">
 
                         </com.google.android.material.button.MaterialButton>
@@ -109,50 +79,87 @@
                             android:id="@+id/createBtn"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_button_margin"
+                            android:layout_marginLeft="@dimen/kp_button_margin"
+                            android:layout_marginRight="@dimen/kp_button_margin"
                             android:layout_weight="1"
                             android:backgroundTint="@color/kp_light_blue"
                             android:drawableLeft="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
+                            android:drawableTint="@color/kp_dark_blue"
                             android:fontFamily="@font/righteous"
                             android:text="@string/create"
                             android:textAllCaps="true"
                             android:textColor="@color/kp_dark_blue"
-                            android:drawableTint="@color/kp_dark_blue"
                             android:textStyle="bold">
 
                         </com.google.android.material.button.MaterialButton>
+
                     </LinearLayout>
 
-                    <LinearLayout
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/kdbxFileName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_margin"
+                        android:layout_margin="@dimen/kp_button_margin"
+                        android:layout_marginLeft="@dimen/kp_button_margin"
+                        android:layout_marginRight="@dimen/kp_button_margin"
+                        android:fontFamily="@font/righteous"
+                        android:hint="Enter name Ex: database.kdbx"
+                        android:textColorHint="@color/kp_grey"
+                        android:singleLine="true"
+                        android:visibility="gone"
+                        android:textColor="@color/kp_dark_blue" />
+
+                    <LinearLayout
+                        android:id="@+id/kdbxFileGotPasswordLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:layout_marginLeft="@dimen/kp_button_margin"
+                        android:layout_marginRight="@dimen/kp_button_margin"
                         android:orientation="horizontal"
                         android:weightSum="100">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_margin"
                             android:layout_weight="30"
-                            app:passwordToggleTint="@color/kp_grey"
+                            android:textColorHint="@color/kp_grey"
                             app:boxStrokeColor="@color/kp_grey"
                             app:hintTextColor="@color/kp_grey"
-                            android:textColorHint="@color/kp_grey"
-                            app:passwordToggleEnabled="true">
+                            app:passwordToggleEnabled="true"
+                            app:passwordToggleTint="@color/kp_grey">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/kdbxPassword"
+                                android:id="@+id/kdbxFileGotPassword"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:backgroundTint="@color/kp_white"
                                 android:fontFamily="@font/righteous"
                                 android:hint="@string/enterPassword"
-                                android:textColor="@color/kp_dark_blue"
-                                android:inputType="textPassword" />
+                                android:inputType="textPassword"
+                                android:textColor="@color/kp_dark_blue" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/kp_button_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:text="@string/databases">
+
+                    </TextView>
+
+                    <LinearLayout
+                        android:id="@+id/listDatabasesLinerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/kp_margin"
+                        android:orientation="vertical"></LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
@@ -195,6 +202,7 @@
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>
+
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/okBtn"
             android:layout_width="wrap_content"

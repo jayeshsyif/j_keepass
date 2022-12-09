@@ -7,8 +7,10 @@
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
     <string name="kdbxFile">kdbx File: </string>
     <string name="open">Open</string>
+    <string name="importStr">Import</string>
     <string name="create">Create</string>
     <string name="enterPassword">Enter Password</string>
+    <string name="enterDatabaseName">Enter database name</string>
     <string name="ok">Ok</string>
     <string name="close">Close</string>
     <string name="newText">New</string>
@@ -25,6 +27,7 @@
     <string name="emptyFileError">Please select kdbx File. File not found!</string>
     <string name="invalidFileError">Invalid kdbx File.</string>
     <string name="noDBError">No database found in kdbx File.</string>
+    <string name="databases">Databases:</string>
 
     <string name="unableToNavigateError">Unable to navigate.</string>
     <string name="groupName">Group Name</string>
