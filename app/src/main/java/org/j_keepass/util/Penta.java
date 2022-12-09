@@ -12,22 +12,26 @@
 //=======================================================================================
 package org.j_keepass.util;
 
-
-public class Triplet<F, S, T> implements java.io.Serializable {
+public class Penta<F, S, T, I, J> implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public F first  = null;
+    public F first = null;
     public S second = null;
-    public T third  = null;
+    public T third = null;
+    public I fourth = null;
+    public J fifth = null;
 
-    public Triplet(F first, S second, T third) {
-        this.first  = first;
-        this.second = second;
-        this.third  = third;
+    public Penta() {
     }
 
-    public Triplet() {}
+    public Penta(F first, S second, T third, I fourth, J fifth) {
+        this.first = first;
+        this.second = second;
+        this.third = third;
+        this.fourth = fourth;
+        this.fifth = fifth;
+    }
 
     public F getFirst() {
         return first;
@@ -39,5 +43,13 @@ public class Triplet<F, S, T> implements java.io.Serializable {
 
     public T getThird() {
         return third;
+    }
+
+    public I getFourth() {
+        return fourth;
+    }
+
+    public J getFifth() {
+        return fifth;
     }
 }

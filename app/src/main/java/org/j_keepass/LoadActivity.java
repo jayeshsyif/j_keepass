@@ -36,7 +36,10 @@ import com.google.common.io.ByteStreams;
 import org.j_keepass.databinding.ActivityLoadBinding;
 import org.j_keepass.util.BannerDialogUtil;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.ConfirmDialogUtil;
+import org.j_keepass.util.DatabaseCreateDialogUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Database;
@@ -51,7 +54,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
 
 public class LoadActivity extends AppCompatActivity {
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -62,7 +64,7 @@ public class LoadActivity extends AppCompatActivity {
     private int currentNightMode = Configuration.UI_MODE_NIGHT_NO;
     private String dirPath = null;
     private String subFilesDirPath = null;
-    boolean isFileAvialable = false;
+    boolean isFileAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,30 +80,30 @@ public class LoadActivity extends AppCompatActivity {
 
         if (getIntent() != null && getIntent().getData() != null) {
             kdbxFileUri = getIntent().getData();
-            isFileAvialable = true;
+            isFileAvailable = true;
         } else {
-            isFileAvialable = false;
+            isFileAvailable = false;
         }
 
         Common.database = null;
 
         Dialog banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
         banner.show();
-        if (isFileAvialable) {
+        if (isFileAvailable) {
             loadFile();
         }
         dirPath = getFilesDir().getPath() + File.separator + "org.j_keepass";
         subFilesDirPath = getFilesDir().getPath() + File.separator + "org.j_keepass" + File.separator + "kdbxfiles";
         setEvents();
 
-        if (isFileAvialable) {
+        if (isFileAvailable) {
             binding.openImportLayout.setVisibility(View.GONE);
         } else {
             binding.kdbxFileName.setVisibility(View.GONE);
         }
 
         new Thread(() -> {
-            if (!isFileAvialable) {
+            if (!isFileAvailable) {
                 fetchAndShowFiles();
             }
         }).start();
@@ -203,15 +205,40 @@ public class LoadActivity extends AppCompatActivity {
             createBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterDatabaseName);
-                    //binding.kdbxFileName.setVisibility(View.VISIBLE);
-                    File fromTo = new File(subFilesDirPath + File.separator + new Date().toString() + ".kdbx");
-                    if (fromTo.exists()) {
-                        fromTo.delete();
-                    } else {
-                        Database<?, ?, ?, ?> database = getDummyDatabase();
-                    }*/
-                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.devInProgress);
+                    Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialog(getLayoutInflater(), binding.getRoot().getContext());
+
+                    confirmDialog.second.setOnClickListener(v1 -> {
+                        if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
+                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                        } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
+                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                        } else {
+                            String dbName = confirmDialog.fourth.getText().toString();
+                            if (!dbName.endsWith("kdbx")) {
+                                dbName = dbName + ".kdbx";
+                            }
+                            File fromTo = new File(subFilesDirPath + File.separator + dbName );
+                            if (fromTo.exists()) {
+                                fromTo.delete();
+                            } else {
+                                try {
+                                    fromTo.createNewFile();
+                                    kdbxFileUri = Uri.fromFile(fromTo);
+                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
+                                    Database<?, ?, ?, ?> database = getDummyDatabase();
+                                    OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                                    database.save(creds, fileOutputStream);
+                                    closeKeyboard();
+                                    confirmDialog.first.dismiss();
+                                    fetchAndShowFiles();
+                                } catch (Exception e) {
+                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
+                                }
+                            }
+                        }
+
+                    });
+                    DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
                 }
             });
         }
