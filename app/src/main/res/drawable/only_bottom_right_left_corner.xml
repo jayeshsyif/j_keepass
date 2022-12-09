@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners
+        android:bottomLeftRadius="@dimen/kp_card_view_radius"
+        android:bottomRightRadius="@dimen/kp_card_view_radius"/>
+    <solid android:color="@color/kp_dark_blue" />
+</shape>

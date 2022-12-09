@@ -5,6 +5,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
@@ -22,6 +25,7 @@ public class ViewEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         binding = ActivityViewEntryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         if (Common.database == null) {
@@ -118,5 +122,18 @@ public class ViewEntryActivity extends AppCompatActivity {
     private String getCopiedStringWithKey(String key)
     {
         return key+" "+getResources().getString(R.string.copiedToClipboard);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!hasFocus)
+        {
+            binding.entryScrollView.setVisibility(View.GONE);
+        }
+        if(hasFocus)
+        {
+            binding.entryScrollView.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -8,15 +8,14 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/kp_card_view_margin"
-        android:backgroundTint="@color/kp_white"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/kp_card_list_view_margin"
         app:cardCornerRadius="2pt">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/kp_light_blue"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:orientation="vertical">
 
             <TextView
@@ -27,6 +26,7 @@
                 android:gravity="center|left"
                 android:layout_margin="@dimen/kp_card_view_margin"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:text="ICICI Bank - login"
                 android:textSize="@dimen/kp_small_text_size"
                 android:textAppearance="?android:attr/textAppearance"
@@ -36,9 +36,9 @@
             <LinearLayout
                 android:id="@+id/adapterMainLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/kp_light_blue"
+                android:background="@drawable/bottom_color_style"
                 android:orientation="horizontal"
                 android:weightSum="100">
 
@@ -72,8 +72,7 @@
                     android:text="@string/groupName"
                     android:textAlignment="gravity"
                     android:textAllCaps="false"
-                    android:textColor="@color/kp_dark_blue"
-                    android:textSize="@dimen/kp_group_list_text_size">
+                    android:textColor="@color/kp_dark_blue">
 
                 </TextView>
 

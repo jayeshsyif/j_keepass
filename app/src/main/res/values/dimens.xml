@@ -1,10 +1,11 @@
 <resources>
     <dimen name="fab_margin">10pt</dimen>
-    <dimen name="kp_card_view_margin">5pt</dimen>
-    <dimen name="kp_card_view_padding">5pt</dimen>
-    <dimen name="kp_card_view_radius">10pt</dimen>
+    <dimen name="kp_card_view_margin">1pt</dimen>
+    <dimen name="kp_card_list_view_margin">5pt</dimen>
+    <dimen name="kp_card_view_padding">2pt</dimen>
+    <dimen name="kp_card_view_radius">3pt</dimen>
     <dimen name="kp_button_margin">5pt</dimen>
-    <dimen name="kp_margin">5pt</dimen>
+    <dimen name="kp_margin">2pt</dimen>
     <dimen name="kp_enter_password_margin">3pt</dimen>
     <dimen name="kp_group_name_text_size">16pt</dimen>
     <dimen name="kp_group_name_margin">7pt</dimen>
@@ -25,4 +26,6 @@
     <dimen name="kp_small_text_size">5pt</dimen>
     <dimen name="kp_progress_height">20pt</dimen>
     <dimen name="kp_toast_height">30pt</dimen>
+
+    <dimen name="kp_load_loading_icon">10pt</dimen>
 </resources>

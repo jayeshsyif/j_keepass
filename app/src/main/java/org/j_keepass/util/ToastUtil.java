@@ -3,6 +3,7 @@ package org.j_keepass.util;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,7 +25,7 @@ public class ToastUtil {
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
         snackbarLayout.setPadding(0, 0, 0, 0);
         snackbarLayout.addView(customSnackView, 0);
-        snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+        snackbarLayout.setAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
         snackbar.show();
     }
 
@@ -40,7 +41,8 @@ public class ToastUtil {
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
         snackbarLayout.setPadding(0, 0, 0, 0);
         snackbarLayout.addView(customSnackView, 0);
-        snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+        snackbarLayout.setAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
+        //snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
         snackbar.show();
     }
 

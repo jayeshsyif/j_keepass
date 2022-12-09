@@ -2,6 +2,7 @@
     <string name="app_name">JKeePass</string>
     <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
     <string name="title_activity_load">LoadActivity</string>
+    <string name="welcomeBackMsg">Welcome back !</string>
 
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
     <string name="kdbxFile">kdbx File: </string>
@@ -93,6 +94,8 @@
     <string name="changeLogsVer51ChangesText">   Better dark mode support. Minor bug fixes</string>
     <string name="changeLogsVer52Text">Version 5.2</string>
     <string name="changeLogsVer52ChangesText">   Added button to switch dark/light. Minor bug fixes</string>
+    <string name="changeLogsVer53Text">Version 5.3</string>
+    <string name="changeLogsVer53ChangesText">   Bug fixes</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 </resources>

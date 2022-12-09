@@ -24,7 +24,7 @@ public class BannerDialogUtil {
             dialog.setContentView(R.layout.banner_layout);
             TextView tx;
             tx = dialog.findViewById(R.id.bannerText);
-            tx.startAnimation(AnimationUtils.loadAnimation(context, R.animator.blink));
+            //tx.startAnimation(AnimationUtils.loadAnimation(context, R.animator.blink));
 
         } catch (Exception e) {
 
