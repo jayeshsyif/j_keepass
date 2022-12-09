@@ -42,6 +42,7 @@ import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Triplet;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -124,10 +125,9 @@ public class LoadActivity extends AppCompatActivity {
             banner.dismiss();
             showWelcomeMessage(binding.getRoot());
         });
-        if ( !isFileAvailable ) {
+        if (!isFileAvailable) {
             bannerThread.start();
-        }else
-        {
+        } else {
             banner.dismiss();
         }
         showWelcomeMessage(binding.getRoot());
@@ -230,7 +230,7 @@ public class LoadActivity extends AppCompatActivity {
                             if (!dbName.endsWith("kdbx")) {
                                 dbName = dbName + ".kdbx";
                             }
-                            File fromTo = new File(subFilesDirPath + File.separator + dbName );
+                            File fromTo = new File(subFilesDirPath + File.separator + dbName);
                             if (fromTo.exists()) {
                                 fromTo.delete();
                             } else {
@@ -727,8 +727,14 @@ public class LoadActivity extends AppCompatActivity {
         });
         ImageButton databaseDeleteBtn = viewToLoad.findViewById(R.id.databaseDeleteBtn);
         databaseDeleteBtn.setOnClickListener(v -> {
-            f.delete();
-            fetchAndShowFiles();
+
+            Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(getLayoutInflater(), this);
+            confirmDialog.second.setOnClickListener(viewObj -> {
+                f.delete();
+                fetchAndShowFiles();
+                confirmDialog.first.dismiss();
+            });
+            ConfirmDialogUtil.showDialog(confirmDialog.first);
         });
         binding.listDatabasesLinerLayout.addView(viewToLoad);
     }
