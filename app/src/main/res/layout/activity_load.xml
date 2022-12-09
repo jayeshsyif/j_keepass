@@ -144,6 +144,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/justDatabaseText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"

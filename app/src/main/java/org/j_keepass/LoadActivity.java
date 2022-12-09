@@ -98,8 +98,16 @@ public class LoadActivity extends AppCompatActivity {
 
         if (isFileAvailable) {
             binding.openImportLayout.setVisibility(View.GONE);
+            binding.kdbxFileName.setVisibility(View.VISIBLE);
+            binding.kdbxFileGotPasswordLayout.setVisibility(View.VISIBLE);
+            binding.justDatabaseText.setVisibility(View.GONE);
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword);
         } else {
             binding.kdbxFileName.setVisibility(View.GONE);
+            binding.openImportLayout.setVisibility(View.VISIBLE);
+            binding.kdbxFileName.setVisibility(View.GONE);
+            binding.kdbxFileGotPasswordLayout.setVisibility(View.GONE);
+            binding.justDatabaseText.setVisibility(View.VISIBLE);
         }
 
         new Thread(() -> {
@@ -116,7 +124,12 @@ public class LoadActivity extends AppCompatActivity {
             banner.dismiss();
             showWelcomeMessage(binding.getRoot());
         });
-        bannerThread.start();
+        if ( !isFileAvailable ) {
+            bannerThread.start();
+        }else
+        {
+            banner.dismiss();
+        }
         showWelcomeMessage(binding.getRoot());
     }
 
@@ -228,8 +241,8 @@ public class LoadActivity extends AppCompatActivity {
                                     Database<?, ?, ?, ?> database = getDummyDatabase();
                                     OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
                                     database.save(creds, fileOutputStream);
-                                    closeKeyboard();
                                     confirmDialog.first.dismiss();
+                                    closeKeyboard();
                                     fetchAndShowFiles();
                                 } catch (Exception e) {
                                     ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
