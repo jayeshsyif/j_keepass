@@ -1,6 +1,7 @@
 package org.j_keepass;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -50,11 +52,14 @@ import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class LoadActivity extends AppCompatActivity {
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -111,11 +116,6 @@ public class LoadActivity extends AppCompatActivity {
             binding.justDatabaseText.setVisibility(View.VISIBLE);
         }
 
-        new Thread(() -> {
-            if (!isFileAvailable) {
-                fetchAndShowFiles();
-            }
-        }).start();
         Thread bannerThread = new Thread(() -> {
             try {
                 Thread.sleep(3000);
@@ -123,14 +123,23 @@ public class LoadActivity extends AppCompatActivity {
                 //do nothing
             }
             banner.dismiss();
-            showWelcomeMessage(binding.getRoot());
+            loadAfterDialog();
         });
         if (!isFileAvailable) {
             bannerThread.start();
         } else {
             banner.dismiss();
+            loadAfterDialog();
         }
-        showWelcomeMessage(binding.getRoot());
+    }
+
+    private void loadAfterDialog() {
+        runOnUiThread(() -> {
+            showWelcomeMessage(binding.getRoot());
+            if (!isFileAvailable) {
+                fetchAndShowFiles();
+            }
+        });
     }
 
     private void setEvents() {
@@ -221,7 +230,9 @@ public class LoadActivity extends AppCompatActivity {
                     Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialog(getLayoutInflater(), binding.getRoot().getContext());
 
                     confirmDialog.second.setOnClickListener(v1 -> {
-                        if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
+                        if (!Common.isCodecAvailable) {
+                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                        } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
                             ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
                         } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
                             ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
@@ -270,6 +281,7 @@ public class LoadActivity extends AppCompatActivity {
             case PICK_FILE_OPEN_RESULT_CODE:
                 if (resultCode == -1) {
                     kdbxFileUri = data.getData();
+                    Log.i("JKeepass","Flags: "+data.getFlags());
                     loadFile();
                     copyFile();
                     fetchAndShowFiles();
@@ -301,6 +313,7 @@ public class LoadActivity extends AppCompatActivity {
             String fileName = "";
             try {
                 getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                this.grantUriPermission(this.getPackageName(), kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } catch (Exception e) {
                 ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
             }
@@ -336,6 +349,14 @@ public class LoadActivity extends AppCompatActivity {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError);
                 proceed = false;
+            }else
+            {
+                /*try {
+                    getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                } catch (Exception e) {
+                    //proceed = false;
+                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+                }*/
             }
         }
         ProgressDialogUtil.setLoadingProgress(alertDialog, 40);
@@ -391,6 +412,11 @@ public class LoadActivity extends AppCompatActivity {
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
                 }
             }
+        }
+
+        if( !proceed )
+        {
+            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
         }
     }
 
@@ -512,12 +538,12 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void showWelcomeMessage(View v) {
-        new Thread(() -> {
+        try {
             binding.appNameTextView.setText(R.string.welcomeBackMsg);
-            binding.appNameTextView.startAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
-        }
-        ).start();
+        } catch (Exception e) {
 
+        }
+        binding.appNameTextView.startAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
     }
 
     private void setThemeButton() {
@@ -613,6 +639,15 @@ public class LoadActivity extends AppCompatActivity {
         File fromTo = new File(subFilesDirPath + File.separator + binding.kdbxFileName.getText().toString());
         if (fromTo.exists()) {
             fromTo.delete();
+        }else
+        {
+            try {
+                fromTo.createNewFile();
+                fromTo.setWritable(true, true);
+                fromTo.setExecutable(true,true);
+                fromTo.setReadable(true,true);
+            } catch (IOException e) {
+            }
         }
 
         InputStream inputStream = null;
@@ -627,7 +662,6 @@ public class LoadActivity extends AppCompatActivity {
             ByteStreams.copy(inputStream, outputStream);
         } catch (Exception e) {
             Log.i("JKEEPASS", "Error copying file : " + e.getMessage());
-            e.printStackTrace();
         } finally {
             if (outputStream != null) {
                 try {
@@ -689,6 +723,7 @@ public class LoadActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ResourceType")
     private void addFileLayout(File f) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewToLoad = inflater.inflate(R.layout.activity_list_kdbx_files_view, null);
@@ -736,6 +771,8 @@ public class LoadActivity extends AppCompatActivity {
             });
             ConfirmDialogUtil.showDialog(confirmDialog.first);
         });
+        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
+        binding.listDatabasesLinerLayout.setLayoutAnimation(lac);
         binding.listDatabasesLinerLayout.addView(viewToLoad);
     }
 }

@@ -1,39 +1,49 @@
 package org.j_keepass;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 
-import org.j_keepass.adapter.ListGroupAdapter;
 import org.j_keepass.databinding.ActivityListBinding;
 import org.j_keepass.util.Common;
-import org.j_keepass.util.Pair;
+import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.PasswordGenerator;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Triplet;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
 
-import java.util.ArrayList;
+import java.io.OutputStream;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
@@ -58,66 +68,24 @@ public class ListActivity extends AppCompatActivity {
             final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
             ProgressDialogUtil.showLoadingDialog(alertDialog);
             ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
-            new Thread(() -> {
-                String groupName = "NA";
+            runOnUiThread(() -> {
                 Database<?, ?, ?, ?> database = Common.database;
-                Group<?, ?, ?, ?> group = null;
-                Bundle bundle = getIntent().getExtras();
-                if (bundle != null) {
-                    String click = bundle.getString("click");
-                    if (click != null && click.equalsIgnoreCase("group")) {
-                        group = Common.group;
-                    }
-                }
+                Group<?, ?, ?, ?> group = Common.group;
+
                 ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
                 if (group == null) {
                     group = database.getRootGroup();
                     Common.group = group;
                 }
 
-                LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-                binding.groupListView.setLayoutAnimation(lac);
-                binding.groupListView.startLayoutAnimation();
-
                 if (group != null) {
-                    groupName = group.getName();
-                    ArrayList<Pair<Object, Boolean>> pairs = new ArrayList<>();
-                    {
-
-                        //groups
-                        List<?> groups = group.getGroups();
-                        for (int gCount = 0; gCount < groups.size(); gCount++) {
-                            Group<?, ?, ?, ?> localGroup = (Group<?, ?, ?, ?>) groups.get(gCount);
-                            Pair<Object, Boolean> pair = new Pair<>();
-                            pair.first = localGroup;
-                            pair.second = true;
-                            pairs.add(pair);
-                        }
-                    }
-                    {
-                        //entries
-                        List<?> entries = group.getEntries();
-                        for (int eCount = 0; eCount < entries.size(); eCount++) {
-                            Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) entries.get(eCount);
-                            Pair<Object, Boolean> pair = new Pair<>();
-                            pair.first = localEntry;
-                            pair.second = false;
-                            pairs.add(pair);
-                        }
-                    }
+                    listAndShowGroupsAndEntries(group, false, alertDialog);
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
-                    ListGroupAdapter listGroupAdapter = new ListGroupAdapter(pairs, ListActivity.this);
-                    listGroupAdapter.setGroupInfoTobeShown(false);
-                    binding.groupListView.setAdapter(listGroupAdapter);
-                    binding.groupListView.setFooterDividersEnabled(false);
-                    binding.groupListView.setHeaderDividersEnabled(false);
-                    binding.groupListView.setDivider(null);
-                    binding.groupListView.setDividerHeight(0);
 
                 }
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                binding.groupName.setText(groupName);
-            }).start();
+
+            });
 
             binding.floatAdd.setOnClickListener(v -> {
                 if (!binding.floatAdd.isExtended()) {
@@ -145,6 +113,38 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return false;
+    }
+
+    @SuppressLint("ResourceType")
+    private void listAndShowGroupsAndEntries(Group<?, ?, ?, ?> group, boolean isFromBack, AlertDialog alertDialog) {
+        boolean isAlertDialogAvailable = true;
+        if (alertDialog == null) {
+            isAlertDialogAvailable = false;
+        }
+        if (alertDialog == null) {
+            alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
+        }
+        binding.groupName.setText(group.getName());
+        if (!isFromBack) {
+            binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
+        } else {
+            binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
+        }
+        binding.groupScrollLinearLayout.removeAllViews();
+        for (Group<?, ?, ?, ?> g : group.getGroups()) {
+            addGroupOnUi(g, isFromBack);
+        }
+        if (!isAlertDialogAvailable) {
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+        }
+        for (Entry<?, ?, ?, ?> e : group.getEntries()) {
+            addEntryOnUi(e, isFromBack);
+        }
+        if (!isAlertDialogAvailable) {
+            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+        }
     }
 
     private AlertDialog getDialog() {
@@ -211,17 +211,194 @@ public class ListActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (Common.group != null && !Common.group.isRootGroup()) {
             Common.group = Common.group.getParent();
-            Intent intent = new Intent(this, ListActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("click", "group");
-            intent.putExtras(bundle);
-            startActivity(intent);
-            finish();
+            listAndShowGroupsAndEntries(Common.group, true, null);
         } else {
             super.onBackPressed();
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
             startActivity(intent);
             finish();
         }
+    }
+
+    @SuppressLint("ResourceType")
+    private void addGroupOnUi(Group<?, ?, ?, ?> g, boolean isFromBack) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View viewToLoad = inflater.inflate(R.layout.activity_list_adapter_view, null);
+        ((TextView) viewToLoad.findViewById(R.id.adapterText)).setText(g.getName());
+        viewToLoad.setOnClickListener(v -> {
+            Common.group = g;
+            listAndShowGroupsAndEntries(g, false, null);
+        });
+
+        ImageView delete = viewToLoad.findViewById(R.id.deleteGroupBtn);
+        delete.setOnClickListener(v -> {
+            deleteGroup(v, this, g);
+        });
+        if (!isFromBack) {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
+            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+        } else {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), 0.5f);
+            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+        }
+        binding.groupScrollLinearLayout.addView(viewToLoad);
+    }
+
+    @SuppressLint("ResourceType")
+    private void addEntryOnUi(Entry<?, ?, ?, ?> e, boolean isFromBack) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View viewToLoad = inflater.inflate(R.layout.activity_list_adapter_view, null);
+        ((TextView) viewToLoad.findViewById(R.id.adapterText)).setText(e.getTitle());
+        ShapeableImageView adapterIconImageView = viewToLoad.findViewById(R.id.adapterIconImageView);
+        adapterIconImageView.setImageResource(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
+        viewToLoad.setOnClickListener(v -> {
+            Common.entry = e;
+            Intent intent = new Intent(this, ViewEntryActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("click", "entry");
+            intent.putExtras(bundle);
+            this.startActivity(intent);
+            this.finish();
+        });
+        ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
+        edit.setOnClickListener(v -> {
+            Common.entry = e;
+            Intent intent = new Intent(this, EditEntryActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("click", "entry");
+            intent.putExtras(bundle);
+            this.startActivity(intent);
+            this.finish();
+        });
+        ImageView delete = viewToLoad.findViewById(R.id.deleteGroupBtn);
+        delete.setOnClickListener(v -> {
+            deleteEntry(v, this, e);
+        });
+        if (!isFromBack) {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
+            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+        } else {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), 0.5f);
+            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+        }
+        binding.groupScrollLinearLayout.addView(viewToLoad);
+    }
+
+    private void deleteGroup(View v, Activity activity, Group group) {
+
+        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
+        confirmDialog.second.setOnClickListener(viewObj -> {
+
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+
+            new Thread(() -> {
+                String groupName = null;
+                Group parent = Common.group;
+
+                if (parent == null) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Parent is null");
+                } else {
+                    parent.removeGroup(group);
+                    Common.group = parent;
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                        OutputStream fileOutputStream = null;
+                        try {
+                            //activity.getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                            fileOutputStream = activity.getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                            Common.database.save(Common.creds, fileOutputStream);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            Intent intent = new Intent(activity, ListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        } catch (NoSuchMethodError e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } catch (Exception e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } finally {
+                            if (fileOutputStream != null) {
+                                try {
+                                    fileOutputStream.close();
+                                } catch (Exception e) {
+                                    //do nothing
+                                }
+                            }
+                        }
+                    } else {
+                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
+                    }
+                }
+            }).start();
+        });
+        ConfirmDialogUtil.showDialog(confirmDialog.first);
+    }
+
+    private void deleteEntry(View v, Activity activity, Entry entry) {
+
+        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
+        confirmDialog.second.setOnClickListener(viewObj -> {
+
+
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+
+            new Thread(() -> {
+                String groupName = null;
+                Group parent = Common.group;
+
+                if (parent == null) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null");
+                } else {
+                    parent.removeEntry(entry);
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                        OutputStream fileOutputStream = null;
+                        try {
+                            activity.getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                            fileOutputStream = activity.getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                            Common.database.save(Common.creds, fileOutputStream);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            Intent intent = new Intent(activity, ListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        } catch (NoSuchMethodError e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } catch (Exception e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                        } finally {
+                            if (fileOutputStream != null) {
+                                try {
+                                    fileOutputStream.close();
+                                } catch (Exception e) {
+                                    //do nothing
+                                }
+                            }
+                        }
+                    } else {
+                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
+                    }
+                }
+            }).start();
+        });
+        confirmDialog.first.show();
     }
 }

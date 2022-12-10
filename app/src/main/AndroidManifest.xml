@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
 
 
     <application
@@ -24,8 +26,8 @@
             android:name=".LoadActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.J_KeePass.NoActionBar">
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,8 +35,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
@@ -61,9 +65,11 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.kdbx" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:mimeType="application/octet-stream" />
@@ -93,43 +99,43 @@
             android:name=".ViewEntryActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".AddGroupActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".EditGroupActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".EditEntryActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden"
             android:label="@string/app_name"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".AddEntryActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".SearchActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"
+            android:windowSoftInputMode="adjustPan"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

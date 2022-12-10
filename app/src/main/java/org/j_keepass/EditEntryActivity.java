@@ -193,7 +193,7 @@ public class EditEntryActivity extends AppCompatActivity {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;
                         try {
-                            getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            //getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                             ProgressDialogUtil.setSavingProgress(alertDialog, 40);
                             fileOutputStream = getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
                             ProgressDialogUtil.setSavingProgress(alertDialog, 50);
