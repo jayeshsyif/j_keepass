@@ -238,7 +238,16 @@ public class ListActivity extends AppCompatActivity {
             Common.group = g;
             listAndShowGroupsAndEntries(g, false, null);
         });
-
+        ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
+        edit.setOnClickListener(v -> {
+            Common.group = g;
+            Intent intent = new Intent(this, EditGroupActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("click", "group");
+            intent.putExtras(bundle);
+            this.startActivity(intent);
+            this.finish();
+        });
         ImageView delete = viewToLoad.findViewById(R.id.deleteGroupBtn);
         delete.setOnClickListener(v -> {
             deleteGroup(v, this, g);

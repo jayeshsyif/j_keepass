@@ -2,11 +2,14 @@ package org.j_keepass;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
@@ -14,9 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.j_keepass.databinding.EditNewGroupLayoutBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Group;
@@ -42,28 +49,14 @@ public class EditGroupActivity extends AppCompatActivity {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
             binding.editGroupScrollView.setLayoutAnimation(lac);
             binding.editGroupScrollView.startLayoutAnimation();
-
+            Pair<View, TextInputEditText> pair = null;
             if(Common.group != null) {
-                binding.editGroupName.setText(Common.group.getName());
                 binding.editGroupTitleName.setText(Common.group.getName());
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                pair = FieldUtil.getEditTextField(inflater, getString(R.string.groupName), Common.group.getName());
+                binding.editGroupScrollViewLinearLayout.addView(pair.first);
             }
-            binding.editGroupName.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (binding.editGroupName.getText() != null) {
-                        binding.editGroupTitleName.setText(binding.editGroupName.getText().toString());
-                    }
-                }
-            });
+            final Pair<View, TextInputEditText> finalPair = pair;
             binding.saveGroup.setOnClickListener(v -> {
                 final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditGroupActivity.this);
                 ProgressDialogUtil.showSavingDialog(alertDialog);
@@ -71,7 +64,7 @@ public class EditGroupActivity extends AppCompatActivity {
                 new Thread(() -> {
                     boolean proceed = false;
                     try {
-                        validate();
+                        validate(finalPair.second.getText().toString());
                         proceed = true;
                     } catch (KpCustomException e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
@@ -80,7 +73,7 @@ public class EditGroupActivity extends AppCompatActivity {
 
                     if (proceed) {
                         Group group = Common.group;
-                        group.setName(binding.editGroupName.getText().toString());
+                        group.setName(finalPair.second.getText().toString());
                         group.setParent(group.getParent());
                         Common.group = group.getParent();
 
@@ -138,6 +131,7 @@ public class EditGroupActivity extends AppCompatActivity {
         binding.backFloatBtn.setOnClickListener(v -> {
             this.onBackPressed();
         });
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -159,9 +153,9 @@ public class EditGroupActivity extends AppCompatActivity {
         }
     }
 
-    private void validate() throws KpCustomException {
+    private void validate(String groupName) throws KpCustomException {
 
-        if (binding.editGroupName.getText() == null) {
+        if (groupName == null) {
             throw new KpCustomException(R.string.groupNameEmptyErrorMsg);
         }
         if (!Common.isCodecAvailable) {
