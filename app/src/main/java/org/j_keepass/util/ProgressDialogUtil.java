@@ -18,7 +18,7 @@ import org.j_keepass.R;
 public class ProgressDialogUtil {
 
 
-    enum TYPE_OF_PROGREES {LOADING, SAVING, PROCESSING, NONE}
+    enum TYPE_OF_PROGREES {LOADING, SAVING, PROCESSING, NONE, SEARCHING}
 
     ;
 
@@ -45,6 +45,10 @@ public class ProgressDialogUtil {
         return getProgressDialog(layoutInflater, context, TYPE_OF_PROGREES.SAVING);
     }
 
+    static public AlertDialog getSearch(LayoutInflater layoutInflater, Context context) {
+        return getProgressDialog(layoutInflater, context, TYPE_OF_PROGREES.SEARCHING);
+    }
+
     static public void setSavingProgress(AlertDialog alertDialog, int progress) {
         setProgress(alertDialog, progress, TYPE_OF_PROGREES.SAVING);
     }
@@ -58,6 +62,23 @@ public class ProgressDialogUtil {
     }
 
     static public void showSavingDialog(AlertDialog alertDialog) {
+        try {
+            alertDialog.show();
+        } catch (Exception e) {
+            // do nothing
+        }
+    }
+
+
+    static public void dismissSearchDialog(AlertDialog alertDialog) {
+        try {
+            alertDialog.dismiss();
+        } catch (Exception e) {
+            // do nothing
+        }
+    }
+
+    static public void showSearchDialog(AlertDialog alertDialog) {
         try {
             alertDialog.show();
         } catch (Exception e) {
@@ -91,6 +112,8 @@ public class ProgressDialogUtil {
                 progressWithPercentage = context.getString(R.string.savingWithPercentage);
                 progressWithPercentage = progressWithPercentage.replace("$per$", "" + 0);
                 progressBarTextView.setText(progressWithPercentage);
+            }else if (typeOfProgrees == TYPE_OF_PROGREES.SEARCHING) {
+                progressWithPercentage = context.getString(R.string.searching);
             }
         } catch (Exception e) {
             alertDialog = alert.create();

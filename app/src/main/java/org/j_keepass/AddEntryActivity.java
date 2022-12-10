@@ -110,15 +110,6 @@ public class AddEntryActivity extends AppCompatActivity {
             });
 
         }
-        binding.searchFloatBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-        binding.backFloatBtn.setOnClickListener(v -> {
-            this.onBackPressed();
-        });
 
     }
 

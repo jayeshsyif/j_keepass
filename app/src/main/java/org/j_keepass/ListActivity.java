@@ -37,6 +37,7 @@ import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.PasswordGenerator;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.SearchDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
 import org.linguafranca.pwdb.Database;
@@ -100,14 +101,9 @@ public class ListActivity extends AppCompatActivity {
         }
 
         binding.searchFloatBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ListActivity.this, SearchActivity.class);
-            startActivity(intent);
-            finish();
+            search(v, this);
         });
 
-        binding.backFloatBtn.setOnClickListener(v -> {
-            this.onBackPressed();
-        });
     }
 
     @Override
@@ -135,7 +131,7 @@ public class ListActivity extends AppCompatActivity {
                 }
                 ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 50);
                 for (Entry<?, ?, ?, ?> e : group.getEntries()) {
-                    addEntryOnUi(e, isFromBack);
+                    addEntryOnUi(e, isFromBack, false);
                 }
                 ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 100);
                 ProgressDialogUtil.dismissLoadingDialog(alertDialogLocal);
@@ -152,7 +148,7 @@ public class ListActivity extends AppCompatActivity {
             addGroupOnUi(g, isFromBack);
         }
         for (Entry<?, ?, ?, ?> e : group.getEntries()) {
-            addEntryOnUi(e, isFromBack);
+            addEntryOnUi(e, isFromBack, false);
         }
     }
 
@@ -265,7 +261,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ResourceType")
-    private void addEntryOnUi(Entry<?, ?, ?, ?> e, boolean isFromBack) {
+    private void addEntryOnUi(Entry<?, ?, ?, ?> e, boolean isFromBack, boolean showGroupInfo) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewToLoad = inflater.inflate(R.layout.activity_list_adapter_view, null);
         ((TextView) viewToLoad.findViewById(R.id.adapterText)).setText(e.getTitle());
@@ -294,6 +290,16 @@ public class ListActivity extends AppCompatActivity {
         delete.setOnClickListener(v -> {
             deleteEntry(v, this, e);
         });
+        if (showGroupInfo) {
+            TextView adapterGroupInfo = viewToLoad.findViewById(R.id.adapterGroupInfo);
+            String path = e.getPath();
+            if (path != null) {
+                path = path.substring(1, path.length());
+                path = path.replace("/", " \u002D ");
+                adapterGroupInfo.setVisibility(View.VISIBLE);
+                adapterGroupInfo.setText(path);
+            }
+        }
         if (!isFromBack) {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
             binding.groupScrollLinearLayout.setLayoutAnimation(lac);
@@ -420,5 +426,27 @@ public class ListActivity extends AppCompatActivity {
             }).start();
         });
         confirmDialog.first.show();
+    }
+
+    @SuppressLint("ResourceType")
+    private void search(View v, Activity activity) {
+        Triplet<AlertDialog, MaterialButton, TextInputEditText> searchDialog = SearchDialogUtil.getSearchDialog(activity.getLayoutInflater(), activity);
+        searchDialog.second.setOnClickListener(viewObj -> {
+            searchDialog.first.dismiss();
+            final AlertDialog alertDialog = ProgressDialogUtil.getSearch(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSearchDialog(alertDialog);
+            runOnUiThread(() -> {
+                binding.groupScrollLinearLayout.removeAllViews();
+                binding.groupName.setText(getString(R.string.search) + ": " + searchDialog.third.getText().toString());
+                binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
+                List<?> searchedEntries = Common.database.findEntries(searchDialog.third.getText().toString());
+                for (int eCount = 0; eCount < searchedEntries.size(); eCount++) {
+                    Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) searchedEntries.get(eCount);
+                    addEntryOnUi(localEntry, false, true);
+                }
+                ProgressDialogUtil.dismissSearchDialog(alertDialog);
+            });
+        });
+        ConfirmDialogUtil.showDialog(searchDialog.first);
     }
 }

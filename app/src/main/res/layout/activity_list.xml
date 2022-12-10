@@ -65,13 +65,11 @@
                     android:layout_height="match_parent">
 
                     <ImageButton
-                        android:id="@+id/backFloatBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
                         android:textStyle="bold"
                         app:tint="@color/kp_dark_blue" />
 

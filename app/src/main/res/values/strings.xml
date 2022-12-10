@@ -58,6 +58,7 @@
 
     <string name="search">Search</string>
     <string name="enterToSearch">Type here to search ....</string>
+    <string name="searching">Searching....</string>
 
     <string name="entryTitleEmptyErrorMsg">Title cannot be empty!</string>
     <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>

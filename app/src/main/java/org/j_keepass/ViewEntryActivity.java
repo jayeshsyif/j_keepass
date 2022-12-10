@@ -100,14 +100,6 @@ public class ViewEntryActivity extends AppCompatActivity {
 
             }
         }
-        binding.backFloatBtn.setOnClickListener(v -> {
-            this.onBackPressed();
-        });
-        binding.searchFloatBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
-            finish();
-        });
     }
 
     @Override
