@@ -33,10 +33,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         field.setHint(hint);
         field.setText(value);
-        return  viewToLoad;
+        return viewToLoad;
     }
 
-    public View getTextFieldWithCopy(LayoutInflater inflater,  String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+    public View getTextFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
@@ -57,14 +57,14 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint+" "+copiedToClipboardString+" value is "+value);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString + " value is " + value);
             }
         });
 
-        return  viewToLoad;
+        return viewToLoad;
     }
 
-    public View getPasswordFieldWithCopy(LayoutInflater inflater,  String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+    public View getPasswordFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
@@ -84,14 +84,14 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint+" "+copiedToClipboardString);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
             }
         });
 
-        return  viewToLoad;
+        return viewToLoad;
     }
 
-    public View getMultiLineTextFieldWithCopy(LayoutInflater inflater,  String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+    public View getMultiLineTextFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
@@ -113,11 +113,11 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint+" "+copiedToClipboardString);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
             }
         });
 
-        return  viewToLoad;
+        return viewToLoad;
     }
 
     public Pair<View, TextInputEditText> getEditTextField(LayoutInflater inflater, String hint, String value) {
@@ -131,6 +131,7 @@ public class FieldUtil {
         fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
         fieldText.setHint(hint);
         final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setTag(hint);
         field.setId(new Random().nextInt());
         field.setInputType(InputType.TYPE_CLASS_TEXT);
         field.setTransformationMethod(null);
@@ -138,6 +139,52 @@ public class FieldUtil {
         field.setText(value);
         pair.first = viewToLoad;
         pair.second = field;
-        return  pair;
+        return pair;
+    }
+
+    public Pair<View, TextInputEditText> getEditPasswordField(LayoutInflater inflater, String hint, String value) {
+        final Pair<View, TextInputEditText> pair = new Pair<View, TextInputEditText>();
+        final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
+        copyLayout.setVisibility(View.GONE);
+        final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setId(new Random().nextInt());
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+        fieldText.setHint(hint);
+        final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setTag(hint);
+        field.setId(new Random().nextInt());
+        field.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        field.setTransformationMethod(null);
+        //field.setHint(hint);
+        field.setText(value);
+        pair.first = viewToLoad;
+        pair.second = field;
+        return pair;
+    }
+
+    public Pair<View, TextInputEditText> getMultiEditTextField(LayoutInflater inflater, String hint, String value) {
+        final Pair<View, TextInputEditText> pair = new Pair<View, TextInputEditText>();
+        final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
+        copyLayout.setVisibility(View.GONE);
+        final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setId(new Random().nextInt());
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        fieldText.setHint(hint);
+        final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setTag(hint);
+        field.setId(new Random().nextInt());
+        field.setLines(10);
+        field.setSingleLine(false);
+        field.setInputType(InputType.TYPE_CLASS_TEXT);
+        field.setTransformationMethod(null);
+        //field.setHint(hint);
+        field.setText(value);
+        pair.first = viewToLoad;
+        pair.second = field;
+        return pair;
     }
 }

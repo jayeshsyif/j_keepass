@@ -1,6 +1,7 @@
 package org.j_keepass;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -18,20 +21,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.j_keepass.databinding.ActivityAddEntryBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class AddEntryActivity extends AppCompatActivity {
 
     private ActivityAddEntryBinding binding;
     private static final int MANAGE_DOCUMENTS = 200;
+    private ArrayList<Pair<View, TextInputEditText>> fields = new ArrayList<Pair<View, TextInputEditText>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,75 +52,63 @@ public class AddEntryActivity extends AppCompatActivity {
             Intent intent = new Intent(AddEntryActivity.this, LoadActivity.class);
             startActivity(intent);
         } else {
+            binding.addEntryScrollViewLinearLayout.removeAllViews();
+            ArrayList<View> viewsToAdd = new ArrayList<View>();
 
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-            binding.addEntryScrollView.setLayoutAnimation(lac);
-            binding.addEntryScrollView.startLayoutAnimation();
+            final Pair<View, TextInputEditText> titleView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                    getString(R.string.entryTitle), "");
+            titleView.second.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            {
+                }
 
-                binding.newEntryTitleName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (titleView.second.getText() != null) {
+                        binding.newEntryTitleNameHeader.setText(titleView.second.getText().toString());
                     }
+                }
+            });
+            viewsToAdd.add(titleView.first);
+            fields.add(titleView);
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
+            final Pair<View, TextInputEditText> userNameView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                    getString(R.string.userName), "");
+            viewsToAdd.add(userNameView.first);
+            fields.add(userNameView);
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (binding.newEntryTitleName.getText() != null) {
-                            binding.newEntryTitleNameHeader.setText(binding.newEntryTitleName.getText().toString());
-                        }
-                    }
-                });
+            final Pair<View, TextInputEditText> passwordView = new FieldUtil().getEditPasswordField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                    getString(R.string.password), "");
+            viewsToAdd.add(passwordView.first);
+            fields.add(passwordView);
 
-                binding.newEntryUserNameCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.newEntryUserName.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("username", binding.newEntryUserName.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
+            final Pair<View, TextInputEditText> urlView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                    getString(R.string.url), "");
+            viewsToAdd.add(urlView.first);
+            fields.add(urlView);
 
-                binding.newEntryPasswordCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.newEntryPassword.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.newEntryPassword.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
+            final Pair<View, TextInputEditText> notesView = new FieldUtil().getMultiEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                    getString(R.string.notes), "");
+            viewsToAdd.add(notesView.first);
+            fields.add(notesView);
 
-                binding.newEntryUrlCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.newEntryUrl.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.newEntryUrl.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
-
-                binding.newEntryNotesCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.newEntryNotes.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.newEntryNotes.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
-                binding.saveNewEntry.setOnClickListener(v -> {
-                    saveNewEntry(v);
-                });
-
+            for (View dynamicView : viewsToAdd) {
+                @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                binding.addEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                binding.addEntryScrollViewLinearLayout.startLayoutAnimation();
+                binding.addEntryScrollViewLinearLayout.addView(dynamicView);
             }
+
+
+            binding.saveNewEntry.setOnClickListener(v -> {
+                saveNewEntry(v);
+            });
+
         }
         binding.searchFloatBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, SearchActivity.class);
@@ -155,22 +153,32 @@ public class AddEntryActivity extends AppCompatActivity {
 
                 if (proceed) {
                     Entry entry = Common.database.newEntry();
-                    if (binding.newEntryTitleName.getText() != null) {
-                        entry.setTitle(binding.newEntryTitleName.getText().toString());
-                    }
-                    if (binding.newEntryUserName.getText() != null) {
-                        entry.setUsername(binding.newEntryUserName.getText().toString());
-                    }
-                    if (binding.newEntryPassword.getText() != null) {
-                        entry.setPassword(binding.newEntryPassword.getText().toString());
-                    }
-                    if (binding.newEntryUrl.getText() != null) {
-                        entry.setUrl(binding.newEntryUrl.getText().toString());
-                    }
-                    if (binding.newEntryNotes.getText() != null) {
-                        entry.setNotes(binding.newEntryNotes.getText().toString());
-                    }
 
+                    for (Pair<View, TextInputEditText> field : fields) {
+                        if (field.getSecond().getTag().toString().equalsIgnoreCase("title")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setTitle(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("user name")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setUsername(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("password")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setPassword(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("url")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setUrl(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("notes")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setNotes(field.second.getText().toString());
+                            }
+                        } else {
+                            entry.setProperty(field.second.getTag().toString(), field.second.getText().toString());
+                        }
+                    }
                     Group group = Common.group;
                     group.addEntry(entry);
                     Common.group = group;
@@ -190,6 +198,7 @@ public class AddEntryActivity extends AppCompatActivity {
                             ProgressDialogUtil.setSavingProgress(alertDialog, 50);
                             Common.database.save(Common.creds, fileOutputStream);
                             ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
                             Intent intent = new Intent(AddEntryActivity.this, ListActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("click", "group");
@@ -222,14 +231,13 @@ public class AddEntryActivity extends AppCompatActivity {
 
     private void validate() throws KpCustomException {
 
-        if (binding.newEntryTitleName.getText() == null || binding.newEntryTitleName.getText().toString() == null || binding.newEntryTitleName.getText().toString().length() <= 0) {
+        /*if (binding.newEntryTitleName.getText() == null || binding.newEntryTitleName.getText().toString() == null || binding.newEntryTitleName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryTitleEmptyErrorMsg);
         }
         if (binding.newEntryUserName.getText() == null || binding.newEntryUserName.getText().toString() == null || binding.newEntryUserName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryUsernameEmptyErrorMsg);
-        }
-        if( !Common.isCodecAvailable)
-        {
+        }*/
+        if (!Common.isCodecAvailable) {
             throw new KpCustomException(R.string.devInProgress);
         }
     }

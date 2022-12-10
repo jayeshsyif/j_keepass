@@ -1,6 +1,7 @@
 package org.j_keepass;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -18,20 +20,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.j_keepass.databinding.ActivityEditEntryBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class EditEntryActivity extends AppCompatActivity {
 
     private ActivityEditEntryBinding binding;
     private static final int MANAGE_DOCUMENTS = 200;
+    private ArrayList<Pair<View, TextInputEditText>> fields = new ArrayList<Pair<View, TextInputEditText>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +60,13 @@ public class EditEntryActivity extends AppCompatActivity {
                 }
             }
 
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-            binding.editEntryScrollView.setLayoutAnimation(lac);
-            binding.editEntryScrollView.startLayoutAnimation();
-
             if (entry != null) {
-                binding.editEntryTitleName.setText(entry.getTitle());
                 binding.editEntryTitleNameHeader.setText(entry.getTitle());
-                binding.editEntryUserName.setText(entry.getUsername());
-                binding.editEntryPassword.setText(entry.getPassword());
-                binding.editEntryUrl.setText(entry.getUrl());
-                binding.editEntryNotes.setText(entry.getNotes());
+                ArrayList<View> viewsToAdd = new ArrayList<View>();
 
-                binding.editEntryTitleName.addTextChangedListener(new TextWatcher() {
+                final Pair<View, TextInputEditText> titleView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.entryTitle), entry.getTitle());
+                titleView.second.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -75,54 +78,46 @@ public class EditEntryActivity extends AppCompatActivity {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        if (binding.editEntryTitleName.getText() != null) {
-                            binding.editEntryTitleNameHeader.setText(binding.editEntryTitleName.getText().toString());
+                        if (titleView.second.getText() != null) {
+                            binding.editEntryTitleNameHeader.setText(titleView.second.getText().toString());
                         }
                     }
                 });
+                viewsToAdd.add(titleView.first);
+                fields.add(titleView);
 
-                binding.editEntryUserNameCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.editEntryUserName.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("username", binding.editEntryUserName.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
+                final Pair<View, TextInputEditText> userNameView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.userName), entry.getUsername());
+                viewsToAdd.add(userNameView.first);
+                fields.add(userNameView);
 
-                binding.editEntryPasswordCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.editEntryPassword.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.editEntryPassword.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
+                final Pair<View, TextInputEditText> passwordView = new FieldUtil().getEditPasswordField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.password), entry.getPassword());
+                viewsToAdd.add(passwordView.first);
+                fields.add(passwordView);
 
-                binding.editEntryUrlCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.editEntryUrl.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.editEntryUrl.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
+                final Pair<View, TextInputEditText> urlView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.url), entry.getUrl());
+                viewsToAdd.add(urlView.first);
+                fields.add(urlView);
 
-                binding.editEntryNotesCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.editEntryNotes.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.editEntryNotes.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-                    }
-                });
+                final Pair<View, TextInputEditText> notesView = new FieldUtil().getMultiEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.notes), entry.getNotes());
+                viewsToAdd.add(notesView.first);
+                fields.add(notesView);
+
+                for (View dynamicView : viewsToAdd) {
+                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                    binding.editEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                    binding.editEntryScrollViewLinearLayout.startLayoutAnimation();
+                    binding.editEntryScrollViewLinearLayout.addView(dynamicView);
+                }
+
+
                 binding.editSaveEntry.setOnClickListener(v -> {
                     saveEntry(v);
                 });
+
 
             }
         }
@@ -168,20 +163,30 @@ public class EditEntryActivity extends AppCompatActivity {
                 }
                 if (proceed) {
                     Entry entry = Common.entry;
-                    if (binding.editEntryTitleName.getText() != null) {
-                        entry.setTitle(binding.editEntryTitleName.getText().toString());
-                    }
-                    if (binding.editEntryUserName.getText() != null) {
-                        entry.setUsername(binding.editEntryUserName.getText().toString());
-                    }
-                    if (binding.editEntryPassword.getText() != null) {
-                        entry.setPassword(binding.editEntryPassword.getText().toString());
-                    }
-                    if (binding.editEntryUrl.getText() != null) {
-                        entry.setUrl(binding.editEntryUrl.getText().toString());
-                    }
-                    if (binding.editEntryNotes.getText() != null) {
-                        entry.setNotes(binding.editEntryNotes.getText().toString());
+                    for (Pair<View, TextInputEditText> field : fields) {
+                        if (field.getSecond().getTag().toString().equalsIgnoreCase("title")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setTitle(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("user name")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setUsername(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("password")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setPassword(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("url")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setUrl(field.second.getText().toString());
+                            }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("notes")) {
+                            if (Util.isUsable(field.getSecond().getText().toString())) {
+                                entry.setNotes(field.second.getText().toString());
+                            }
+                        } else {
+                            entry.setProperty(field.second.getTag().toString(), field.second.getText().toString());
+                        }
                     }
 
                     if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -232,12 +237,12 @@ public class EditEntryActivity extends AppCompatActivity {
 
     private void validate() throws KpCustomException {
 
-        if (binding.editEntryTitleName.getText() == null || binding.editEntryTitleName.getText().toString() == null || binding.editEntryTitleName.getText().toString().length() <= 0) {
+        /*if (binding.editEntryTitleName.getText() == null || binding.editEntryTitleName.getText().toString() == null || binding.editEntryTitleName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryTitleEmptyErrorMsg);
         }
         if (binding.editEntryUserName.getText() == null || binding.editEntryUserName.getText().toString() == null || binding.editEntryUserName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryUsernameEmptyErrorMsg);
-        }
+        }*/
         if( !Common.isCodecAvailable)
         {
             throw new KpCustomException(R.string.devInProgress);

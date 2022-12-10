@@ -179,6 +179,7 @@ public class ListActivity extends AppCompatActivity {
         });
         MaterialButton addGroup = mView.findViewById(R.id.addNewGroupfloatBtn);
         addGroup.setOnClickListener(v -> {
+            alertDialog.dismiss();
             Intent intent = new Intent(ListActivity.this, AddGroupActivity.class);
             startActivity(intent);
             finish();
@@ -186,6 +187,7 @@ public class ListActivity extends AppCompatActivity {
 
         MaterialButton addEntry = mView.findViewById(R.id.addNewEntryfloatBtn);
         addEntry.setOnClickListener(v -> {
+            alertDialog.dismiss();
             Intent intent = new Intent(ListActivity.this, AddEntryActivity.class);
             startActivity(intent);
             finish();
