@@ -117,14 +117,29 @@ public class ListActivity extends AppCompatActivity {
 
     @SuppressLint("ResourceType")
     private void listAndShowGroupsAndEntries(Group<?, ?, ?, ?> group, boolean isFromBack, AlertDialog alertDialog) {
-        boolean isAlertDialogAvailable = true;
         if (alertDialog == null) {
-            isAlertDialogAvailable = false;
-        }
-        if (alertDialog == null) {
-            alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
-            ProgressDialogUtil.showLoadingDialog(alertDialog);
-            ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
+            final AlertDialog alertDialogLocal = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialogLocal);
+            ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 10);
+            runOnUiThread(() -> {
+                binding.groupName.setText(group.getName());
+                if (!isFromBack) {
+                    binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
+                } else {
+                    binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
+                }
+                binding.groupScrollLinearLayout.removeAllViews();
+                ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 20);
+                for (Group<?, ?, ?, ?> g : group.getGroups()) {
+                    addGroupOnUi(g, isFromBack);
+                }
+                ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 50);
+                for (Entry<?, ?, ?, ?> e : group.getEntries()) {
+                    addEntryOnUi(e, isFromBack);
+                }
+                ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 100);
+                ProgressDialogUtil.dismissLoadingDialog(alertDialogLocal);
+            });
         }
         binding.groupName.setText(group.getName());
         if (!isFromBack) {
@@ -136,14 +151,8 @@ public class ListActivity extends AppCompatActivity {
         for (Group<?, ?, ?, ?> g : group.getGroups()) {
             addGroupOnUi(g, isFromBack);
         }
-        if (!isAlertDialogAvailable) {
-            ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
-        }
         for (Entry<?, ?, ?, ?> e : group.getEntries()) {
             addEntryOnUi(e, isFromBack);
-        }
-        if (!isAlertDialogAvailable) {
-            ProgressDialogUtil.dismissLoadingDialog(alertDialog);
         }
     }
 
