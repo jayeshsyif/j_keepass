@@ -50,6 +50,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
 
     private ActivityListBinding binding;
+    private boolean isSearchView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,7 @@ public class ListActivity extends AppCompatActivity {
                     binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
                 }
                 binding.groupScrollLinearLayout.removeAllViews();
+                binding.groupScrollView.fullScroll(View.FOCUS_UP);
                 ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 20);
                 for (Group<?, ?, ?, ?> g : group.getGroups()) {
                     addGroupOnUi(g, isFromBack);
@@ -144,6 +146,7 @@ public class ListActivity extends AppCompatActivity {
             binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
         }
         binding.groupScrollLinearLayout.removeAllViews();
+        binding.groupScrollView.fullScroll(View.FOCUS_UP);
         for (Group<?, ?, ?, ?> g : group.getGroups()) {
             addGroupOnUi(g, isFromBack);
         }
@@ -219,7 +222,9 @@ public class ListActivity extends AppCompatActivity {
         if (Common.group != null && !Common.group.isRootGroup()) {
             Common.group = Common.group.getParent();
             listAndShowGroupsAndEntries(Common.group, true, null);
-        } else {
+        } else if( Common.group != null && isSearchView){
+            listAndShowGroupsAndEntries(Common.group, true, null);
+        }else {
             super.onBackPressed();
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
             startActivity(intent);
@@ -234,6 +239,7 @@ public class ListActivity extends AppCompatActivity {
         ((TextView) viewToLoad.findViewById(R.id.adapterText)).setText(g.getName());
         viewToLoad.setOnClickListener(v -> {
             Common.group = g;
+            isSearchView = false;
             listAndShowGroupsAndEntries(g, false, null);
         });
         ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
@@ -436,7 +442,9 @@ public class ListActivity extends AppCompatActivity {
             final AlertDialog alertDialog = ProgressDialogUtil.getSearch(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSearchDialog(alertDialog);
             runOnUiThread(() -> {
+                isSearchView = true;
                 binding.groupScrollLinearLayout.removeAllViews();
+                binding.groupScrollView.fullScroll(View.FOCUS_UP);
                 binding.groupName.setText(getString(R.string.search) + ": " + searchDialog.third.getText().toString());
                 binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
                 List<?> searchedEntries = Common.database.findEntries(searchDialog.third.getText().toString());
