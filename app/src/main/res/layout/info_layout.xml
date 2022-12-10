@@ -52,7 +52,7 @@
                     android:clickable="false"
                     android:fontFamily="@font/righteous"
                     android:text="@string/developer"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textSize="@dimen/kp_small_text_size">
 
                 </com.google.android.material.button.MaterialButton>
@@ -75,7 +75,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="@string/fullStack"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
 
@@ -170,8 +170,34 @@
                     android:text="@string/changeLogs"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_card_view_margin"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/righteous"
+                    android:gravity="center_vertical"
+                    android:text="@string/changeLogsVer60Text"
+                    android:textAlignment="gravity"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/kp_grey"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_card_view_margin"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/changeLogsVer60ChangesText"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/kp_grey"
+                    android:textColorLink="@color/kp_dark_blue"
+                    android:textSize="@dimen/kp_small_text_size"
+                    android:textStyle="italic" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -183,7 +209,7 @@
                     android:text="@string/changeLogsVer53Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -194,7 +220,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer53ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -209,7 +235,7 @@
                     android:text="@string/changeLogsVer52Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -220,7 +246,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer52ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -235,7 +261,7 @@
                     android:text="@string/changeLogsVer51Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -246,7 +272,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer51ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -261,7 +287,7 @@
                     android:text="@string/changeLogsVer5Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -272,7 +298,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer5ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -287,7 +313,7 @@
                     android:text="@string/changeLogsVer4Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -298,7 +324,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer4ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -313,7 +339,7 @@
                     android:text="@string/changeLogsVer31Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -339,7 +365,7 @@
                     android:text="@string/changeLogsVer3Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -350,7 +376,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer3ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -365,7 +391,7 @@
                     android:text="@string/changeLogsVer21Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -376,7 +402,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer21ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -391,7 +417,7 @@
                     android:text="@string/changeLogsVer2Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -402,7 +428,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer2ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -417,7 +443,7 @@
                     android:text="@string/changeLogsVer11Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -428,7 +454,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer11ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -443,7 +469,7 @@
                     android:text="@string/changeLogsVer1Text"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textStyle="normal" />
 
                 <TextView
@@ -454,7 +480,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/changeLogsVer1ChangesText"
                     android:textAlignment="gravity"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue"
                     android:textSize="@dimen/kp_small_text_size"
                     android:textStyle="italic" />
@@ -468,7 +494,7 @@
                     android:text=""
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_grey"
                     android:textColorLink="@color/kp_dark_blue" />
             </LinearLayout>
         </ScrollView>

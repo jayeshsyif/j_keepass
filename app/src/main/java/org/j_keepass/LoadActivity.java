@@ -40,6 +40,7 @@ import org.j_keepass.util.BannerDialogUtil;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.DatabaseCreateDialogUtil;
+import org.j_keepass.util.InfoDialogUtil;
 import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
@@ -281,7 +282,7 @@ public class LoadActivity extends AppCompatActivity {
             case PICK_FILE_OPEN_RESULT_CODE:
                 if (resultCode == -1) {
                     kdbxFileUri = data.getData();
-                    Log.i("JKeepass","Flags: "+data.getFlags());
+                    Log.i("JKeepass", "Flags: " + data.getFlags());
                     loadFile();
                     copyFile();
                     fetchAndShowFiles();
@@ -349,8 +350,7 @@ public class LoadActivity extends AppCompatActivity {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError);
                 proceed = false;
-            }else
-            {
+            } else {
                 /*try {
                     getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 } catch (Exception e) {
@@ -414,8 +414,7 @@ public class LoadActivity extends AppCompatActivity {
             }
         }
 
-        if( !proceed )
-        {
+        if (!proceed) {
             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
         }
     }
@@ -595,41 +594,7 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void showInfoDialog() {
-        final Dialog dialog = new Dialog(LoadActivity.this, android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
-        dialog.setContentView(R.layout.info_layout);
-        ImageButton llink = dialog.findViewById(R.id.llink);
-        llink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.linkedin.com/in/jayesh-ganatra-76051056"));
-                startActivity(intent);
-            }
-        });
-
-        ImageButton elink = dialog.findViewById(R.id.elink);
-        elink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://flowcv.me/jayesh-ganatra"));
-                startActivity(intent);
-            }
-        });
-
-        ImageButton glink = dialog.findViewById(R.id.glink);
-        glink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://play.google.com/store/apps/dev?id=7560962222107226464"));
-                startActivity(intent);
-            }
-        });
-        FloatingActionButton closeInfoBtn = dialog.findViewById(R.id.floatCloseInfoBtn);
-        closeInfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        final Dialog dialog = new InfoDialogUtil().getInfoDialog(binding.getRoot().getContext(), getLayoutInflater());
         dialog.show();
     }
 
@@ -639,13 +604,12 @@ public class LoadActivity extends AppCompatActivity {
         File fromTo = new File(subFilesDirPath + File.separator + binding.kdbxFileName.getText().toString());
         if (fromTo.exists()) {
             fromTo.delete();
-        }else
-        {
+        } else {
             try {
                 fromTo.createNewFile();
                 fromTo.setWritable(true, true);
-                fromTo.setExecutable(true,true);
-                fromTo.setReadable(true,true);
+                fromTo.setExecutable(true, true);
+                fromTo.setReadable(true, true);
             } catch (IOException e) {
             }
         }
