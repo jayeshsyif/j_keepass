@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -15,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.j_keepass.databinding.ActivityViewEntryBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 
 public class ViewEntryActivity extends AppCompatActivity {
@@ -43,57 +46,35 @@ public class ViewEntryActivity extends AppCompatActivity {
 
             if (entry != null) {
                 LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-                binding.entryScrollView.setLayoutAnimation(lac);
-                binding.entryScrollView.startLayoutAnimation();
+                binding.viewEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                binding.viewEntryScrollViewLinearLayout.startLayoutAnimation();
 
                 binding.entryTitleName.setText(entry.getTitle());
-                binding.entryUserName.setText(entry.getUsername());
-                binding.entryPassword.setText(entry.getPassword());
-                binding.entryUrl.setText(entry.getUrl());
-                binding.entryNotes.setText(entry.getNotes());
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                if (Util.isUsable(entry.getUsername())) {
+                    final View userNameView = FieldUtil.getTextFieldWithCopy(inflater, getString(R.string.userName), entry.getUsername(), clipboard, getString(R.string.copiedToClipboard));
+                    binding.viewEntryScrollViewLinearLayout.addView(userNameView);
+                }
 
-                binding.userNameCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.entryUserName.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("username", binding.entryUserName.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("User name"));
-                    }
-                });
+                if (Util.isUsable(entry.getPassword())) {
+                    final View passwordView = FieldUtil.getPasswordFieldWithCopy(inflater, getString(R.string.password), entry.getPassword(), clipboard, getString(R.string.copiedToClipboard));
+                    binding.viewEntryScrollViewLinearLayout.addView(passwordView);
+                    binding.entryPasswordCopyFloatBtn.setOnClickListener(v -> {
+                        passwordView.findViewById(R.id.fieldCopy).performClick();
+                    });
+                }
 
-                binding.entryPasswordCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.entryPassword.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.entryPassword.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("Password"));
-                    }
-                });
+                if (Util.isUsable(entry.getUrl())) {
+                    final View urlView = FieldUtil.getTextFieldWithCopy(inflater, getString(R.string.url), entry.getUrl(), clipboard, getString(R.string.copiedToClipboard));
+                    binding.viewEntryScrollViewLinearLayout.addView(urlView);
+                }
+                if (Util.isUsable(entry.getNotes())) {
+                    final View notesView = FieldUtil.getMultiLineTextFieldWithCopy(inflater, getString(R.string.notes), entry.getNotes(), clipboard, getString(R.string.copiedToClipboard));
+                    binding.viewEntryScrollViewLinearLayout.addView(notesView);
+                }
 
-                binding.entryUrlCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.entryUrl.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.entryUrl.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("URL"));
-                    }
-                });
 
-                binding.entryNotesCopy.setOnClickListener(v -> {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (binding.entryNotes.getText() != null) {
-                        ClipData clip = ClipData.newPlainText("password", binding.entryNotes.getText().toString());
-                        clipboard.setPrimaryClip(clip);
-                        ToastUtil.showToast(getLayoutInflater(), v, getCopiedStringWithKey("Notes"));
-                    }
-                });
-                binding.entryPasswordCopyFloatBtn.setOnClickListener( v -> {
-                    binding.entryPasswordCopy.performClick();
-                });
             }
         }
         binding.backFloatBtn.setOnClickListener(v -> {
@@ -119,21 +100,15 @@ public class ViewEntryActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-    private String getCopiedStringWithKey(String key)
-    {
-        return key+" "+getResources().getString(R.string.copiedToClipboard);
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(!hasFocus)
-        {
-            binding.entryScrollView.setVisibility(View.GONE);
+        if (!hasFocus) {
+            binding.viewEntryScrollView.setVisibility(View.GONE);
         }
-        if(hasFocus)
-        {
-            binding.entryScrollView.setVisibility(View.VISIBLE);
+        if (hasFocus) {
+            binding.viewEntryScrollView.setVisibility(View.VISIBLE);
         }
     }
 }

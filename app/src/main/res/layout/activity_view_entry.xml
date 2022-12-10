@@ -36,234 +36,21 @@
                 android:textStyle="bold"></TextView>
 
             <ScrollView
-                android:id="@+id/entryScrollView"
+                android:id="@+id/viewEntryScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="20"
                 android:background="@color/kp_light_blue">
 
                 <LinearLayout
+                    android:id="@+id/viewEntryScrollViewLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="top"
-                        android:text="@string/userName"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic"></TextView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="100"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/entryUserName"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_group_name_margin"
-                            android:layout_weight="20"
-                            android:fontFamily="@font/righteous"
-                            android:gravity="left|center"
-                            android:text="@string/userName"
-                            android:textAlignment="gravity"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textStyle="bold"></TextView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="80">
-
-                            <ImageButton
-                                android:id="@+id/userNameCopy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
-                                android:textAlignment="gravity"
-                                app:tint="@color/kp_dark_blue"></ImageButton>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="top"
-                        android:text="@string/password"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic"></TextView>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="100"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_margin"
-                            android:layout_weight="20"
-                            app:passwordToggleTint="@color/kp_grey"
-                            app:boxStrokeColor="@color/kp_grey"
-                            app:hintTextColor="@color/kp_grey"
-                            android:textColorHint="@color/kp_grey"
-                            app:passwordToggleEnabled="true">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/entryPassword"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:backgroundTint="@android:color/transparent"
-                                android:clickable="false"
-                                android:cursorVisible="false"
-                                android:focusable="false"
-                                android:fontFamily="@font/righteous"
-                                android:inputType="textPassword"
-                                android:textColor="@color/kp_dark_blue"
-                                android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="80">
-
-                            <ImageButton
-                                android:id="@+id/entryPasswordCopy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
-                                android:textAlignment="gravity"
-                                app:tint="@color/kp_dark_blue"></ImageButton>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="top"
-                        android:text="@string/url"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic"></TextView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="100"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/entryUrl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_group_name_margin"
-                            android:layout_weight="20"
-                            android:fontFamily="@font/righteous"
-                            android:gravity="left|center"
-                            android:text="@string/url"
-                            android:textAlignment="gravity"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textStyle="bold"></TextView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="80">
-
-                            <ImageButton
-                                android:id="@+id/entryUrlCopy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
-                                android:textAlignment="gravity"
-                                app:tint="@color/kp_dark_blue"></ImageButton>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="top"
-                        android:text="@string/notes"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic"></TextView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="100"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/entryNotes"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/kp_group_name_margin"
-                            android:layout_weight="20"
-                            android:fontFamily="@font/righteous"
-                            android:gravity="left|center"
-                            android:singleLine="false"
-                            android:text="@string/notes"
-                            android:textAlignment="gravity"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textStyle="bold"></TextView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="80">
-
-                            <ImageButton
-                                android:id="@+id/entryNotesCopy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
-                                android:textAlignment="gravity"
-                                app:tint="@color/kp_dark_blue"></ImageButton>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
                 </LinearLayout>
             </ScrollView>
+
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
@@ -303,6 +90,7 @@
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/entryPasswordCopyFloatBtn"
             android:layout_width="wrap_content"
@@ -310,8 +98,8 @@
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
             android:backgroundTint="@color/kp_dark_blue"
-            android:textColor="@color/kp_white"
             android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+            android:textColor="@color/kp_white"
             app:iconTint="@color/kp_white"
             app:tint="@color/kp_white" />
     </androidx.cardview.widget.CardView>

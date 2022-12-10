@@ -1,5 +1,7 @@
 package org.j_keepass.util;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -22,26 +24,91 @@ public class FieldUtil {
         copyLayout.setVisibility(View.GONE);
         TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
         fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
-
+        fieldText.setHint(hint);
         TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setEnabled(false);
         field.setInputType(InputType.TYPE_NULL);
+        field.setTransformationMethod(null);
         field.setHint(hint);
         field.setText(value);
         return  viewToLoad;
     }
 
-    public static View getTextFieldWithCopy(LayoutInflater inflater,  String hint, String value) {
+    public static View getTextFieldWithCopy(LayoutInflater inflater,  String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
         View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
         copyLayout.setVisibility(View.VISIBLE);
         TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
         fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
-
+        fieldText.setHint(hint);
         TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setEnabled(false);
         field.setInputType(InputType.TYPE_NULL);
-        field.setHint(hint);
+        field.setTransformationMethod(null);
+        //field.setHint(hint);
         field.setText(value);
+
+        copy.setOnClickListener(v -> {
+            if (value != null) {
+                ClipData clip = ClipData.newPlainText(hint, value);
+                clipboard.setPrimaryClip(clip);
+                ToastUtil.showToast(inflater, v, hint+" "+copiedToClipboardString);
+            }
+        });
+
+        return  viewToLoad;
+    }
+
+    public static View getPasswordFieldWithCopy(LayoutInflater inflater,  String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+        View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
+        copyLayout.setVisibility(View.VISIBLE);
+        TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+        fieldText.setHint(hint);
+        TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setEnabled(false);
+        field.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //field.setHint(hint);
+        field.setText(value);
+
+        copy.setOnClickListener(v -> {
+            if (value != null) {
+                ClipData clip = ClipData.newPlainText(hint, value);
+                clipboard.setPrimaryClip(clip);
+                ToastUtil.showToast(inflater, v, hint+" "+copiedToClipboardString);
+            }
+        });
+
+        return  viewToLoad;
+    }
+
+    public static View getMultiLineTextFieldWithCopy(LayoutInflater inflater,  String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+        View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
+        copyLayout.setVisibility(View.VISIBLE);
+        TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        fieldText.setHint(hint);
+        TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setEnabled(false);
+        field.setLines(10);
+        field.setInputType(InputType.TYPE_NULL);
+        field.setTransformationMethod(null);
+        //field.setHint(hint);
+        field.setText(value);
+
+        copy.setOnClickListener(v -> {
+            if (value != null) {
+                ClipData clip = ClipData.newPlainText(hint, value);
+                clipboard.setPrimaryClip(clip);
+                ToastUtil.showToast(inflater, v, hint+" "+copiedToClipboardString);
+            }
+        });
+
         return  viewToLoad;
     }
 

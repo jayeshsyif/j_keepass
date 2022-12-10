@@ -23,4 +23,16 @@ public class Util {
         return o;
     }
 
+    static public boolean isUsable(String str)
+    {
+        if( str == null || str.length() <= 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 }
