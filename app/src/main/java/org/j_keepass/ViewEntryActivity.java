@@ -1,11 +1,10 @@
 package org.j_keepass;
 
-import android.content.ClipData;
+import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,9 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.j_keepass.databinding.ActivityViewEntryBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.FieldUtil;
-import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
+
+import java.util.ArrayList;
 
 public class ViewEntryActivity extends AppCompatActivity {
 
@@ -43,37 +43,60 @@ public class ViewEntryActivity extends AppCompatActivity {
                     entry = Common.entry;
                 }
             }
-
+            final Entry<?, ?, ?, ?> finalEntry = entry;
             if (entry != null) {
-                LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-                binding.viewEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                binding.viewEntryScrollViewLinearLayout.startLayoutAnimation();
-
                 binding.entryTitleName.setText(entry.getTitle());
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                if (Util.isUsable(entry.getUsername())) {
-                    final View userNameView = FieldUtil.getTextFieldWithCopy(inflater, getString(R.string.userName), entry.getUsername(), clipboard, getString(R.string.copiedToClipboard));
-                    binding.viewEntryScrollViewLinearLayout.addView(userNameView);
+
+                binding.viewEntryScrollViewLinearLayout.removeAllViews();
+                ArrayList<View> viewsToAdd = new ArrayList<View>();
+                if (Util.isUsable(finalEntry.getUsername())) {
+                    final View userNameView = new FieldUtil().getTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.userName), finalEntry.getUsername(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                    viewsToAdd.add(userNameView);
                 }
 
-                if (Util.isUsable(entry.getPassword())) {
-                    final View passwordView = FieldUtil.getPasswordFieldWithCopy(inflater, getString(R.string.password), entry.getPassword(), clipboard, getString(R.string.copiedToClipboard));
-                    binding.viewEntryScrollViewLinearLayout.addView(passwordView);
+                if (Util.isUsable(finalEntry.getPassword())) {
+                    final View passwordView = new FieldUtil().getPasswordFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.password), finalEntry.getPassword(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                    viewsToAdd.add(passwordView);
                     binding.entryPasswordCopyFloatBtn.setOnClickListener(v -> {
                         passwordView.findViewById(R.id.fieldCopy).performClick();
                     });
                 }
 
-                if (Util.isUsable(entry.getUrl())) {
-                    final View urlView = FieldUtil.getTextFieldWithCopy(inflater, getString(R.string.url), entry.getUrl(), clipboard, getString(R.string.copiedToClipboard));
-                    binding.viewEntryScrollViewLinearLayout.addView(urlView);
+                if (Util.isUsable(finalEntry.getUrl())) {
+                    final View urlView = new FieldUtil().getTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.url), finalEntry.getUrl(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                    viewsToAdd.add(urlView);
                 }
-                if (Util.isUsable(entry.getNotes())) {
-                    final View notesView = FieldUtil.getMultiLineTextFieldWithCopy(inflater, getString(R.string.notes), entry.getNotes(), clipboard, getString(R.string.copiedToClipboard));
-                    binding.viewEntryScrollViewLinearLayout.addView(notesView);
+                if (Util.isUsable(finalEntry.getNotes())) {
+                    final View notesView = new FieldUtil().getMultiLineTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.notes), finalEntry.getNotes(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                    viewsToAdd.add(notesView);
                 }
-
+                {
+                    if (entry.getPropertyNames().size() > 0) {
+                        for (String pn : entry.getPropertyNames()) {
+                            if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password")
+                                    && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
+                                final View pnView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                        pn, entry.getProperty(pn));
+                                viewsToAdd.add(pnView);
+                            }
+                        }
+                    }
+                }
+                {
+                    final View creationView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.creationDate), finalEntry.getCreationTime().toString());
+                    viewsToAdd.add(creationView);
+                }
+                for (View dynamicView : viewsToAdd) {
+                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                    binding.viewEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                    binding.viewEntryScrollViewLinearLayout.startLayoutAnimation();
+                    binding.viewEntryScrollViewLinearLayout.addView(dynamicView);
+                }
 
             }
         }

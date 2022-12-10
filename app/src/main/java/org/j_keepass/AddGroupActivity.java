@@ -50,7 +50,7 @@ public class AddGroupActivity extends AppCompatActivity {
             binding.addGroupScrollView.setLayoutAnimation(lac);
             binding.addGroupScrollView.startLayoutAnimation();
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final Pair<View, TextInputEditText> pair = FieldUtil.getEditTextField(inflater, getString(R.string.enterGroupName), "");
+            final Pair<View, TextInputEditText> pair = new FieldUtil().getEditTextField(inflater, getString(R.string.enterGroupName), "");
 
             pair.second.addTextChangedListener(new TextWatcher() {
                 @Override

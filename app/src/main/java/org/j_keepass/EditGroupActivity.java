@@ -53,7 +53,7 @@ public class EditGroupActivity extends AppCompatActivity {
             if(Common.group != null) {
                 binding.editGroupTitleName.setText(Common.group.getName());
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                pair = FieldUtil.getEditTextField(inflater, getString(R.string.groupName), Common.group.getName());
+                pair = new FieldUtil().getEditTextField(inflater, getString(R.string.groupName), Common.group.getName());
                 binding.editGroupScrollViewLinearLayout.addView(pair.first);
             }
             final Pair<View, TextInputEditText> finalPair = pair;
