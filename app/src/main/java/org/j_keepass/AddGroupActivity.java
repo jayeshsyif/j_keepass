@@ -2,11 +2,14 @@ package org.j_keepass;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
@@ -14,9 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.j_keepass.databinding.AddNewGroupLayoutBinding;
 import org.j_keepass.util.Common;
+import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.linguafranca.pwdb.Group;
@@ -42,8 +49,10 @@ public class AddGroupActivity extends AppCompatActivity {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
             binding.addGroupScrollView.setLayoutAnimation(lac);
             binding.addGroupScrollView.startLayoutAnimation();
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final Pair<View, TextInputEditText> pair = FieldUtil.getEditTextField(inflater, getString(R.string.enterGroupName), "");
 
-            binding.addGroupName.addTextChangedListener(new TextWatcher() {
+            pair.second.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -55,11 +64,13 @@ public class AddGroupActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (binding.addGroupName.getText() != null) {
-                        binding.addGroupTitleName.setText(binding.addGroupName.getText().toString());
+                    if (pair.second.getText() != null) {
+                        binding.addGroupTitleName.setText(pair.second.getText().toString());
                     }
                 }
             });
+            binding.addGroupScrollViewLinearLayout.addView(pair.first);
+
             binding.saveGroup.setOnClickListener(v -> {
                 final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddGroupActivity.this);
                 ProgressDialogUtil.showSavingDialog(alertDialog);
@@ -68,7 +79,7 @@ public class AddGroupActivity extends AppCompatActivity {
 
                     boolean proceed = false;
                     try {
-                        validate();
+                        validate(pair.second.getText().toString());
                         proceed = true;
                     } catch (KpCustomException e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
@@ -78,7 +89,7 @@ public class AddGroupActivity extends AppCompatActivity {
                     if (proceed) {
                         Group group = Common.group;
                         Group newGroup = Common.database.newGroup();
-                        newGroup.setName(binding.addGroupName.getText().toString());
+                        newGroup.setName(pair.second.getText().toString());
                         newGroup.setParent(group);
                         group.addGroup(newGroup);
                         if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -156,9 +167,9 @@ public class AddGroupActivity extends AppCompatActivity {
         }
     }
 
-    private void validate() throws KpCustomException {
+    private void validate(String groupName) throws KpCustomException {
 
-        if (binding.addGroupName.getText() == null) {
+        if (groupName == null) {
             throw new KpCustomException(R.string.groupNameEmptyErrorMsg);
         }
         if (!Common.isCodecAvailable) {

@@ -43,38 +43,10 @@
                 android:background="@color/kp_light_blue">
 
                 <LinearLayout
+                    android:id="@+id/addGroupScrollViewLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="top"
-                        android:text="@string/groupName"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic"></TextView>
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/addGroupName"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_group_name_margin"
-                        android:layout_weight="20"
-                        android:backgroundTint="@color/kp_dark_blue"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="left|center"
-                        android:hint="@string/enterGroupName"
-                        android:singleLine="true"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textColorHint="@color/kp_grey"
-                        android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
 
                 </LinearLayout>
             </ScrollView>
