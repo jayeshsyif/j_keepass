@@ -164,8 +164,15 @@ public class EditEntryActivity extends AppCompatActivity {
                     AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
                     NewPasswordDialogUtil.showDialog(d);
                 });
-                binding.backBtn.setOnClickListener(v -> {
-                    this.onBackPressed();
+                binding.lockBtn.setOnClickListener(v -> {
+                    Common.database = null;
+                    Common.group = null;
+                    Common.entry = null;
+                    Common.creds = null;
+                    Common.kdbxFileUri = null;
+                    Intent intent = new Intent(EditEntryActivity.this, LoadActivity.class);
+                    startActivity(intent);
+                    finish();
                 });
             }
         }

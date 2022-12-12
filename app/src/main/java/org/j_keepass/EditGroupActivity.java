@@ -126,8 +126,15 @@ public class EditGroupActivity extends AppCompatActivity {
                 this.onBackPressed();
             });
 
-            binding.back.setOnClickListener( v -> {
-                this.onBackPressed();
+            binding.lockBtn.setOnClickListener(v -> {
+                Common.database = null;
+                Common.group = null;
+                Common.entry = null;
+                Common.creds = null;
+                Common.kdbxFileUri = null;
+                Intent intent = new Intent(EditGroupActivity.this, LoadActivity.class);
+                startActivity(intent);
+                finish();
             });
         }
     }

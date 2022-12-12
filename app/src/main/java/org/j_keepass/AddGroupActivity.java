@@ -142,8 +142,15 @@ public class AddGroupActivity extends AppCompatActivity {
                 this.onBackPressed();
             });
 
-            binding.back.setOnClickListener( v -> {
-                this.onBackPressed();
+            binding.lockBtn.setOnClickListener(v -> {
+                Common.database = null;
+                Common.group = null;
+                Common.entry = null;
+                Common.creds = null;
+                Common.kdbxFileUri = null;
+                Intent intent = new Intent(AddGroupActivity.this, LoadActivity.class);
+                startActivity(intent);
+                finish();
             });
         }
     }

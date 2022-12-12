@@ -106,8 +106,15 @@ public class ViewEntryActivity extends AppCompatActivity {
             this.onBackPressed();
         });
 
-        binding.backBtn.setOnClickListener( v -> {
-            this.onBackPressed();
+        binding.lockBtn.setOnClickListener(v -> {
+            Common.database = null;
+            Common.group = null;
+            Common.entry = null;
+            Common.creds = null;
+            Common.kdbxFileUri = null;
+            Intent intent = new Intent(ViewEntryActivity.this, LoadActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
