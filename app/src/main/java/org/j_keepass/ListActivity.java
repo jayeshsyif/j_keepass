@@ -83,7 +83,6 @@ public class ListActivity extends AppCompatActivity {
                 if (group != null) {
                     listAndShowGroupsAndEntries(group, false, alertDialog);
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
-
                 }
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
 
@@ -104,6 +103,11 @@ public class ListActivity extends AppCompatActivity {
         binding.searchFloatBtn.setOnClickListener(v -> {
             search(v, this);
         });
+        binding.searchHomeBtn.setOnClickListener(v -> {
+            Common.group = Common.database.getRootGroup();
+            isSearchView = false;
+            listAndShowGroupsAndEntries(Common.group, false, null);
+        });
 
     }
 
@@ -114,31 +118,6 @@ public class ListActivity extends AppCompatActivity {
 
     @SuppressLint("ResourceType")
     private void listAndShowGroupsAndEntries(Group<?, ?, ?, ?> group, boolean isFromBack, AlertDialog alertDialog) {
-        if (alertDialog == null) {
-            final AlertDialog alertDialogLocal = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
-            ProgressDialogUtil.showLoadingDialog(alertDialogLocal);
-            ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 10);
-            runOnUiThread(() -> {
-                binding.groupName.setText(group.getName());
-                if (!isFromBack) {
-                    binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
-                } else {
-                    binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
-                }
-                binding.groupScrollLinearLayout.removeAllViews();
-                binding.groupScrollView.fullScroll(View.FOCUS_UP);
-                ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 20);
-                for (Group<?, ?, ?, ?> g : group.getGroups()) {
-                    addGroupOnUi(g, isFromBack);
-                }
-                ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 50);
-                for (Entry<?, ?, ?, ?> e : group.getEntries()) {
-                    addEntryOnUi(e, isFromBack, false);
-                }
-                ProgressDialogUtil.setLoadingProgress(alertDialogLocal, 100);
-                ProgressDialogUtil.dismissLoadingDialog(alertDialogLocal);
-            });
-        }
         binding.groupName.setText(group.getName());
         if (!isFromBack) {
             binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
@@ -165,7 +144,7 @@ public class ListActivity extends AppCompatActivity {
         alertDialog.getWindow().setGravity(Gravity.CENTER);
 
         ScrollView newFloatScrollView = mView.findViewById(R.id.newFloatScrollView);
-        newFloatScrollView.setAnimation(AnimationUtils.makeInAnimation(this, true));
+        //newFloatScrollView.setAnimation(AnimationUtils.makeInAnimation(this, true));
 
         FloatingActionButton closeInfoBtn = mView.findViewById(R.id.addNewfloatCloseInfoBtn);
         closeInfoBtn.setOnClickListener(v -> {
@@ -222,9 +201,9 @@ public class ListActivity extends AppCompatActivity {
         if (Common.group != null && !Common.group.isRootGroup()) {
             Common.group = Common.group.getParent();
             listAndShowGroupsAndEntries(Common.group, true, null);
-        } else if( Common.group != null && isSearchView){
+        } else if (Common.group != null && isSearchView) {
             listAndShowGroupsAndEntries(Common.group, true, null);
-        }else {
+        } else {
             super.onBackPressed();
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
             startActivity(intent);
@@ -257,10 +236,10 @@ public class ListActivity extends AppCompatActivity {
             deleteGroup(v, this, g);
         });
         if (!isFromBack) {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
             binding.groupScrollLinearLayout.setLayoutAnimation(lac);
         } else {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), 0.5f);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), Common.ANIMATION_TIME);
             binding.groupScrollLinearLayout.setLayoutAnimation(lac);
         }
         binding.groupScrollLinearLayout.addView(viewToLoad);
@@ -307,10 +286,10 @@ public class ListActivity extends AppCompatActivity {
             }
         }
         if (!isFromBack) {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
             binding.groupScrollLinearLayout.setLayoutAnimation(lac);
         } else {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), 0.5f);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), Common.ANIMATION_TIME);
             binding.groupScrollLinearLayout.setLayoutAnimation(lac);
         }
         binding.groupScrollLinearLayout.addView(viewToLoad);

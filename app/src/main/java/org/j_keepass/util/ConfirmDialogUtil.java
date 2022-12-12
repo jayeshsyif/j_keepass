@@ -31,7 +31,7 @@ public class ConfirmDialogUtil {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
             alertDialog.getWindow().setGravity(Gravity.CENTER);
-            ((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+            //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton yes = mView.findViewById(R.id.confirmYes);
             MaterialButton no = mView.findViewById(R.id.confirmNo);
             no.setOnClickListener(v -> {

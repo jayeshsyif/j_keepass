@@ -46,7 +46,7 @@ public class EditGroupActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
 
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
             binding.editGroupScrollView.setLayoutAnimation(lac);
             binding.editGroupScrollView.startLayoutAnimation();
             Pair<View, TextInputEditText> pair = null;

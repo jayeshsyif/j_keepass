@@ -32,7 +32,7 @@ public class DatabaseCreateDialogUtil {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
             alertDialog.getWindow().setGravity(Gravity.CENTER);
-            ((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+            //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton save = mView.findViewById(R.id.saveDatabase);
             MaterialButton cancel = mView.findViewById(R.id.cancelDatabase);
             cancel.setOnClickListener(v -> {

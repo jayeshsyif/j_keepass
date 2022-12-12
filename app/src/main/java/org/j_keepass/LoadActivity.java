@@ -735,7 +735,7 @@ public class LoadActivity extends AppCompatActivity {
             });
             ConfirmDialogUtil.showDialog(confirmDialog.first);
         });
-        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f);
+        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
         binding.listDatabasesLinerLayout.setLayoutAnimation(lac);
         binding.listDatabasesLinerLayout.addView(viewToLoad);
     }

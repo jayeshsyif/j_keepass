@@ -17,4 +17,5 @@ public class Common {
     public static Uri kdbxFileUri;
 
     public static boolean isCodecAvailable = false;
+    public static final float ANIMATION_TIME = 0.1f;
 }

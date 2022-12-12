@@ -43,10 +43,32 @@
                 android:background="@color/kp_light_blue">
 
                 <LinearLayout
-                    android:id="@+id/addEntryScrollViewLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/addBasicFieldEntryScrollViewLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/addMoreFieldBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_margin="@dimen/kp_margin"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:fontFamily="@font/righteous"
+                        android:visibility="gone"
+                        android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24" />
+
+                    <LinearLayout
+                        android:id="@+id/addAdditionalFieldEntryScrollViewLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"></LinearLayout>
 
                 </LinearLayout>
             </ScrollView>

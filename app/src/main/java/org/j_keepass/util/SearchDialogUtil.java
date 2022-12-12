@@ -32,7 +32,7 @@ public class SearchDialogUtil {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
             alertDialog.getWindow().setGravity(Gravity.CENTER);
-            ((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+            //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton yes = mView.findViewById(R.id.confirmSearch);
             MaterialButton no = mView.findViewById(R.id.searchCancel);
             TextInputEditText searchText = mView.findViewById(R.id.searchText);

@@ -92,7 +92,7 @@ public class ViewEntryActivity extends AppCompatActivity {
                     viewsToAdd.add(creationView);
                 }
                 for (View dynamicView : viewsToAdd) {
-                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
+                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
                     binding.viewEntryScrollViewLinearLayout.setLayoutAnimation(lac);
                     binding.viewEntryScrollViewLinearLayout.startLayoutAnimation();
                     binding.viewEntryScrollViewLinearLayout.addView(dynamicView);

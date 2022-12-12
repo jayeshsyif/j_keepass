@@ -1,6 +1,6 @@
 <resources>
     <dimen name="fab_margin">10pt</dimen>
-    <dimen name="kp_card_view_margin">1pt</dimen>
+    <dimen name="kp_card_view_margin">2pt</dimen>
     <dimen name="kp_card_list_view_margin">5pt</dimen>
     <dimen name="kp_card_view_padding">2pt</dimen>
     <dimen name="kp_card_view_radius">3pt</dimen>

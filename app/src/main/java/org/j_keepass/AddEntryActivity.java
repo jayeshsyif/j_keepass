@@ -52,7 +52,7 @@ public class AddEntryActivity extends AppCompatActivity {
             Intent intent = new Intent(AddEntryActivity.this, LoadActivity.class);
             startActivity(intent);
         } else {
-            binding.addEntryScrollViewLinearLayout.removeAllViews();
+            binding.addBasicFieldEntryScrollViewLinearLayout.removeAllViews();
             ArrayList<View> viewsToAdd = new ArrayList<View>();
 
             final Pair<View, TextInputEditText> titleView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
@@ -98,13 +98,14 @@ public class AddEntryActivity extends AppCompatActivity {
             fields.add(notesView);
 
             for (View dynamicView : viewsToAdd) {
-                @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), 0.5f); //0.5f == time between appearance of listview items.
-                binding.addEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                binding.addEntryScrollViewLinearLayout.startLayoutAnimation();
-                binding.addEntryScrollViewLinearLayout.addView(dynamicView);
+                @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+                binding.addBasicFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                binding.addBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();
+                binding.addBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
             }
 
-
+            binding.addMoreFieldBtn.setOnClickListener( v -> {
+            });
             binding.saveNewEntry.setOnClickListener(v -> {
                 saveNewEntry(v);
             });
