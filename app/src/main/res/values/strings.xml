@@ -103,7 +103,7 @@
     <string name="changeLogsVer53Text">Version 5.3</string>
     <string name="changeLogsVer53ChangesText">   Bug fixes</string>
     <string name="changeLogsVer60Text">Version 6.0</string>
-    <string name="changeLogsVer60ChangesText">   Major UI change. Added Import feature, Added additional field support.</string>
+    <string name="changeLogsVer60ChangesText">   Major UI change. Added Import and Export feature, Added additional field support.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>

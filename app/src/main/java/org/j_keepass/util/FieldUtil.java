@@ -59,7 +59,7 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString + " value is " + value);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
             }
         });
 
