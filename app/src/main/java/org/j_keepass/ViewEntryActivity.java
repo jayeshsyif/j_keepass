@@ -79,8 +79,8 @@ public class ViewEntryActivity extends AppCompatActivity {
                         for (String pn : entry.getPropertyNames()) {
                             if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password")
                                     && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
-                                final View pnView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                                        pn, entry.getProperty(pn));
+                                final View pnView = new FieldUtil().getTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                        pn, entry.getProperty(pn), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
                                 viewsToAdd.add(pnView);
                             }
                         }

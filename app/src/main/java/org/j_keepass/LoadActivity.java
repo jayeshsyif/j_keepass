@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -72,7 +74,7 @@ public class LoadActivity extends AppCompatActivity {
     private String dirPath = null;
     private String subFilesDirPath = null;
     boolean isFileAvailable = false;
-
+    Dialog banner = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +95,14 @@ public class LoadActivity extends AppCompatActivity {
         }
 
         Common.database = null;
-
-        Dialog banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
+        if( banner != null)
+        {
+            Log.i("JKEEPASS","banner not null");
+        }else
+        {
+            Log.i("JKEEPASS","banner null");
+        }
+        banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
         banner.show();
         if (isFileAvailable) {
             loadFile();
@@ -707,5 +715,21 @@ public class LoadActivity extends AppCompatActivity {
         LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
         binding.listDatabasesLinerLayout.setLayoutAnimation(lac);
         binding.listDatabasesLinerLayout.addView(viewToLoad);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        if(banner!=null && banner.isShowing()) {
+            banner.dismiss();
+        }
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if(banner!=null && banner.isShowing()) {
+            banner.dismiss();
+        }
+        super.onSaveInstanceState(outState);
     }
 }
