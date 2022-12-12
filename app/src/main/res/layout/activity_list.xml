@@ -73,13 +73,13 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:id="@+id/homeBtn"
+                            android:id="@+id/exportBtn"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
-                            android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
+                            android:src="@drawable/ic_export_fill0_wght300_grad_25_opsz24"
                             android:textStyle="bold"
                             app:tint="@color/kp_dark_blue" />
 
@@ -120,13 +120,13 @@
                             app:tint="@color/kp_dark_blue" />
 
                         <ImageButton
-                            android:id="@+id/backBtn"
+                            android:id="@+id/lockBtn"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
-                            android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
+                            android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
                             android:textStyle="bold"
                             app:tint="@color/kp_dark_blue" />
                     </LinearLayout>

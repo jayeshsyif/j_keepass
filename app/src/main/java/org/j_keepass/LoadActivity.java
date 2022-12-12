@@ -195,78 +195,47 @@ public class LoadActivity extends AppCompatActivity {
             }
         });
         MaterialButton createBtn = binding.createBtn;
-        boolean useOldCreate = false;
-        if (useOldCreate) {
-            createBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        ActivityCompat.requestPermissions(LoadActivity.this, new String[]{
-                                        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                READ_EXTERNAL_STORAGE);
-                    }
+        createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialog(getLayoutInflater(), binding.getRoot().getContext());
 
-                    if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-                        chooseFile.setType("*/*");
-                        chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                                | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-                        chooseFile.putExtra(Intent.EXTRA_TITLE, "database.kdbx");
-
-                        chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
-                        startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+                confirmDialog.second.setOnClickListener(v1 -> {
+                    if (!Common.isCodecAvailable) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                    } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                    } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
                     } else {
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
-                    }
-                }
-            });
-        } else {
-            createBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialog(getLayoutInflater(), binding.getRoot().getContext());
-
-                    confirmDialog.second.setOnClickListener(v1 -> {
-                        if (!Common.isCodecAvailable) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
-                        } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
-                        } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                        String dbName = confirmDialog.fourth.getText().toString();
+                        if (!dbName.endsWith("kdbx")) {
+                            dbName = dbName + ".kdbx";
+                        }
+                        File fromTo = new File(subFilesDirPath + File.separator + dbName);
+                        if (fromTo.exists()) {
+                            fromTo.delete();
                         } else {
-                            String dbName = confirmDialog.fourth.getText().toString();
-                            if (!dbName.endsWith("kdbx")) {
-                                dbName = dbName + ".kdbx";
-                            }
-                            File fromTo = new File(subFilesDirPath + File.separator + dbName);
-                            if (fromTo.exists()) {
-                                fromTo.delete();
-                            } else {
-                                try {
-                                    fromTo.createNewFile();
-                                    kdbxFileUri = Uri.fromFile(fromTo);
-                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
-                                    Database<?, ?, ?, ?> database = getDummyDatabase();
-                                    OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
-                                    database.save(creds, fileOutputStream);
-                                    confirmDialog.first.dismiss();
-                                    closeKeyboard();
-                                    fetchAndShowFiles();
-                                } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
-                                }
+                            try {
+                                fromTo.createNewFile();
+                                kdbxFileUri = Uri.fromFile(fromTo);
+                                KdbxCreds creds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
+                                Database<?, ?, ?, ?> database = getDummyDatabase();
+                                OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                                database.save(creds, fileOutputStream);
+                                confirmDialog.first.dismiss();
+                                closeKeyboard();
+                                fetchAndShowFiles();
+                            } catch (Exception e) {
+                                ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
                             }
                         }
+                    }
 
-                    });
-                    DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
-                }
-            });
-        }
+                });
+                DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
+            }
+        });
         binding.floatInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

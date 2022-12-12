@@ -81,7 +81,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
+                        android:src="@drawable/ic_close_fill0_wght300_grad_25_opsz24"
                         android:textColor="@color/kp_dark_blue"
                         android:textStyle="bold"
                         app:tint="@color/kp_dark_blue" />

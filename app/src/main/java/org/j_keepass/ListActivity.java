@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +26,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
@@ -44,6 +46,7 @@ import org.j_keepass.util.Triplet;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
+import org.linguafranca.pwdb.kdbx.KdbxCreds;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -52,6 +55,8 @@ public class ListActivity extends AppCompatActivity {
 
     private ActivityListBinding binding;
     private boolean isSearchView = false;
+    public static final int PICK_FOLDER_OPEN_RESULT_CODE = 2;
+    private static final int READ_EXTERNAL_STORAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +114,43 @@ public class ListActivity extends AppCompatActivity {
             NewPasswordDialogUtil.showDialog(d);
         });
 
-        binding.homeBtn.setOnClickListener(v -> {
-            Common.group = Common.database.getRootGroup();
-            isSearchView = false;
-            listAndShowGroupsAndEntries(Common.group, false, null);
+        binding.exportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(ListActivity.this, new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            READ_EXTERNAL_STORAGE);
+                }
+
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+                    chooseFile.setType("*/*");
+                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    chooseFile.putExtra(Intent.EXTRA_TITLE, "database.kdbx");
+
+                    chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
+                    startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+                } else {
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                }
+            }
         });
 
-        binding.backBtn.setOnClickListener(v -> {
-            this.onBackPressed();
+        binding.lockBtn.setOnClickListener(v -> {
+            Common.database = null;
+            Common.group = null;
+            Common.entry = null;
+            Common.creds = null;
+            Common.kdbxFileUri = null;
+            Intent intent = new Intent(ListActivity.this, LoadActivity.class);
+            startActivity(intent);
+            finish();
         });
 
     }
@@ -423,5 +457,57 @@ public class ListActivity extends AppCompatActivity {
             });
         });
         ConfirmDialogUtil.showDialog(searchDialog.first);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case PICK_FOLDER_OPEN_RESULT_CODE:
+                if (resultCode == -1) {
+                    Uri newFile = data.getData();
+                    if (newFile != null) {
+                        export(newFile);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void export(Uri newFile) {
+        AlertDialog d = ProgressDialogUtil.getSaving(getLayoutInflater(), binding.getRoot().getContext());
+        ProgressDialogUtil.showSavingDialog(d);
+        runOnUiThread(() -> {
+            String fileName = "";
+            try {
+                getContentResolver().takePersistableUriPermission(newFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                this.grantUriPermission(this.getPackageName(), newFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } catch (Exception e) {
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+            }
+            Database<?, ?, ?, ?> database = Common.database;
+            OutputStream fileOutputStream = null;
+            try {
+                ProgressDialogUtil.setSavingProgress(d, 50);
+                KdbxCreds creds = Common.creds;
+                fileOutputStream = getContentResolver().openOutputStream(newFile, "wt");
+                database.save(creds, fileOutputStream);
+            } catch (NoSuchMethodError e) {
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage());
+            } catch (Exception e) {
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage());
+                Log.e("KP", "KP error ", e);
+            } finally {
+                ProgressDialogUtil.dismissSavingDialog(d);
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (Exception e) {
+                        //do nothing
+                    }
+                }
+            }
+        });
     }
 }
