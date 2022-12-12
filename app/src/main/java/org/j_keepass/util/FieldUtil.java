@@ -3,7 +3,9 @@ package org.j_keepass.util;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -186,5 +188,55 @@ public class FieldUtil {
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
+    }
+
+    public Triplet<View, TextInputEditText, ImageButton> getAdditionalEditTextField(LayoutInflater inflater, String hint, String value) {
+        final Triplet<View, TextInputEditText, ImageButton> triplet = new Triplet<View, TextInputEditText, ImageButton>();
+        final View viewToLoad = inflater.inflate(R.layout.additional_field_layout, null);
+        final TextInputLayout additionalFieldNameTextLayout = viewToLoad.findViewById(R.id.additionalFieldNameTextInputLayout);
+        additionalFieldNameTextLayout.setId(new Random().nextInt());
+        additionalFieldNameTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        final TextInputEditText additionalFieldName = viewToLoad.findViewById(R.id.additionalFieldNameEditText);
+        additionalFieldName.setId(new Random().nextInt());
+        additionalFieldName.setInputType(InputType.TYPE_CLASS_TEXT);
+        additionalFieldName.setTransformationMethod(null);
+        //additionalFieldName.setHint(hint);
+        additionalFieldName.setText(value);
+
+        final TextInputLayout additionalFieldValueTextLayout = viewToLoad.findViewById(R.id.additionalFieldValueTextInputLayout);
+        additionalFieldValueTextLayout.setId(new Random().nextInt());
+        additionalFieldValueTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        additionalFieldValueTextLayout.setHint(hint);
+        final TextInputEditText additionalFieldValue = viewToLoad.findViewById(R.id.additionalFieldValueEditText);
+        additionalFieldValue.setTag(hint);
+        additionalFieldValue.setId(new Random().nextInt());
+        additionalFieldValue.setInputType(InputType.TYPE_CLASS_TEXT);
+        additionalFieldValue.setTransformationMethod(null);
+        //field.setHint(hint);
+        additionalFieldValue.setText(value);
+
+        additionalFieldName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                additionalFieldValueTextLayout.setHint("Enter value for: " + additionalFieldName.getText().toString());
+                additionalFieldValue.setTag(additionalFieldName.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        triplet.first = viewToLoad;
+        triplet.second = additionalFieldValue;
+        triplet.third = viewToLoad.findViewById(R.id.fieldDelete);
+
+        return triplet;
     }
 }

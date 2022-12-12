@@ -3,19 +3,17 @@ package org.j_keepass;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -30,6 +28,7 @@ import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -104,12 +103,33 @@ public class AddEntryActivity extends AppCompatActivity {
                 binding.addBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
             }
 
-            binding.addMoreFieldBtn.setOnClickListener( v -> {
+            binding.addMoreFieldBtn.setOnClickListener(v -> {
+
+                final Triplet<View, TextInputEditText, ImageButton> additionalView = new FieldUtil().getAdditionalEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.enterFieldValue), "");
+                viewsToAdd.add(additionalView.first);
+                Pair<View, TextInputEditText> additionalViewPair = new Pair<>();
+                additionalViewPair.first = additionalView.first;
+                additionalViewPair.second = additionalView.second;
+                additionalView.third.setOnClickListener(v1 -> {
+                    binding.addAdditionalFieldEntryScrollViewLinearLayout.removeView(additionalView.first);
+                    fields.remove(additionalViewPair);
+                });
+                fields.add(additionalViewPair);
+                binding.addAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
+
             });
             binding.saveNewEntry.setOnClickListener(v -> {
                 saveNewEntry(v);
             });
+            binding.home.setOnClickListener( v -> {
+                Common.group = Common.database.getRootGroup();
+                this.onBackPressed();
+            });
 
+            binding.back.setOnClickListener( v -> {
+                this.onBackPressed();
+            });
         }
 
     }

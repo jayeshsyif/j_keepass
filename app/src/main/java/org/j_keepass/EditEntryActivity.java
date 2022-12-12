@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,6 +30,7 @@ import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -62,6 +64,8 @@ public class EditEntryActivity extends AppCompatActivity {
 
             if (entry != null) {
                 binding.editEntryTitleNameHeader.setText(entry.getTitle());
+                binding.editBasicFieldEntryScrollViewLinearLayout.removeAllViews();
+                binding.editAdditionalFieldEntryScrollViewLinearLayout.removeAllViews();
                 ArrayList<View> viewsToAdd = new ArrayList<View>();
 
                 final Pair<View, TextInputEditText> titleView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
@@ -106,19 +110,58 @@ public class EditEntryActivity extends AppCompatActivity {
                 viewsToAdd.add(notesView.first);
                 fields.add(notesView);
 
-                for (View dynamicView : viewsToAdd) {
-                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-                    binding.editEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                    binding.editEntryScrollViewLinearLayout.startLayoutAnimation();
-                    binding.editEntryScrollViewLinearLayout.addView(dynamicView);
+                {
+                    if (entry.getPropertyNames().size() > 0) {
+                        for (String pn : entry.getPropertyNames()) {
+                            if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password")
+                                    && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
+                                final Pair<View, TextInputEditText> additionalView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                        pn, entry.getProperty(pn));
+                                fields.add(additionalView);
+                                @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
+                                binding.editAdditionalFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                                binding.editAdditionalFieldEntryScrollViewLinearLayout.startLayoutAnimation();
+                                binding.editAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
+                            }
+                        }
+                    }
                 }
 
+                for (View dynamicView : viewsToAdd) {
+                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
+                    binding.editBasicFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
+                    binding.editBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();
+                    binding.editBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
+                }
 
+                binding.editMoreFieldBtn.setOnClickListener(v -> {
+
+                    final Triplet<View, TextInputEditText, ImageButton> additionalView = new FieldUtil().getAdditionalEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.enterFieldValue), "");
+                    viewsToAdd.add(additionalView.first);
+                    Pair<View, TextInputEditText> additionalViewPair = new Pair<>();
+                    additionalViewPair.first = additionalView.first;
+                    additionalViewPair.second = additionalView.second;
+                    additionalView.third.setOnClickListener(v1 -> {
+                        binding.editAdditionalFieldEntryScrollViewLinearLayout.removeView(additionalView.first);
+                        fields.remove(additionalViewPair);
+                    });
+                    fields.add(additionalViewPair);
+                    binding.editAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
+
+                });
                 binding.editSaveEntry.setOnClickListener(v -> {
                     saveEntry(v);
                 });
 
+                binding.home.setOnClickListener( v -> {
+                    Common.group = Common.database.getRootGroup();
+                    this.onBackPressed();
+                });
 
+                binding.back.setOnClickListener( v -> {
+                    this.onBackPressed();
+                });
             }
         }
     }

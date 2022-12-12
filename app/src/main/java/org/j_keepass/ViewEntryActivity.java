@@ -100,6 +100,15 @@ public class ViewEntryActivity extends AppCompatActivity {
 
             }
         }
+
+        binding.home.setOnClickListener( v -> {
+            Common.group = Common.database.getRootGroup();
+            this.onBackPressed();
+        });
+
+        binding.back.setOnClickListener( v -> {
+            this.onBackPressed();
+        });
     }
 
     @Override

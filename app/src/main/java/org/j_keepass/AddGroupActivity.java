@@ -136,6 +136,15 @@ public class AddGroupActivity extends AppCompatActivity {
                     }
                 }).start();
             });
+
+            binding.home.setOnClickListener( v -> {
+                Common.group = Common.database.getRootGroup();
+                this.onBackPressed();
+            });
+
+            binding.back.setOnClickListener( v -> {
+                this.onBackPressed();
+            });
         }
     }
 

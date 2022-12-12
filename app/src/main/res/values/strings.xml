@@ -106,4 +106,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
+    <string name="enterFieldName">Enter Field Name</string>
+    <string name="enterFieldValue">Enter Field Value</string>
 </resources>
