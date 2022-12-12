@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_weight="1"
     android:background="@android:color/transparent"
     android:backgroundTint="@android:color/transparent"
@@ -27,73 +27,6 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/kp_margin"
                 android:orientation="vertical">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/newRandonPasswordFloatBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/kp_margin"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/kp_light_blue"
-                    android:drawableLeft="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
-                    android:drawableTint="@color/kp_dark_blue"
-                    android:fontFamily="@font/righteous"
-                    android:text="@string/getRandomPwd"
-                    android:textColor="@color/kp_dark_blue">
-
-                </com.google.android.material.button.MaterialButton>
-
-                <LinearLayout
-                    android:id="@+id/randomPasswordLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="100"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_margin"
-                        android:layout_weight="20"
-                        android:textColorHint="@color/kp_grey"
-                        app:boxStrokeColor="@color/kp_grey"
-                        app:hintTextColor="@color/kp_grey"
-                        app:passwordToggleEnabled="true"
-                        app:passwordToggleTint="@color/kp_grey">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/randomPassword"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:backgroundTint="@android:color/transparent"
-                            android:clickable="false"
-                            android:cursorVisible="false"
-                            android:focusable="false"
-                            android:fontFamily="@font/righteous"
-                            android:inputType="textPassword"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textColorHint="@color/kp_dark_blue"></com.google.android.material.textfield.TextInputEditText>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="80">
-
-                        <ImageButton
-                            android:id="@+id/randomPasswordCopy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
-                            android:textAlignment="gravity"
-                            app:tint="@color/kp_dark_blue"></ImageButton>
-
-                    </LinearLayout>
-                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addNewGroupfloatBtn"

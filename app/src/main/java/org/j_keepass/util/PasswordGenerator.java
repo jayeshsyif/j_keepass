@@ -28,7 +28,7 @@ public final class PasswordGenerator {
         this.usePunctuation = builder.usePunctuation;
     }
 
-    private PasswordGenerator(PasswordGeneratorBuilder builder) {
+    public PasswordGenerator(PasswordGeneratorBuilder builder) {
         this.useLower = builder.useLower;
         this.useUpper = builder.useUpper;
         this.useDigits = builder.useDigits;
@@ -104,4 +104,6 @@ public final class PasswordGenerator {
         }
         return new String(password);
     }
+
+
 }

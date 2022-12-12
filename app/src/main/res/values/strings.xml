@@ -38,6 +38,7 @@
     <string name="entryName">Entry Name</string>
     <string name="userName">User name</string>
     <string name="password">Password</string>
+    <string name="newPassword">New Generated Password</string>
     <string name="entryTitle">Title</string>
 
     <string name="url">URL</string>
@@ -102,10 +103,15 @@
     <string name="changeLogsVer53Text">Version 5.3</string>
     <string name="changeLogsVer53ChangesText">   Bug fixes</string>
     <string name="changeLogsVer60Text">Version 6.0</string>
-    <string name="changeLogsVer60ChangesText">   Major UI change</string>
+    <string name="changeLogsVer60ChangesText">   Major UI change. Added Import feature, Added additional field support.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
     <string name="enterFieldName">Enter Field Name</string>
     <string name="enterFieldValue">Enter Field Value</string>
+    <string name="useDigit">Digit</string>
+    <string name="useLowerCase">Lower Case</string>
+    <string name="useUpperCase">Upper Case</string>
+    <string name="useSymbol">Symbol</string>
+    <string name="newPasswordAllFalse">All cannot be false! Please provide proper Input.</string>
 </resources>

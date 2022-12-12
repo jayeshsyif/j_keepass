@@ -106,7 +106,7 @@ public class ViewEntryActivity extends AppCompatActivity {
             this.onBackPressed();
         });
 
-        binding.back.setOnClickListener( v -> {
+        binding.backBtn.setOnClickListener( v -> {
             this.onBackPressed();
         });
     }

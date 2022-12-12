@@ -3,6 +3,7 @@ package org.j_keepass;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import org.j_keepass.databinding.ActivityAddEntryBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
@@ -127,7 +129,11 @@ public class AddEntryActivity extends AppCompatActivity {
                 this.onBackPressed();
             });
 
-            binding.back.setOnClickListener( v -> {
+            binding.generateNewPassword.setOnClickListener( v -> {
+                AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(),(ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+                NewPasswordDialogUtil.showDialog(d);
+            });
+            binding.backBtn.setOnClickListener(v -> {
                 this.onBackPressed();
             });
         }

@@ -27,6 +27,7 @@ import org.j_keepass.databinding.ActivityEditEntryBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
@@ -159,7 +160,11 @@ public class EditEntryActivity extends AppCompatActivity {
                     this.onBackPressed();
                 });
 
-                binding.back.setOnClickListener( v -> {
+                binding.generateNewPassword.setOnClickListener( v -> {
+                    AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+                    NewPasswordDialogUtil.showDialog(d);
+                });
+                binding.backBtn.setOnClickListener(v -> {
                     this.onBackPressed();
                 });
             }

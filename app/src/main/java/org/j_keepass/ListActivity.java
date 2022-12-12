@@ -35,6 +35,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.j_keepass.databinding.ActivityListBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
+import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.PasswordGenerator;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.SearchDialogUtil;
@@ -100,13 +101,22 @@ public class ListActivity extends AppCompatActivity {
 
         }
 
-        binding.searchFloatBtn.setOnClickListener(v -> {
+        binding.searchBtn.setOnClickListener(v -> {
             search(v, this);
         });
-        binding.searchHomeBtn.setOnClickListener(v -> {
+        binding.generateNewPassword.setOnClickListener(v -> {
+            AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+            NewPasswordDialogUtil.showDialog(d);
+        });
+
+        binding.homeBtn.setOnClickListener(v -> {
             Common.group = Common.database.getRootGroup();
             isSearchView = false;
             listAndShowGroupsAndEntries(Common.group, false, null);
+        });
+
+        binding.backBtn.setOnClickListener(v -> {
+            this.onBackPressed();
         });
 
     }
@@ -171,28 +181,6 @@ public class ListActivity extends AppCompatActivity {
             finish();
         });
 
-        LinearLayout randomPasswordLayout = mView.findViewById(R.id.randomPasswordLayout);
-        TextInputEditText randomPassword = mView.findViewById(R.id.randomPassword);
-        ImageButton randomPasswordCopy = mView.findViewById(R.id.randomPasswordCopy);
-        MaterialButton newRandonPasswordFloatBtn = mView.findViewById(R.id.newRandonPasswordFloatBtn);
-        newRandonPasswordFloatBtn.setOnClickListener(v -> {
-            if (randomPasswordLayout.getVisibility() == View.GONE) {
-                randomPassword.setText(new PasswordGenerator().generate(20));
-                randomPasswordLayout.setVisibility(View.VISIBLE);
-                randomPasswordLayout.startAnimation(AnimationUtils.makeInAnimation(mView.getContext(), true));
-            } else {
-                randomPasswordLayout.setVisibility(View.GONE);
-            }
-        });
-        randomPasswordCopy.setOnClickListener(v -> {
-            if (randomPassword.getText() != null) {
-                ClipboardManager clipboard = (ClipboardManager)
-                        getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("password", randomPassword.getText().toString());
-                clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.copiedToClipboard);
-            }
-        });
         return alertDialog;
     }
 
