@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +15,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -38,7 +37,6 @@ import org.j_keepass.databinding.ActivityListBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.NewPasswordDialogUtil;
-import org.j_keepass.util.PasswordGenerator;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.SearchDialogUtil;
 import org.j_keepass.util.ToastUtil;
@@ -243,6 +241,21 @@ public class ListActivity extends AppCompatActivity {
             isSearchView = false;
             listAndShowGroupsAndEntries(g, false, null);
         });
+        /*viewToLoad.setOnLongClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(ListActivity.this, v);
+
+            popupMenu.getMenuInflater().inflate(R.menu.group_entry_more_option_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.edit);
+                    return true;
+                }
+            });
+            // Showing the popup menu
+            popupMenu.show();
+            return true;
+        });*/
         ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
         edit.setOnClickListener(v -> {
             Common.group = g;
@@ -335,7 +348,7 @@ public class ListActivity extends AppCompatActivity {
                 } else {
                     parent.removeGroup(group);
                     Common.group = parent;
-                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && Common.isCodecAvailable) {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;
                         try {
@@ -380,8 +393,6 @@ public class ListActivity extends AppCompatActivity {
 
         Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
         confirmDialog.second.setOnClickListener(viewObj -> {
-
-
             final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSavingDialog(alertDialog);
 
@@ -394,7 +405,7 @@ public class ListActivity extends AppCompatActivity {
                     ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null");
                 } else {
                     parent.removeEntry(entry);
-                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && Common.isCodecAvailable) {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;
                         try {

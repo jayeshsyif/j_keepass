@@ -114,4 +114,6 @@
     <string name="useUpperCase">Upper Case</string>
     <string name="useSymbol">Symbol</string>
     <string name="newPasswordAllFalse">All cannot be false! Please provide proper Input.</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
