@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -168,7 +169,6 @@ public class ListActivity extends AppCompatActivity {
         }
         binding.groupsLinearLayout.removeAllViews();
         binding.entriesLinearLayout.removeAllViews();
-        binding.groupScrollView.fullScroll(View.FOCUS_UP);
         if (group.getGroups() != null && group.getGroups().size() > 0) {
             binding.justGroupsTextView.setVisibility(View.VISIBLE);
         } else {
@@ -186,6 +186,7 @@ public class ListActivity extends AppCompatActivity {
         {
             binding.justNothingTextView.setVisibility(View.GONE);
         }
+        binding.groupScrollView.fullScroll(View.FOCUS_UP);
         for (Group<?, ?, ?, ?> g : group.getGroups()) {
             addGroupOnUi(g, isFromBack);
         }
@@ -288,12 +289,13 @@ public class ListActivity extends AppCompatActivity {
         delete.setOnClickListener(v -> {
             deleteGroup(v, this, g);
         });
+        CardView cardView = viewToLoad.findViewById(R.id.adapterCardView);
         if (!isFromBack) {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
-            binding.groupsLinearLayout.setLayoutAnimation(lac);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+            cardView.setLayoutAnimation(lac);
         } else {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), Common.ANIMATION_TIME);
-            binding.groupsLinearLayout.setLayoutAnimation(lac);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+            cardView.setLayoutAnimation(lac);
         }
         binding.groupsLinearLayout.addView(viewToLoad);
     }
@@ -338,12 +340,13 @@ public class ListActivity extends AppCompatActivity {
                 adapterGroupInfo.setText(path);
             }
         }
+        CardView cardView = viewToLoad.findViewById(R.id.adapterCardView);
         if (!isFromBack) {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
-            binding.entriesLinearLayout.setLayoutAnimation(lac);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+            cardView.setLayoutAnimation(lac);
         } else {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), Common.ANIMATION_TIME);
-            binding.entriesLinearLayout.setLayoutAnimation(lac);
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+            cardView.setLayoutAnimation(lac);
         }
         binding.entriesLinearLayout.addView(viewToLoad);
     }

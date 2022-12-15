@@ -29,6 +29,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -727,8 +728,9 @@ public class LoadActivity extends AppCompatActivity {
             });
             ConfirmDialogUtil.showDialog(confirmDialog.first);
         });
-        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
-        binding.listDatabasesLinerLayout.setLayoutAnimation(lac);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
+        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+        databaseNameCardView.setLayoutAnimation(lac);
         binding.listDatabasesLinerLayout.addView(viewToLoad);
     }
 
