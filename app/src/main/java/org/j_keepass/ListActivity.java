@@ -355,10 +355,10 @@ public class ListActivity extends AppCompatActivity {
         Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
         confirmDialog.second.setOnClickListener(viewObj -> {
 
-            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
-            ProgressDialogUtil.showSavingDialog(alertDialog);
+            runOnUiThread(() -> {
+                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+                ProgressDialogUtil.showSavingDialog(alertDialog);
 
-            new Thread(() -> {
                 String groupName = null;
                 Group parent = Common.group;
 
@@ -404,7 +404,7 @@ public class ListActivity extends AppCompatActivity {
                         ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
                     }
                 }
-            }).start();
+            });
         });
         ConfirmDialogUtil.showDialog(confirmDialog.first);
     }
@@ -416,7 +416,7 @@ public class ListActivity extends AppCompatActivity {
             final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSavingDialog(alertDialog);
 
-            new Thread(() -> {
+            runOnUiThread(() -> {
                 String groupName = null;
                 Group parent = Common.group;
 
@@ -461,7 +461,7 @@ public class ListActivity extends AppCompatActivity {
                         ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
                     }
                 }
-            }).start();
+            });
         });
         confirmDialog.first.show();
     }
