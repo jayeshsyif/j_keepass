@@ -119,8 +119,12 @@ public class FieldUtil {
         field.setId(new Random().nextInt());
         field.setEnabled(false);
         field.setLines(10);
-        field.setInputType(InputType.TYPE_NULL);
+        field.setEms(10);
+        field.setSingleLine(false);
+        field.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         field.setTransformationMethod(null);
+        field.setHorizontallyScrolling(false);
+        field.setMaxLines(Integer.MAX_VALUE);
         //field.setHint(hint);
         field.setText(value);
 
@@ -204,9 +208,13 @@ public class FieldUtil {
         field.setTag(hint);
         field.setId(new Random().nextInt());
         field.setLines(10);
+        field.setEms(10);
         field.setSingleLine(false);
-        field.setInputType(InputType.TYPE_CLASS_TEXT);
+        field.setInputType(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE);
         field.setTransformationMethod(null);
+        field.setHorizontallyScrolling(false);
+        field.setMaxLines(Integer.MAX_VALUE);
+
         //field.setHint(hint);
         field.setText(value);
         LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
