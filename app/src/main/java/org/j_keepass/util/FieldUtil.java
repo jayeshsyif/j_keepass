@@ -1,5 +1,6 @@
 package org.j_keepass.util;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -9,6 +10,8 @@ import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -35,6 +38,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         field.setHint(hint);
         field.setText(value);
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -62,7 +69,10 @@ public class FieldUtil {
                 ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
             }
         });
-
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -89,7 +99,10 @@ public class FieldUtil {
                 ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
             }
         });
-
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -118,7 +131,10 @@ public class FieldUtil {
                 ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
             }
         });
-
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -139,6 +155,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         //field.setHint(hint);
         field.setText(value);
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -161,6 +181,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         //field.setHint(hint);
         field.setText(value);
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -185,6 +209,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         //field.setHint(hint);
         field.setText(value);
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -232,6 +260,11 @@ public class FieldUtil {
 
             }
         });
+
+        LinearLayout wholeAdditionalFieldLayout = viewToLoad.findViewById(R.id.wholeAdditionalFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeAdditionalFieldLayout.setLayoutAnimation(lac);
+        wholeAdditionalFieldLayout.startLayoutAnimation();
 
         triplet.first = viewToLoad;
         triplet.second = additionalFieldValue;

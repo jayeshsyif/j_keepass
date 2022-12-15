@@ -1,7 +1,6 @@
 package org.j_keepass;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -12,8 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -99,9 +96,9 @@ public class AddEntryActivity extends AppCompatActivity {
             fields.add(notesView);
 
             for (View dynamicView : viewsToAdd) {
-                @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+            /*    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
                 binding.addBasicFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                binding.addBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();
+                binding.addBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();*/
                 binding.addBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
             }
 

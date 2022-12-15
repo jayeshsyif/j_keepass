@@ -3,7 +3,6 @@ package org.j_keepass;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +33,6 @@ import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
-import org.linguafranca.pwdb.Group;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -119,9 +117,9 @@ public class EditEntryActivity extends AppCompatActivity {
                                 final Pair<View, TextInputEditText> additionalView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                                         pn, entry.getProperty(pn));
                                 fields.add(additionalView);
-                                @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
+                                /*@SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
                                 binding.editAdditionalFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                                binding.editAdditionalFieldEntryScrollViewLinearLayout.startLayoutAnimation();
+                                binding.editAdditionalFieldEntryScrollViewLinearLayout.startLayoutAnimation();*/
                                 binding.editAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
                             }
                         }
@@ -129,9 +127,9 @@ public class EditEntryActivity extends AppCompatActivity {
                 }
 
                 for (View dynamicView : viewsToAdd) {
-                    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
+                    /*@SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
                     binding.editBasicFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                    binding.editBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();
+                    binding.editBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();*/
                     binding.editBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
                 }
 

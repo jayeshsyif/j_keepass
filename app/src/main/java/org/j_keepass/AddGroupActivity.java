@@ -10,8 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -46,9 +44,9 @@ public class AddGroupActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
 
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+           /* LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
             binding.addGroupScrollView.setLayoutAnimation(lac);
-            binding.addGroupScrollView.startLayoutAnimation();
+            binding.addGroupScrollView.startLayoutAnimation();*/
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final Pair<View, TextInputEditText> pair = new FieldUtil().getEditTextField(inflater, getString(R.string.enterGroupName), "");
 
