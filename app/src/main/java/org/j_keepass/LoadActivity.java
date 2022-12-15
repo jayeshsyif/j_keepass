@@ -675,29 +675,37 @@ public class LoadActivity extends AppCompatActivity {
         kdbxListFilePasswordLayout.setVisibility(View.GONE);
         LinearLayout databaseNameLinearLayout = viewToLoad.findViewById(R.id.databaseNameLinearLayout);
         databaseNameLinearLayout.setOnClickListener(v -> {
-            if (kdbxFileUri != null) {
-                int ch = binding.listDatabasesLinerLayout.getChildCount();
-                if (ch > 0) {
-                    for (int i = 0; i < ch; i++) {
-                        if (binding.listDatabasesLinerLayout.getChildAt(i).getTag() != null) {
-                            if (binding.listDatabasesLinerLayout.getChildAt(i).getTag().toString().equals(kdbxFileUri.getPath())) {
-                                kdbxFileUri = null;
-                                binding.listDatabasesLinerLayout.getChildAt(i).findViewById(R.id.databaseNameLinearLayout).performClick();
-                                break;
+            runOnUiThread(() -> {
+                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), inflater.getContext());
+                ProgressDialogUtil.showLoadingDialog(alertDialog);
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
+
+                if (kdbxFileUri != null) {
+                    int ch = binding.listDatabasesLinerLayout.getChildCount();
+                    if (ch > 0) {
+                        for (int i = 0; i < ch; i++) {
+                            if (binding.listDatabasesLinerLayout.getChildAt(i).getTag() != null) {
+                                if (binding.listDatabasesLinerLayout.getChildAt(i).getTag().toString().equals(kdbxFileUri.getPath())) {
+                                    kdbxFileUri = null;
+                                    binding.listDatabasesLinerLayout.getChildAt(i).findViewById(R.id.databaseNameLinearLayout).performClick();
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (kdbxListFilePasswordLayout.getVisibility() == View.VISIBLE) {
-                kdbxListFilePasswordLayout.setVisibility(View.GONE);
-                kdbxFileUri = null;
-                binding.kdbxFileName.setText("");
-            } else {
-                kdbxListFilePasswordLayout.setVisibility(View.VISIBLE);
-                kdbxFileUri = Uri.fromFile(f);
-                binding.kdbxFileName.setText(f.getName());
-            }
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+                if (kdbxListFilePasswordLayout.getVisibility() == View.VISIBLE) {
+                    kdbxListFilePasswordLayout.setVisibility(View.GONE);
+                    kdbxFileUri = null;
+                    binding.kdbxFileName.setText("");
+                } else {
+                    kdbxListFilePasswordLayout.setVisibility(View.VISIBLE);
+                    kdbxFileUri = Uri.fromFile(f);
+                    binding.kdbxFileName.setText(f.getName());
+                }
+                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+            });
         });
         TextInputEditText kdbxListFilePassword = viewToLoad.findViewById(R.id.kdbxListFilePassword);
         kdbxListFilePassword.addTextChangedListener(new TextWatcher() {

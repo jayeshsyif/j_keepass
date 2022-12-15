@@ -116,18 +116,18 @@ public class AddEntryActivity extends AppCompatActivity {
                 });
                 fields.add(additionalViewPair);
                 binding.addAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
-
+                additionalView.first.requestFocus();
             });
             binding.saveNewEntry.setOnClickListener(v -> {
                 saveNewEntry(v);
             });
-            binding.home.setOnClickListener( v -> {
+            binding.home.setOnClickListener(v -> {
                 Common.group = Common.database.getRootGroup();
                 this.onBackPressed();
             });
 
-            binding.generateNewPassword.setOnClickListener( v -> {
-                AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(),(ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+            binding.generateNewPassword.setOnClickListener(v -> {
+                AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
                 NewPasswordDialogUtil.showDialog(d);
             });
             binding.lockBtn.setOnClickListener(v -> {
@@ -159,11 +159,11 @@ public class AddEntryActivity extends AppCompatActivity {
     }
 
     private void saveNewEntry(View v) {
-        final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddEntryActivity.this);
-        ProgressDialogUtil.showSavingDialog(alertDialog);
 
-        new Thread(() -> {
+        runOnUiThread(() -> {
             {
+                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddEntryActivity.this);
+                ProgressDialogUtil.showSavingDialog(alertDialog);
                 boolean proceed = false;
                 try {
                     validate();
@@ -248,7 +248,7 @@ public class AddEntryActivity extends AppCompatActivity {
                     }
                 }
             }
-        }).start();
+        });
     }
 
     private void validate() throws KpCustomException {

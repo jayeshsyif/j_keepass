@@ -42,6 +42,7 @@ public class EditEntryActivity extends AppCompatActivity {
     private ActivityEditEntryBinding binding;
     private static final int MANAGE_DOCUMENTS = 200;
     private ArrayList<Pair<View, TextInputEditText>> fields = new ArrayList<Pair<View, TextInputEditText>>();
+    private ArrayList<Pair<View, TextInputEditText>> fieldsToRemove = new ArrayList<Pair<View, TextInputEditText>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,12 +115,18 @@ public class EditEntryActivity extends AppCompatActivity {
                         for (String pn : entry.getPropertyNames()) {
                             if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password")
                                     && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
-                                final Pair<View, TextInputEditText> additionalView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                                        pn, entry.getProperty(pn));
-                                fields.add(additionalView);
-                                /*@SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
-                                binding.editAdditionalFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
-                                binding.editAdditionalFieldEntryScrollViewLinearLayout.startLayoutAnimation();*/
+                                final Triplet<View, TextInputEditText, ImageButton> additionalView = new FieldUtil().
+                                        getAdditionalEditTextField2((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                                pn, pn, entry.getProperty(pn));
+                                Pair<View, TextInputEditText> additionalViewPair = new Pair<>();
+                                additionalViewPair.first = additionalView.first;
+                                additionalViewPair.second = additionalView.second;
+                                fields.add(additionalViewPair);
+                                additionalView.third.setOnClickListener(v1 -> {
+                                    binding.editAdditionalFieldEntryScrollViewLinearLayout.removeView(additionalView.first);
+                                    fieldsToRemove.add(additionalViewPair);
+                                    fields.remove(additionalViewPair);
+                                });
                                 binding.editAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
                             }
                         }
@@ -147,18 +154,18 @@ public class EditEntryActivity extends AppCompatActivity {
                     });
                     fields.add(additionalViewPair);
                     binding.editAdditionalFieldEntryScrollViewLinearLayout.addView(additionalView.first);
-
+                    additionalView.first.requestFocus();
                 });
                 binding.editSaveEntry.setOnClickListener(v -> {
                     saveEntry(v);
                 });
 
-                binding.home.setOnClickListener( v -> {
+                binding.home.setOnClickListener(v -> {
                     Common.group = Common.database.getRootGroup();
                     this.onBackPressed();
                 });
 
-                binding.generateNewPassword.setOnClickListener( v -> {
+                binding.generateNewPassword.setOnClickListener(v -> {
                     AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
                     NewPasswordDialogUtil.showDialog(d);
                 });
@@ -191,11 +198,11 @@ public class EditEntryActivity extends AppCompatActivity {
     }
 
     private void saveEntry(View v) {
-        final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditEntryActivity.this);
-        ProgressDialogUtil.showSavingDialog(alertDialog);
-
-        new Thread(() -> {
+        runOnUiThread(() -> {
             {
+                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditEntryActivity.this);
+                ProgressDialogUtil.showSavingDialog(alertDialog);
+
                 boolean proceed = false;
                 try {
                     validate();
@@ -206,6 +213,9 @@ public class EditEntryActivity extends AppCompatActivity {
                 }
                 if (proceed) {
                     Entry entry = Common.entry;
+                    for (Pair<View, TextInputEditText> fieldRemove : fieldsToRemove) {
+                        entry.removeProperty(fieldRemove.second.getTag().toString());
+                    }
                     for (Pair<View, TextInputEditText> field : fields) {
                         if (field.getSecond().getTag().toString().equalsIgnoreCase("title")) {
                             if (Util.isUsable(field.getSecond().getText().toString())) {
@@ -275,7 +285,7 @@ public class EditEntryActivity extends AppCompatActivity {
 
                 }
             }
-        }).start();
+        });
     }
 
     private void validate() throws KpCustomException {
@@ -286,8 +296,7 @@ public class EditEntryActivity extends AppCompatActivity {
         if (binding.editEntryUserName.getText() == null || binding.editEntryUserName.getText().toString() == null || binding.editEntryUserName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryUsernameEmptyErrorMsg);
         }*/
-        if( !Common.isCodecAvailable)
-        {
+        if (!Common.isCodecAvailable) {
             throw new KpCustomException(R.string.devInProgress);
         }
     }

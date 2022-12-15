@@ -70,11 +70,9 @@ public class AddGroupActivity extends AppCompatActivity {
             binding.addGroupScrollViewLinearLayout.addView(pair.first);
 
             binding.saveGroup.setOnClickListener(v -> {
-                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddGroupActivity.this);
-                ProgressDialogUtil.showSavingDialog(alertDialog);
-
-                new Thread(() -> {
-
+                runOnUiThread(() -> {
+                    final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddGroupActivity.this);
+                    ProgressDialogUtil.showSavingDialog(alertDialog);
                     boolean proceed = false;
                     try {
                         validate(pair.second.getText().toString());
@@ -132,7 +130,7 @@ public class AddGroupActivity extends AppCompatActivity {
                         }
 
                     }
-                }).start();
+                });
             });
 
             binding.home.setOnClickListener( v -> {

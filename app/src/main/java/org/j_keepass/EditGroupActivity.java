@@ -42,11 +42,8 @@ public class EditGroupActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
 
-           /* LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-            binding.editGroupScrollView.setLayoutAnimation(lac);
-            binding.editGroupScrollView.startLayoutAnimation();*/
             Pair<View, TextInputEditText> pair = null;
-            if(Common.group != null) {
+            if (Common.group != null) {
                 binding.editGroupTitleName.setText(Common.group.getName());
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 pair = new FieldUtil().getEditTextField(inflater, getString(R.string.groupName), Common.group.getName());
@@ -54,10 +51,11 @@ public class EditGroupActivity extends AppCompatActivity {
             }
             final Pair<View, TextInputEditText> finalPair = pair;
             binding.saveGroup.setOnClickListener(v -> {
-                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditGroupActivity.this);
-                ProgressDialogUtil.showSavingDialog(alertDialog);
 
-                new Thread(() -> {
+
+                runOnUiThread(() -> {
+                    final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditGroupActivity.this);
+                    ProgressDialogUtil.showSavingDialog(alertDialog);
                     boolean proceed = false;
                     try {
                         validate(finalPair.second.getText().toString());
@@ -115,9 +113,9 @@ public class EditGroupActivity extends AppCompatActivity {
                         }
 
                     }
-                }).start();
+                });
             });
-            binding.home.setOnClickListener( v -> {
+            binding.home.setOnClickListener(v -> {
                 Common.group = Common.database.getRootGroup();
                 this.onBackPressed();
             });

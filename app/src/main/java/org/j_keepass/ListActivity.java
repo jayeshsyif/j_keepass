@@ -72,10 +72,10 @@ public class ListActivity extends AppCompatActivity {
             finish();
         } else {
 
-            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
-            ProgressDialogUtil.showLoadingDialog(alertDialog);
-            ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
             runOnUiThread(() -> {
+                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+                ProgressDialogUtil.showLoadingDialog(alertDialog);
+                ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
                 Database<?, ?, ?, ?> database = Common.database;
                 Group<?, ?, ?, ?> group = Common.group;
 
@@ -182,8 +182,7 @@ public class ListActivity extends AppCompatActivity {
         if (binding.justEntriesTextView.getVisibility() == View.GONE && binding.justGroupsTextView.getVisibility() == View.GONE) {
             binding.justNothingTextView.setVisibility(View.VISIBLE);
             binding.justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
-        }else
-        {
+        } else {
             binding.justNothingTextView.setVisibility(View.GONE);
         }
         binding.groupScrollView.fullScroll(View.FOCUS_UP);
