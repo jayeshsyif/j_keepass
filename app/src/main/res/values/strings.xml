@@ -116,4 +116,6 @@
     <string name="newPasswordAllFalse">All cannot be false! Please provide proper Input.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
 </resources>

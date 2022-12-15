@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.j_keepass.R;
@@ -51,7 +53,18 @@ public class InfoDialogUtil {
             }
         });
 
-
+        dialog.findViewById(R.id.changeLogsLinearLayout).setVisibility(View.GONE);
+        ((AppCompatImageButton)dialog.findViewById(R.id.changeLogShowHide)).setOnClickListener(v -> {
+            if(dialog.findViewById(R.id.changeLogsLinearLayout).getVisibility() == View.GONE)
+            {
+                dialog.findViewById(R.id.changeLogsLinearLayout).setVisibility(View.VISIBLE);
+                ((AppCompatImageButton)dialog.findViewById(R.id.changeLogShowHide)).setImageResource(R.drawable.ic_visibility_off_fill0_wght300_grad_25_opsz24);
+            }else
+            {
+                dialog.findViewById(R.id.changeLogsLinearLayout).setVisibility(View.GONE);
+                ((AppCompatImageButton)dialog.findViewById(R.id.changeLogShowHide)).setImageResource(R.drawable.ic_visibility_fill0_wght300_grad_25_opsz24);
+            }
+        });
         return dialog;
     }
 }
