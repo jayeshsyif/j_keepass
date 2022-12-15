@@ -162,9 +162,9 @@ public class ListActivity extends AppCompatActivity {
     private void listAndShowGroupsAndEntries(Group<?, ?, ?, ?> group, boolean isFromBack, AlertDialog alertDialog) {
         binding.groupName.setText(group.getName());
         if (!isFromBack) {
-            binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
+            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
         } else {
-            binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
+            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
         }
         binding.groupScrollLinearLayout.removeAllViews();
         binding.groupScrollView.fullScroll(View.FOCUS_UP);

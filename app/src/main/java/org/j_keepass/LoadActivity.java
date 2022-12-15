@@ -75,6 +75,7 @@ public class LoadActivity extends AppCompatActivity {
     private String subFilesDirPath = null;
     boolean isFileAvailable = false;
     Dialog banner = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,12 +96,10 @@ public class LoadActivity extends AppCompatActivity {
         }
 
         Common.database = null;
-        if( banner != null)
-        {
-            Log.i("JKEEPASS","banner not null");
-        }else
-        {
-            Log.i("JKEEPASS","banner null");
+        if (banner != null) {
+            Log.i("JKEEPASS", "banner not null");
+        } else {
+            Log.i("JKEEPASS", "banner null");
         }
         banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
         banner.show();
@@ -234,6 +233,7 @@ public class LoadActivity extends AppCompatActivity {
                                 confirmDialog.first.dismiss();
                                 closeKeyboard();
                                 fetchAndShowFiles();
+                                kdbxFileUri = null;
                             } catch (Exception e) {
                                 ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
                             }
@@ -669,10 +669,25 @@ public class LoadActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewToLoad = inflater.inflate(R.layout.activity_list_kdbx_files_view, null);
         ((TextView) viewToLoad.findViewById(R.id.databaseName)).setText(f.getName());
+        viewToLoad.setTag(f.getPath());
         LinearLayout kdbxListFilePasswordLayout = viewToLoad.findViewById(R.id.kdbxListFilePasswordLayout);
         kdbxListFilePasswordLayout.setVisibility(View.GONE);
         LinearLayout databaseNameLinearLayout = viewToLoad.findViewById(R.id.databaseNameLinearLayout);
         databaseNameLinearLayout.setOnClickListener(v -> {
+            if (kdbxFileUri != null) {
+                int ch = binding.listDatabasesLinerLayout.getChildCount();
+                if (ch > 0) {
+                    for (int i = 0; i < ch; i++) {
+                        if (binding.listDatabasesLinerLayout.getChildAt(i).getTag() != null) {
+                            if (binding.listDatabasesLinerLayout.getChildAt(i).getTag().toString().equals(kdbxFileUri.getPath())) {
+                                kdbxFileUri = null;
+                                binding.listDatabasesLinerLayout.getChildAt(i).findViewById(R.id.databaseNameLinearLayout).performClick();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             if (kdbxListFilePasswordLayout.getVisibility() == View.VISIBLE) {
                 kdbxListFilePasswordLayout.setVisibility(View.GONE);
                 kdbxFileUri = null;
@@ -718,8 +733,9 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        if(banner!=null && banner.isShowing()) {
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle
+            outPersistentState) {
+        if (banner != null && banner.isShowing()) {
             banner.dismiss();
         }
         super.onSaveInstanceState(outState, outPersistentState);
@@ -727,7 +743,7 @@ public class LoadActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if(banner!=null && banner.isShowing()) {
+        if (banner != null && banner.isShowing()) {
             banner.dismiss();
         }
         super.onSaveInstanceState(outState);
