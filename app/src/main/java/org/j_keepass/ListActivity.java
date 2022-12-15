@@ -162,12 +162,30 @@ public class ListActivity extends AppCompatActivity {
     private void listAndShowGroupsAndEntries(Group<?, ?, ?, ?> group, boolean isFromBack, AlertDialog alertDialog) {
         binding.groupName.setText(group.getName());
         if (!isFromBack) {
-            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
+            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
         } else {
-            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_right));
+            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
         }
-        binding.groupScrollLinearLayout.removeAllViews();
+        binding.groupsLinearLayout.removeAllViews();
+        binding.entriesLinearLayout.removeAllViews();
         binding.groupScrollView.fullScroll(View.FOCUS_UP);
+        if (group.getGroups() != null && group.getGroups().size() > 0) {
+            binding.justGroupsTextView.setVisibility(View.VISIBLE);
+        } else {
+            binding.justGroupsTextView.setVisibility(View.GONE);
+        }
+        if (group.getEntries() != null && group.getEntries().size() > 0) {
+            binding.justEntriesTextView.setVisibility(View.VISIBLE);
+        } else {
+            binding.justEntriesTextView.setVisibility(View.GONE);
+        }
+        if (binding.justEntriesTextView.getVisibility() == View.GONE && binding.justGroupsTextView.getVisibility() == View.GONE) {
+            binding.justNothingTextView.setVisibility(View.VISIBLE);
+            binding.justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+        }else
+        {
+            binding.justNothingTextView.setVisibility(View.GONE);
+        }
         for (Group<?, ?, ?, ?> g : group.getGroups()) {
             addGroupOnUi(g, isFromBack);
         }
@@ -272,12 +290,12 @@ public class ListActivity extends AppCompatActivity {
         });
         if (!isFromBack) {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
-            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+            binding.groupsLinearLayout.setLayoutAnimation(lac);
         } else {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), Common.ANIMATION_TIME);
-            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+            binding.groupsLinearLayout.setLayoutAnimation(lac);
         }
-        binding.groupScrollLinearLayout.addView(viewToLoad);
+        binding.groupsLinearLayout.addView(viewToLoad);
     }
 
     @SuppressLint("ResourceType")
@@ -322,12 +340,12 @@ public class ListActivity extends AppCompatActivity {
         }
         if (!isFromBack) {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME);
-            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+            binding.entriesLinearLayout.setLayoutAnimation(lac);
         } else {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_right), Common.ANIMATION_TIME);
-            binding.groupScrollLinearLayout.setLayoutAnimation(lac);
+            binding.entriesLinearLayout.setLayoutAnimation(lac);
         }
-        binding.groupScrollLinearLayout.addView(viewToLoad);
+        binding.entriesLinearLayout.addView(viewToLoad);
     }
 
     private void deleteGroup(View v, Activity activity, Group group) {
@@ -455,11 +473,22 @@ public class ListActivity extends AppCompatActivity {
             ProgressDialogUtil.showSearchDialog(alertDialog);
             runOnUiThread(() -> {
                 isSearchView = true;
-                binding.groupScrollLinearLayout.removeAllViews();
+                binding.groupsLinearLayout.removeAllViews();
+                binding.entriesLinearLayout.removeAllViews();
                 binding.groupScrollView.fullScroll(View.FOCUS_UP);
                 binding.groupName.setText(getString(R.string.search) + ": " + searchDialog.third.getText().toString());
-                binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_slide_in_left));
+                //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                binding.justGroupsTextView.setVisibility(View.GONE);
+
                 List<?> searchedEntries = Common.database.findEntries(searchDialog.third.getText().toString());
+                if (searchedEntries != null && searchedEntries.size() > 0) {
+                    binding.justEntriesTextView.setVisibility(View.VISIBLE);
+                    binding.justNothingTextView.setVisibility(View.GONE);
+                } else {
+                    binding.justEntriesTextView.setVisibility(View.GONE);
+                    binding.justNothingTextView.setVisibility(View.VISIBLE);
+                    binding.justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                }
                 for (int eCount = 0; eCount < searchedEntries.size(); eCount++) {
                     Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) searchedEntries.get(eCount);
                     addEntryOnUi(localEntry, false, true);

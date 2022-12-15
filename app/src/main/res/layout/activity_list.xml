@@ -42,11 +42,59 @@
                 android:layout_weight="20">
 
                 <LinearLayout
-                    android:id="@+id/groupScrollLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+
+                    <TextView
+                        android:id="@+id/justGroupsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/kp_button_margin"
+                        android:layout_marginBottom="@dimen/kp_button_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:text="@string/groups"
+                        android:visibility="gone"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/groupsLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <TextView
+                        android:id="@+id/justEntriesTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/kp_button_margin"
+                        android:layout_marginBottom="@dimen/kp_button_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:text="@string/entries"
+                        android:visibility="gone"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/entriesLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <TextView
+                        android:id="@+id/justNothingTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/kp_button_margin"
+                        android:layout_marginBottom="@dimen/kp_button_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:visibility="gone"
+                        android:text="@string/nothingHere"></TextView>
                 </LinearLayout>
             </ScrollView>
 

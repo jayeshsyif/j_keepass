@@ -9,7 +9,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/kp_card_list_view_margin"
+        android:layout_marginLeft="@dimen/kp_card_list_view_left_margin"
+        android:layout_marginTop="@dimen/kp_card_list_view_top_margin"
+        android:layout_marginRight="@dimen/kp_card_list_view_right_margin"
+        android:layout_marginBottom="@dimen/kp_card_list_view_bottom_margin"
         app:cardCornerRadius="2pt">
 
         <LinearLayout
@@ -22,16 +25,16 @@
                 android:id="@+id/adapterGroupInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="gravity"
-                android:gravity="center|left"
                 android:layout_margin="@dimen/kp_card_view_margin"
                 android:layout_weight="1"
-                android:visibility="gone"
+                android:gravity="center|left"
                 android:text="ICICI Bank - login"
-                android:textSize="@dimen/kp_small_text_size"
+                android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearance"
+                android:textColor="@color/kp_dark_blue"
+                android:textSize="@dimen/kp_small_text_size"
                 android:textStyle="italic"
-                android:textColor="@color/kp_dark_blue"></TextView>
+                android:visibility="gone"></TextView>
 
             <LinearLayout
                 android:id="@+id/adapterMainLinearLayout"

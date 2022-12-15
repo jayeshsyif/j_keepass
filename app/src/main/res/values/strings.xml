@@ -30,6 +30,7 @@
     <string name="databases">Databases:</string>
 
     <string name="unableToNavigateError">Unable to navigate.</string>
+    <string name="groups">Groups</string>
     <string name="groupName">Group Name</string>
     <string name="groupNameDesc">\n It indicates Group Name.</string>
 
@@ -118,4 +119,6 @@
     <string name="delete">Delete</string>
     <string name="show">Show</string>
     <string name="hide">Hide</string>
+    <string name="entries">Entries</string>
+    <string name="nothingHere">Nothing here .. !</string>
 </resources>
