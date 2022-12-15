@@ -1,6 +1,7 @@
 package org.j_keepass;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.j_keepass.databinding.ActivityViewEntryBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.FieldUtil;
+import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 
@@ -97,13 +99,26 @@ public class ViewEntryActivity extends AppCompatActivity {
                     binding.viewEntryScrollViewLinearLayout.startLayoutAnimation();*/
                     binding.viewEntryScrollViewLinearLayout.addView(dynamicView);
                 }
-
             }
         }
 
         binding.home.setOnClickListener( v -> {
             Common.group = Common.database.getRootGroup();
             this.onBackPressed();
+        });
+
+        binding.generateNewPassword.setOnClickListener( v -> {
+            AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+            NewPasswordDialogUtil.showDialog(d);
+        });
+
+        binding.edit.setOnClickListener( v -> {
+            Intent intent = new Intent(this, EditEntryActivity.class);
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("click", "entry");
+            intent.putExtras(bundle1);
+            startActivity(intent);
+            finish();
         });
 
         binding.lockBtn.setOnClickListener(v -> {
