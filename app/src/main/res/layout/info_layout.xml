@@ -175,6 +175,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
+                        android:textColor="@color/kp_grey"
                         android:gravity="center_vertical"
                         android:text="@string/changeLogs"
                         android:textAppearance="?android:attr/textAppearanceSmall">
