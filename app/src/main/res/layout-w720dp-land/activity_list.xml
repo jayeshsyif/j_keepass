@@ -55,7 +55,7 @@
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="@color/kp_grey"
                         android:text="@string/groups"
                         android:visibility="gone"></TextView>
 
@@ -92,7 +92,7 @@
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="@color/kp_grey"
                         android:visibility="gone"
                         android:text="@string/nothingHere"></TextView>
                 </LinearLayout>

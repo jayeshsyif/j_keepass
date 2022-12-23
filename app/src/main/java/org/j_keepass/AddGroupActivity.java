@@ -103,6 +103,7 @@ public class AddGroupActivity extends AppCompatActivity {
                                 ProgressDialogUtil.setSavingProgress(alertDialog, 50);
                                 Common.database.save(Common.creds, fileOutputStream);
                                 ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                                ProgressDialogUtil.dismissSavingDialog(alertDialog);
                                 Intent intent = new Intent(AddGroupActivity.this, ListActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("click", "group");

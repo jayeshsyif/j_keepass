@@ -15,16 +15,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -260,38 +262,45 @@ public class ListActivity extends AppCompatActivity {
             isSearchView = false;
             listAndShowGroupsAndEntries(g, false, null);
         });
-        /*viewToLoad.setOnLongClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(ListActivity.this, v);
-
-            popupMenu.getMenuInflater().inflate(R.menu.group_entry_more_option_menu, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
+            MenuBuilder menuBuilder = new MenuBuilder(this);
+            MenuInflater menuInflater = new MenuInflater(this);
+            menuInflater.inflate(R.menu.group_entry_more_option_menu, menuBuilder);
+            MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, v);
+            optionsMenu.setForceShowIcon(true);
+            // Set Item Click Listener
+            menuBuilder.setCallback(new MenuBuilder.Callback() {
                 @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.edit);
-                    return true;
+                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.moreOptionEdit:
+                            optionsMenu.dismiss();
+                            Common.group = g;
+                            Intent intent = new Intent(ListActivity.this, EditGroupActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
+                            return true;
+                        case R.id.moreOptionDelete:
+                            optionsMenu.dismiss();
+                            deleteGroup(v, ListActivity.this, g);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onMenuModeChange(MenuBuilder menu) {
                 }
             });
-            // Showing the popup menu
-            popupMenu.show();
-            return true;
-        });*/
-        /*TextView dateAndSubInfo = viewToLoad.findViewById(R.id.dateAndSubInfo);
-        String info =" Sub Groups: "+g.getGroupsCount()+" "+Common.DOT_SYMBOL_CODE+" Sub Entries: "+g.getEntriesCount();
-        dateAndSubInfo.setText(info);*/
-        ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
-        edit.setOnClickListener(v -> {
-            Common.group = g;
-            Intent intent = new Intent(this, EditGroupActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("click", "group");
-            intent.putExtras(bundle);
-            this.startActivity(intent);
-            this.finish();
+            // Display the menu
+            optionsMenu.show();
         });
-        ImageView delete = viewToLoad.findViewById(R.id.deleteGroupBtn);
-        delete.setOnClickListener(v -> {
-            deleteGroup(v, this, g);
-        });
+        TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
+        subCountArrowBtn.setText("" + (g.getGroupsCount() + g.getEntriesCount()) + Common.SUB_DIRECTORY_ARROW_SYMBOL_CODE);
         CardView cardView = viewToLoad.findViewById(R.id.adapterCardView);
         if (!isFromBack) {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
@@ -324,24 +333,49 @@ public class ListActivity extends AppCompatActivity {
         dateAndSubInfo.setText(info);
         if (showGroupInfo) {
             dateAndSubInfo.setVisibility(View.INVISIBLE);
-        }else
-        {
+        } else {
             dateAndSubInfo.setVisibility(View.VISIBLE);
         }
-        ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
-        edit.setOnClickListener(v -> {
-            Common.entry = e;
-            Intent intent = new Intent(this, EditEntryActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("click", "entry");
-            intent.putExtras(bundle);
-            this.startActivity(intent);
-            this.finish();
+        TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
+        subCountArrowBtn.setVisibility(View.INVISIBLE);
+        viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
+            MenuBuilder menuBuilder = new MenuBuilder(this);
+            MenuInflater menuInflater = new MenuInflater(this);
+            menuInflater.inflate(R.menu.group_entry_more_option_menu, menuBuilder);
+            MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, v);
+            optionsMenu.setForceShowIcon(true);
+            // Set Item Click Listener
+            menuBuilder.setCallback(new MenuBuilder.Callback() {
+                @Override
+                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.moreOptionEdit:
+                            optionsMenu.dismiss();
+                            Common.entry = e;
+                            Intent intent = new Intent(ListActivity.this, EditEntryActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "entry");
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
+                            return true;
+                        case R.id.moreOptionDelete:
+                            optionsMenu.dismiss();
+                            deleteEntry(v, ListActivity.this, e);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onMenuModeChange(MenuBuilder menu) {
+                }
+            });
+            // Display the menu
+            optionsMenu.show();
         });
-        ImageView delete = viewToLoad.findViewById(R.id.deleteGroupBtn);
-        delete.setOnClickListener(v -> {
-            deleteEntry(v, this, e);
-        });
+
         if (showGroupInfo) {
             TextView adapterGroupInfo = viewToLoad.findViewById(R.id.adapterGroupInfo);
             String path = e.getPath();
@@ -352,6 +386,7 @@ public class ListActivity extends AppCompatActivity {
                 adapterGroupInfo.setText(path);
             }
         }
+
         CardView cardView = viewToLoad.findViewById(R.id.adapterCardView);
         if (!isFromBack) {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
@@ -428,7 +463,6 @@ public class ListActivity extends AppCompatActivity {
         confirmDialog.second.setOnClickListener(viewObj -> {
             final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSavingDialog(alertDialog);
-
             runOnUiThread(() -> {
                 String groupName = null;
                 Group parent = Common.group;

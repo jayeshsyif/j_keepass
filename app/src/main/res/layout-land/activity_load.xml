@@ -149,7 +149,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="@color/kp_grey"
                         android:text="@string/databases">
 
                     </TextView>

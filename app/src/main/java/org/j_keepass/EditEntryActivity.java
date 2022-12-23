@@ -257,6 +257,7 @@ public class EditEntryActivity extends AppCompatActivity {
                             ProgressDialogUtil.setSavingProgress(alertDialog, 50);
                             Common.database.save(Common.creds, fileOutputStream);
                             ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
                             Intent intent = new Intent(EditEntryActivity.this, ListActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("click", "group");

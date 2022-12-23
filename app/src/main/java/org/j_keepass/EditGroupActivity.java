@@ -51,8 +51,6 @@ public class EditGroupActivity extends AppCompatActivity {
             }
             final Pair<View, TextInputEditText> finalPair = pair;
             binding.saveGroup.setOnClickListener(v -> {
-
-
                 runOnUiThread(() -> {
                     final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditGroupActivity.this);
                     ProgressDialogUtil.showSavingDialog(alertDialog);
@@ -86,6 +84,7 @@ public class EditGroupActivity extends AppCompatActivity {
                                 ProgressDialogUtil.setSavingProgress(alertDialog, 50);
                                 Common.database.save(Common.creds, fileOutputStream);
                                 ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                                ProgressDialogUtil.dismissSavingDialog(alertDialog);
                                 Intent intent = new Intent(EditGroupActivity.this, ListActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("click", "group");
