@@ -13,9 +13,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -25,8 +25,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -51,6 +49,7 @@ import org.linguafranca.pwdb.Group;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
@@ -263,44 +262,44 @@ public class ListActivity extends AppCompatActivity {
             listAndShowGroupsAndEntries(g, false, null);
         });
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
-            MenuBuilder menuBuilder = new MenuBuilder(this);
-            MenuInflater menuInflater = new MenuInflater(this);
-            menuInflater.inflate(R.menu.group_entry_more_option_menu, menuBuilder);
-            MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, v);
-            optionsMenu.setForceShowIcon(true);
-            // Set Item Click Listener
-            menuBuilder.setCallback(new MenuBuilder.Callback() {
+            Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
+            PopupMenu popup = new PopupMenu(wrapper, v);
+            popup.getMenuInflater().inflate(R.menu.group_entry_more_option_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
-                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.moreOptionEdit:
-                            optionsMenu.dismiss();
-                            Common.group = g;
-                            Intent intent = new Intent(ListActivity.this, EditGroupActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("click", "group");
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            finish();
-                            return true;
-                        case R.id.moreOptionDelete:
-                            optionsMenu.dismiss();
-                            deleteGroup(v, ListActivity.this, g);
-                            return true;
-                        default:
-                            return false;
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    // Toast message on menu item clicked
+                    if (menuItem.getItemId() == R.id.moreOptionEdit) {
+                        popup.dismiss();
+                        Common.group = g;
+                        Intent intent = new Intent(ListActivity.this, EditGroupActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("click", "group");
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        finish();
+                    } else if (menuItem.getItemId() == R.id.moreOptionDelete) {
+                        popup.dismiss();
+                        deleteGroup(v, ListActivity.this, g);
                     }
-                }
-
-                @Override
-                public void onMenuModeChange(MenuBuilder menu) {
+                    return true;
                 }
             });
-            // Display the menu
-            optionsMenu.show();
+            Object menuHelper;
+            Class[] argTypes;
+            try {
+                Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+                fMenuHelper.setAccessible(true);
+                menuHelper = fMenuHelper.get(popup);
+                argTypes = new Class[]{boolean.class};
+                menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+            } catch (Exception e) {
+
+            }
+            popup.show();
         });
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
-        subCountArrowBtn.setText("" + (g.getGroupsCount() + g.getEntriesCount()) + Common.SUB_DIRECTORY_ARROW_SYMBOL_CODE);
+        subCountArrowBtn.setText("" + (g.getGroupsCount() + g.getEntriesCount()) + " " + Common.SUB_DIRECTORY_ARROW_SYMBOL_CODE);
         CardView cardView = viewToLoad.findViewById(R.id.adapterCardView);
         if (!isFromBack) {
             LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
@@ -339,41 +338,41 @@ public class ListActivity extends AppCompatActivity {
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
         subCountArrowBtn.setVisibility(View.INVISIBLE);
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
-            MenuBuilder menuBuilder = new MenuBuilder(this);
-            MenuInflater menuInflater = new MenuInflater(this);
-            menuInflater.inflate(R.menu.group_entry_more_option_menu, menuBuilder);
-            MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, v);
-            optionsMenu.setForceShowIcon(true);
-            // Set Item Click Listener
-            menuBuilder.setCallback(new MenuBuilder.Callback() {
+            Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
+            PopupMenu popup = new PopupMenu(wrapper, v);
+            popup.getMenuInflater().inflate(R.menu.group_entry_more_option_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
-                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.moreOptionEdit:
-                            optionsMenu.dismiss();
-                            Common.entry = e;
-                            Intent intent = new Intent(ListActivity.this, EditEntryActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("click", "entry");
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            finish();
-                            return true;
-                        case R.id.moreOptionDelete:
-                            optionsMenu.dismiss();
-                            deleteEntry(v, ListActivity.this, e);
-                            return true;
-                        default:
-                            return false;
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    // Toast message on menu item clicked
+                    if (menuItem.getItemId() == R.id.moreOptionEdit) {
+                        popup.dismiss();
+                        Common.entry = e;
+                        Intent intent = new Intent(ListActivity.this, EditEntryActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("click", "entry");
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        finish();
+                    } else if (menuItem.getItemId() == R.id.moreOptionDelete) {
+                        popup.dismiss();
+                        deleteEntry(v, ListActivity.this, e);
                     }
-                }
-
-                @Override
-                public void onMenuModeChange(MenuBuilder menu) {
+                    return true;
                 }
             });
-            // Display the menu
-            optionsMenu.show();
+            Object menuHelper;
+            Class[] argTypes;
+            try {
+                Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+                fMenuHelper.setAccessible(true);
+                menuHelper = fMenuHelper.get(popup);
+                argTypes = new Class[]{boolean.class};
+                menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+            } catch (Exception e1) {
+
+            }
+            popup.show();
         });
 
         if (showGroupInfo) {
