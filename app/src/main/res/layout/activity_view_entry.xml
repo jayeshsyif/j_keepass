@@ -29,6 +29,7 @@
                 android:fontFamily="@font/righteous"
                 android:gravity="top"
                 android:text="@string/entryName"
+                android:singleLine="true"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"

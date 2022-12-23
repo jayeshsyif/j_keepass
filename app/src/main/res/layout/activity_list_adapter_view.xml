@@ -82,6 +82,7 @@
                         android:gravity="bottom|left"
                         android:text="@string/groupName"
                         android:textAlignment="gravity"
+                        android:singleLine="true"
                         android:textAllCaps="false"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/kp_dark_blue"></TextView>

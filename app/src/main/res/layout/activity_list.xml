@@ -29,6 +29,7 @@
                 android:fontFamily="@font/righteous"
                 android:gravity="top"
                 android:text="@string/groupName"
+                android:singleLine="true"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
@@ -57,6 +58,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
                         android:text="@string/groups"
+                        android:textStyle="italic"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -74,6 +76,7 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
+                        android:textStyle="italic"
                         android:text="@string/entries"
                         android:visibility="gone"></TextView>
 

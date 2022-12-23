@@ -719,6 +719,18 @@ public class LoadActivity extends AppCompatActivity {
                 addFileLayout(f);
             }
         }
+        showDeclaration(files);
+    }
+
+    @SuppressLint("ResourceType")
+    private void showDeclaration(File[] files) {
+        if (files == null || files.length <= 0) {
+            binding.justImportCreateTextView.setText(R.string.importDatabase);
+            binding.justImportCreateTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+        } else {
+            binding.justImportCreateTextView.setText(R.string.importDeclaration);
+            binding.justImportCreateTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+        }
     }
 
     @SuppressLint("ResourceType")

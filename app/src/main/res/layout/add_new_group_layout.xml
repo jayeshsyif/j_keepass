@@ -30,6 +30,7 @@
                 android:gravity="top"
                 android:text="@string/enterGroupName"
                 android:textAlignment="gravity"
+                android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
                 android:textSize="@dimen/kp_group_name_text_size"

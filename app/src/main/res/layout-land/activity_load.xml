@@ -104,19 +104,19 @@
                         android:layout_marginRight="@dimen/kp_button_margin"
                         android:fontFamily="@font/righteous"
                         android:hint="Enter name Ex: database.kdbx"
-                        android:textColorHint="@color/kp_grey"
                         android:singleLine="true"
-                        android:visibility="gone"
-                        android:textColor="@color/kp_dark_blue" />
+                        android:textColor="@color/kp_dark_blue"
+                        android:textColorHint="@color/kp_grey"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/kdbxFileGotPasswordLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="gone"
                         android:layout_marginLeft="@dimen/kp_button_margin"
                         android:layout_marginRight="@dimen/kp_button_margin"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:weightSum="100">
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -160,6 +160,18 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:orientation="vertical"></LinearLayout>
+
+                    <TextView
+                        android:id="@+id/justImportCreateTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/kp_button_margin"
+                        android:layout_marginBottom="@dimen/kp_button_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:gravity="center"
+                        android:text="@string/importDatabase"></TextView>
                 </LinearLayout>
             </ScrollView>
 

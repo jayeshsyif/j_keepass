@@ -93,6 +93,11 @@ public class ViewEntryActivity extends AppCompatActivity {
                             getString(R.string.creationDate), Util.convertDateToString(finalEntry.getCreationTime()));
                     viewsToAdd.add(creationView);
                 }
+                {
+                    final View creationView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            getString(R.string.expireDate), Util.convertDateToString(finalEntry.getExpiryTime()));
+                    viewsToAdd.add(creationView);
+                }
                 for (View dynamicView : viewsToAdd) {
                     /*@SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
                     binding.viewEntryScrollViewLinearLayout.setLayoutAnimation(lac);
