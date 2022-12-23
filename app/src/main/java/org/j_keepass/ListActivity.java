@@ -42,6 +42,7 @@ import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.SearchDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -274,6 +275,9 @@ public class ListActivity extends AppCompatActivity {
             popupMenu.show();
             return true;
         });*/
+        /*TextView dateAndSubInfo = viewToLoad.findViewById(R.id.dateAndSubInfo);
+        String info =" Sub Groups: "+g.getGroupsCount()+" "+Common.DOT_SYMBOL_CODE+" Sub Entries: "+g.getEntriesCount();
+        dateAndSubInfo.setText(info);*/
         ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
         edit.setOnClickListener(v -> {
             Common.group = g;
@@ -315,6 +319,15 @@ public class ListActivity extends AppCompatActivity {
             this.startActivity(intent);
             this.finish();
         });
+        TextView dateAndSubInfo = viewToLoad.findViewById(R.id.dateAndSubInfo);
+        String info = Util.convertDateToString(e.getCreationTime());
+        dateAndSubInfo.setText(info);
+        if (showGroupInfo) {
+            dateAndSubInfo.setVisibility(View.INVISIBLE);
+        }else
+        {
+            dateAndSubInfo.setVisibility(View.VISIBLE);
+        }
         ImageView edit = viewToLoad.findViewById(R.id.editGroupBtn);
         edit.setOnClickListener(v -> {
             Common.entry = e;
@@ -334,7 +347,7 @@ public class ListActivity extends AppCompatActivity {
             String path = e.getPath();
             if (path != null) {
                 path = path.substring(1, path.length());
-                path = path.replace("/", " \u002D ");
+                path = path.replace("/", Common.DOT_SYMBOL_CODE);
                 adapterGroupInfo.setVisibility(View.VISIBLE);
                 adapterGroupInfo.setText(path);
             }

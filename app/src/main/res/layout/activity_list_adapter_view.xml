@@ -65,20 +65,41 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/adapterText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/kp_margin"
                     android:layout_weight="20"
-                    android:fontFamily="@font/righteous"
-                    android:gravity="center_vertical"
-                    android:text="@string/groupName"
-                    android:textAlignment="gravity"
-                    android:textAllCaps="false"
-                    android:textColor="@color/kp_dark_blue">
+                    android:weightSum="100"
+                    android:orientation="vertical">
 
-                </TextView>
+                    <TextView
+                        android:id="@+id/adapterText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="30"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="bottom|left"
+                        android:text="@string/groupName"
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/kp_dark_blue"></TextView>
+
+                    <TextView
+                        android:id="@+id/dateAndSubInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/kp_margin"
+                        android:layout_weight="70"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="top|left"
+                        android:text=""
+                        android:textAlignment="gravity"
+                        android:textAllCaps="false"
+                        android:textColor="@color/kp_grey"
+                        android:textSize="@dimen/kp_extra_small_text_size"></TextView>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

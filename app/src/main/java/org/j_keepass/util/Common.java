@@ -18,4 +18,6 @@ public class Common {
 
     public static boolean isCodecAvailable = false;
     public static final float ANIMATION_TIME = 0.05f;
+
+    public static final String DOT_SYMBOL_CODE = " \u002D ";
 }

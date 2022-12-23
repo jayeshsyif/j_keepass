@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">48dp</dimen>
-    <dimen name="kp_small_text_size">8pt</dimen>
+    <dimen name="kp_small_text_size">5pt</dimen>
+    <dimen name="kp_extra_small_text_size">3pt</dimen>
 </resources>

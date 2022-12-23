@@ -5,6 +5,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Util {
 
@@ -35,4 +38,17 @@ public class Util {
         }
     }
 
+    static public  String convertDateToString(Date d)
+    {
+        String dateStr = "";
+        try
+        {
+            DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a");
+            dateStr = df.format(d);
+        }catch (Exception e)
+        {
+            dateStr = d.toString();
+        }
+        return dateStr;
+    }
 }

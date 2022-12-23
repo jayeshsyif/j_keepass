@@ -90,7 +90,7 @@ public class ViewEntryActivity extends AppCompatActivity {
                 }
                 {
                     final View creationView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            getString(R.string.creationDate), finalEntry.getCreationTime().toString());
+                            getString(R.string.creationDate), Util.convertDateToString(finalEntry.getCreationTime()));
                     viewsToAdd.add(creationView);
                 }
                 for (View dynamicView : viewsToAdd) {
