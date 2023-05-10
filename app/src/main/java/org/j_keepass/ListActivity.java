@@ -317,7 +317,8 @@ public class ListActivity extends AppCompatActivity {
         View viewToLoad = inflater.inflate(R.layout.activity_list_adapter_view, null);
         ((TextView) viewToLoad.findViewById(R.id.adapterText)).setText(e.getTitle());
         ShapeableImageView adapterIconImageView = viewToLoad.findViewById(R.id.adapterIconImageView);
-        adapterIconImageView.setImageResource(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
+        adapterIconImageView.setImageResource(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
+        adapterIconImageView.setColorFilter(ContextCompat.getColor(viewToLoad.getContext(), R.color.kp_green_2));
         viewToLoad.setOnClickListener(v -> {
             Common.entry = e;
             Intent intent = new Intent(this, ViewEntryActivity.class);

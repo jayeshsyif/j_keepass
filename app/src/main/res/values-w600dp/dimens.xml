@@ -1,4 +1,36 @@
 <resources>
     <dimen name="fab_margin">48dp</dimen>
+    <dimen name="kp_card_view_margin">2pt</dimen>
+    <dimen name="kp_card_list_view_margin">5pt</dimen>
+    <dimen name="kp_card_list_view_right_margin">5pt</dimen>
+    <dimen name="kp_card_list_view_left_margin">5pt</dimen>
+    <dimen name="kp_card_list_view_top_margin">1pt</dimen>
+    <dimen name="kp_card_list_view_bottom_margin">4pt</dimen>
+    <dimen name="kp_card_view_padding">2pt</dimen>
+    <dimen name="kp_card_view_radius">3pt</dimen>
+    <dimen name="kp_button_margin">5pt</dimen>
+    <dimen name="kp_margin">2pt</dimen>
+    <dimen name="kp_enter_password_margin">3pt</dimen>
+    <dimen name="kp_group_name_text_size">16pt</dimen>
+    <dimen name="kp_group_name_margin">7pt</dimen>
+    <dimen name="kp_group_list_icon_size">25pt</dimen>
+    <dimen name="kp_group_list_text_size">10pt</dimen>
+    <dimen name="kp_group_icon_margin">2pt</dimen>
+
+    <dimen name="kp_info_margin_top">20pt</dimen>
+
+
+    <dimen name="fab_new_margin">10pt</dimen>
+    <dimen name="fab_new_random_pwd_bottom_margin">40pt</dimen>
+    <dimen name="fab_new_group_bottom_margin">70pt</dimen>
+    <dimen name="fab_new_right_margin">40pt</dimen>
+    <dimen name="fab_new_padding">5pt</dimen>
+    <dimen name="fab_new_entry_bottom_margin">100pt</dimen>
+
     <dimen name="kp_small_text_size">5pt</dimen>
+    <dimen name="kp_extra_small_text_size">4pt</dimen>
+    <dimen name="kp_progress_height">20pt</dimen>
+    <dimen name="kp_toast_height">30pt</dimen>
+
+    <dimen name="kp_load_loading_icon">10pt</dimen>
 </resources>

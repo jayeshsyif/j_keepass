@@ -19,6 +19,6 @@ public class Common {
     public static boolean isCodecAvailable = false;
     public static final float ANIMATION_TIME = 0.05f;
 
-    public static final String DOT_SYMBOL_CODE = "\u002D";
-    public static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = "\u21B3";
+    public static final String DOT_SYMBOL_CODE = " \u2192 ";
+    public static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " \u21B3 ";
 }
