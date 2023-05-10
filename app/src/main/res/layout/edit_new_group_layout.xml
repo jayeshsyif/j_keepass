@@ -84,7 +84,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
                         android:textStyle="bold"
-                        app:tint="@color/kp_dark_blue" />
+                        app:tint="@color/kp_red" />
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>

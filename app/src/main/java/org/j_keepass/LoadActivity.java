@@ -128,7 +128,7 @@ public class LoadActivity extends AppCompatActivity {
 
         Thread bannerThread = new Thread(() -> {
             try {
-                Thread.sleep(1600);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 //do nothing
             }

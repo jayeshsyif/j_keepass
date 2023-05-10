@@ -107,7 +107,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        app:tint="@color/kp_dark_blue">
+                        app:tint="@color/kp_green_2">
 
                     </ImageButton>
 
@@ -119,7 +119,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        app:tint="@color/kp_dark_blue">
+                        app:tint="@color/kp_green_2">
 
                     </ImageButton>
 
@@ -131,7 +131,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        app:tint="@color/kp_dark_blue"></ImageButton>
+                        app:tint="@color/kp_green_2"></ImageButton>
 
                     <ImageButton
                         android:layout_width="wrap_content"

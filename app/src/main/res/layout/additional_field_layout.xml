@@ -95,7 +95,7 @@
             android:background="@android:color/transparent"
             android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="@color/kp_dark_blue"></ImageButton>
+            app:tint="@color/kp_red"></ImageButton>
 
     </LinearLayout>
 </LinearLayout>
