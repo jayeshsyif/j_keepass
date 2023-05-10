@@ -129,4 +129,6 @@
     <string name="nothingHere">Nothing here .. !</string>
     <string name="importDatabase">Import or Create Database ...</string>
     <string name="importDeclaration">Please export and save database before uninstallation of application</string>
+
+    <string name="themeCode">themeCode</string>
 </resources>

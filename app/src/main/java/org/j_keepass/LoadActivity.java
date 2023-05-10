@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -71,7 +72,7 @@ public class LoadActivity extends AppCompatActivity {
     private ActivityLoadBinding binding;
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
-    private int currentNightMode = Configuration.UI_MODE_NIGHT_NO;
+    private int defaultThemeCode = Configuration.UI_MODE_NIGHT_NO;
     private String dirPath = null;
     private String subFilesDirPath = null;
     boolean isFileAvailable = false;
@@ -127,7 +128,7 @@ public class LoadActivity extends AppCompatActivity {
 
         Thread bannerThread = new Thread(() -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1600);
             } catch (InterruptedException e) {
                 //do nothing
             }
@@ -599,15 +600,27 @@ public class LoadActivity extends AppCompatActivity {
 
     private void setThemeButton() {
         try {
-            currentNightMode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-            switch (currentNightMode) {
+            defaultThemeCode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            SharedPreferences sharedPref = LoadActivity.this.getPreferences(Context.MODE_PRIVATE);
+            int themeCode = sharedPref.getInt(getString(R.string.themeCode), 0);
+            if(themeCode > 0)
+            {
+                defaultThemeCode = themeCode;
+            }
+            switch (defaultThemeCode) {
                 case Configuration.UI_MODE_NIGHT_NO:
                     // Night mode is not active on device
                     binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     break;
                 case Configuration.UI_MODE_NIGHT_YES:
                     // Night mode is active on device
                     binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    break;
+                case 3:
+                    break;
+                default:
                     break;
             }
         } catch (Exception e) {
@@ -616,14 +629,20 @@ public class LoadActivity extends AppCompatActivity {
 
         binding.themeFloatBtn.setOnClickListener(v -> {
             try {
-                switch (currentNightMode) {
+                SharedPreferences sharedPref = LoadActivity.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                switch (defaultThemeCode) {
                     case Configuration.UI_MODE_NIGHT_NO:
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
+                        editor.putInt(getString(R.string.themeCode), Configuration.UI_MODE_NIGHT_YES);
+                        editor.apply();
                         break;
                     case Configuration.UI_MODE_NIGHT_YES:
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
+                        editor.putInt(getString(R.string.themeCode), Configuration.UI_MODE_NIGHT_NO);
+                        editor.apply();
                         break;
                 }
             } catch (Exception e) {
