@@ -111,6 +111,8 @@
     <string name="changeLogsVer62ChangesText">   UI Changes and Bug fixes.</string>
     <string name="changeLogsVer621Text">Version 6.2.1</string>
     <string name="changeLogsVer621ChangesText">   Minor fixes.</string>
+    <string name="changeLogsVer63Text">Version 6.3</string>
+    <string name="changeLogsVer63ChangesText">   Improvement in Dark mode, Colors added and Dark/Light mode stays even after app is closed.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
