@@ -66,6 +66,21 @@
                     android:weightSum="2">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/searchCancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/kp_button_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
+                        android:fontFamily="@font/righteous"
+                        android:text="@string/cancel"
+                        android:textAllCaps="true"
+                        android:textColor="@color/kp_dark_blue"
+                        android:textStyle="bold">
+
+                    </com.google.android.material.button.MaterialButton>
+
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/confirmSearch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -80,20 +95,6 @@
 
                     </com.google.android.material.button.MaterialButton>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/searchCancel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/kp_button_margin"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
-                        android:fontFamily="@font/righteous"
-                        android:text="@string/cancel"
-                        android:textAllCaps="true"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textStyle="bold">
-
-                    </com.google.android.material.button.MaterialButton>
                 </LinearLayout>
 
             </LinearLayout>

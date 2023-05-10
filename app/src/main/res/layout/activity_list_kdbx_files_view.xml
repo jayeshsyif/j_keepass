@@ -91,9 +91,9 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
-                        android:textColor="@color/kp_dark_blue"
+                        android:textColor="@color/kp_red"
                         android:textStyle="bold"
-                        app:tint="@color/kp_dark_blue" />
+                        app:tint="@color/kp_red" />
                 </LinearLayout>
             </LinearLayout>
 
