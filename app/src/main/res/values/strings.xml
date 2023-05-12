@@ -113,6 +113,9 @@
     <string name="changeLogsVer621ChangesText">   Minor fixes.</string>
     <string name="changeLogsVer63Text">Version 6.3</string>
     <string name="changeLogsVer63ChangesText">   Improvement in Dark mode, Colors added and Dark/Light mode stays even after app is closed.</string>
+    <string name="changeLogsVer64Text">Version 6.4</string>
+    <string name="changeLogsVer64ChangesText">   Rename of database added. Enhancement in setting and showing info on expiry date.</string>
+
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
