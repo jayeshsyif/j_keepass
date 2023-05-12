@@ -34,6 +34,8 @@ import org.linguafranca.pwdb.Group;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AddEntryActivity extends AppCompatActivity {
 
@@ -94,6 +96,12 @@ public class AddEntryActivity extends AppCompatActivity {
                     getString(R.string.notes), "");
             viewsToAdd.add(notesView.first);
             fields.add(notesView);
+
+            Date currentDate = Calendar.getInstance().getTime();
+            final Pair<View, TextInputEditText> expiryDatePicker = new FieldUtil().getDatePickerTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                    getString(R.string.expiryDate), currentDate);
+            viewsToAdd.add(expiryDatePicker.first);
+            fields.add(expiryDatePicker);
 
             for (View dynamicView : viewsToAdd) {
             /*    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
@@ -197,6 +205,8 @@ public class AddEntryActivity extends AppCompatActivity {
                             if (Util.isUsable(field.getSecond().getText().toString())) {
                                 entry.setNotes(field.second.getText().toString());
                             }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("Expiry Date")) {
+                            entry.setExpiryTime(Util.convertStringToDate(field.second.getText().toString()));
                         } else {
                             entry.setProperty(field.second.getTag().toString(), field.second.getText().toString());
                         }

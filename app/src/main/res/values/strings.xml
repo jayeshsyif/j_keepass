@@ -53,7 +53,7 @@
 
     <string name="notes">Notes</string>
     <string name="creationDate">Created Date</string>
-    <string name="expireDate">Expire Date</string>
+    <string name="expiryDate">Expiry Date</string>
 
     <string name="groupNameEmptyErrorMsg">Group Name cannot be empty!</string>
 

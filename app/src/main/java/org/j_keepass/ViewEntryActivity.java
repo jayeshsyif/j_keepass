@@ -22,16 +22,22 @@ import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ViewEntryActivity extends AppCompatActivity {
 
     private ActivityViewEntryBinding binding;
+    private static Date currentDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         binding = ActivityViewEntryBinding.inflate(getLayoutInflater());
+        currentDate = Calendar.getInstance().getTime();
+
         setContentView(binding.getRoot());
         if (Common.database == null) {
             Intent intent = new Intent(ViewEntryActivity.this, LoadActivity.class);
@@ -94,9 +100,22 @@ public class ViewEntryActivity extends AppCompatActivity {
                     viewsToAdd.add(creationView);
                 }
                 {
-                    final View creationView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            getString(R.string.expireDate), Util.convertDateToString(finalEntry.getExpiryTime()));
-                    viewsToAdd.add(creationView);
+                    long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                    long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                    if (daysToExpire <= 0) {
+                        final View creationView = new FieldUtil().getTextFieldForExpired((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                getString(R.string.expiryDate), Util.convertDateToString(finalEntry.getExpiryTime()));
+                        viewsToAdd.add(creationView);
+                    } else if (daysToExpire > 0 && daysToExpire <= 10) {
+                        final View creationView = new FieldUtil().getTextFieldForExpirySoon((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                getString(R.string.expiryDate), Util.convertDateToString(finalEntry.getExpiryTime()));
+                        viewsToAdd.add(creationView);
+                    } else {
+                        final View creationView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                getString(R.string.expiryDate), Util.convertDateToString(finalEntry.getExpiryTime()));
+                        viewsToAdd.add(creationView);
+                    }
+
                 }
                 for (View dynamicView : viewsToAdd) {
                     /*@SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
@@ -107,17 +126,17 @@ public class ViewEntryActivity extends AppCompatActivity {
             }
         }
 
-        binding.home.setOnClickListener( v -> {
+        binding.home.setOnClickListener(v -> {
             Common.group = Common.database.getRootGroup();
             this.onBackPressed();
         });
 
-        binding.generateNewPassword.setOnClickListener( v -> {
+        binding.generateNewPassword.setOnClickListener(v -> {
             AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
             NewPasswordDialogUtil.showDialog(d);
         });
 
-        binding.edit.setOnClickListener( v -> {
+        binding.edit.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditEntryActivity.class);
             Bundle bundle1 = new Bundle();
             bundle1.putString("click", "entry");

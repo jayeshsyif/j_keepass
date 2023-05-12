@@ -36,6 +36,8 @@ import org.linguafranca.pwdb.Entry;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EditEntryActivity extends AppCompatActivity {
 
@@ -109,6 +111,11 @@ public class EditEntryActivity extends AppCompatActivity {
                         getString(R.string.notes), entry.getNotes());
                 viewsToAdd.add(notesView.first);
                 fields.add(notesView);
+
+                final Pair<View, TextInputEditText> expiryDatePicker = new FieldUtil().getDatePickerTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                        getString(R.string.expiryDate), entry.getExpiryTime());
+                viewsToAdd.add(expiryDatePicker.first);
+                fields.add(expiryDatePicker);
 
                 {
                     if (entry.getPropertyNames().size() > 0) {
@@ -237,6 +244,8 @@ public class EditEntryActivity extends AppCompatActivity {
                             if (Util.isUsable(field.getSecond().getText().toString())) {
                                 entry.setNotes(field.second.getText().toString());
                             }
+                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("Expiry Date")) {
+                            entry.setExpiryTime(Util.convertStringToDate(field.second.getText().toString()));
                         } else {
                             entry.setProperty(field.second.getTag().toString(), field.second.getText().toString());
                         }

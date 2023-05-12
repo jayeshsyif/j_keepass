@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -50,7 +51,10 @@ import org.linguafranca.pwdb.kdbx.KdbxCreds;
 
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -59,13 +63,15 @@ public class ListActivity extends AppCompatActivity {
     public static final int PICK_FOLDER_OPEN_RESULT_CODE = 2;
     private static final int READ_EXTERNAL_STORAGE = 100;
 
+    private static Date currentDate = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        currentDate = Calendar.getInstance().getTime();
         binding.floatAdd.shrink();
 
         if (Common.database == null) {
@@ -337,7 +343,19 @@ public class ListActivity extends AppCompatActivity {
             dateAndSubInfo.setVisibility(View.VISIBLE);
         }
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
-        subCountArrowBtn.setVisibility(View.INVISIBLE);
+        //subCountArrowBtn.setVisibility(View.INVISIBLE);
+        long diff = e.getExpiryTime().getTime() - currentDate.getTime();
+        long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        if (daysToExpire <= 0) {
+            subCountArrowBtn.setText("Expired ! ");
+            subCountArrowBtn.setTextColor(ContextCompat.getColor(viewToLoad.getContext(), R.color.kp_red));
+        } else if (daysToExpire > 0 && daysToExpire <= 10) {
+            subCountArrowBtn.setText("Expires soon, in " + daysToExpire + " days ! ");
+            subCountArrowBtn.setTextColor(ContextCompat.getColor(viewToLoad.getContext(), R.color.kp_coral));
+        } else {
+            subCountArrowBtn.setText("Expires in " + daysToExpire + " days.");
+        }
+        subCountArrowBtn.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
             Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
             PopupMenu popup = new PopupMenu(wrapper, v);

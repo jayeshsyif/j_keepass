@@ -1,13 +1,13 @@
 package org.j_keepass.util;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -15,12 +15,18 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.j_keepass.R;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
+import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FieldUtil {
 
@@ -334,5 +340,89 @@ public class FieldUtil {
         triplet.third = viewToLoad.findViewById(R.id.fieldDelete);
 
         return triplet;
+    }
+
+    public Pair<View, TextInputEditText> getDatePickerTextField(LayoutInflater inflater, String hint, Date currentDate) {
+        final Pair<View, TextInputEditText> pair = new Pair<View, TextInputEditText>();
+        final View viewToLoad = inflater.inflate(R.layout.field_date_picker_layout, null);
+        final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setId(new Random().nextInt());
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        fieldText.setHint(hint);
+        final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setTag(hint);
+        field.setId(new Random().nextInt());
+        field.setEnabled(false);
+        field.setInputType(InputType.TYPE_NULL);
+        field.setTransformationMethod(null);
+        //field.setHint(hint);
+        field.setText(Util.convertDateToString(currentDate));
+        final ImageButton picker = viewToLoad.findViewById(R.id.picker);
+        picker.setOnClickListener(v -> {
+            Calendar currentCalender = Calendar.getInstance(TimeZone.getDefault());
+            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
+                currentCalender.set(year, month, dayOfMonth);
+                AtomicReference<Date> selectedExpiryDate = new AtomicReference<>(currentCalender.getTime());
+                field.setText(Util.convertDateToString(selectedExpiryDate.get()));
+                TimePickerDialog timePickerDialog = new TimePickerDialog(viewToLoad.getContext(), (view1, hourOfDay, minute) -> {
+                    currentCalender.set(year, month, dayOfMonth, hourOfDay, minute);
+                    selectedExpiryDate.set(currentCalender.getTime());
+                    field.setText(Util.convertDateToString(selectedExpiryDate.get()));
+                }, currentCalender.get(Calendar.HOUR_OF_DAY), currentCalender.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
+            },
+                    currentCalender.get(Calendar.YEAR), currentCalender.get(Calendar.MONTH),
+                    currentCalender.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+        });
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType")
+        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
+        pair.first = viewToLoad;
+        pair.second = field;
+        return pair;
+    }
+
+    public View getTextFieldForExpired(LayoutInflater inflater, String hint, String value) {
+        final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        copy.setImageResource(R.drawable.ic_warning_fill0_wght300_grad_25_opsz24);
+        copy.setColorFilter(ContextCompat.getColor(viewToLoad.getContext(), R.color.kp_red));
+        final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        fieldText.setHint(hint);
+        final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setEnabled(false);
+        field.setInputType(InputType.TYPE_NULL);
+        field.setTransformationMethod(null);
+        field.setHint(hint);
+        field.setText(value);
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
+        return viewToLoad;
+    }
+    public View getTextFieldForExpirySoon(LayoutInflater inflater, String hint, String value) {
+        final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        copy.setImageResource(R.drawable.ic_warning_fill0_wght300_grad_25_opsz24);
+        copy.setColorFilter(ContextCompat.getColor(viewToLoad.getContext(), R.color.kp_coral));
+        final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        fieldText.setHint(hint);
+        final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setEnabled(false);
+        field.setInputType(InputType.TYPE_NULL);
+        field.setTransformationMethod(null);
+        field.setHint(hint);
+        field.setText(value);
+        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        wholeFieldLayout.setLayoutAnimation(lac);
+        wholeFieldLayout.startLayoutAnimation();
+        return viewToLoad;
     }
 }

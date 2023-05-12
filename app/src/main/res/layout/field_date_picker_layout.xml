@@ -24,7 +24,7 @@
             android:textColorHint="@color/kp_grey"
             app:boxStrokeColor="@color/kp_grey"
             app:hintTextColor="@color/kp_grey"
-            app:passwordToggleEnabled="true"
+            app:passwordToggleEnabled="false"
             app:passwordToggleTint="@color/kp_grey">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -41,19 +41,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/copyLayout"
+        android:id="@+id/pickerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="90">
 
         <ImageButton
-            android:id="@+id/fieldCopy"
+            android:id="@+id/picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+            android:src="@drawable/ic_calendar_month_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
             app:tint="@color/kp_dark_blue"></ImageButton>
 
