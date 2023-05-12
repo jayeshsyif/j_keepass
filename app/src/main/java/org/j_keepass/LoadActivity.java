@@ -35,7 +35,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.io.ByteStreams;
 
@@ -57,16 +56,13 @@ import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 public class LoadActivity extends AppCompatActivity {
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -750,6 +746,7 @@ public class LoadActivity extends AppCompatActivity {
         createSubFilesDirectory();
         File subFilesDir = new File(subFilesDirPath);
         File[] files = subFilesDir.listFiles();
+        Arrays.sort(files);
         if (files != null && files.length > 0) {
             for (File f : files) {
                 addFileLayout(f);

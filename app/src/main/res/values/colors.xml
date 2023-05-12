@@ -18,5 +18,5 @@
     <color name="kp_red">#ba1a1a</color>
     <color name="kp_yellow">#E0E722</color>
     <color name="kp_coral">#ff7f50</color>
-
+    <color name="kp_static_white">#FFFFFF</color>
 </resources>
