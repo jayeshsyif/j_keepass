@@ -79,7 +79,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
                         android:textStyle="bold"
-                        android:visibility="invisible"
+                        android:visibility="visible"
                         app:tint="@color/kp_dark_blue" />
 
                     <ImageButton

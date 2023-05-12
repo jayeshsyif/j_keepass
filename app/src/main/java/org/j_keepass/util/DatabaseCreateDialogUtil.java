@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.google.android.material.button.MaterialButton;
@@ -56,5 +57,40 @@ public class DatabaseCreateDialogUtil {
         } catch (Exception e) {
             // do nothing
         }
+    }
+
+    static public Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> getConfirmDialogEditName(LayoutInflater layoutInflater, Context
+            context, String value) {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        AlertDialog alertDialog = null;
+        Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> penta = new Penta<>();
+        try {
+
+            View mView = layoutInflater.inflate(R.layout.database_name_password_dialog_layout, null);
+            alert.setView(mView);
+            alertDialog = alert.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
+            alertDialog.getWindow().setGravity(Gravity.CENTER);
+            //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+            LinearLayout databasePasswordLayout = mView.findViewById(R.id.databasePasswordLayout);
+            databasePasswordLayout.setVisibility(View.GONE);
+            MaterialButton save = mView.findViewById(R.id.saveDatabase);
+            MaterialButton cancel = mView.findViewById(R.id.cancelDatabase);
+            cancel.setOnClickListener(v -> {
+                penta.first.dismiss();
+            });
+
+            penta.second = save;
+            penta.third = cancel;
+            penta.fourth = mView.findViewById(R.id.databaseName);
+            penta.fourth.setText(value);
+            penta.fifth = mView.findViewById(R.id.databasePassword);
+        } catch (Exception e) {
+            alertDialog = alert.create();
+        }
+        penta.first = alertDialog;
+        return penta;
     }
 }

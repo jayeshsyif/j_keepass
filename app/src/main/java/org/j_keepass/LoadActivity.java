@@ -65,6 +65,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LoadActivity extends AppCompatActivity {
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -158,7 +160,10 @@ public class LoadActivity extends AppCompatActivity {
         kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                closeKeyboard();
+                if (binding.getRoot().getContext() != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+                }
                 return true;
             }
             return false;
@@ -249,10 +254,13 @@ public class LoadActivity extends AppCompatActivity {
                                     Database<?, ?, ?, ?> database = getDummyDatabase();
                                     OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
                                     database.save(creds, fileOutputStream);
-                                    confirmDialog.first.dismiss();
-                                    closeKeyboard();
                                     fetchAndShowFiles();
                                     kdbxFileUri = null;
+                                    if (v1 != null) {
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                                    }
+                                    confirmDialog.first.dismiss();
                                 } catch (Exception e) {
                                     ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
                                 }
@@ -482,7 +490,12 @@ public class LoadActivity extends AppCompatActivity {
         Database<?, ?, ?, ?> database = new SimpleDatabase();
         Group rootGroup = database.getRootGroup();
         rootGroup.setName("Root");
-
+        Calendar currentCalender = Calendar.getInstance();
+        int currentCalenderMonth = currentCalender.get(Calendar.MONTH);
+        if (currentCalenderMonth == 11) {
+            currentCalenderMonth = 0;
+        }
+        currentCalender.set(Calendar.MONTH, currentCalenderMonth + 1);
         {
             Group g = database.newGroup("Dummy Bank Group");
             Entry e1 = database.newEntry("Dummy Bank 1");
@@ -490,12 +503,14 @@ public class LoadActivity extends AppCompatActivity {
             e1.setPassword("dummypassword1");
             e1.setUrl("http://www.dummy1.com");
             e1.setNotes("Some dummy note");
+            e1.setExpiryTime(currentCalender.getTime());
             g.addEntry(e1);
             Entry e2 = database.newEntry("Dummy Bank 2");
             e2.setUsername("dummyusername2");
             e2.setPassword("dummypassword2");
             e2.setUrl("http://www.dummy2.com");
             e2.setNotes("Some dummy note");
+            e2.setExpiryTime(currentCalender.getTime());
             g.addEntry(e2);
             Group g1 = database.newGroup("Dummy Local Bank Sub Group");
             Entry e3 = database.newEntry("Dummy Sub User 1");
@@ -503,12 +518,14 @@ public class LoadActivity extends AppCompatActivity {
             e3.setPassword("dummypassword1");
             e3.setUrl("http://www.dummy1.com");
             e3.setNotes("Some dummy note");
+            e3.setExpiryTime(currentCalender.getTime());
             g1.addEntry(e3);
             Entry e4 = database.newEntry("Dummy Sub User 2");
             e4.setUsername("dummyusername2");
             e4.setPassword("dummypassword2");
             e4.setUrl("http://www.dummy2.com");
             e4.setNotes("Some dummy note");
+            e4.setExpiryTime(currentCalender.getTime());
             g1.addEntry(e4);
             g.addGroup(g1);
             rootGroup.addGroup(g);
@@ -520,12 +537,14 @@ public class LoadActivity extends AppCompatActivity {
             e1.setPassword("dummypassword1");
             e1.setUrl("http://www.dummy1.com");
             e1.setNotes("Some dummy note");
+            e1.setExpiryTime(currentCalender.getTime());
             g.addEntry(e1);
             Entry e2 = database.newEntry("Dummy MySQL Database 2");
             e2.setUsername("dummyusername2");
             e2.setPassword("dummypassword2");
             e2.setUrl("http://www.dummy2.com");
             e2.setNotes("Some dummy note");
+            e2.setExpiryTime(currentCalender.getTime());
             g.addEntry(e2);
 
             Group g1 = database.newGroup("Dummy Company User Group");
@@ -534,12 +553,15 @@ public class LoadActivity extends AppCompatActivity {
             e3.setPassword("dummypassword1");
             e3.setUrl("http://www.dummy1.com");
             e3.setNotes("Some dummy note");
+            e3.setExpiryTime(currentCalender.getTime());
             g1.addEntry(e3);
+
             Entry e4 = database.newEntry("Dummy User 2");
             e4.setUsername("dummyusername2");
             e4.setPassword("dummypassword2");
             e4.setUrl("http://www.dummy2.com");
             e4.setNotes("Some dummy note");
+            e4.setExpiryTime(currentCalender.getTime());
             g1.addEntry(e4);
             g.addGroup(g1);
             rootGroup.addGroup(g);
@@ -566,28 +588,6 @@ public class LoadActivity extends AppCompatActivity {
         }
     }
 
-    private void closeKeyboard() {
-        // this will give us the view
-        // which is currently focus
-        // in this layout
-        View view = this.getCurrentFocus();
-
-        // if nothing is currently
-        // focus then this will protect
-        // the app from crash
-        if (view != null) {
-
-            // now assign the system
-            // service to InputMethodManager
-            InputMethodManager manager
-                    = (InputMethodManager)
-                    getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-            manager
-                    .hideSoftInputFromWindow(
-                            view.getWindowToken(), 0);
-        }
-    }
 
     private void showWelcomeMessage(View v) {
         try {
@@ -603,8 +603,7 @@ public class LoadActivity extends AppCompatActivity {
             defaultThemeCode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             SharedPreferences sharedPref = LoadActivity.this.getPreferences(Context.MODE_PRIVATE);
             int themeCode = sharedPref.getInt(getString(R.string.themeCode), 0);
-            if(themeCode > 0)
-            {
+            if (themeCode > 0) {
                 defaultThemeCode = themeCode;
             }
             switch (defaultThemeCode) {
@@ -840,6 +839,31 @@ public class LoadActivity extends AppCompatActivity {
                 confirmDialog.first.dismiss();
             });
             ConfirmDialogUtil.showDialog(confirmDialog.first);
+        });
+        ImageButton databaseEditBtn = viewToLoad.findViewById(R.id.databaseEditBtn);
+        databaseEditBtn.setOnClickListener(v -> {
+            Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog = DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), this, f.getName());
+            editDatabaseNameDialog.second.setOnClickListener(v1 -> {
+                if (!Common.isCodecAvailable) {
+                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                } else if (editDatabaseNameDialog.fourth.getText() == null || editDatabaseNameDialog.fourth.getText().toString().length() <= 0) {
+                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                } else {
+                    String dbName = editDatabaseNameDialog.fourth.getText().toString();
+                    if (!dbName.endsWith("kdbx")) {
+                        dbName = dbName + ".kdbx";
+                    }
+                    File fromTo = new File(subFilesDirPath + File.separator + dbName);
+                    f.renameTo(fromTo);
+                    if (v1 != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                    }
+                    fetchAndShowFiles();
+                    editDatabaseNameDialog.first.dismiss();
+                }
+            });
+            DatabaseCreateDialogUtil.showDialog(editDatabaseNameDialog.first);
         });
         CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
