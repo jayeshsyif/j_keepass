@@ -655,6 +655,7 @@
         android:layout_marginEnd="0pt"
         android:backgroundTint="@color/kp_red"
         app:fabSize="mini"
+        app:borderWidth="@dimen/kp_always_0"
         app:srcCompat="@drawable/ic_close_fill0_wght300_grad_25_opsz24"
         app:tint="@color/kp_static_white" />
 </LinearLayout>

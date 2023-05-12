@@ -7,8 +7,8 @@
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/kp_dark_blue</item>
-        <item name="colorSecondaryVariant">@color/kp_dark_blue</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/kp_light_blue</item>
+        <item name="colorOnSecondary">@color/kp_dark_blue</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/kp_grey</item>
         <!-- Customize your theme here. -->
