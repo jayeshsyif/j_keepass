@@ -34,4 +34,5 @@
 
     <dimen name="kp_load_loading_icon">10pt</dimen>
     <dimen name="kp_always_0">0pt</dimen>
+    <dimen name="kp_always_1">1pt</dimen>
 </resources>
