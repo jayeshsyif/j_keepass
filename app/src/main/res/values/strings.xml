@@ -119,6 +119,8 @@
     <string name="changeLogsVer64ChangesText">   Rename of database added. Enhancement in setting and showing info on expiry date.</string>
     <string name="changeLogsVer641Text">Version 6.4.1</string>
     <string name="changeLogsVer641ChangesText">   Minor fixes.</string>
+    <string name="changeLogsVer65Text">Version 6.5</string>
+    <string name="changeLogsVer65ChangesText">   Change password added. UI update.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
