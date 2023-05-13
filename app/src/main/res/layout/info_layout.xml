@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_weight="1"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="@dimen/kp_margin"
         android:layout_margin="@dimen/kp_margin"
         android:layout_weight="1"
@@ -17,7 +19,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/kp_margin"
             android:padding="@dimen/kp_margin">
 
@@ -39,13 +41,13 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
                         android:src="@drawable/me" />
                 </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/kp_card_view_margin"
@@ -60,18 +62,19 @@
                 </com.google.android.material.button.MaterialButton>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/kp_card_view_margin"
                     android:layout_weight="1"
                     android:fontFamily="@font/righteous"
                     android:text="@string/developerName"
+                    android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/kp_dark_blue" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -83,12 +86,12 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:layout_weight="1"
@@ -101,7 +104,7 @@
 
                     <ImageButton
                         android:id="@+id/llink"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:layout_weight="1"
@@ -113,7 +116,7 @@
 
                     <ImageButton
                         android:id="@+id/elink"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:layout_weight="1"
@@ -125,7 +128,7 @@
 
                     <ImageButton
                         android:id="@+id/glink"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:layout_weight="1"
@@ -134,7 +137,7 @@
                         app:tint="@color/kp_green_2"></ImageButton>
 
                     <ImageButton
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
                         android:layout_weight="1"
@@ -148,7 +151,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/kp_card_view_margin"
                     android:layout_weight="1"
                     android:autoLink="web"
@@ -164,18 +167,18 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/kp_card_view_margin"
                     android:orientation="horizontal">
 
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
                         android:textColor="@color/kp_grey"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/changeLogs"
                         android:textAppearance="?android:attr/textAppearanceSmall">
@@ -186,10 +189,10 @@
                         android:id="@+id/changeLogShowHide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/kp_white"
                         android:fontFamily="@font/righteous"
-                        android:gravity="center"
+                        android:gravity="center|right"
                         android:src="@drawable/ic_visibility_fill0_wght300_grad_25_opsz24"
                         android:tint="@color/kp_grey" />
                 </LinearLayout>
@@ -197,13 +200,39 @@
                 <LinearLayout
                     android:id="@+id/changeLogsLinearLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="@dimen/kp_margin"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/kp_card_view_margin"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="center_vertical"
+                        android:text="@string/changeLogsVer641Text"
+                        android:textAlignment="gravity"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/kp_grey"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/kp_card_view_margin"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/changeLogsVer641ChangesText"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_grey"
+                        android:textColorLink="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -216,7 +245,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -229,7 +258,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -242,7 +271,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -255,7 +284,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -268,7 +297,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -281,7 +310,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -294,7 +323,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -307,7 +336,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -320,7 +349,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -333,7 +362,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -346,7 +375,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -359,7 +388,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -372,7 +401,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -385,7 +414,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -398,7 +427,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -411,7 +440,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -424,7 +453,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -437,7 +466,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -450,7 +479,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -463,7 +492,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -476,7 +505,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -489,7 +518,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -502,7 +531,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -515,7 +544,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -528,7 +557,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -541,7 +570,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -554,7 +583,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -567,7 +596,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -580,7 +609,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -593,7 +622,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -606,7 +635,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -619,7 +648,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:fontFamily="@font/righteous"
@@ -632,7 +661,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
@@ -649,7 +678,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatCloseInfoBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginEnd="0pt"
