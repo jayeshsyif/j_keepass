@@ -56,4 +56,18 @@ public class Util {
         }
         return date;
     }
+
+    static public void sleepInMilliSec(long millisec) {
+        try {
+            Thread.sleep(millisec);
+        } catch (Exception e) {
+        }
+    }
+
+    static public void sleepFor1Sec() {
+        sleepInMilliSec(1000);
+    }
+    static public void sleepForHalfSec() {
+        sleepInMilliSec(500);
+    }
 }

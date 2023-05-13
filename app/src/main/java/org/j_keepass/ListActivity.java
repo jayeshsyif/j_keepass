@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -79,27 +80,27 @@ public class ListActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            new Thread(() -> {
+                runOnUiThread(() -> {
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
+                    Database<?, ?, ?, ?> database = Common.database;
+                    Group<?, ?, ?, ?> group = Common.group;
 
-            runOnUiThread(() -> {
-                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
-                ProgressDialogUtil.showLoadingDialog(alertDialog);
-                ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
-                Database<?, ?, ?, ?> database = Common.database;
-                Group<?, ?, ?, ?> group = Common.group;
-
-                ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
-                if (group == null) {
-                    group = database.getRootGroup();
-                    Common.group = group;
-                }
-
-                if (group != null) {
-                    listAndShowGroupsAndEntries(group, false, alertDialog);
-                    ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
-                }
-                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-
-            });
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
+                    if (group == null) {
+                        group = database.getRootGroup();
+                        Common.group = group;
+                    }
+                    if (group != null) {
+                        ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+                        listAndShowGroupsAndEntries(group, false, alertDialog);
+                        ProgressDialogUtil.setLoadingProgress(alertDialog, 80);
+                    }
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                });
+            }).start();
 
             binding.floatAdd.setOnClickListener(v -> {
                 if (!binding.floatAdd.isExtended()) {
@@ -194,9 +195,11 @@ public class ListActivity extends AppCompatActivity {
             binding.justNothingTextView.setVisibility(View.GONE);
         }
         binding.groupScrollView.fullScroll(View.FOCUS_UP);
+        ProgressDialogUtil.setLoadingProgress(alertDialog,60);
         for (Group<?, ?, ?, ?> g : group.getGroups()) {
             addGroupOnUi(g, isFromBack);
         }
+        ProgressDialogUtil.setLoadingProgress(alertDialog,80);
         for (Entry<?, ?, ?, ?> e : group.getEntries()) {
             addEntryOnUi(e, isFromBack, false);
         }
@@ -246,9 +249,27 @@ public class ListActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (Common.group != null && !Common.group.isRootGroup()) {
             Common.group = Common.group.getParent();
-            listAndShowGroupsAndEntries(Common.group, true, null);
+            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            ProgressDialogUtil.setLoadingProgress(alertDialog,20);
+            new Thread(() -> {
+                runOnUiThread(() -> {
+                    listAndShowGroupsAndEntries(Common.group, false, alertDialog);
+                    ProgressDialogUtil.setLoadingProgress(alertDialog,99);
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                });
+            }).start();
         } else if (Common.group != null && isSearchView) {
-            listAndShowGroupsAndEntries(Common.group, true, null);
+            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            ProgressDialogUtil.setLoadingProgress(alertDialog,20);
+            new Thread(() -> {
+                runOnUiThread(() -> {
+                    listAndShowGroupsAndEntries(Common.group, false, alertDialog);
+                    ProgressDialogUtil.setLoadingProgress(alertDialog,99);
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                });
+            }).start();
         } else {
             super.onBackPressed();
             Intent intent = new Intent(ListActivity.this, LoadActivity.class);
@@ -265,7 +286,18 @@ public class ListActivity extends AppCompatActivity {
         viewToLoad.setOnClickListener(v -> {
             Common.group = g;
             isSearchView = false;
-            listAndShowGroupsAndEntries(g, false, null);
+            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            ProgressDialogUtil.setLoadingProgress(alertDialog,20);
+            new Thread(() -> {
+               runOnUiThread(() -> {
+                   ProgressDialogUtil.setLoadingProgress(alertDialog,50);
+                   listAndShowGroupsAndEntries(g, false, alertDialog);
+                   ProgressDialogUtil.setLoadingProgress(alertDialog,99);
+                   ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+               });
+            }).start();
+
         });
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
             Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
@@ -420,10 +452,9 @@ public class ListActivity extends AppCompatActivity {
 
         Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
         confirmDialog.second.setOnClickListener(viewObj -> {
-
-            runOnUiThread(() -> {
-                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
-                ProgressDialogUtil.showSavingDialog(alertDialog);
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+            new Thread(() -> {
 
                 String groupName = null;
                 Group parent = Common.group;
@@ -470,7 +501,7 @@ public class ListActivity extends AppCompatActivity {
                         ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
                     }
                 }
-            });
+            }).start();
         });
         ConfirmDialogUtil.showDialog(confirmDialog.first);
     }
@@ -481,7 +512,7 @@ public class ListActivity extends AppCompatActivity {
         confirmDialog.second.setOnClickListener(viewObj -> {
             final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSavingDialog(alertDialog);
-            runOnUiThread(() -> {
+            new Thread(() -> {
                 String groupName = null;
                 Group parent = Common.group;
 
@@ -526,7 +557,7 @@ public class ListActivity extends AppCompatActivity {
                         ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
                     }
                 }
-            });
+            }).start();
         });
         confirmDialog.first.show();
     }
@@ -535,33 +566,42 @@ public class ListActivity extends AppCompatActivity {
     private void search(View v, Activity activity) {
         Triplet<AlertDialog, MaterialButton, TextInputEditText> searchDialog = SearchDialogUtil.getSearchDialog(activity.getLayoutInflater(), activity);
         searchDialog.second.setOnClickListener(viewObj -> {
-            searchDialog.first.dismiss();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             final AlertDialog alertDialog = ProgressDialogUtil.getSearch(activity.getLayoutInflater(), activity);
             ProgressDialogUtil.showSearchDialog(alertDialog);
-            runOnUiThread(() -> {
-                isSearchView = true;
-                binding.groupsLinearLayout.removeAllViews();
-                binding.entriesLinearLayout.removeAllViews();
-                binding.groupScrollView.fullScroll(View.FOCUS_UP);
-                binding.groupName.setText(getString(R.string.search) + ": " + searchDialog.third.getText().toString());
-                //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
-                binding.justGroupsTextView.setVisibility(View.GONE);
-
-                List<?> searchedEntries = Common.database.findEntries(searchDialog.third.getText().toString());
-                if (searchedEntries != null && searchedEntries.size() > 0) {
-                    binding.justEntriesTextView.setVisibility(View.VISIBLE);
-                    binding.justNothingTextView.setVisibility(View.GONE);
-                } else {
-                    binding.justEntriesTextView.setVisibility(View.GONE);
-                    binding.justNothingTextView.setVisibility(View.VISIBLE);
-                    binding.justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
-                }
-                for (int eCount = 0; eCount < searchedEntries.size(); eCount++) {
-                    Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) searchedEntries.get(eCount);
-                    addEntryOnUi(localEntry, false, true);
-                }
-                ProgressDialogUtil.dismissSearchDialog(alertDialog);
-            });
+            isSearchView = true;
+            ProgressDialogUtil.setSearchProgress(alertDialog, 20);
+            binding.groupsLinearLayout.removeAllViews();
+            binding.entriesLinearLayout.removeAllViews();
+            binding.groupScrollView.fullScroll(View.FOCUS_UP);
+            binding.groupName.setText(getString(R.string.search) + ": " + searchDialog.third.getText().toString());
+            //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+            binding.justGroupsTextView.setVisibility(View.GONE);
+            TextView justEntriesTextView = binding.justEntriesTextView;
+            TextView justNothingTextView = binding.justNothingTextView;
+            ProgressDialogUtil.setSearchProgress(alertDialog, 30);
+            new Thread(() -> {
+                activity.runOnUiThread(() -> {
+                    List<?> searchedEntries = Common.database.findEntries(searchDialog.third.getText().toString());
+                    Util.sleepForHalfSec();
+                    if (searchedEntries != null && searchedEntries.size() > 0) {
+                        justEntriesTextView.setVisibility(View.VISIBLE);
+                        justNothingTextView.setVisibility(View.GONE);
+                    } else {
+                        justEntriesTextView.setVisibility(View.GONE);
+                        justNothingTextView.setVisibility(View.VISIBLE);
+                        justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                    }
+                    ProgressDialogUtil.setSearchProgress(alertDialog, 50);
+                    for (int eCount = 0; eCount < searchedEntries.size(); eCount++) {
+                        Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) searchedEntries.get(eCount);
+                        addEntryOnUi(localEntry, false, true);
+                    }
+                    ProgressDialogUtil.dismissSearchDialog(alertDialog);
+                    searchDialog.first.dismiss();
+                });
+            }).start();
         });
         ConfirmDialogUtil.showDialog(searchDialog.first);
     }

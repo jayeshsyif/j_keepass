@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +34,19 @@ public class ProgressDialogUtil {
 
 
     static public void dismissLoadingDialog(AlertDialog alertDialog) {
-        alertDialog.dismiss();
+        try {
+            alertDialog.dismiss();
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 
     static public void showLoadingDialog(AlertDialog alertDialog) {
-        alertDialog.show();
+        try {
+            alertDialog.show();
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 
 
@@ -86,6 +95,9 @@ public class ProgressDialogUtil {
         }
     }
 
+    static public void setSearchProgress(AlertDialog alertDialog, int progress) {
+        setProgress(alertDialog, progress, TYPE_OF_PROGREES.SEARCHING);
+    }
 
     static public AlertDialog getProgressDialog(LayoutInflater layoutInflater, Context
             context, TYPE_OF_PROGREES typeOfProgrees) {
@@ -112,8 +124,9 @@ public class ProgressDialogUtil {
                 progressWithPercentage = context.getString(R.string.savingWithPercentage);
                 progressWithPercentage = progressWithPercentage.replace("$per$", "" + 0);
                 progressBarTextView.setText(progressWithPercentage);
-            }else if (typeOfProgrees == TYPE_OF_PROGREES.SEARCHING) {
+            } else if (typeOfProgrees == TYPE_OF_PROGREES.SEARCHING) {
                 progressWithPercentage = context.getString(R.string.searching);
+                progressBarTextView.setText(progressWithPercentage);
             }
         } catch (Exception e) {
             alertDialog = alert.create();
@@ -123,6 +136,9 @@ public class ProgressDialogUtil {
 
     static public void setProgress(AlertDialog alertDialog, int progress, TYPE_OF_PROGREES
             typeOfProgrees) {
+        if (alertDialog == null) {
+            return;
+        }
         try {
             ProgressBar progressBar = alertDialog.findViewById(R.id.progressBar);
             progressBar.setProgress(progress);
@@ -137,7 +153,7 @@ public class ProgressDialogUtil {
             }
             progressBarTextView.setText(progressWithPercentage);
         } catch (Exception e) {
-            //do nothing
+            //Log.i("JKEEPASS","Error seting progress "+e.getMessage(), e);
         }
     }
 

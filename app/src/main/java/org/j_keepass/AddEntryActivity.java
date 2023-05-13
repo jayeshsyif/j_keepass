@@ -127,7 +127,14 @@ public class AddEntryActivity extends AppCompatActivity {
                 additionalView.first.requestFocus();
             });
             binding.saveNewEntry.setOnClickListener(v -> {
-                saveNewEntry(v);
+                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddEntryActivity.this);
+                ProgressDialogUtil.showSavingDialog(alertDialog);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        saveNewEntry(alertDialog, v);
+                    }
+                }).start();
             });
             binding.home.setOnClickListener(v -> {
                 Common.group = Common.database.getRootGroup();
@@ -166,99 +173,93 @@ public class AddEntryActivity extends AppCompatActivity {
         }
     }
 
-    private void saveNewEntry(View v) {
+    private void saveNewEntry(AlertDialog alertDialog, View v) {
+        boolean proceed = false;
+        try {
+            validate();
+            proceed = true;
+        } catch (KpCustomException e) {
+            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+            ToastUtil.showToast(getLayoutInflater(), v, e);
+        }
 
-        runOnUiThread(() -> {
-            {
-                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), AddEntryActivity.this);
-                ProgressDialogUtil.showSavingDialog(alertDialog);
-                boolean proceed = false;
-                try {
-                    validate();
-                    proceed = true;
-                } catch (KpCustomException e) {
-                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                    ToastUtil.showToast(getLayoutInflater(), v, e);
-                }
+        if (proceed) {
+            Entry entry = Common.database.newEntry();
 
-                if (proceed) {
-                    Entry entry = Common.database.newEntry();
-
-                    for (Pair<View, TextInputEditText> field : fields) {
-                        if (field.getSecond().getTag().toString().equalsIgnoreCase("title")) {
-                            if (Util.isUsable(field.getSecond().getText().toString())) {
-                                entry.setTitle(field.second.getText().toString());
-                            }
-                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("user name")) {
-                            if (Util.isUsable(field.getSecond().getText().toString())) {
-                                entry.setUsername(field.second.getText().toString());
-                            }
-                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("password")) {
-                            if (Util.isUsable(field.getSecond().getText().toString())) {
-                                entry.setPassword(field.second.getText().toString());
-                            }
-                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("url")) {
-                            if (Util.isUsable(field.getSecond().getText().toString())) {
-                                entry.setUrl(field.second.getText().toString());
-                            }
-                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("notes")) {
-                            if (Util.isUsable(field.getSecond().getText().toString())) {
-                                entry.setNotes(field.second.getText().toString());
-                            }
-                        } else if (field.getSecond().getTag().toString().equalsIgnoreCase("Expiry Date")) {
-                            entry.setExpiryTime(Util.convertStringToDate(field.second.getText().toString()));
-                        } else {
-                            entry.setProperty(field.second.getTag().toString(), field.second.getText().toString());
-                        }
+            for (Pair<View, TextInputEditText> field : fields) {
+                if (field.getSecond().getTag().toString().equalsIgnoreCase("title")) {
+                    if (Util.isUsable(field.getSecond().getText().toString())) {
+                        entry.setTitle(field.second.getText().toString());
                     }
-                    Group group = Common.group;
-                    group.addEntry(entry);
-                    Common.group = group;
-
-                    if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(AddEntryActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                MANAGE_DOCUMENTS);
+                } else if (field.getSecond().getTag().toString().equalsIgnoreCase("user name")) {
+                    if (Util.isUsable(field.getSecond().getText().toString())) {
+                        entry.setUsername(field.second.getText().toString());
                     }
-
-                    if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
-                        OutputStream fileOutputStream = null;
-                        try {
-                            //getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
-                            fileOutputStream = getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
-                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
-                            Common.database.save(Common.creds, fileOutputStream);
-                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
-                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            Intent intent = new Intent(AddEntryActivity.this, ListActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("click", "group");
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            finish();
-                        } catch (NoSuchMethodError e) {
-                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
-                        } catch (Exception e) {
-                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
-                        } finally {
-                            if (fileOutputStream != null) {
-                                try {
-                                    fileOutputStream.close();
-                                } catch (Exception e) {
-                                    //do nothing
-                                }
-                            }
-                        }
-                    } else {
-                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                } else if (field.getSecond().getTag().toString().equalsIgnoreCase("password")) {
+                    if (Util.isUsable(field.getSecond().getText().toString())) {
+                        entry.setPassword(field.second.getText().toString());
                     }
+                } else if (field.getSecond().getTag().toString().equalsIgnoreCase("url")) {
+                    if (Util.isUsable(field.getSecond().getText().toString())) {
+                        entry.setUrl(field.second.getText().toString());
+                    }
+                } else if (field.getSecond().getTag().toString().equalsIgnoreCase("notes")) {
+                    if (Util.isUsable(field.getSecond().getText().toString())) {
+                        entry.setNotes(field.second.getText().toString());
+                    }
+                } else if (field.getSecond().getTag().toString().equalsIgnoreCase("Expiry Date")) {
+                    entry.setExpiryTime(Util.convertStringToDate(field.second.getText().toString()));
+                } else {
+                    entry.setProperty(field.second.getTag().toString(), field.second.getText().toString());
                 }
             }
-        });
+            Group group = Common.group;
+            group.addEntry(entry);
+            Common.group = group;
+
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(AddEntryActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MANAGE_DOCUMENTS);
+            }
+
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                OutputStream fileOutputStream = null;
+                try {
+                    //getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                    Util.sleepForHalfSec();
+                    fileOutputStream = getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                    ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                    Common.database.save(Common.creds, fileOutputStream);
+                    ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    Intent intent = new Intent(AddEntryActivity.this, ListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("click", "group");
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                } catch (NoSuchMethodError e) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                } catch (Exception e) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                } finally {
+                    if (fileOutputStream != null) {
+                        try {
+                            fileOutputStream.close();
+                        } catch (Exception e) {
+                            //do nothing
+                        }
+                    }
+                }
+            } else {
+                ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+            }
+        }
     }
 
     private void validate() throws KpCustomException {

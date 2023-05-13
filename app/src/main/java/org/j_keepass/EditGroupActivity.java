@@ -22,6 +22,7 @@ import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Group;
 
 import java.io.OutputStream;
@@ -51,9 +52,9 @@ public class EditGroupActivity extends AppCompatActivity {
             }
             final Pair<View, TextInputEditText> finalPair = pair;
             binding.saveGroup.setOnClickListener(v -> {
-                runOnUiThread(() -> {
-                    final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditGroupActivity.this);
-                    ProgressDialogUtil.showSavingDialog(alertDialog);
+                final AlertDialog alertDialog = ProgressDialogUtil.getSaving(getLayoutInflater(), EditGroupActivity.this);
+                ProgressDialogUtil.showSavingDialog(alertDialog);
+                new Thread(() -> {
                     boolean proceed = false;
                     try {
                         validate(finalPair.second.getText().toString());
@@ -80,6 +81,7 @@ public class EditGroupActivity extends AppCompatActivity {
                             try {
                                 //getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                                 ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                                Util.sleepForHalfSec();
                                 fileOutputStream = getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
                                 ProgressDialogUtil.setSavingProgress(alertDialog, 50);
                                 Common.database.save(Common.creds, fileOutputStream);
@@ -112,7 +114,7 @@ public class EditGroupActivity extends AppCompatActivity {
                         }
 
                     }
-                });
+                }).start();
             });
             binding.home.setOnClickListener(v -> {
                 Common.group = Common.database.getRootGroup();
