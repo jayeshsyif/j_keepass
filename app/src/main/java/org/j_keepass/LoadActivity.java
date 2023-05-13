@@ -17,14 +17,18 @@ import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,8 +51,10 @@ import org.j_keepass.util.InfoDialogUtil;
 import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.Quadruple;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
+import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -61,6 +67,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -826,42 +833,96 @@ public class LoadActivity extends AppCompatActivity {
                 }
             }
         });
-        ImageButton databaseDeleteBtn = viewToLoad.findViewById(R.id.databaseDeleteBtn);
-        databaseDeleteBtn.setOnClickListener(v -> {
-
-            Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(getLayoutInflater(), this);
-            confirmDialog.second.setOnClickListener(viewObj -> {
-                f.delete();
-                fetchAndShowFiles();
-                confirmDialog.first.dismiss();
-            });
-            ConfirmDialogUtil.showDialog(confirmDialog.first);
-        });
-        ImageButton databaseEditBtn = viewToLoad.findViewById(R.id.databaseEditBtn);
-        databaseEditBtn.setOnClickListener(v -> {
-            Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog = DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), this, f.getName());
-            editDatabaseNameDialog.second.setOnClickListener(v1 -> {
-                if (!Common.isCodecAvailable) {
-                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
-                } else if (editDatabaseNameDialog.fourth.getText() == null || editDatabaseNameDialog.fourth.getText().toString().length() <= 0) {
-                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
-                } else {
-                    String dbName = editDatabaseNameDialog.fourth.getText().toString();
-                    if (!dbName.endsWith("kdbx")) {
-                        dbName = dbName + ".kdbx";
+        viewToLoad.findViewById(R.id.databaseMoreOption).setOnClickListener(v -> {
+            Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
+            PopupMenu popup = new PopupMenu(wrapper, v);
+            popup.getMenuInflater().inflate(R.menu.database_more_option_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    // Toast message on menu item clicked
+                    if (menuItem.getItemId() == R.id.moreOptionEdit) {
+                        popup.dismiss();
+                        Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog =
+                                DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), viewToLoad.getContext(), f.getName());
+                        editDatabaseNameDialog.second.setOnClickListener(v1 -> {
+                            if (!Common.isCodecAvailable) {
+                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                            } else if (editDatabaseNameDialog.fourth.getText() == null || editDatabaseNameDialog.fourth.getText().toString().length() <= 0) {
+                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                            } else {
+                                String dbName = editDatabaseNameDialog.fourth.getText().toString();
+                                if (!dbName.endsWith("kdbx")) {
+                                    dbName = dbName + ".kdbx";
+                                }
+                                File fromTo = new File(subFilesDirPath + File.separator + dbName);
+                                f.renameTo(fromTo);
+                                if (v1 != null) {
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                                }
+                                fetchAndShowFiles();
+                                editDatabaseNameDialog.first.dismiss();
+                            }
+                        });
+                        DatabaseCreateDialogUtil.showDialog(editDatabaseNameDialog.first);
+                    } else if (menuItem.getItemId() == R.id.moreOptionDelete) {
+                        popup.dismiss();
+                        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(getLayoutInflater(), viewToLoad.getContext());
+                        confirmDialog.second.setOnClickListener(viewObj -> {
+                            f.delete();
+                            fetchAndShowFiles();
+                            confirmDialog.first.dismiss();
+                        });
+                        ConfirmDialogUtil.showDialog(confirmDialog.first);
+                    } else if (menuItem.getItemId() == R.id.moreOptionChangePassword) {
+                        Quadruple<AlertDialog, MaterialButton, MaterialButton, TextInputEditText> confirmDialog
+                                = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
+                        confirmDialog.second.setOnClickListener(v1 -> {
+                            if (!Common.isCodecAvailable) {
+                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                            } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
+                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                            } else {
+                                try {
+                                    kdbxFileUri = Uri.fromFile(f);
+                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
+                                    Database<?, ?, ?, ?> database = getDummyDatabase();
+                                    OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                                    database.save(creds, fileOutputStream);
+                                    fetchAndShowFiles();
+                                    kdbxFileUri = null;
+                                    if (v1 != null) {
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                                    }
+                                    confirmDialog.first.dismiss();
+                                } catch (Exception e) {
+                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
+                                }
+                            }
+                        });
+                        DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
                     }
-                    File fromTo = new File(subFilesDirPath + File.separator + dbName);
-                    f.renameTo(fromTo);
-                    if (v1 != null) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
-                    }
-                    fetchAndShowFiles();
-                    editDatabaseNameDialog.first.dismiss();
+                    return true;
                 }
             });
-            DatabaseCreateDialogUtil.showDialog(editDatabaseNameDialog.first);
+            Object menuHelper;
+            Class[] argTypes;
+            try {
+                Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+                fMenuHelper.setAccessible(true);
+                menuHelper = fMenuHelper.get(popup);
+                argTypes = new Class[]{boolean.class};
+                menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+            } catch (Exception e) {
+
+            }
+            popup.show();
         });
+        TextView databaseMoreInfo = viewToLoad.findViewById(R.id.databaseMoreInfo);
+        databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()));
+        databaseMoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
         databaseNameCardView.setLayoutAnimation(lac);

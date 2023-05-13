@@ -46,6 +46,28 @@ public class Util {
         return dateStr;
     }
 
+    static public String convertDateToStringOtherFormat(Date d) {
+        String dateStr = "";
+        try {
+            DateFormat df = new SimpleDateFormat("E, dd/M/yy, hh:mm: a");
+            dateStr = df.format(d);
+        } catch (Exception e) {
+            dateStr = d.toString();
+        }
+        return dateStr;
+    }
+
+    static public String convertDateToStringOnlyDate(Date d) {
+        String dateStr = "";
+        try {
+            DateFormat df = new SimpleDateFormat("dd/M/yy");
+            dateStr = df.format(d);
+        } catch (Exception e) {
+            dateStr = d.toString();
+        }
+        return dateStr;
+    }
+
     static public Date convertStringToDate(String d) {
         Date date = null;
         try {
@@ -55,6 +77,18 @@ public class Util {
             date = Calendar.getInstance().getTime();
         }
         return date;
+    }
+
+    static public String convertDateToString(Long dateInLong) {
+        return convertDateToString(new Date(dateInLong));
+    }
+
+    static public String convertDateToStringOtherFormat(Long dateInLong) {
+        return convertDateToStringOtherFormat(new Date(dateInLong));
+    }
+
+    static public String convertDateToStringOnlyDate(Long dateInLong) {
+        return convertDateToStringOnlyDate(new Date(dateInLong));
     }
 
     static public void sleepInMilliSec(long millisec) {
@@ -67,6 +101,7 @@ public class Util {
     static public void sleepFor1Sec() {
         sleepInMilliSec(1000);
     }
+
     static public void sleepForHalfSec() {
         sleepInMilliSec(500);
     }

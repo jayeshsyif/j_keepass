@@ -93,4 +93,35 @@ public class DatabaseCreateDialogUtil {
         penta.first = alertDialog;
         return penta;
     }
+
+    static public Quadruple<AlertDialog, MaterialButton, MaterialButton, TextInputEditText> getConfirmDialogChangePassword(LayoutInflater layoutInflater, Context
+            context) {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        AlertDialog alertDialog = null;
+        Quadruple<AlertDialog, MaterialButton, MaterialButton, TextInputEditText> penta = new Quadruple<>();
+        try {
+
+            View mView = layoutInflater.inflate(R.layout.database_change_password_dialog_layout, null);
+            alert.setView(mView);
+            alertDialog = alert.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
+            alertDialog.getWindow().setGravity(Gravity.CENTER);
+            //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+            MaterialButton save = mView.findViewById(R.id.saveDatabase);
+            MaterialButton cancel = mView.findViewById(R.id.cancelDatabase);
+            cancel.setOnClickListener(v -> {
+                penta.first.dismiss();
+            });
+
+            penta.second = save;
+            penta.third = cancel;
+            penta.fourth = mView.findViewById(R.id.databaseNewPassword);
+        } catch (Exception e) {
+            alertDialog = alert.create();
+        }
+        penta.first = alertDialog;
+        return penta;
+    }
 }

@@ -10,6 +10,8 @@
     <string name="importStr">Import</string>
     <string name="create">Create</string>
     <string name="enterPassword">Enter Password</string>
+    <string name="enterOldPassword">Enter Old Password</string>
+    <string name="enterNewPassword">Enter New Password</string>
     <string name="enterDatabaseName">Enter File/Database name</string>
     <string name="ok">Ok</string>
     <string name="close">Close</string>
@@ -129,6 +131,7 @@
     <string name="useSymbol">Symbol</string>
     <string name="newPasswordAllFalse">All cannot be false! Please provide proper Input.</string>
     <string name="edit">Edit</string>
+    <string name="changePassword">Change Password</string>
     <string name="delete">Delete</string>
     <string name="show">Show</string>
     <string name="hide">Hide</string>
