@@ -39,6 +39,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.io.ByteStreams;
 
@@ -232,7 +233,7 @@ public class LoadActivity extends AppCompatActivity {
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
                 }
                 if (isOK) {
-                    Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialog(getLayoutInflater(), binding.getRoot().getContext());
+                    Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialog(getLayoutInflater(), binding.getRoot().getContext());
 
                     confirmDialog.second.setOnClickListener(v1 -> {
                         if (!Common.isCodecAvailable) {
@@ -843,7 +844,7 @@ public class LoadActivity extends AppCompatActivity {
                     // Toast message on menu item clicked
                     if (menuItem.getItemId() == R.id.moreOptionEdit) {
                         popup.dismiss();
-                        Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog =
+                        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog =
                                 DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), viewToLoad.getContext(), f.getName());
                         editDatabaseNameDialog.second.setOnClickListener(v1 -> {
                             if (!Common.isCodecAvailable) {
@@ -876,7 +877,7 @@ public class LoadActivity extends AppCompatActivity {
                         });
                         ConfirmDialogUtil.showDialog(confirmDialog.first);
                     } else if (menuItem.getItemId() == R.id.moreOptionChangePassword) {
-                        Quadruple<AlertDialog, MaterialButton, MaterialButton, TextInputEditText> confirmDialog
+                        Quadruple<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText> confirmDialog
                                 = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
                         confirmDialog.second.setOnClickListener(v1 -> {
                             if (!Common.isCodecAvailable) {

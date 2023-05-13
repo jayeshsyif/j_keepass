@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -19,11 +20,11 @@ import org.j_keepass.R;
 
 public class DatabaseCreateDialogUtil {
 
-    static public Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> getConfirmDialog(LayoutInflater layoutInflater, Context
+    static public Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> getConfirmDialog(LayoutInflater layoutInflater, Context
             context) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         AlertDialog alertDialog = null;
-        Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> penta = new Penta<>();
+        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> penta = new Penta<>();
         try {
 
             View mView = layoutInflater.inflate(R.layout.database_name_password_dialog_layout, null);
@@ -35,7 +36,7 @@ public class DatabaseCreateDialogUtil {
             alertDialog.getWindow().setGravity(Gravity.CENTER);
             //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton save = mView.findViewById(R.id.saveDatabase);
-            MaterialButton cancel = mView.findViewById(R.id.cancelDatabase);
+            FloatingActionButton cancel = mView.findViewById(R.id.cancelDatabase);
             cancel.setOnClickListener(v -> {
                 penta.first.dismiss();
             });
@@ -59,11 +60,11 @@ public class DatabaseCreateDialogUtil {
         }
     }
 
-    static public Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> getConfirmDialogEditName(LayoutInflater layoutInflater, Context
+    static public Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> getConfirmDialogEditName(LayoutInflater layoutInflater, Context
             context, String value) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         AlertDialog alertDialog = null;
-        Penta<AlertDialog, MaterialButton, MaterialButton, TextInputEditText, TextInputEditText> penta = new Penta<>();
+        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> penta = new Penta<>();
         try {
 
             View mView = layoutInflater.inflate(R.layout.database_name_password_dialog_layout, null);
@@ -77,7 +78,7 @@ public class DatabaseCreateDialogUtil {
             LinearLayout databasePasswordLayout = mView.findViewById(R.id.databasePasswordLayout);
             databasePasswordLayout.setVisibility(View.GONE);
             MaterialButton save = mView.findViewById(R.id.saveDatabase);
-            MaterialButton cancel = mView.findViewById(R.id.cancelDatabase);
+            FloatingActionButton cancel = mView.findViewById(R.id.cancelDatabase);
             cancel.setOnClickListener(v -> {
                 penta.first.dismiss();
             });
@@ -94,11 +95,11 @@ public class DatabaseCreateDialogUtil {
         return penta;
     }
 
-    static public Quadruple<AlertDialog, MaterialButton, MaterialButton, TextInputEditText> getConfirmDialogChangePassword(LayoutInflater layoutInflater, Context
+    static public Quadruple<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText> getConfirmDialogChangePassword(LayoutInflater layoutInflater, Context
             context) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         AlertDialog alertDialog = null;
-        Quadruple<AlertDialog, MaterialButton, MaterialButton, TextInputEditText> penta = new Quadruple<>();
+        Quadruple<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText> penta = new Quadruple<>();
         try {
 
             View mView = layoutInflater.inflate(R.layout.database_change_password_dialog_layout, null);
@@ -110,7 +111,7 @@ public class DatabaseCreateDialogUtil {
             alertDialog.getWindow().setGravity(Gravity.CENTER);
             //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton save = mView.findViewById(R.id.saveDatabase);
-            MaterialButton cancel = mView.findViewById(R.id.cancelDatabase);
+            FloatingActionButton cancel = mView.findViewById(R.id.cancelDatabase);
             cancel.setOnClickListener(v -> {
                 penta.first.dismiss();
             });
