@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -34,7 +35,7 @@ public class SearchDialogUtil {
             alertDialog.getWindow().setGravity(Gravity.CENTER);
             //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
             MaterialButton yes = mView.findViewById(R.id.confirmSearch);
-            MaterialButton no = mView.findViewById(R.id.searchCancel);
+            FloatingActionButton no = mView.findViewById(R.id.searchCancel);
             TextInputEditText searchText = mView.findViewById(R.id.searchText);
             no.setOnClickListener(v -> {
                 triplet.first.dismiss();
