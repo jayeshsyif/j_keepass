@@ -342,7 +342,9 @@ public class FieldUtil {
         return triplet;
     }
 
-    public Pair<View, TextInputEditText> getDatePickerTextField(LayoutInflater inflater, String hint, Date currentDate) {
+    public Pair<View, TextInputEditText> getDatePickerTextField(LayoutInflater inflater, String hint, Date toBeDisplayedDateObj) {
+        Calendar toBeDisplayedDate = Calendar.getInstance();
+        toBeDisplayedDate.setTime(toBeDisplayedDateObj);
         final Pair<View, TextInputEditText> pair = new Pair<View, TextInputEditText>();
         final View viewToLoad = inflater.inflate(R.layout.field_date_picker_layout, null);
         final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
@@ -356,7 +358,7 @@ public class FieldUtil {
         field.setInputType(InputType.TYPE_NULL);
         field.setTransformationMethod(null);
         //field.setHint(hint);
-        field.setText(Util.convertDateToString(currentDate));
+        field.setText(Util.convertDateToString(toBeDisplayedDateObj));
         final ImageButton picker = viewToLoad.findViewById(R.id.picker);
         picker.setOnClickListener(v -> {
             Calendar currentCalender = Calendar.getInstance(TimeZone.getDefault());
@@ -368,11 +370,12 @@ public class FieldUtil {
                     currentCalender.set(year, month, dayOfMonth, hourOfDay, minute);
                     selectedExpiryDate.set(currentCalender.getTime());
                     field.setText(Util.convertDateToString(selectedExpiryDate.get()));
-                }, currentCalender.get(Calendar.HOUR_OF_DAY), currentCalender.get(Calendar.MINUTE), true);
+                }, toBeDisplayedDate.get(Calendar.HOUR_OF_DAY), toBeDisplayedDate.get(Calendar.MINUTE), true);
                 timePickerDialog.show();
             },
-                    currentCalender.get(Calendar.YEAR), currentCalender.get(Calendar.MONTH),
-                    currentCalender.get(Calendar.DAY_OF_MONTH));
+                    toBeDisplayedDate.get(Calendar.YEAR), toBeDisplayedDate.get(Calendar.MONTH),
+                    toBeDisplayedDate.get(Calendar.DAY_OF_MONTH));
+
             datePickerDialog.show();
         });
         LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);

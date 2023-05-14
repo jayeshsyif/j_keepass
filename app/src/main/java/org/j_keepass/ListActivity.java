@@ -52,7 +52,10 @@ import org.linguafranca.pwdb.kdbx.KdbxCreds;
 
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -195,12 +198,26 @@ public class ListActivity extends AppCompatActivity {
             binding.justNothingTextView.setVisibility(View.GONE);
         }
         binding.groupScrollView.fullScroll(View.FOCUS_UP);
-        ProgressDialogUtil.setLoadingProgress(alertDialog,60);
-        for (Group<?, ?, ?, ?> g : group.getGroups()) {
+        ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
+        ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
+        Collections.sort(gList, new Comparator<Group<?, ?, ?, ?>>() {
+            @Override
+            public int compare(Group<?, ?, ?, ?> o1, Group<?, ?, ?, ?> o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        for (Group<?, ?, ?, ?> g : gList) {
             addGroupOnUi(g, isFromBack);
         }
-        ProgressDialogUtil.setLoadingProgress(alertDialog,80);
-        for (Entry<?, ?, ?, ?> e : group.getEntries()) {
+        ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
+        Collections.sort(eList, new Comparator<Entry<?, ?, ?, ?>>() {
+            @Override
+            public int compare(Entry<?, ?, ?, ?> o1, Entry<?, ?, ?, ?> o2) {
+                return o1.getTitle().compareTo(o2.getTitle());
+            }
+        });
+        ProgressDialogUtil.setLoadingProgress(alertDialog, 80);
+        for (Entry<?, ?, ?, ?> e : eList) {
             addEntryOnUi(e, isFromBack, false);
         }
     }
@@ -251,22 +268,22 @@ public class ListActivity extends AppCompatActivity {
             Common.group = Common.group.getParent();
             final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
             ProgressDialogUtil.showLoadingDialog(alertDialog);
-            ProgressDialogUtil.setLoadingProgress(alertDialog,20);
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
             new Thread(() -> {
                 runOnUiThread(() -> {
                     listAndShowGroupsAndEntries(Common.group, false, alertDialog);
-                    ProgressDialogUtil.setLoadingProgress(alertDialog,99);
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 99);
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 });
             }).start();
         } else if (Common.group != null && isSearchView) {
             final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
             ProgressDialogUtil.showLoadingDialog(alertDialog);
-            ProgressDialogUtil.setLoadingProgress(alertDialog,20);
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
             new Thread(() -> {
                 runOnUiThread(() -> {
                     listAndShowGroupsAndEntries(Common.group, false, alertDialog);
-                    ProgressDialogUtil.setLoadingProgress(alertDialog,99);
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 99);
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 });
             }).start();
@@ -288,14 +305,14 @@ public class ListActivity extends AppCompatActivity {
             isSearchView = false;
             final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), ListActivity.this);
             ProgressDialogUtil.showLoadingDialog(alertDialog);
-            ProgressDialogUtil.setLoadingProgress(alertDialog,20);
+            ProgressDialogUtil.setLoadingProgress(alertDialog, 20);
             new Thread(() -> {
-               runOnUiThread(() -> {
-                   ProgressDialogUtil.setLoadingProgress(alertDialog,50);
-                   listAndShowGroupsAndEntries(g, false, alertDialog);
-                   ProgressDialogUtil.setLoadingProgress(alertDialog,99);
-                   ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-               });
+                runOnUiThread(() -> {
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
+                    listAndShowGroupsAndEntries(g, false, alertDialog);
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 99);
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                });
             }).start();
 
         });

@@ -28,6 +28,7 @@
                 android:layout_marginLeft="@dimen/kp_margin"
                 android:layout_marginRight="@dimen/kp_margin"
                 android:layout_marginTop="@dimen/fab_new_margin"
+                android:layout_marginBottom="@dimen/fab_new_margin"
                 android:orientation="vertical">
 
                 <com.google.android.material.button.MaterialButton
