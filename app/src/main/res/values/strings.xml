@@ -20,6 +20,7 @@
     <string name="getRandomPwd">New Random Password</string>
     <string name="addGroup">Add Group</string>
     <string name="addEntry">Add Entry</string>
+    <string name="importComfirmText">Do you want to Import and store it for further use?</string>
 
     <string name="save">Save</string>
 
@@ -121,6 +122,8 @@
     <string name="changeLogsVer641ChangesText">   Minor fixes.</string>
     <string name="changeLogsVer65Text">Version 6.5</string>
     <string name="changeLogsVer65ChangesText">   Change password added. UI update.</string>
+    <string name="changeLogsVer651Text">Version 6.5.1</string>
+    <string name="changeLogsVer651ChangesText">   Change password bug fix. Sorting of folder and entries added. Import added when opening file from outside of app.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
