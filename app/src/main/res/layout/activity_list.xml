@@ -28,8 +28,8 @@
                 android:layout_weight="80"
                 android:fontFamily="@font/righteous"
                 android:gravity="top"
-                android:text="@string/groupName"
                 android:singleLine="true"
+                android:text="@string/groupName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
@@ -45,8 +45,131 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_always_1"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/entriesStatistics"
+                        android:textAlignment="viewStart"
+                        android:layout_marginTop="@dimen/kp_button_margin"
+                        android:layout_marginBottom="@dimen/kp_button_margin"
+                        android:textColor="@color/kp_grey"
+                        android:textStyle="italic"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:layout_margin="@dimen/kp_always_1"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/totalCountDisplayLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:layout_margin="@dimen/kp_always_1"
+                                android:layout_weight="1"
+                                android:background="@color/kp_static_dark_blue"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/totalCountTextDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/kp_always_1"
+                                    android:layout_weight="1"
+                                    android:text="@string/total"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/kp_static_white"></TextView>
+
+                                <TextView
+                                    android:id="@+id/totalCountDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/kp_always_1"
+                                    android:layout_weight="1"
+                                    android:text="0"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/kp_static_white"
+                                    android:textStyle="bold"></TextView>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/totalExpiredCountDisplayLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:layout_margin="@dimen/kp_always_1"
+                                android:layout_weight="1"
+                                android:background="@color/kp_red"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/totalExpiredCountTextDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/kp_always_1"
+                                    android:layout_weight="1"
+                                    android:text="@string/expired"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/kp_static_white"></TextView>
+
+                                <TextView
+                                    android:id="@+id/totalExpiredCountDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/kp_always_1"
+                                    android:layout_weight="1"
+                                    android:text="0"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/kp_static_white"
+                                    android:textStyle="bold"></TextView>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/totalExpiringSoonCountDisplayLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:layout_margin="@dimen/kp_always_1"
+                                android:layout_weight="1"
+                                android:background="@color/kp_coral"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/totalExpiringSoonCountTextDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/kp_always_1"
+                                    android:layout_weight="1"
+                                    android:text="@string/expiringSoon"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/kp_static_white"></TextView>
+
+                                <TextView
+                                    android:id="@+id/totalExpiringSoonCountDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/kp_always_1"
+                                    android:layout_weight="1"
+                                    android:text="0"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/kp_static_white"
+                                    android:textStyle="bold"></TextView>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/justGroupsTextView"
@@ -76,8 +199,8 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
-                        android:textStyle="italic"
                         android:text="@string/entries"
+                        android:textStyle="italic"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -91,13 +214,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
-                        android:visibility="gone"
-                        android:text="@string/nothingHere"></TextView>
+                        android:gravity="center"
+                        android:text="@string/nothingHere"
+                        android:visibility="gone"></TextView>
                 </LinearLayout>
             </ScrollView>
 

@@ -5,4 +5,5 @@
     <dimen name="kp_always_0">0pt</dimen>
     <dimen name="kp_always_1">1pt</dimen>
     <dimen name="kp_group_name_margin">0pt</dimen>
+    <dimen name="kp_group_name_text_size">6pt</dimen>
 </resources>

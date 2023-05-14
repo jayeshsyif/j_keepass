@@ -146,4 +146,9 @@
     <string name="importDeclaration">Please export and save database before uninstallation of application</string>
 
     <string name="themeCode">themeCode</string>
+
+    <string name="total">Total</string>
+    <string name="expired">Expired</string>
+    <string name="expiringSoon">Expiring soon</string>
+    <string name="entriesStatistics">Statistics (Entries)</string>
 </resources>

@@ -69,6 +69,7 @@ public class ListActivity extends AppCompatActivity {
 
     private static Date currentDate = null;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,8 +100,139 @@ public class ListActivity extends AppCompatActivity {
                     if (group != null) {
                         ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
                         listAndShowGroupsAndEntries(group, false, alertDialog);
-                        ProgressDialogUtil.setLoadingProgress(alertDialog, 80);
+                        ProgressDialogUtil.setLoadingProgress(alertDialog, 70);
                     }
+                    {
+                        List<?> allEntriesList = database.findEntries(new Entry.Matcher() {
+                            @Override
+                            public boolean matches(Entry entry) {
+                                return entry.getTitle().length() > 0;
+                            }
+                        });
+                        if (allEntriesList != null) {
+                            binding.totalCountDisplay.setText("" + allEntriesList.size());
+                            binding.totalCountTextDisplay.setOnClickListener(v -> {
+                                binding.totalCountDisplayLayout.performClick();
+                            });
+                            binding.totalCountDisplay.setOnClickListener(v -> {
+                                binding.totalCountDisplayLayout.performClick();
+                            });
+                            binding.totalCountDisplayLayout.setOnClickListener(v -> {
+                                final AlertDialog alertDialogL = ProgressDialogUtil.getLoading(LayoutInflater.from(v.getContext()), v.getContext());
+                                ProgressDialogUtil.showLoadingDialog(alertDialogL);
+                                ProgressDialogUtil.setLoadingProgress(alertDialogL, 10);
+                                new Thread(() -> {
+                                    runOnUiThread(() -> {
+                                        Common.group = Common.database.getRootGroup();
+                                        listAndShowGroupsAndEntries(Common.group, false, alertDialogL);
+                                        ProgressDialogUtil.setLoadingProgress(alertDialogL, 100);
+                                        ProgressDialogUtil.dismissLoadingDialog(alertDialogL);
+                                    });
+                                }).start();
+                            });
+                        }
+                    }
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 80);
+                    {
+                        List<?> expiredList = database.findEntries(new Entry.Matcher() {
+                            @Override
+                            public boolean matches(Entry entry) {
+                                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                                return (daysToExpire <= 0);
+                            }
+                        });
+                        if (expiredList != null) {
+                            binding.totalExpiredCountDisplay.setText("" + expiredList.size());
+                            binding.totalExpiredCountDisplay.setOnClickListener(v -> {
+                                binding.totalExpiredCountDisplayLayout.performClick();
+                            });
+                            binding.totalExpiredCountTextDisplay.setOnClickListener(v -> {
+                                binding.totalExpiredCountDisplayLayout.performClick();
+                            });
+                            binding.totalExpiredCountDisplayLayout.setOnClickListener(v -> {
+                                final AlertDialog alertDialogL = ProgressDialogUtil.getLoading(LayoutInflater.from(v.getContext()), v.getContext());
+                                ProgressDialogUtil.showLoadingDialog(alertDialogL);
+                                ProgressDialogUtil.setLoadingProgress(alertDialogL, 10);
+                                new Thread(() -> {
+                                    runOnUiThread(() -> {
+                                        binding.groupsLinearLayout.removeAllViews();
+                                        binding.entriesLinearLayout.removeAllViews();
+                                        binding.groupScrollView.fullScroll(View.FOCUS_UP);
+                                        binding.groupName.setText(getString(R.string.expired));
+                                        //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                                        binding.justGroupsTextView.setVisibility(View.GONE);
+                                        if (expiredList != null && expiredList.size() > 0) {
+                                            binding.justEntriesTextView.setVisibility(View.VISIBLE);
+                                            binding.justNothingTextView.setVisibility(View.GONE);
+                                        } else {
+                                            binding.justEntriesTextView.setVisibility(View.GONE);
+                                            binding.justNothingTextView.setVisibility(View.VISIBLE);
+                                            binding.justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                                        }
+                                        ProgressDialogUtil.setLoadingProgress(alertDialogL, 50);
+                                        for (int eCount = 0; eCount < expiredList.size(); eCount++) {
+                                            Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) expiredList.get(eCount);
+                                            addEntryOnUi(localEntry, false, true);
+                                        }
+                                        ProgressDialogUtil.setLoadingProgress(alertDialogL, 100);
+                                        ProgressDialogUtil.dismissLoadingDialog(alertDialogL);
+                                    });
+                                }).start();
+                            });
+                        }
+                    }
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 85);
+                    {
+                        List<?> expiringSoonList = database.findEntries(new Entry.Matcher() {
+                            @Override
+                            public boolean matches(Entry entry) {
+                                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                                return (daysToExpire > 0 && daysToExpire <= 10);
+                            }
+                        });
+                        if (expiringSoonList != null) {
+                            binding.totalExpiringSoonCountDisplay.setText("" + expiringSoonList.size());
+                            binding.totalExpiringSoonCountDisplay.setOnClickListener(v -> {
+                                binding.totalExpiringSoonCountDisplayLayout.performClick();
+                            });
+                            binding.totalExpiringSoonCountTextDisplay.setOnClickListener(v -> {
+                                binding.totalExpiringSoonCountDisplayLayout.performClick();
+                            });
+                            binding.totalExpiringSoonCountDisplay.setOnClickListener(v -> {
+                                final AlertDialog alertDialogL = ProgressDialogUtil.getLoading(LayoutInflater.from(v.getContext()), v.getContext());
+                                ProgressDialogUtil.showLoadingDialog(alertDialogL);
+                                ProgressDialogUtil.setLoadingProgress(alertDialogL, 10);
+                                new Thread(() -> {
+                                    runOnUiThread(() -> {
+                                        binding.groupsLinearLayout.removeAllViews();
+                                        binding.entriesLinearLayout.removeAllViews();
+                                        binding.groupScrollView.fullScroll(View.FOCUS_UP);
+                                        binding.groupName.setText(getString(R.string.expired));
+                                        //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                                        binding.justGroupsTextView.setVisibility(View.GONE);
+                                        if (expiringSoonList != null && expiringSoonList.size() > 0) {
+                                            binding.justEntriesTextView.setVisibility(View.VISIBLE);
+                                            binding.justNothingTextView.setVisibility(View.GONE);
+                                        } else {
+                                            binding.justEntriesTextView.setVisibility(View.GONE);
+                                            binding.justNothingTextView.setVisibility(View.VISIBLE);
+                                            binding.justNothingTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+                                        }
+                                        ProgressDialogUtil.setLoadingProgress(alertDialogL, 50);
+                                        for (int eCount = 0; eCount < expiringSoonList.size(); eCount++) {
+                                            Entry<?, ?, ?, ?> localEntry = (Entry<?, ?, ?, ?>) expiringSoonList.get(eCount);
+                                            addEntryOnUi(localEntry, false, true);
+                                        }
+                                        ProgressDialogUtil.setLoadingProgress(alertDialogL, 100);
+                                        ProgressDialogUtil.dismissLoadingDialog(alertDialogL);
+                                    });
+                                }).start();
+                            });
+                        }
+                    }
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 });
             }).start();
