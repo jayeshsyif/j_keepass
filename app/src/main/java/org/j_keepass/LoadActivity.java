@@ -112,7 +112,16 @@ public class LoadActivity extends AppCompatActivity {
         banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
         banner.show();
         if (isFileAvailable) {
-            loadFile();
+            Triplet<AlertDialog, MaterialButton, MaterialButton> importConfirmDialog = ConfirmDialogUtil.getImportConfirmDialog(getLayoutInflater(), this);
+            importConfirmDialog.third.setOnClickListener(v -> {
+                importConfirmDialog.first.dismiss();
+                loadFile();
+            });
+            importConfirmDialog.second.setOnClickListener(v -> {
+                importConfirmDialog.first.dismiss();
+                importFile();
+            });
+            ConfirmDialogUtil.showDialog(importConfirmDialog.first);
         }
         dirPath = getFilesDir().getPath() + File.separator + "org.j_keepass";
         subFilesDirPath = getFilesDir().getPath() + File.separator + "org.j_keepass" + File.separator + "kdbxfiles";
@@ -123,7 +132,7 @@ public class LoadActivity extends AppCompatActivity {
             binding.kdbxFileName.setVisibility(View.VISIBLE);
             binding.kdbxFileGotPasswordLayout.setVisibility(View.VISIBLE);
             binding.justDatabaseText.setVisibility(View.GONE);
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword);
+            //ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword);
         } else {
             binding.kdbxFileName.setVisibility(View.GONE);
             binding.openImportLayout.setVisibility(View.VISIBLE);
@@ -325,7 +334,10 @@ public class LoadActivity extends AppCompatActivity {
                 getContentResolver().takePersistableUriPermission(kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 this.grantUriPermission(this.getPackageName(), kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+                if(!isFileAvailable)
+                {
+                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+                }
             }
             try {
                 Cursor returnCursor =
@@ -337,6 +349,12 @@ public class LoadActivity extends AppCompatActivity {
             } catch (Exception e) {
                 fileName = e.getMessage();
             }
+        }
+    }
+    private void importFile() {
+        if (kdbxFileUri != null) {
+            loadFile();
+            copyFile();
         }
     }
 
