@@ -32,6 +32,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -110,7 +111,7 @@ public class ListActivity extends AppCompatActivity {
                             }
                         });
                         if (allEntriesList != null) {
-                            binding.totalCountDisplay.setText("" + allEntriesList.size());
+                            ((Chip) binding.totalCountDisplay).setText("" + allEntriesList.size());
                             binding.totalCountTextDisplay.setOnClickListener(v -> {
                                 binding.totalCountDisplayLayout.performClick();
                             });
@@ -130,6 +131,9 @@ public class ListActivity extends AppCompatActivity {
                                     });
                                 }).start();
                             });
+                            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+                            binding.totalCountDisplayLayout.setVisibility(View.VISIBLE);
+                            binding.totalCountDisplayLayout.setLayoutAnimation(lac);
                         }
                     }
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 80);
@@ -143,7 +147,7 @@ public class ListActivity extends AppCompatActivity {
                             }
                         });
                         if (expiredList != null) {
-                            binding.totalExpiredCountDisplay.setText("" + expiredList.size());
+                            ((Chip) binding.totalExpiredCountDisplay).setText("" + expiredList.size());
                             binding.totalExpiredCountDisplay.setOnClickListener(v -> {
                                 binding.totalExpiredCountDisplayLayout.performClick();
                             });
@@ -180,6 +184,9 @@ public class ListActivity extends AppCompatActivity {
                                     });
                                 }).start();
                             });
+                            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+                            binding.totalExpiredCountDisplayLayout.setVisibility(View.VISIBLE);
+                            binding.totalExpiredCountDisplayLayout.setLayoutAnimation(lac);
                         }
                     }
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 85);
@@ -193,7 +200,7 @@ public class ListActivity extends AppCompatActivity {
                             }
                         });
                         if (expiringSoonList != null) {
-                            binding.totalExpiringSoonCountDisplay.setText("" + expiringSoonList.size());
+                            ((Chip) binding.totalExpiringSoonCountDisplay).setText("" + expiringSoonList.size());
                             binding.totalExpiringSoonCountDisplay.setOnClickListener(v -> {
                                 binding.totalExpiringSoonCountDisplayLayout.performClick();
                             });
@@ -209,7 +216,7 @@ public class ListActivity extends AppCompatActivity {
                                         binding.groupsLinearLayout.removeAllViews();
                                         binding.entriesLinearLayout.removeAllViews();
                                         binding.groupScrollView.fullScroll(View.FOCUS_UP);
-                                        binding.groupName.setText(getString(R.string.expired));
+                                        binding.groupName.setText(getString(R.string.expiringSoon));
                                         //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
                                         binding.justGroupsTextView.setVisibility(View.GONE);
                                         if (expiringSoonList != null && expiringSoonList.size() > 0) {
@@ -230,6 +237,9 @@ public class ListActivity extends AppCompatActivity {
                                     });
                                 }).start();
                             });
+                            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+                            binding.totalExpiringSoonCountDisplayLayout.setVisibility(View.VISIBLE);
+                            binding.totalExpiringSoonCountDisplayLayout.setLayoutAnimation(lac);
                         }
                     }
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 90);

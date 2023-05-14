@@ -150,5 +150,8 @@
     <string name="total">Total</string>
     <string name="expired">Expired</string>
     <string name="expiringSoon">Expiring soon</string>
+    <string name="totalEntries">Total (Entries)</string>
+    <string name="expiredEntries">Expired (Entries)</string>
+    <string name="expiringSoonEntries">Expiring soon (Entries)</string>
     <string name="entriesStatistics">Statistics (Entries)</string>
 </resources>

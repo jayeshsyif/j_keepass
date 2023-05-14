@@ -28,8 +28,8 @@
                 android:layout_weight="80"
                 android:fontFamily="@font/righteous"
                 android:gravity="center"
-                android:text="@string/groupName"
                 android:singleLine="true"
+                android:text="@string/groupName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_dark_blue"
@@ -52,10 +52,12 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
+                        android:layout_weight="1"
                         android:text="@string/entriesStatistics"
                         android:textAlignment="viewStart"
                         android:textColor="@color/kp_grey"
-                        android:textStyle="italic"></TextView>
+                        android:textStyle="italic"
+                        android:visibility="gone"></TextView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -78,8 +80,8 @@
                                 android:layout_gravity="end"
                                 android:layout_margin="@dimen/kp_always_1"
                                 android:layout_weight="1"
-                                android:background="@color/kp_static_dark_blue"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/totalCountTextDisplay"
@@ -87,20 +89,24 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
-                                    android:text="@string/total"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/kp_static_white"></TextView>
+                                    android:backgroundTint="@color/kp_grey"
+                                    android:gravity="center"
+                                    android:text="@string/totalEntries"
+                                    android:textSize="@dimen/kp_small_text_size"></TextView>
 
-                                <TextView
+                                <com.google.android.material.chip.Chip
                                     android:id="@+id/totalCountDisplay"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
+                                    android:backgroundTint="@color/kp_static_dark_blue"
+                                    android:gravity="center"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
-                                    android:textStyle="bold"></TextView>
+                                    android:textSize="@dimen/kp_small_text_size"
+                                    android:textStyle="bold"></com.google.android.material.chip.Chip>
                             </LinearLayout>
 
                             <LinearLayout
@@ -110,8 +116,8 @@
                                 android:layout_gravity="end"
                                 android:layout_margin="@dimen/kp_always_1"
                                 android:layout_weight="1"
-                                android:background="@color/kp_red"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/totalExpiredCountTextDisplay"
@@ -119,20 +125,23 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
-                                    android:text="@string/expired"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/kp_static_white"></TextView>
+                                    android:backgroundTint="@color/kp_grey"
+                                    android:gravity="center"
+                                    android:text="@string/expiredEntries"
+                                    android:textSize="@dimen/kp_small_text_size"></TextView>
 
-                                <TextView
+                                <com.google.android.material.chip.Chip
                                     android:id="@+id/totalExpiredCountDisplay"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
+                                    android:backgroundTint="@color/kp_red"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
-                                    android:textStyle="bold"></TextView>
+                                    android:textSize="@dimen/kp_small_text_size"
+                                    android:textStyle="bold"></com.google.android.material.chip.Chip>
                             </LinearLayout>
 
                             <LinearLayout
@@ -142,8 +151,8 @@
                                 android:layout_gravity="end"
                                 android:layout_margin="@dimen/kp_always_1"
                                 android:layout_weight="1"
-                                android:background="@color/kp_coral"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/totalExpiringSoonCountTextDisplay"
@@ -151,21 +160,25 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
-                                    android:text="@string/expiringSoon"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/kp_static_white"></TextView>
+                                    android:backgroundTint="@color/kp_grey"
+                                    android:gravity="center"
+                                    android:text="@string/expiringSoonEntries"
+                                    android:textSize="@dimen/kp_small_text_size"></TextView>
 
-                                <TextView
+                                <com.google.android.material.chip.Chip
                                     android:id="@+id/totalExpiringSoonCountDisplay"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
+                                    android:backgroundTint="@color/kp_coral"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
-                                    android:textStyle="bold"></TextView>
+                                    android:textSize="@dimen/kp_small_text_size"
+                                    android:textStyle="bold"></com.google.android.material.chip.Chip>
                             </LinearLayout>
+
                         </LinearLayout>
                     </LinearLayout>
 
@@ -212,13 +225,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
-                        android:visibility="gone"
-                        android:text="@string/nothingHere"></TextView>
+                        android:gravity="center"
+                        android:text="@string/nothingHere"
+                        android:visibility="gone"></TextView>
                 </LinearLayout>
             </ScrollView>
 
