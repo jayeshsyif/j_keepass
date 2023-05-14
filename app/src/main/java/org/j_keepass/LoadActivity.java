@@ -877,30 +877,52 @@ public class LoadActivity extends AppCompatActivity {
                         });
                         ConfirmDialogUtil.showDialog(confirmDialog.first);
                     } else if (menuItem.getItemId() == R.id.moreOptionChangePassword) {
-                        Quadruple<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText> confirmDialog
+                        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> confirmDialog
                                 = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
                         confirmDialog.second.setOnClickListener(v1 -> {
                             if (!Common.isCodecAvailable) {
                                 ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
                             } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
                                 ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                            } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
+                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
                             } else {
-                                try {
-                                    kdbxFileUri = Uri.fromFile(f);
-                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
-                                    Database<?, ?, ?, ?> database = getDummyDatabase();
-                                    OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
-                                    database.save(creds, fileOutputStream);
-                                    fetchAndShowFiles();
-                                    kdbxFileUri = null;
-                                    if (v1 != null) {
-                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                        imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
-                                    }
-                                    confirmDialog.first.dismiss();
-                                } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
+                                if (v1 != null) {
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
                                 }
+                                confirmDialog.first.dismiss();
+                                AlertDialog changePasswordDialog = ProgressDialogUtil.getSaving(LayoutInflater.from(v1.getContext()), v1.getContext());
+                                ProgressDialogUtil.showSavingDialog(changePasswordDialog);
+                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 10);
+                                new Thread(() -> {
+                                    runOnUiThread(() -> {
+                                        try {
+                                            kdbxFileUri = Uri.fromFile(f);
+                                            KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
+                                            Database<?, ?, ?, ?> database = null;
+                                            ProgressDialogUtil.setSavingProgress(changePasswordDialog, 20);
+                                            InputStream inputStream = getContentResolver().openInputStream(kdbxFileUri);
+                                            database = SimpleDatabase.load(creds, inputStream);
+                                            ProgressDialogUtil.setSavingProgress(changePasswordDialog, 50);
+                                            if (database != null) {
+                                                OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                                                KdbxCreds newCreds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
+                                                database.save(newCreds, fileOutputStream);
+                                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 60);
+                                                fetchAndShowFiles();
+                                                kdbxFileUri = null;
+                                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
+                                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
+                                            } else {
+                                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
+                                            }
+                                        } catch (Exception e) {
+                                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
+                                        }
+                                        ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
+                                    });
+                                }).start();
                             }
                         });
                         DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
@@ -922,7 +944,7 @@ public class LoadActivity extends AppCompatActivity {
             popup.show();
         });
         TextView databaseMoreInfo = viewToLoad.findViewById(R.id.databaseMoreInfo);
-        databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()));
+        databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()) + " ");
         databaseMoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);

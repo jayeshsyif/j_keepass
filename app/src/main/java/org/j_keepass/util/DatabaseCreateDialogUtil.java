@@ -95,11 +95,11 @@ public class DatabaseCreateDialogUtil {
         return penta;
     }
 
-    static public Quadruple<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText> getConfirmDialogChangePassword(LayoutInflater layoutInflater, Context
+    static public Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> getConfirmDialogChangePassword(LayoutInflater layoutInflater, Context
             context) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         AlertDialog alertDialog = null;
-        Quadruple<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText> penta = new Quadruple<>();
+        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> penta = new Penta();
         try {
 
             View mView = layoutInflater.inflate(R.layout.database_change_password_dialog_layout, null);
@@ -118,7 +118,8 @@ public class DatabaseCreateDialogUtil {
 
             penta.second = save;
             penta.third = cancel;
-            penta.fourth = mView.findViewById(R.id.databaseNewPassword);
+            penta.fourth = mView.findViewById(R.id.databaseOldPassword);
+            penta.fifth = mView.findViewById(R.id.databaseNewPassword);
         } catch (Exception e) {
             alertDialog = alert.create();
         }

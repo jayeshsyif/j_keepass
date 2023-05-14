@@ -28,7 +28,7 @@
     <string name="emptyPasswordError">Password cannot be Empty.</string>
     <string name="emptyFileError">Please select kdbx File. File not found!</string>
     <string name="invalidFileError">Invalid kdbx File.</string>
-    <string name="noDBError">No database found in kdbx File.</string>
+    <string name="noDBError">Please check password. No database found in kdbx File.</string>
     <string name="databases">Databases:</string>
 
     <string name="unableToNavigateError">Unable to navigate.</string>
