@@ -207,7 +207,7 @@ public class ListActivity extends AppCompatActivity {
                             binding.totalExpiringSoonCountTextDisplay.setOnClickListener(v -> {
                                 binding.totalExpiringSoonCountDisplayLayout.performClick();
                             });
-                            binding.totalExpiringSoonCountDisplay.setOnClickListener(v -> {
+                            binding.totalExpiringSoonCountDisplayLayout.setOnClickListener(v -> {
                                 final AlertDialog alertDialogL = ProgressDialogUtil.getLoading(LayoutInflater.from(v.getContext()), v.getContext());
                                 ProgressDialogUtil.showLoadingDialog(alertDialogL);
                                 ProgressDialogUtil.setLoadingProgress(alertDialogL, 10);
@@ -339,6 +339,9 @@ public class ListActivity extends AppCompatActivity {
         } else {
             binding.justNothingTextView.setVisibility(View.GONE);
         }
+        binding.totalCountDisplayLayout.setVisibility(View.GONE);
+        binding.totalExpiredCountDisplayLayout.setVisibility(View.GONE);
+        binding.totalExpiringSoonCountDisplayLayout.setVisibility(View.GONE);
         binding.groupScrollView.fullScroll(View.FOCUS_UP);
         ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
         ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
@@ -737,6 +740,9 @@ public class ListActivity extends AppCompatActivity {
             binding.groupName.setText(getString(R.string.search) + ": " + searchDialog.third.getText().toString());
             //binding.groupName.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
             binding.justGroupsTextView.setVisibility(View.GONE);
+            binding.totalCountDisplayLayout.setVisibility(View.GONE);
+            binding.totalExpiredCountDisplayLayout.setVisibility(View.GONE);
+            binding.totalExpiringSoonCountDisplayLayout.setVisibility(View.GONE);
             TextView justEntriesTextView = binding.justEntriesTextView;
             TextView justNothingTextView = binding.justNothingTextView;
             ProgressDialogUtil.setSearchProgress(alertDialog, 30);
