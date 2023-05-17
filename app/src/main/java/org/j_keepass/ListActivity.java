@@ -529,7 +529,7 @@ public class ListActivity extends AppCompatActivity {
             this.finish();
         });
         TextView dateAndSubInfo = viewToLoad.findViewById(R.id.dateAndSubInfo);
-        String info = Util.convertDateToString(e.getCreationTime());
+        String info = Util.convertDateToString(e.getExpiryTime());
         dateAndSubInfo.setText(info);
         if (showGroupInfo) {
             dateAndSubInfo.setVisibility(View.INVISIBLE);
