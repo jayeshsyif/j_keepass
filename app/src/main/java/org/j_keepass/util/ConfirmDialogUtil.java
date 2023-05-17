@@ -12,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 
 import org.j_keepass.R;
@@ -38,7 +39,10 @@ public class ConfirmDialogUtil {
             no.setOnClickListener(v -> {
                 triplet.first.dismiss();
             });
-
+            FloatingActionButton cancelConfirm = mView.findViewById(R.id.cancelConfirm);
+            cancelConfirm.setOnClickListener(v -> {
+                triplet.third.performClick();
+            });
             triplet.second = yes;
             triplet.third = no;
         } catch (Exception e) {
@@ -78,7 +82,10 @@ public class ConfirmDialogUtil {
             no.setOnClickListener(v -> {
                 triplet.first.dismiss();
             });
-
+            FloatingActionButton cancelConfirm = mView.findViewById(R.id.cancelConfirm);
+            cancelConfirm.setOnClickListener(v -> {
+                triplet.third.performClick();
+            });
             triplet.second = yes;
             triplet.third = no;
         } catch (Exception e) {
