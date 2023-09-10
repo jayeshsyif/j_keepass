@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
     android:layout_gravity="center"
+    android:layout_weight="1"
     android:gravity="center"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/kp_margin"
         android:layout_margin="@dimen/kp_margin"
         android:layout_weight="1"
         android:backgroundTint="@color/kp_white"
+        android:padding="@dimen/kp_margin"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <ScrollView
@@ -27,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/kp_margin"
-                android:padding="@dimen/kp_margin"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/kp_margin">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="200dp"
@@ -68,8 +68,8 @@
                     android:layout_margin="@dimen/kp_card_view_margin"
                     android:layout_weight="1"
                     android:fontFamily="@font/righteous"
-                    android:text="@string/developerName"
                     android:gravity="center"
+                    android:text="@string/developerName"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/kp_dark_blue" />
 
@@ -81,8 +81,8 @@
                     android:text="@string/fullStack"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kp_grey"
-                    android:visibility="gone"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:visibility="gone" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -176,12 +176,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:backgroundTint="@color/kp_light_blue"
-                        android:textColor="@color/kp_grey"
                         android:layout_weight="1"
+                        android:backgroundTint="@color/kp_light_blue"
                         android:gravity="center_vertical"
                         android:text="@string/changeLogs"
-                        android:textAppearance="?android:attr/textAppearanceSmall">
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/kp_grey">
 
                     </TextView>
 
@@ -201,8 +201,34 @@
                     android:id="@+id/changeLogsLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/kp_margin"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="@dimen/kp_margin">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/kp_card_view_margin"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/righteous"
+                        android:gravity="center_vertical"
+                        android:text="@string/changeLogsVer66Text"
+                        android:textAlignment="gravity"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/kp_grey"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/kp_card_view_margin"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/changeLogsVer66ChangesText"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/kp_grey"
+                        android:textColorLink="@color/kp_dark_blue"
+                        android:textSize="@dimen/kp_small_text_size"
+                        android:textStyle="italic" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -735,8 +761,8 @@
         android:layout_gravity="center"
         android:layout_marginEnd="0pt"
         android:backgroundTint="@color/kp_red"
-        app:fabSize="mini"
         app:borderWidth="@dimen/kp_always_0"
+        app:fabSize="mini"
         app:srcCompat="@drawable/ic_close_fill0_wght300_grad_25_opsz24"
         app:tint="@color/kp_static_white" />
 </LinearLayout>
