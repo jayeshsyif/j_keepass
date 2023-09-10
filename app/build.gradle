@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "org.j_keepass"
         minSdk 21
-        targetSdk 32
-        versionCode 24
+        targetSdk 33
+        versionCode 25
         versionName "6.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
