@@ -23,7 +23,7 @@ public class ToastUtil {
         toastText.setText(text);
         snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-        snackbarLayout.setPadding(0, 0, 0, 0);
+        snackbarLayout.setPadding(0, 0, 0, (int) v.getContext().getResources().getDimension(R.dimen.kp_toast_height));
         snackbarLayout.addView(customSnackView, 0);
         snackbarLayout.setAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
         snackbar.show();
@@ -39,7 +39,7 @@ public class ToastUtil {
         toastText.setText(id);
         snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-        snackbarLayout.setPadding(0, 0, 0, 0);
+        snackbarLayout.setPadding(0, 0, 0, (int) v.getContext().getResources().getDimension(R.dimen.kp_toast_height));
         snackbarLayout.addView(customSnackView, 0);
         snackbarLayout.setAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
         //snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);

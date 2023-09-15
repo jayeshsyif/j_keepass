@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:fontFamily="@font/righteous"
+        android:fontFamily="@font/josefin_sans_regular"
         android:gravity="center"
         android:text="@string/loading"
         android:textAlignment="center"
-        android:background="@color/kp_dark_blue"
+        android:background="@color/kp_light_blue"
         android:textColor="@color/kp_white"
         android:textStyle="bold"></TextView>
 

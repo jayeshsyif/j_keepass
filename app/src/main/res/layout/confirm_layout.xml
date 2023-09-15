@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/kp_card_view_margin"
         android:layout_weight="1"
-        android:backgroundTint="@color/kp_white"
+        android:backgroundTint="@color/kp_whitesh_grey"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <ScrollView
@@ -34,11 +34,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:fontFamily="@font/righteous"
+                    android:fontFamily="@font/josefin_sans_regular"
                     android:gravity="center"
                     android:text="@string/areYouSure"
                     android:textAlignment="center"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="@color/kp_light_blue"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -55,10 +55,10 @@
                         android:layout_margin="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
-                        android:fontFamily="@font/righteous"
+                        android:fontFamily="@font/josefin_sans_regular"
                         android:text="@string/yes"
                         android:textAllCaps="true"
-                        android:textColor="@color/kp_dark_blue"
+                        android:textColor="@color/kp_white"
                         android:textStyle="bold">
 
                     </com.google.android.material.button.MaterialButton>
@@ -70,10 +70,10 @@
                         android:layout_margin="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
-                        android:fontFamily="@font/righteous"
+                        android:fontFamily="@font/josefin_sans_regular"
                         android:text="@string/no"
                         android:textAllCaps="true"
-                        android:textColor="@color/kp_dark_blue"
+                        android:textColor="@color/kp_white"
                         android:textStyle="bold">
 
                     </com.google.android.material.button.MaterialButton>

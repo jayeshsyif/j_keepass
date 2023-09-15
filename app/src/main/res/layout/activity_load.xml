@@ -27,12 +27,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:fontFamily="@font/righteous"
+                android:fontFamily="@font/megrim"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/kp_dark_blue"
+                android:background="@color/kp_light_blue"
+                android:textColor="@color/kp_white"
                 android:textStyle="bold" />
 
             <ScrollView
@@ -40,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:background="@color/kp_whitesh_grey"
                 android:layout_weight="20">
 
                 <LinearLayout
@@ -66,12 +68,12 @@
                             android:layout_weight="1"
                             android:backgroundTint="@color/kp_light_blue"
                             android:drawableLeft="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
-                            android:drawableTint="@color/kp_dark_blue"
-                            android:fontFamily="@font/righteous"
+                            android:drawableTint="@color/kp_static_white"
+                            android:fontFamily="@font/mooli"
                             android:text="@string/importStr"
                             android:textAllCaps="true"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textStyle="bold">
+                            android:textColor="@color/kp_white"
+                            android:textStyle="normal">
 
                         </com.google.android.material.button.MaterialButton>
 
@@ -84,12 +86,12 @@
                             android:layout_weight="1"
                             android:backgroundTint="@color/kp_light_blue"
                             android:drawableLeft="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
-                            android:drawableTint="@color/kp_dark_blue"
-                            android:fontFamily="@font/righteous"
+                            android:drawableTint="@color/kp_static_white"
+                            android:fontFamily="@font/mooli"
                             android:text="@string/create"
                             android:textAllCaps="true"
-                            android:textColor="@color/kp_dark_blue"
-                            android:textStyle="bold">
+                            android:textColor="@color/kp_white"
+                            android:textStyle="normal">
 
                         </com.google.android.material.button.MaterialButton>
 
@@ -150,6 +152,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_weight="1"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:backgroundTint="@color/kp_grey"
                         android:textStyle="italic"
                         android:text="@string/databases">
@@ -173,6 +176,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
                         android:gravity="center"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:text="@string/importDatabase"></TextView>
                 </LinearLayout>
             </ScrollView>
@@ -200,7 +204,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:textStyle="bold"
-                        app:tint="@color/kp_dark_blue" />
+                        app:tint="@color/kp_white" />
 
                     <ImageButton
                         android:id="@+id/floatInfo"
@@ -210,9 +214,9 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
-                        android:textColor="@color/kp_dark_blue"
+                        android:textColor="@color/kp_white"
                         android:textStyle="bold"
-                        app:tint="@color/kp_dark_blue" />
+                        app:tint="@color/kp_white" />
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>
@@ -223,11 +227,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
-            android:backgroundTint="@color/kp_dark_blue"
-            android:textColor="@color/kp_white"
+            android:backgroundTint="@color/float_btn_back"
+            android:textColor="@color/float_btn_fore"
             app:icon="@drawable/ic_login_fill0_wght300_grad_25_opsz24"
-            app:iconTint="@color/kp_white"
-            app:tint="@color/kp_white" />
+            app:iconTint="@color/float_btn_fore"
+            app:tint="@color/float_btn_fore" />
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

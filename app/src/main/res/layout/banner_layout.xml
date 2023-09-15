@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/righteous"
+            android:fontFamily="@font/megrim"
             android:gravity="center"
             android:text="@string/app_name"
             android:textAlignment="center"
@@ -36,14 +36,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/bannerAppName"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/kp_always_1"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/righteous"
+            android:fontFamily="@font/josefin_sans_light"
             android:gravity="center"
             android:text="@string/app_desc"
             android:textAlignment="center"
             android:textColor="@color/kp_dark_blue"
-            android:textSize="@dimen/kp_small_text_size"
-            android:textStyle="italic" />
+            android:textSize="@dimen/kp_small_text_size" />
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar"

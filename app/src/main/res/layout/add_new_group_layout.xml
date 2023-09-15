@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/kp_card_view_margin"
-        android:backgroundTint="@color/kp_white"
+        android:backgroundTint="@color/kp_light_blue"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <LinearLayout
@@ -24,7 +24,7 @@
                 android:id="@+id/addGroupTitleName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/kp_group_name_margin"
+                android:padding="@dimen/kp_group_name_margin"
                 android:layout_weight="80"
                 android:fontFamily="@font/righteous"
                 android:gravity="top"
@@ -32,7 +32,8 @@
                 android:textAlignment="gravity"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/kp_dark_blue"
+                android:textColor="@color/kp_white"
+                android:background="@color/kp_light_blue"
                 android:textSize="@dimen/kp_group_name_text_size"
                 android:textStyle="bold"></TextView>
 
@@ -41,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="20"
-                android:background="@color/kp_light_blue">
+                android:background="@color/kp_whitesh_grey">
 
                 <LinearLayout
                     android:id="@+id/addGroupScrollViewLinearLayout"
@@ -55,7 +56,7 @@
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/kp_white"
+                android:background="@color/kp_light_blue"
                 app:labelVisibilityMode="unlabeled"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -74,7 +75,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
                         android:textStyle="bold"
-                        app:tint="@color/kp_dark_blue" />
+                        app:tint="@color/kp_white" />
 
                     <ImageButton
                         android:id="@+id/lockBtn"

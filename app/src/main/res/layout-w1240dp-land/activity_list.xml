@@ -24,27 +24,28 @@
                 android:id="@+id/groupName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/kp_group_name_margin"
                 android:layout_weight="80"
-                android:fontFamily="@font/righteous"
+                android:background="@color/kp_light_blue"
+                android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/kp_dark_blue"
                 android:textSize="@dimen/kp_group_name_text_size"
+                android:textColor="@color/kp_white"
                 android:textStyle="bold"></TextView>
 
             <ScrollView
                 android:id="@+id/groupScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="20">
+                android:layout_weight="20"
+                android:background="@color/kp_whitesh_grey">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="@dimen/kp_always_1"
                     android:orientation="vertical">
 
                     <TextView
@@ -56,7 +57,7 @@
                         android:text="@string/entriesStatistics"
                         android:textAlignment="viewStart"
                         android:textColor="@color/kp_grey"
-                        android:textStyle="italic"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -90,6 +91,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_grey"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="@string/totalEntries"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
@@ -101,6 +103,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_static_dark_blue"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="0"
                                     android:textAlignment="center"
@@ -126,6 +129,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_grey"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="@string/expiredEntries"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
@@ -137,6 +141,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_red"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
@@ -161,6 +166,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_grey"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="@string/expiringSoonEntries"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
@@ -172,6 +178,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_coral"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
@@ -191,8 +198,8 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:text="@string/groups"
-                        android:textStyle="italic"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -209,9 +216,9 @@
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="@color/kp_grey"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:text="@string/entries"
-                        android:textStyle="italic"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -228,7 +235,7 @@
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_grey"
+                        android:backgroundTint="@color/kp_light_blue"
                         android:gravity="center"
                         android:text="@string/nothingHere"
                         android:visibility="gone"></TextView>
@@ -266,7 +273,7 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_export_fill0_wght300_grad_25_opsz24"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue" />
+                            app:tint="@color/kp_white" />
 
                         <ImageButton
                             android:id="@+id/searchBtn"
@@ -277,7 +284,7 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_search_fill0_wght300_grad_25_opsz24"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue" />
+                            app:tint="@color/kp_white" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -300,9 +307,9 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
-                            android:textColor="@color/kp_dark_blue"
+                            android:textColor="@color/kp_white"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue" />
+                            app:tint="@color/kp_white" />
 
                         <ImageButton
                             android:id="@+id/lockBtn"
@@ -326,11 +333,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
-            android:backgroundTint="@color/kp_dark_blue"
-            android:textColor="@color/kp_white"
+            android:backgroundTint="@color/float_btn_back"
+            android:textColor="@color/float_btn_fore"
             app:icon="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
-            app:iconTint="@color/kp_white"
-            app:tint="@color/kp_white" />
+            app:iconTint="@color/float_btn_fore"
+            app:tint="@color/float_btn_fore" />
 
     </androidx.cardview.widget.CardView>
 

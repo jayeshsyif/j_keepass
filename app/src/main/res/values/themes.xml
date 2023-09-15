@@ -8,9 +8,9 @@
         <item name="colorOnPrimary">@color/kp_white</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/kp_dark_blue</item>
-        <item name="colorSecondaryVariant">@color/kp_dark_blue</item>
-        <item name="colorOnSecondary">@color/kp_dark_blue</item>
+        <item name="colorSecondary">@color/kp_light_blue</item>
+        <item name="colorSecondaryVariant">@color/kp_light_blue</item>
+        <item name="colorOnSecondary">@color/kp_light_blue</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/kp_grey</item>
         <!-- Customize your theme here. -->
@@ -29,7 +29,7 @@
 
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@drawable/round_corner_all_size</item>
-        <item name="android:textColor">@color/kp_dark_blue</item>
+        <item name="android:textColor">@color/kp_white</item>
     </style>
 
     <style name="DialogAnimation">

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/kp_margin"
         android:layout_weight="1"
-        android:backgroundTint="@color/kp_white"
+        android:backgroundTint="@color/kp_whitesh_grey"
         android:padding="@dimen/kp_margin"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
@@ -54,7 +54,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/kp_light_blue"
                     android:clickable="false"
-                    android:fontFamily="@font/righteous"
+                    android:fontFamily="@font/josefin_sans_regular"
                     android:text="@string/developer"
                     android:textColor="@color/kp_grey"
                     android:textSize="@dimen/kp_small_text_size">
@@ -67,22 +67,12 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/kp_card_view_margin"
                     android:layout_weight="1"
-                    android:fontFamily="@font/righteous"
+                    android:fontFamily="@font/josefin_sans_regular"
                     android:gravity="center"
                     android:text="@string/developerName"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/kp_dark_blue" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/fullStack"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_grey"
-                    android:textStyle="italic"
-                    android:visibility="gone" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -156,12 +146,13 @@
                     android:layout_weight="1"
                     android:autoLink="web"
                     android:gravity="center"
+                    android:fontFamily="@font/josefin_sans_regular"
                     android:text="@string/credit"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kp_dark_blue"
                     android:textColorLink="@color/kp_dark_blue"
-                    android:textStyle="italic">
+                    android:textStyle="normal">
 
                 </TextView>
 
@@ -177,11 +168,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="@color/kp_dark_blue"
                         android:gravity="center_vertical"
+                        android:fontFamily="@font/josefin_sans_light"
                         android:text="@string/changeLogs"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey">
+                        android:textColor="@color/kp_dark_blue">
 
                     </TextView>
 
@@ -190,11 +182,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_white"
-                        android:fontFamily="@font/righteous"
+                        android:backgroundTint="@color/kp_whitesh_grey"
+                        android:fontFamily="@font/josefin_sans_light"
                         android:gravity="center|right"
                         android:src="@drawable/ic_visibility_fill0_wght300_grad_25_opsz24"
-                        android:tint="@color/kp_grey" />
+                        android:tint="@color/kp_dark_blue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -209,12 +201,12 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
+                        android:fontFamily="@font/josefin_sans_light"
                         android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer66Text"
+                        android:text="@string/changeLogsVer67Text"
                         android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
+                        android:textColor="@color/kp_dark_blue"
                         android:textStyle="normal" />
 
                     <TextView
@@ -223,532 +215,15 @@
                         android:layout_margin="@dimen/kp_card_view_margin"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer66ChangesText"
+                        android:text="@string/changeLogsVer67ChangesText"
                         android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
+                        android:fontFamily="@font/josefin_sans_light"
+                        android:textColor="@color/kp_dark_blue"
                         android:textColorLink="@color/kp_dark_blue"
                         android:textSize="@dimen/kp_small_text_size"
                         android:textStyle="italic" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer651Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer651ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer65Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer65ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer641Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer641ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer64Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer64ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer63Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer63ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer621Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer621ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer62Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer62ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer61Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer61ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer60Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer60ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer53Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer53ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer52Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer52ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer51Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer51ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer5Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer5ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer4Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer4ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer31Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer31ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer3Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer3ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer21Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer21ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer2Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer2ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer11Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer11ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/righteous"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer1Text"
-                        android:textAlignment="gravity"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_grey"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/kp_card_view_margin"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer1ChangesText"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/kp_grey"
-                        android:textColorLink="@color/kp_dark_blue"
-                        android:textSize="@dimen/kp_small_text_size"
-                        android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

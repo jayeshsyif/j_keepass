@@ -2,7 +2,8 @@
     <string name="app_name">JKeePass</string>
     <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
     <string name="title_activity_load">LoadActivity</string>
-    <string name="welcomeBackMsg">Welcome back !</string>
+    <string name="welcomeBackMsg">JKeePass</string>
+
 
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
     <string name="kdbxFile">kdbx File: </string>
@@ -126,6 +127,10 @@
     <string name="changeLogsVer651ChangesText">   Change password bug fix. Sorting of folder and entries added. Import added when opening file from outside of app.</string>
     <string name="changeLogsVer66Text">Version 6.6</string>
     <string name="changeLogsVer66ChangesText">   Added Statistic infos and Bug fixes.</string>
+    <string name="changeLogsVer661Text">Version 6.6.1</string>
+    <string name="changeLogsVer661ChangesText">   Minor UI fixes.</string>
+    <string name="changeLogsVer67Text">Version 6.7</string>
+    <string name="changeLogsVer67ChangesText">   Major UI changes.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

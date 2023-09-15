@@ -9,8 +9,8 @@ android {
         applicationId "org.j_keepass"
         minSdk 21
         targetSdk 33
-        versionCode 25
-        versionName "6.6"
+        versionCode 26
+        versionName "6.6.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

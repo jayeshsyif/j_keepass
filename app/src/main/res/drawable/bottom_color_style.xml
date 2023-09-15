@@ -7,7 +7,7 @@
         android:bottom="0dp">
 
         <shape android:shape="rectangle">
-            <solid android:color="@color/kp_light_blue"/>
+            <solid android:color="@color/kp_changing_white"/>
             <stroke
                 android:width="0.5dp"
                 android:color="@color/kp_dark_blue"/>

@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.J_KeePass" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/kp_dark_blue</item>
+        <item name="colorPrimaryVariant">@color/kp_dark_blue</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/kp_dark_blue</item>
-        <item name="colorSecondaryVariant">@color/kp_light_blue</item>
+        <item name="colorSecondaryVariant">@color/kp_dark_blue</item>
         <item name="colorOnSecondary">@color/kp_dark_blue</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/kp_grey</item>
@@ -18,6 +18,6 @@
 
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@drawable/round_corner_all_size</item>
-        <item name="android:textColor">@color/kp_dark_blue</item>
+        <item name="android:textColor">@color/kp_static_white</item>
     </style>
 </resources>

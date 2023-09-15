@@ -24,15 +24,16 @@
                 android:id="@+id/groupName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/kp_group_name_margin"
                 android:layout_weight="80"
-                android:fontFamily="@font/righteous"
-                android:gravity="top"
+                android:background="@color/kp_light_blue"
+                android:fontFamily="@font/josefin_sans_regular"
+                android:gravity="center_vertical"
+                android:padding="@dimen/kp_group_name_margin"
                 android:singleLine="true"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/kp_dark_blue"
+                android:textColor="@color/kp_white"
                 android:textSize="@dimen/kp_group_name_text_size"
                 android:textStyle="bold"></TextView>
 
@@ -40,7 +41,8 @@
                 android:id="@+id/groupScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="20">
+                android:layout_weight="20"
+                android:background="@color/kp_whitesh_grey">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -57,8 +59,8 @@
                         android:text="@string/entriesStatistics"
                         android:textAlignment="viewStart"
                         android:textColor="@color/kp_grey"
-                        android:visibility="gone"
-                        android:textStyle="italic"></TextView>
+                        android:fontFamily="@font/josefin_sans_extra_light"
+                        android:visibility="gone"></TextView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -90,9 +92,10 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
+                                    android:backgroundTint="@color/kp_grey"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="@string/totalEntries"
-                                    android:backgroundTint="@color/kp_grey"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
 
                                 <com.google.android.material.chip.Chip
@@ -101,7 +104,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
-                                    android:backgroundTint="@color/kp_static_dark_blue"
+                                    android:backgroundTint="@color/kp_light_blue"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="0"
                                     android:textAlignment="center"
@@ -126,9 +130,10 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
+                                    android:backgroundTint="@color/kp_grey"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="@string/expiredEntries"
-                                    android:backgroundTint="@color/kp_grey"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
 
                                 <com.google.android.material.chip.Chip
@@ -138,6 +143,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_red"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
@@ -161,9 +167,10 @@
                                     android:layout_height="match_parent"
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
+                                    android:backgroundTint="@color/kp_grey"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:gravity="center"
                                     android:text="@string/expiringSoonEntries"
-                                    android:backgroundTint="@color/kp_grey"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
 
                                 <com.google.android.material.chip.Chip
@@ -173,6 +180,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_coral"
+                                    android:fontFamily="@font/josefin_sans_regular"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
@@ -188,12 +196,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:text="@string/groups"
-                        android:textStyle="italic"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -211,8 +218,8 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
+                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:text="@string/entries"
-                        android:textStyle="italic"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -267,7 +274,7 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_export_fill0_wght300_grad_25_opsz24"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue" />
+                            app:tint="@color/kp_white" />
 
                         <ImageButton
                             android:id="@+id/searchBtn"
@@ -278,7 +285,7 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_search_fill0_wght300_grad_25_opsz24"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue" />
+                            app:tint="@color/kp_white" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -301,9 +308,9 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
-                            android:textColor="@color/kp_dark_blue"
+                            android:textColor="@color/kp_white"
                             android:textStyle="bold"
-                            app:tint="@color/kp_dark_blue" />
+                            app:tint="@color/kp_white" />
 
                         <ImageButton
                             android:id="@+id/lockBtn"
@@ -327,11 +334,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
-            android:backgroundTint="@color/kp_dark_blue"
-            android:textColor="@color/kp_white"
+            android:backgroundTint="@color/float_btn_back"
+            android:textColor="@color/float_btn_fore"
             app:icon="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
-            app:iconTint="@color/kp_white"
-            app:tint="@color/kp_white" />
+            app:iconTint="@color/float_btn_fore"
+            app:tint="@color/float_btn_fore" />
 
     </androidx.cardview.widget.CardView>
 

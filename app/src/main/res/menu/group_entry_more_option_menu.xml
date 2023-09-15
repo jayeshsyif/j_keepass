@@ -6,7 +6,7 @@
     <item
         android:id="@+id/moreOptionEdit"
         android:icon="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
-        android:iconTint="@color/kp_dark_blue"
+        android:iconTint="@color/kp_static_white"
         android:title="@string/edit"
         app:showAsAction="always|withText"></item>
 
