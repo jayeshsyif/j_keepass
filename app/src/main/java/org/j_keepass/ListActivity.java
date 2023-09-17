@@ -534,7 +534,7 @@ public class ListActivity extends AppCompatActivity {
         if (showGroupInfo) {
             dateAndSubInfo.setVisibility(View.INVISIBLE);
         } else {
-            dateAndSubInfo.setVisibility(View.VISIBLE);
+            dateAndSubInfo.setVisibility(View.INVISIBLE);
         }
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
         //subCountArrowBtn.setVisibility(View.INVISIBLE);

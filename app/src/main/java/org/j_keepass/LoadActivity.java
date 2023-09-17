@@ -634,6 +634,10 @@ public class LoadActivity extends AppCompatActivity {
 
     private void Validate() throws KpCustomException {
         TextInputEditText kdbxPasswordET = binding.kdbxFileGotPassword;
+        if(kdbxFileUri == null)
+        {
+            throw new KpCustomException(R.string.emptyFileError);
+        }
         if (kdbxPasswordET.getText() != null) {
             String kdbxPassword = kdbxPasswordET.getText().toString();
             if (kdbxPassword == null || kdbxPassword.length() <= 0) {

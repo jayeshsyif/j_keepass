@@ -6,19 +6,33 @@
     android:layout_height="@dimen/kp_toast_height"
     android:layout_gravity="center">
 
-
-    <TextView
-        android:id="@+id/toastText"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:fontFamily="@font/josefin_sans_regular"
-        android:gravity="center"
-        android:text="@string/loading"
-        android:textAlignment="center"
-        android:background="@color/kp_light_blue"
-        android:textColor="@color/kp_white"
-        android:textStyle="bold"></TextView>
+        android:layout_weight="1">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="@dimen/kp_card_view_radius"
+            android:gravity="center">
 
+            <TextView
+                android:id="@+id/toastText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@color/kp_light_blue"
+                android:fontFamily="@font/josefin_sans_regular"
+                android:gravity="center"
+                android:padding="@dimen/fab_new_padding"
+                android:text="@string/loading"
+                android:textAlignment="center"
+                android:textColor="@color/kp_white"
+                android:textSize="@dimen/kp_small_text_size"
+                android:textStyle="bold"></TextView>
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 </LinearLayout>

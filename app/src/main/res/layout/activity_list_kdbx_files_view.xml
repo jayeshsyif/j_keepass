@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/kp_card_list_view_margin"
         android:background="@color/kp_whitesh_grey"
-        app:cardCornerRadius="2pt">
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <LinearLayout
             android:layout_width="match_parent"

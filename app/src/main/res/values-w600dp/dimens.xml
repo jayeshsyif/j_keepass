@@ -7,7 +7,7 @@
     <dimen name="kp_card_list_view_top_margin">1pt</dimen>
     <dimen name="kp_card_list_view_bottom_margin">4pt</dimen>
     <dimen name="kp_card_view_padding">2pt</dimen>
-    <dimen name="kp_card_view_radius">3pt</dimen>
+    <dimen name="kp_card_view_radius">2pt</dimen>
     <dimen name="kp_button_margin">5pt</dimen>
     <dimen name="kp_margin">2pt</dimen>
     <dimen name="kp_enter_password_margin">3pt</dimen>

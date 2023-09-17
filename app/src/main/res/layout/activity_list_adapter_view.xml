@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/kp_card_list_view_top_margin"
         android:layout_marginRight="@dimen/kp_card_list_view_right_margin"
         android:layout_marginBottom="@dimen/kp_card_list_view_bottom_margin"
-        app:cardCornerRadius="2pt">
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <LinearLayout
             android:layout_width="match_parent"
