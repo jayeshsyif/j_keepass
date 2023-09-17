@@ -24,17 +24,15 @@
                 android:id="@+id/editEntryTitleNameHeader"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/kp_group_name_margin"
                 android:layout_weight="80"
                 android:fontFamily="@font/josefin_sans_regular"
-                android:gravity="top"
+                android:gravity="center"
                 android:text="@string/entryName"
                 android:singleLine="true"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:background="@color/kp_light_blue"
                 android:textColor="@color/kp_white"
-                android:textSize="@dimen/kp_group_name_text_size"
                 android:textStyle="bold"></TextView>
 
             <ScrollView

@@ -27,14 +27,13 @@
                 android:padding="@dimen/kp_group_name_margin"
                 android:layout_weight="80"
                 android:fontFamily="@font/righteous"
-                android:gravity="top"
+                android:gravity="center"
                 android:text="@string/enterGroupName"
                 android:textAlignment="gravity"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/kp_white"
                 android:background="@color/kp_light_blue"
-                android:textSize="@dimen/kp_group_name_text_size"
                 android:textStyle="bold"></TextView>
 
             <ScrollView
