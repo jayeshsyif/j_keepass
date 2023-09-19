@@ -1,7 +1,5 @@
 package org.j_keepass;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -132,8 +128,7 @@ public class ViewEntryActivity extends AppCompatActivity {
         });
 
         binding.generateNewPassword.setOnClickListener(v -> {
-            AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
-            NewPasswordDialogUtil.showDialog(d);
+            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
         });
 
         binding.edit.setOnClickListener(v -> {

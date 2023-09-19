@@ -262,8 +262,7 @@ public class ListActivity extends AppCompatActivity {
             search(v, this);
         });
         binding.generateNewPassword.setOnClickListener(v -> {
-            AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
-            NewPasswordDialogUtil.showDialog(d);
+            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
         });
 
         binding.exportBtn.setOnClickListener(new View.OnClickListener() {

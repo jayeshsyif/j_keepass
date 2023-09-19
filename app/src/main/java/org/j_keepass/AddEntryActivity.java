@@ -58,8 +58,7 @@ public class AddEntryActivity extends AppCompatActivity {
             binding.addBasicFieldEntryScrollViewLinearLayout.removeAllViews();
             ArrayList<View> viewsToAdd = new ArrayList<View>();
 
-            final Pair<View, TextInputEditText> titleView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                    getString(R.string.entryTitle), "");
+            final Pair<View, TextInputEditText> titleView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.entryTitle), "");
             titleView.second.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -80,29 +79,24 @@ public class AddEntryActivity extends AppCompatActivity {
             viewsToAdd.add(titleView.first);
             fields.add(titleView);
 
-            final Pair<View, TextInputEditText> userNameView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                    getString(R.string.userName), "");
+            final Pair<View, TextInputEditText> userNameView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.userName), "");
             viewsToAdd.add(userNameView.first);
             fields.add(userNameView);
 
-            final Pair<View, TextInputEditText> passwordView = new FieldUtil().getEditPasswordField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                    getString(R.string.password), "");
+            final Pair<View, TextInputEditText> passwordView = new FieldUtil().getEditPasswordField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.password), "");
             viewsToAdd.add(passwordView.first);
             fields.add(passwordView);
 
-            final Pair<View, TextInputEditText> urlView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                    getString(R.string.url), "");
+            final Pair<View, TextInputEditText> urlView = new FieldUtil().getEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.url), "");
             viewsToAdd.add(urlView.first);
             fields.add(urlView);
 
-            final Pair<View, TextInputEditText> notesView = new FieldUtil().getMultiEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                    getString(R.string.notes), "");
+            final Pair<View, TextInputEditText> notesView = new FieldUtil().getMultiEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.notes), "");
             viewsToAdd.add(notesView.first);
             fields.add(notesView);
 
             Date currentDate = Calendar.getInstance().getTime();
-            final Pair<View, TextInputEditText> expiryDatePicker = new FieldUtil().getDatePickerTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                    getString(R.string.expiryDate), currentDate);
+            final Pair<View, TextInputEditText> expiryDatePicker = new FieldUtil().getDatePickerTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.expiryDate), currentDate);
             viewsToAdd.add(expiryDatePicker.first);
             fields.add(expiryDatePicker);
 
@@ -115,8 +109,7 @@ public class AddEntryActivity extends AppCompatActivity {
 
             binding.addMoreFieldBtn.setOnClickListener(v -> {
 
-                final Triplet<View, TextInputEditText, ImageButton> additionalView = new FieldUtil().getAdditionalEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                        getString(R.string.enterFieldValue), "");
+                final Triplet<View, TextInputEditText, ImageButton> additionalView = new FieldUtil().getAdditionalEditTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getString(R.string.enterFieldValue), "");
                 viewsToAdd.add(additionalView.first);
                 Pair<View, TextInputEditText> additionalViewPair = new Pair<>();
                 additionalViewPair.first = additionalView.first;
@@ -145,8 +138,7 @@ public class AddEntryActivity extends AppCompatActivity {
             });
 
             binding.generateNewPassword.setOnClickListener(v -> {
-                AlertDialog d = NewPasswordDialogUtil.getDialog(getLayoutInflater(), binding.getRoot().getContext(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
-                NewPasswordDialogUtil.showDialog(d);
+                NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
             });
             binding.lockBtn.setOnClickListener(v -> {
                 Common.database = null;
@@ -278,12 +270,8 @@ public class AddEntryActivity extends AppCompatActivity {
     private boolean checkAndGetPermission(View v, Activity activity) {
         boolean isOK = false;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(activity, new String[]{
-                                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        READ_EXTERNAL_STORAGE);
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
             }
 
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -292,12 +280,8 @@ public class AddEntryActivity extends AppCompatActivity {
                 ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
             }
         } else {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(activity, new String[]{
-                                Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES},
-                        READ_EXTERNAL_STORAGE);
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
             }
 
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
