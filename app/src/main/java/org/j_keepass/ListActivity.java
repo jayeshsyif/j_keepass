@@ -13,15 +13,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,7 +49,6 @@ import org.linguafranca.pwdb.Group;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -500,41 +496,23 @@ public class ListActivity extends AppCompatActivity {
         }
         subCountArrowBtn.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
-            Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
-            PopupMenu popup = new PopupMenu(wrapper, v);
-            popup.getMenuInflater().inflate(R.menu.group_entry_more_option_menu, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    // Toast message on menu item clicked
-                    if (menuItem.getItemId() == R.id.moreOptionEdit) {
-                        popup.dismiss();
-                        Common.entry = e;
-                        Intent intent = new Intent(ListActivity.this, EditEntryActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("click", "entry");
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                        finish();
-                    } else if (menuItem.getItemId() == R.id.moreOptionDelete) {
-                        popup.dismiss();
-                        deleteEntry(v, ListActivity.this, e);
-                    }
-                    return true;
-                }
-            });
-            Object menuHelper;
-            Class[] argTypes;
-            try {
-                Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
-                fMenuHelper.setAccessible(true);
-                menuHelper = fMenuHelper.get(popup);
-                argTypes = new Class[]{boolean.class};
-                menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
-            } catch (Exception e1) {
 
-            }
-            popup.show();
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(v.getContext());
+            bsd.first.show();
+            bsd.second.get(0).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Common.entry = e;
+                Intent intent = new Intent(ListActivity.this, EditEntryActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("click", "entry");
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            });
+            bsd.second.get(1).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                deleteEntry(v, ListActivity.this, e);
+            });
         });
 
         if (showGroupInfo) {

@@ -30,6 +30,7 @@ public class NewPasswordDialogUtil {
         ImageButton copyBtn = bsd.findViewById(R.id.newPasswordCopy);
         copyBtn.setOnClickListener(v -> {
             if (pwdF.getText() != null) {
+                bsd.dismiss();
                 ClipData clip = ClipData.newPlainText("password", pwdF.getText().toString());
                 clipboard.setPrimaryClip(clip);
                 ToastUtil.showToast(layoutInflater, v, R.string.copiedToClipboard);
