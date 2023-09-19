@@ -30,10 +30,10 @@ public class NewPasswordDialogUtil {
         ImageButton copyBtn = bsd.findViewById(R.id.newPasswordCopy);
         copyBtn.setOnClickListener(v -> {
             if (pwdF.getText() != null) {
+                ToastUtil.showToast(layoutInflater, mView, R.string.copiedToClipboard);
                 bsd.dismiss();
                 ClipData clip = ClipData.newPlainText("password", pwdF.getText().toString());
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(layoutInflater, v, R.string.copiedToClipboard);
             }
         });
         MaterialCheckBox useDigit = bsd.findViewById(R.id.useDigit);
@@ -47,6 +47,7 @@ public class NewPasswordDialogUtil {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
+                    bsd.dismiss();
                     ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
@@ -57,6 +58,7 @@ public class NewPasswordDialogUtil {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
+                    bsd.dismiss();
                     ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
@@ -67,6 +69,7 @@ public class NewPasswordDialogUtil {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
+                    bsd.dismiss();
                     ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
@@ -77,6 +80,7 @@ public class NewPasswordDialogUtil {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
+                    bsd.dismiss();
                     ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
@@ -87,6 +91,7 @@ public class NewPasswordDialogUtil {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
+                    bsd.dismiss();
                     ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
