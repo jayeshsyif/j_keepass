@@ -51,7 +51,7 @@ public class FieldUtil {
         return viewToLoad;
     }
 
-    public View getTextFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+    public View getTextFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString, View anchorView) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
@@ -72,7 +72,7 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString, anchorView);
             }
         });
         LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
@@ -82,7 +82,7 @@ public class FieldUtil {
         return viewToLoad;
     }
 
-    public View getPasswordFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+    public View getPasswordFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString, View anchorView) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
@@ -102,7 +102,7 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString, anchorView);
             }
         });
         LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
@@ -112,7 +112,7 @@ public class FieldUtil {
         return viewToLoad;
     }
 
-    public View getMultiLineTextFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString) {
+    public View getMultiLineTextFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString, View anchorView) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
         final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
@@ -138,7 +138,7 @@ public class FieldUtil {
             if (value != null) {
                 ClipData clip = ClipData.newPlainText(hint, value);
                 clipboard.setPrimaryClip(clip);
-                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString);
+                ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString, anchorView);
             }
         });
         LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);

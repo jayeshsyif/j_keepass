@@ -55,13 +55,13 @@ public class ViewEntryActivity extends AppCompatActivity {
                 ArrayList<View> viewsToAdd = new ArrayList<View>();
                 if (Util.isUsable(finalEntry.getUsername())) {
                     final View userNameView = new FieldUtil().getTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            getString(R.string.userName), finalEntry.getUsername(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                            getString(R.string.userName), finalEntry.getUsername(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
                     viewsToAdd.add(userNameView);
                 }
 
                 if (Util.isUsable(finalEntry.getPassword())) {
                     final View passwordView = new FieldUtil().getPasswordFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            getString(R.string.password), finalEntry.getPassword(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                            getString(R.string.password), finalEntry.getPassword(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
                     viewsToAdd.add(passwordView);
                     binding.entryPasswordCopyFloatBtn.setOnClickListener(v -> {
                         passwordView.findViewById(R.id.fieldCopy).performClick();
@@ -70,12 +70,12 @@ public class ViewEntryActivity extends AppCompatActivity {
 
                 if (Util.isUsable(finalEntry.getUrl())) {
                     final View urlView = new FieldUtil().getTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            getString(R.string.url), finalEntry.getUrl(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                            getString(R.string.url), finalEntry.getUrl(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
                     viewsToAdd.add(urlView);
                 }
                 if (Util.isUsable(finalEntry.getNotes())) {
                     final View notesView = new FieldUtil().getMultiLineTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            getString(R.string.notes), finalEntry.getNotes(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                            getString(R.string.notes), finalEntry.getNotes(), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
                     viewsToAdd.add(notesView);
                 }
                 {
@@ -84,7 +84,7 @@ public class ViewEntryActivity extends AppCompatActivity {
                             if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password")
                                     && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
                                 final View pnView = new FieldUtil().getTextFieldWithCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                                        pn, entry.getProperty(pn), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard));
+                                        pn, entry.getProperty(pn), (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
                                 viewsToAdd.add(pnView);
                             }
                         }
@@ -128,7 +128,7 @@ public class ViewEntryActivity extends AppCompatActivity {
         });
 
         binding.generateNewPassword.setOnClickListener(v -> {
-            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
         });
 
         binding.edit.setOnClickListener(v -> {

@@ -258,7 +258,7 @@ public class ListActivity extends AppCompatActivity {
             search(v, this);
         });
         binding.generateNewPassword.setOnClickListener(v -> {
-            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),binding.getRoot().findViewById(R.id.floatAdd));
         });
 
         binding.exportBtn.setOnClickListener(new View.OnClickListener() {
@@ -276,7 +276,7 @@ public class ListActivity extends AppCompatActivity {
                     chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
                     startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
                 } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
                 }
             }
         });
@@ -550,7 +550,7 @@ public class ListActivity extends AppCompatActivity {
 
                 if (parent == null) {
                     ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Parent is null");
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Parent is null",binding.getRoot().findViewById(R.id.floatAdd));
                 } else {
                     parent.removeGroup(group);
                     Common.group = parent;
@@ -572,10 +572,10 @@ public class ListActivity extends AppCompatActivity {
                             activity.finish();
                         } catch (NoSuchMethodError e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
                         } catch (Exception e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
                         } finally {
                             if (fileOutputStream != null) {
                                 try {
@@ -587,7 +587,7 @@ public class ListActivity extends AppCompatActivity {
                         }
                     } else {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
                     }
                 }
             }).start();
@@ -607,7 +607,7 @@ public class ListActivity extends AppCompatActivity {
 
                 if (parent == null) {
                     ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null");
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null",binding.getRoot().findViewById(R.id.floatAdd));
                 } else {
                     parent.removeEntry(entry);
                     if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && Common.isCodecAvailable) {
@@ -628,10 +628,10 @@ public class ListActivity extends AppCompatActivity {
                             activity.finish();
                         } catch (NoSuchMethodError e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
                         } catch (Exception e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage());
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
                         } finally {
                             if (fileOutputStream != null) {
                                 try {
@@ -643,7 +643,7 @@ public class ListActivity extends AppCompatActivity {
                         }
                     } else {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
                     }
                 }
             }).start();
@@ -723,7 +723,7 @@ public class ListActivity extends AppCompatActivity {
                 getContentResolver().takePersistableUriPermission(newFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 this.grantUriPermission(this.getPackageName(), newFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError,binding.getRoot().findViewById(R.id.floatAdd));
             }
             Database<?, ?, ?, ?> database = Common.database;
             OutputStream fileOutputStream = null;
@@ -733,9 +733,9 @@ public class ListActivity extends AppCompatActivity {
                 fileOutputStream = getContentResolver().openOutputStream(newFile, "wt");
                 database.save(creds, fileOutputStream);
             } catch (NoSuchMethodError e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage());
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage());
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
                 Log.e("KP", "KP error ", e);
             } finally {
                 ProgressDialogUtil.dismissSavingDialog(d);
@@ -760,7 +760,7 @@ public class ListActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
             }
         } else {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -770,7 +770,7 @@ public class ListActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
             }
         }
         return isOK;

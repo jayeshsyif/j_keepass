@@ -169,7 +169,7 @@ public class EditEntryActivity extends AppCompatActivity {
                 });
 
                 binding.generateNewPassword.setOnClickListener(v -> {
-                    NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE));
+                    NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), binding.getRoot().findViewById(R.id.editSaveEntry));
                 });
                 binding.lockBtn.setOnClickListener(v -> {
                     Common.database = null;
@@ -207,7 +207,7 @@ public class EditEntryActivity extends AppCompatActivity {
                 proceed = true;
             } catch (KpCustomException e) {
                 ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, e);
+                ToastUtil.showToast(getLayoutInflater(), v, e,binding.getRoot().findViewById(R.id.editSaveEntry));
             }
             if (proceed) {
                 Entry entry = Common.entry;
@@ -265,10 +265,10 @@ public class EditEntryActivity extends AppCompatActivity {
                         finish();
                     } catch (NoSuchMethodError e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                        ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.editSaveEntry));
                     } catch (Exception e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                        ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.editSaveEntry));
                     } finally {
                         if (fileOutputStream != null) {
                             try {
@@ -280,7 +280,7 @@ public class EditEntryActivity extends AppCompatActivity {
                     }
                 } else {
                     ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.editSaveEntry));
                 }
 
             }
@@ -289,10 +289,10 @@ public class EditEntryActivity extends AppCompatActivity {
 
     private void validate() throws KpCustomException {
 
-        /*if (binding.editEntryTitleName.getText() == null || binding.editEntryTitleName.getText().toString() == null || binding.editEntryTitleName.getText().toString().length() <= 0) {
+        if (binding.editEntryTitleNameHeader.getText() == null || binding.editEntryTitleNameHeader.getText().toString() == null || binding.editEntryTitleNameHeader.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryTitleEmptyErrorMsg);
         }
-        if (binding.editEntryUserName.getText() == null || binding.editEntryUserName.getText().toString() == null || binding.editEntryUserName.getText().toString().length() <= 0) {
+        /*if (binding.editEntryUserName.getText() == null || binding.editEntryUserName.getText().toString() == null || binding.editEntryUserName.getText().toString().length() <= 0) {
             throw new KpCustomException(R.string.entryUsernameEmptyErrorMsg);
         }*/
         if (!Common.isCodecAvailable) {
@@ -310,7 +310,7 @@ public class EditEntryActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.editSaveEntry));
             }
         } else {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -320,7 +320,7 @@ public class EditEntryActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.editSaveEntry));
             }
         }
         return isOK;

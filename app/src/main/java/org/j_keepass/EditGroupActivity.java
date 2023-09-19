@@ -63,7 +63,7 @@ public class EditGroupActivity extends AppCompatActivity {
                         proceed = true;
                     } catch (KpCustomException e) {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, e);
+                        ToastUtil.showToast(getLayoutInflater(), v, e,binding.getRoot().findViewById(R.id.saveGroup));
                     }
 
                     if (proceed) {
@@ -94,10 +94,10 @@ public class EditGroupActivity extends AppCompatActivity {
                                 finish();
                             } catch (NoSuchMethodError e) {
                                 ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.saveGroup));
                             } catch (Exception e) {
                                 ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.saveGroup));
                             } finally {
                                 if (fileOutputStream != null) {
                                     try {
@@ -109,7 +109,7 @@ public class EditGroupActivity extends AppCompatActivity {
                             }
                         } else {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                            ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.saveGroup));
                         }
 
                     }
@@ -154,7 +154,7 @@ public class EditGroupActivity extends AppCompatActivity {
 
     private void validate(String groupName) throws KpCustomException {
 
-        if (groupName == null) {
+        if (groupName == null || groupName.length() <= 0) {
             throw new KpCustomException(R.string.groupNameEmptyErrorMsg);
         }
         if (!Common.isCodecAvailable) {
@@ -172,7 +172,7 @@ public class EditGroupActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.saveGroup));
             }
         } else {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -182,7 +182,7 @@ public class EditGroupActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.saveGroup));
             }
         }
         return isOK;

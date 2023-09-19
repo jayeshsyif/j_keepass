@@ -208,7 +208,7 @@ public class LoadActivity extends AppCompatActivity {
                     chooseFile = Intent.createChooser(chooseFile, "Choose a file");
                     startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
                 } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.okBtn));
                 }
             }
         });
@@ -224,11 +224,11 @@ public class LoadActivity extends AppCompatActivity {
 
                     confirmDialog.second.setOnClickListener(v1 -> {
                         if (!Common.isCodecAvailable) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress,binding.getRoot().findViewById(R.id.okBtn));
                         } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName,binding.getRoot().findViewById(R.id.okBtn));
                         } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
                         } else {
                             String dbName = confirmDialog.fourth.getText().toString();
                             if (!dbName.endsWith("kdbx")) {
@@ -253,7 +253,7 @@ public class LoadActivity extends AppCompatActivity {
                                     }
                                     confirmDialog.first.dismiss();
                                 } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage());
+                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage(),binding.getRoot().findViewById(R.id.okBtn));
                                 }
                             }
                         }
@@ -313,7 +313,7 @@ public class LoadActivity extends AppCompatActivity {
                 this.grantUriPermission(this.getPackageName(), kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } catch (Exception e) {
                 if (!isFileAvailable) {
-                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError,binding.getRoot().findViewById(R.id.okBtn));
                 }
             }
             try {
@@ -344,7 +344,7 @@ public class LoadActivity extends AppCompatActivity {
             Validate();
         } catch (KpCustomException e) {
             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-            ToastUtil.showToast(getLayoutInflater(), v, e);
+            ToastUtil.showToast(getLayoutInflater(), v, e,binding.getRoot().findViewById(R.id.okBtn));
             proceed = false;
         }
         TextInputEditText kdbxPasswordET = binding.kdbxFileGotPassword;
@@ -352,7 +352,7 @@ public class LoadActivity extends AppCompatActivity {
         if (proceed) {
             if (kdbxFileUri == null) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError,binding.getRoot().findViewById(R.id.okBtn));
                 proceed = false;
             } else {
                 /*try {
@@ -374,7 +374,7 @@ public class LoadActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 proceed = false;
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(),binding.getRoot().findViewById(R.id.okBtn));
             }
             ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
             if (inputStream != null) {
@@ -383,11 +383,11 @@ public class LoadActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     proceed = false;
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage());
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(),binding.getRoot().findViewById(R.id.okBtn));
                 }
                 if (database == null) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
                     proceed = false;
                 }
             }
@@ -413,7 +413,7 @@ public class LoadActivity extends AppCompatActivity {
                     finish();
                 } catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError,binding.getRoot().findViewById(R.id.okBtn));
                 }
             }
         }
@@ -431,7 +431,7 @@ public class LoadActivity extends AppCompatActivity {
             ValidateCodec();
         } catch (KpCustomException e) {
             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-            ToastUtil.showToast(getLayoutInflater(), v, e);
+            ToastUtil.showToast(getLayoutInflater(), v, e,binding.getRoot().findViewById(R.id.okBtn));
             proceed = false;
         }
         if (proceed) {
@@ -452,10 +452,10 @@ public class LoadActivity extends AppCompatActivity {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
             } catch (NoSuchMethodError e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.okBtn));
             } catch (Exception e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage());
+                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.okBtn));
                 Log.e("KP", "KP error ", e);
             } finally {
                 if (fileOutputStream != null) {
@@ -478,7 +478,7 @@ public class LoadActivity extends AppCompatActivity {
                         finish();
                     } catch (Exception e) {
                         ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError);
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError,binding.getRoot().findViewById(R.id.okBtn));
                     }
                 }
             }
@@ -666,7 +666,7 @@ public class LoadActivity extends AppCompatActivity {
                     break;
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError);
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError,binding.getRoot().findViewById(R.id.okBtn));
         }
 
         binding.themeFloatBtn.setOnClickListener(v -> {
@@ -688,7 +688,7 @@ public class LoadActivity extends AppCompatActivity {
                         break;
                 }
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError);
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError,binding.getRoot().findViewById(R.id.okBtn));
             }
         });
     }
@@ -699,10 +699,10 @@ public class LoadActivity extends AppCompatActivity {
             Common.isCodecAvailable = true;
         } catch (NoSuchMethodError e) {
             Common.isCodecAvailable = false;
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError,binding.getRoot().findViewById(R.id.okBtn));
         } catch (Exception e) {
             Common.isCodecAvailable = false;
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError);
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError,binding.getRoot().findViewById(R.id.okBtn));
         }
     }
 
@@ -881,9 +881,9 @@ public class LoadActivity extends AppCompatActivity {
                 Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog = DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), viewToLoad.getContext(), f.getName());
                 editDatabaseNameDialog.second.setOnClickListener(v1 -> {
                     if (!Common.isCodecAvailable) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress,binding.getRoot().findViewById(R.id.okBtn));
                     } else if (editDatabaseNameDialog.fourth.getText() == null || editDatabaseNameDialog.fourth.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName,binding.getRoot().findViewById(R.id.okBtn));
                     } else {
                         String dbName = editDatabaseNameDialog.fourth.getText().toString();
                         if (!dbName.endsWith("kdbx")) {
@@ -906,11 +906,11 @@ public class LoadActivity extends AppCompatActivity {
                 Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
                 confirmDialog.second.setOnClickListener(v1 -> {
                     if (!Common.isCodecAvailable) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress,binding.getRoot().findViewById(R.id.okBtn));
                     } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
                     } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
                     } else {
                         if (v1 != null) {
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -940,10 +940,10 @@ public class LoadActivity extends AppCompatActivity {
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
                                     } else {
-                                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
+                                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
                                     }
                                 } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
+                                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
                                 }
                                 ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
                             });
@@ -999,7 +999,7 @@ public class LoadActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.okBtn));
             }
         } else {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -1009,7 +1009,7 @@ public class LoadActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.okBtn));
             }
         }
         return isOK;

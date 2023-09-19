@@ -19,7 +19,7 @@ import org.j_keepass.R;
 
 public class NewPasswordDialogUtil {
 
-    static public void show(LayoutInflater layoutInflater, View mView, ClipboardManager clipboard) {
+    static public void show(LayoutInflater layoutInflater, View mView, ClipboardManager clipboard, View anchorView) {
         BottomSheetDialog bsd = new BottomSheetDialog(mView.getContext());
         bsd.setContentView(R.layout.new_password_layout);
         bsd.show();
@@ -30,7 +30,7 @@ public class NewPasswordDialogUtil {
         ImageButton copyBtn = bsd.findViewById(R.id.newPasswordCopy);
         copyBtn.setOnClickListener(v -> {
             if (pwdF.getText() != null) {
-                ToastUtil.showToast(layoutInflater, mView, R.string.copiedToClipboard);
+                ToastUtil.showToast(layoutInflater, mView, R.string.copiedToClipboard, anchorView);
                 bsd.dismiss();
                 ClipData clip = ClipData.newPlainText("password", pwdF.getText().toString());
                 clipboard.setPrimaryClip(clip);
@@ -48,7 +48,7 @@ public class NewPasswordDialogUtil {
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
                     bsd.dismiss();
-                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
+                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse, anchorView);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
                 }
@@ -59,7 +59,7 @@ public class NewPasswordDialogUtil {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
                     bsd.dismiss();
-                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
+                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse, anchorView);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
                 }
@@ -70,7 +70,7 @@ public class NewPasswordDialogUtil {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
                     bsd.dismiss();
-                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
+                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse, anchorView);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
                 }
@@ -81,7 +81,7 @@ public class NewPasswordDialogUtil {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
                     bsd.dismiss();
-                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
+                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse, anchorView);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
                 }
@@ -92,7 +92,7 @@ public class NewPasswordDialogUtil {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isAllFalse(useDigit, useLowerCase, useUpperCase, useSymbol)) {
                     bsd.dismiss();
-                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse);
+                    ToastUtil.showToast(layoutInflater, mView, R.string.newPasswordAllFalse, anchorView);
                 } else {
                     pwdF.setText(getPassword(useDigit, useLowerCase, useUpperCase, useSymbol, slider));
                 }
