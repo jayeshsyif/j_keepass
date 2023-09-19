@@ -40,7 +40,7 @@
                     android:backgroundTint="@color/kp_light_blue"
                     android:drawableLeft="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
                     android:drawableTint="@color/kp_white"
-                    android:fontFamily="@font/righteous"
+                    android:fontFamily="@font/josefin_sans_regular"
                     android:text="@string/addGroup"
                     android:textColor="@color/kp_white">
 
@@ -55,7 +55,7 @@
                     android:backgroundTint="@color/kp_light_blue"
                     android:drawableLeft="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
                     android:drawableTint="@color/kp_white"
-                    android:fontFamily="@font/righteous"
+                    android:fontFamily="@font/josefin_sans_regular"
                     android:text="@string/addEntry"
                     android:textColor="@color/kp_white">
 

@@ -59,7 +59,7 @@
                         android:layout_gravity="right"
                         android:layout_margin="@dimen/kp_margin"
                         android:backgroundTint="@color/kp_light_blue"
-                        android:fontFamily="@font/righteous"
+                        android:fontFamily="@font/josefin_sans_regular"
                         android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
                         android:tint="@color/kp_white" />
 
