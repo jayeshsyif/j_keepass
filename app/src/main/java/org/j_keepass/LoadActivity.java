@@ -20,16 +20,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +36,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,11 +44,13 @@ import com.google.common.io.ByteStreams;
 
 import org.j_keepass.databinding.ActivityLoadBinding;
 import org.j_keepass.util.BannerDialogUtil;
+import org.j_keepass.util.BottomMenuUtil;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.DatabaseCreateDialogUtil;
 import org.j_keepass.util.InfoDialogUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.ToastUtil;
@@ -68,7 +68,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -171,8 +171,7 @@ public class LoadActivity extends AppCompatActivity {
         TextInputEditText kdbxPasswordET = binding.kdbxFileGotPassword;
 
         kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 if (binding.getRoot().getContext() != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
@@ -204,9 +203,7 @@ public class LoadActivity extends AppCompatActivity {
                 if (isOk) {
                     Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     chooseFile.setType("*/*");
-                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
                     chooseFile = Intent.createChooser(chooseFile, "Choose a file");
                     startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
@@ -320,8 +317,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
             }
             try {
-                Cursor returnCursor =
-                        getContentResolver().query(kdbxFileUri, null, null, null, null);
+                Cursor returnCursor = getContentResolver().query(kdbxFileUri, null, null, null, null);
                 int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 returnCursor.moveToFirst();
                 fileName = returnCursor.getString(nameIndex);
@@ -878,114 +874,96 @@ public class LoadActivity extends AppCompatActivity {
             }
         });
         viewToLoad.findViewById(R.id.databaseMoreOption).setOnClickListener(v -> {
-            Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
-            PopupMenu popup = new PopupMenu(wrapper, v);
-            popup.getMenuInflater().inflate(R.menu.database_more_option_menu, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    // Toast message on menu item clicked
-                    if (menuItem.getItemId() == R.id.moreOptionEdit) {
-                        popup.dismiss();
-                        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog =
-                                DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), viewToLoad.getContext(), f.getName());
-                        editDatabaseNameDialog.second.setOnClickListener(v1 -> {
-                            if (!Common.isCodecAvailable) {
-                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
-                            } else if (editDatabaseNameDialog.fourth.getText() == null || editDatabaseNameDialog.fourth.getText().toString().length() <= 0) {
-                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
-                            } else {
-                                String dbName = editDatabaseNameDialog.fourth.getText().toString();
-                                if (!dbName.endsWith("kdbx")) {
-                                    dbName = dbName + ".kdbx";
-                                }
-                                File fromTo = new File(subFilesDirPath + File.separator + dbName);
-                                f.renameTo(fromTo);
-                                if (v1 != null) {
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
-                                }
-                                fetchAndShowFiles();
-                                editDatabaseNameDialog.first.dismiss();
-                            }
-                        });
-                        DatabaseCreateDialogUtil.showDialog(editDatabaseNameDialog.first);
-                    } else if (menuItem.getItemId() == R.id.moreOptionDelete) {
-                        popup.dismiss();
-                        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(getLayoutInflater(), viewToLoad.getContext());
-                        confirmDialog.second.setOnClickListener(viewObj -> {
-                            f.delete();
-                            fetchAndShowFiles();
-                            confirmDialog.first.dismiss();
-                        });
-                        ConfirmDialogUtil.showDialog(confirmDialog.first);
-                    } else if (menuItem.getItemId() == R.id.moreOptionChangePassword) {
-                        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> confirmDialog
-                                = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
-                        confirmDialog.second.setOnClickListener(v1 -> {
-                            if (!Common.isCodecAvailable) {
-                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
-                            } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
-                            } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
-                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
-                            } else {
-                                if (v1 != null) {
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
-                                }
-                                confirmDialog.first.dismiss();
-                                AlertDialog changePasswordDialog = ProgressDialogUtil.getSaving(LayoutInflater.from(v1.getContext()), v1.getContext());
-                                ProgressDialogUtil.showSavingDialog(changePasswordDialog);
-                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 10);
-                                new Thread(() -> {
-                                    runOnUiThread(() -> {
-                                        try {
-                                            kdbxFileUri = Uri.fromFile(f);
-                                            KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
-                                            Database<?, ?, ?, ?> database = null;
-                                            ProgressDialogUtil.setSavingProgress(changePasswordDialog, 20);
-                                            InputStream inputStream = getContentResolver().openInputStream(kdbxFileUri);
-                                            database = SimpleDatabase.load(creds, inputStream);
-                                            ProgressDialogUtil.setSavingProgress(changePasswordDialog, 50);
-                                            if (database != null) {
-                                                OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
-                                                KdbxCreds newCreds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
-                                                database.save(newCreds, fileOutputStream);
-                                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 60);
-                                                fetchAndShowFiles();
-                                                kdbxFileUri = null;
-                                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
-                                                ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
-                                            } else {
-                                                ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
-                                            }
-                                        } catch (Exception e) {
-                                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
-                                        }
-                                        ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
-                                    });
-                                }).start();
-                            }
-                        });
-                        DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getDbMenuOptions(v.getContext());
+            bsd.first.show();
+            bsd.second.get(0).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> editDatabaseNameDialog = DatabaseCreateDialogUtil.getConfirmDialogEditName(getLayoutInflater(), viewToLoad.getContext(), f.getName());
+                editDatabaseNameDialog.second.setOnClickListener(v1 -> {
+                    if (!Common.isCodecAvailable) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                    } else if (editDatabaseNameDialog.fourth.getText() == null || editDatabaseNameDialog.fourth.getText().toString().length() <= 0) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName);
+                    } else {
+                        String dbName = editDatabaseNameDialog.fourth.getText().toString();
+                        if (!dbName.endsWith("kdbx")) {
+                            dbName = dbName + ".kdbx";
+                        }
+                        File fromTo = new File(subFilesDirPath + File.separator + dbName);
+                        f.renameTo(fromTo);
+                        if (v1 != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                        }
+                        fetchAndShowFiles();
+                        editDatabaseNameDialog.first.dismiss();
                     }
-                    return true;
-                }
+                });
+                DatabaseCreateDialogUtil.showDialog(editDatabaseNameDialog.first);
             });
-            Object menuHelper;
-            Class[] argTypes;
-            try {
-                Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
-                fMenuHelper.setAccessible(true);
-                menuHelper = fMenuHelper.get(popup);
-                argTypes = new Class[]{boolean.class};
-                menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
-            } catch (Exception e) {
-
-            }
-            popup.show();
+            bsd.second.get(1).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
+                confirmDialog.second.setOnClickListener(v1 -> {
+                    if (!Common.isCodecAvailable) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress);
+                    } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                    } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
+                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword);
+                    } else {
+                        if (v1 != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                        }
+                        confirmDialog.first.dismiss();
+                        AlertDialog changePasswordDialog = ProgressDialogUtil.getSaving(LayoutInflater.from(v1.getContext()), v1.getContext());
+                        ProgressDialogUtil.showSavingDialog(changePasswordDialog);
+                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 10);
+                        new Thread(() -> {
+                            runOnUiThread(() -> {
+                                try {
+                                    kdbxFileUri = Uri.fromFile(f);
+                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
+                                    Database<?, ?, ?, ?> database = null;
+                                    ProgressDialogUtil.setSavingProgress(changePasswordDialog, 20);
+                                    InputStream inputStream = getContentResolver().openInputStream(kdbxFileUri);
+                                    database = SimpleDatabase.load(creds, inputStream);
+                                    ProgressDialogUtil.setSavingProgress(changePasswordDialog, 50);
+                                    if (database != null) {
+                                        OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                                        KdbxCreds newCreds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
+                                        database.save(newCreds, fileOutputStream);
+                                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 60);
+                                        fetchAndShowFiles();
+                                        kdbxFileUri = null;
+                                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
+                                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
+                                    } else {
+                                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
+                                    }
+                                } catch (Exception e) {
+                                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError);
+                                }
+                                ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
+                            });
+                        }).start();
+                    }
+                });
+                DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
+            });
+            bsd.second.get(2).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(getLayoutInflater(), viewToLoad.getContext());
+                confirmDialog.second.setOnClickListener(viewObj -> {
+                    f.delete();
+                    fetchAndShowFiles();
+                    confirmDialog.first.dismiss();
+                });
+                ConfirmDialogUtil.showDialog(confirmDialog.first);
+            });
         });
+
         TextView databaseMoreInfo = viewToLoad.findViewById(R.id.databaseMoreInfo);
         databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()) + " ");
         databaseMoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
@@ -996,8 +974,7 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle
-            outPersistentState) {
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
         if (banner != null && banner.isShowing()) {
             banner.dismiss();
         }
@@ -1015,12 +992,8 @@ public class LoadActivity extends AppCompatActivity {
     private boolean checkAndGetPermission(View v, Activity activity) {
         boolean isOK = false;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(activity, new String[]{
-                                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        READ_EXTERNAL_STORAGE);
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
             }
 
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -1029,12 +1002,8 @@ public class LoadActivity extends AppCompatActivity {
                 ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
             }
         } else {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(activity, new String[]{
-                                Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES},
-                        READ_EXTERNAL_STORAGE);
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
             }
 
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {

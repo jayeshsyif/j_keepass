@@ -8,23 +8,20 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,16 +29,18 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.databinding.ActivityListBinding;
+import org.j_keepass.util.BottomMenuUtil;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.NewPasswordDialogUtil;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.SearchDialogUtil;
 import org.j_keepass.util.ToastUtil;
@@ -254,8 +253,7 @@ public class ListActivity extends AppCompatActivity {
                 } else {
                     binding.floatAdd.shrink();
                 }
-                AlertDialog alertDialog1 = getDialog();
-                alertDialog1.show();
+                showMenu(v);
             });
 
         }
@@ -277,9 +275,7 @@ public class ListActivity extends AppCompatActivity {
                     Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                     chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
                     chooseFile.setType("*/*");
-                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
                     chooseFile.putExtra(Intent.EXTRA_TITLE, "database.kdbx");
 
                     chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
@@ -362,44 +358,22 @@ public class ListActivity extends AppCompatActivity {
         }
     }
 
-    private AlertDialog getDialog() {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(ListActivity.this);
-        View mView = getLayoutInflater().inflate(R.layout.add_new_layout, null);
-        alert.setView(mView);
-        final AlertDialog alertDialog = alert.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.getWindow().setGravity(Gravity.CENTER);
-
-        ScrollView newFloatScrollView = mView.findViewById(R.id.newFloatScrollView);
-        //newFloatScrollView.setAnimation(AnimationUtils.makeInAnimation(this, true));
-
-        FloatingActionButton closeInfoBtn = mView.findViewById(R.id.addNewfloatCloseInfoBtn);
-        closeInfoBtn.setOnClickListener(v -> {
-            alertDialog.dismiss();
-            if (!binding.floatAdd.isExtended()) {
-                binding.floatAdd.extend();
-            } else {
-                binding.floatAdd.shrink();
-            }
-        });
-        MaterialButton addGroup = mView.findViewById(R.id.addNewGroupfloatBtn);
-        addGroup.setOnClickListener(v -> {
-            alertDialog.dismiss();
+    private void showMenu(View v) {
+        Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getAddNewEntryAndGroupMenuOptions(v.getContext());
+        bsd.first.show();
+        bsd.second.get(0).setOnClickListener(v1 -> {
+            bsd.first.dismiss();
             Intent intent = new Intent(ListActivity.this, AddGroupActivity.class);
             startActivity(intent);
             finish();
         });
 
-        MaterialButton addEntry = mView.findViewById(R.id.addNewEntryfloatBtn);
-        addEntry.setOnClickListener(v -> {
-            alertDialog.dismiss();
+        bsd.second.get(1).setOnClickListener(v1 -> {
+            bsd.first.dismiss();
             Intent intent = new Intent(ListActivity.this, AddEntryActivity.class);
             startActivity(intent);
             finish();
         });
-
-        return alertDialog;
     }
 
     @Override
@@ -457,41 +431,22 @@ public class ListActivity extends AppCompatActivity {
 
         });
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
-            Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopupMenu);
-            PopupMenu popup = new PopupMenu(wrapper, v);
-            popup.getMenuInflater().inflate(R.menu.group_entry_more_option_menu, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    // Toast message on menu item clicked
-                    if (menuItem.getItemId() == R.id.moreOptionEdit) {
-                        popup.dismiss();
-                        Common.group = g;
-                        Intent intent = new Intent(ListActivity.this, EditGroupActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("click", "group");
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                        finish();
-                    } else if (menuItem.getItemId() == R.id.moreOptionDelete) {
-                        popup.dismiss();
-                        deleteGroup(v, ListActivity.this, g);
-                    }
-                    return true;
-                }
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(v.getContext());
+            bsd.first.show();
+            bsd.second.get(0).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Common.group = g;
+                Intent intent = new Intent(ListActivity.this, EditGroupActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("click", "group");
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
             });
-            Object menuHelper;
-            Class[] argTypes;
-            try {
-                Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
-                fMenuHelper.setAccessible(true);
-                menuHelper = fMenuHelper.get(popup);
-                argTypes = new Class[]{boolean.class};
-                menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
-            } catch (Exception e) {
-
-            }
-            popup.show();
+            bsd.second.get(1).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                deleteGroup(v, ListActivity.this, g);
+            });
         });
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
         subCountArrowBtn.setText("" + (g.getGroupsCount() + g.getEntriesCount()) + " " + Common.SUB_DIRECTORY_ARROW_SYMBOL_CODE);
@@ -821,12 +776,8 @@ public class ListActivity extends AppCompatActivity {
     private boolean checkAndGetPermission(View v, Activity activity) {
         boolean isOK = false;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(activity, new String[]{
-                                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        READ_EXTERNAL_STORAGE);
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
             }
 
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -835,12 +786,8 @@ public class ListActivity extends AppCompatActivity {
                 ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
             }
         } else {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(activity, new String[]{
-                                Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES},
-                        READ_EXTERNAL_STORAGE);
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
             }
 
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
