@@ -554,7 +554,9 @@ public class ListActivity extends AppCompatActivity {
                 } else {
                     parent.removeGroup(group);
                     Common.group = parent;
-                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && Common.isCodecAvailable) {
+                    boolean isOk = checkAndGetPermission(v, ListActivity.this);
+                    if (isOk && Common.isCodecAvailable)
+                    {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;
                         try {
@@ -610,7 +612,8 @@ public class ListActivity extends AppCompatActivity {
                     ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null",binding.getRoot().findViewById(R.id.floatAdd));
                 } else {
                     parent.removeEntry(entry);
-                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && Common.isCodecAvailable) {
+                    boolean isOk = checkAndGetPermission(v, ListActivity.this);
+                    if (isOk && Common.isCodecAvailable) {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;
                         try {
