@@ -131,6 +131,8 @@
     <string name="changeLogsVer661ChangesText">   Minor UI fixes.</string>
     <string name="changeLogsVer67Text">Version 6.7</string>
     <string name="changeLogsVer67ChangesText">   Major UI changes.</string>
+    <string name="changeLogsVer7Text">Version 7</string>
+    <string name="changeLogsVer7ChangesText">   Fixes which supports Android 13+.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

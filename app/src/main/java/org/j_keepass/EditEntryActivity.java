@@ -1,20 +1,19 @@
 package org.j_keepass;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,13 +36,11 @@ import org.linguafranca.pwdb.Entry;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class EditEntryActivity extends AppCompatActivity {
 
     private ActivityEditEntryBinding binding;
-    private static final int MANAGE_DOCUMENTS = 200;
+    private static final int READ_EXTERNAL_STORAGE = 100;
     private ArrayList<Pair<View, TextInputEditText>> fields = new ArrayList<Pair<View, TextInputEditText>>();
     private ArrayList<Pair<View, TextInputEditText>> fieldsToRemove = new ArrayList<Pair<View, TextInputEditText>>();
 
@@ -257,12 +254,9 @@ public class EditEntryActivity extends AppCompatActivity {
                     }
                 }
 
-                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(EditEntryActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MANAGE_DOCUMENTS);
-                }
+                boolean isOk = checkAndGetPermission(v, EditEntryActivity.this);
 
-                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (isOk) {
                     ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                     OutputStream fileOutputStream = null;
                     try {
@@ -315,5 +309,39 @@ public class EditEntryActivity extends AppCompatActivity {
         if (!Common.isCodecAvailable) {
             throw new KpCustomException(R.string.devInProgress);
         }
+    }
+
+    private boolean checkAndGetPermission(View v, Activity activity) {
+        boolean isOK = false;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(activity, new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        READ_EXTERNAL_STORAGE);
+            }
+
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                isOK = true;
+            } else {
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(activity, new String[]{
+                                Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES},
+                        READ_EXTERNAL_STORAGE);
+            }
+
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                isOK = true;
+            } else {
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted);
+            }
+        }
+        return isOK;
     }
 }
