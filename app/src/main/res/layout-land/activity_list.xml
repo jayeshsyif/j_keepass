@@ -33,7 +33,7 @@
                 android:textAlignment="gravity"
                 android:textSize="@dimen/kp_small_text_size"
                 android:textColor="@color/kp_white"
-                android:textStyle="bold"></TextView>
+                android:textStyle="normal"></TextView>
 
             <ScrollView
                 android:id="@+id/groupScrollView"
