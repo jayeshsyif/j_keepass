@@ -656,7 +656,7 @@ public class ListActivity extends AppCompatActivity {
 
     @SuppressLint("ResourceType")
     private void search(View v, Activity activity) {
-        Triplet<AlertDialog, MaterialButton, TextInputEditText> searchDialog = SearchDialogUtil.getSearchDialog(activity.getLayoutInflater(), activity);
+        Triplet<BottomSheetDialog, MaterialButton, TextInputEditText> searchDialog = SearchDialogUtil.getSearchDialog(activity.getLayoutInflater(), activity);
         searchDialog.second.setOnClickListener(viewObj -> {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -698,7 +698,7 @@ public class ListActivity extends AppCompatActivity {
                 });
             }).start();
         });
-        ConfirmDialogUtil.showDialog(searchDialog.first);
+        searchDialog.first.show();
     }
 
 
