@@ -3,16 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/kp_margin"
-    android:layout_weight="1"
     android:background="@color/kp_changing_white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <LinearLayout
+        android:id="@+id/nameMenuLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="vertical"
+            android:padding="@dimen/kp_button_margin"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/nameMenuText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:fontFamily="@font/josefin_sans_regular"
+                android:gravity="center_vertical"
+                android:text="@string/menuText"
+                android:textColor="@color/kp_dark_blue">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="98"
+                android:background="@color/kp_dark_blue">
+
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/editMenuLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="90"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="100">
 
@@ -39,9 +76,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/kp_button_margin"
             android:layout_weight="10"
             android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
             android:weightSum="100">
 
             <TextView
@@ -61,7 +98,7 @@
         android:id="@+id/changePwdMenuLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="90"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="100">
 
@@ -88,9 +125,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/kp_button_margin"
             android:layout_weight="10"
             android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
             android:weightSum="100">
 
             <TextView
@@ -110,7 +147,7 @@
         android:id="@+id/deleteMenuLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="90"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="100">
 
@@ -137,9 +174,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/kp_button_margin"
             android:layout_weight="10"
             android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
             android:weightSum="100">
 
             <TextView
@@ -159,7 +196,7 @@
         android:id="@+id/addGroupMenuLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="90"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="100">
 
@@ -186,9 +223,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/kp_button_margin"
             android:layout_weight="10"
             android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
             android:weightSum="100">
 
             <TextView
@@ -208,7 +245,7 @@
         android:id="@+id/addEntryMenuLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="90"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="100">
 
@@ -235,9 +272,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/kp_button_margin"
             android:layout_weight="10"
             android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
             android:weightSum="100">
 
             <TextView

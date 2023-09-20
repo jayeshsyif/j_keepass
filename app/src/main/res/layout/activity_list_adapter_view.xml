@@ -26,7 +26,7 @@
                 android:id="@+id/adapterGroupInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/kp_card_view_margin"
+                android:padding="@dimen/kp_card_view_margin"
                 android:layout_weight="1"
                 android:gravity="center|left"
                 android:text="ICICI Bank - login"
@@ -35,6 +35,7 @@
                 android:textColor="@color/kp_dark_blue"
                 android:textSize="@dimen/kp_small_text_size"
                 android:textStyle="italic"
+                android:background="@color/kp_changing_white"
                 android:visibility="gone"></TextView>
 
             <LinearLayout

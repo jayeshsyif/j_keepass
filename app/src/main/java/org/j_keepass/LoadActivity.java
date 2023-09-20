@@ -873,7 +873,7 @@ public class LoadActivity extends AppCompatActivity {
             }
         });
         viewToLoad.findViewById(R.id.databaseMoreOption).setOnClickListener(v -> {
-            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getDbMenuOptions(v.getContext());
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getDbMenuOptions(f.getName(),v.getContext());
             bsd.first.show();
             bsd.second.get(0).setOnClickListener(view -> {
                 bsd.first.dismiss();

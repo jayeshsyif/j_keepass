@@ -426,8 +426,7 @@ public class ListActivity extends AppCompatActivity {
 
         });
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
-            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(v.getContext());
-            bsd.first.show();
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(g.getName(),v.getContext());
             bsd.second.get(0).setOnClickListener(view -> {
                 bsd.first.dismiss();
                 Common.group = g;
@@ -442,6 +441,7 @@ public class ListActivity extends AppCompatActivity {
                 bsd.first.dismiss();
                 deleteGroup(v, ListActivity.this, g);
             });
+            bsd.first.show();
         });
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
         subCountArrowBtn.setText("" + (g.getGroupsCount() + g.getEntriesCount()) + " " + Common.SUB_DIRECTORY_ARROW_SYMBOL_CODE);
@@ -497,8 +497,7 @@ public class ListActivity extends AppCompatActivity {
         subCountArrowBtn.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
 
-            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(v.getContext());
-            bsd.first.show();
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(e.getTitle(),v.getContext());
             bsd.second.get(0).setOnClickListener(view -> {
                 bsd.first.dismiss();
                 Common.entry = e;
@@ -513,6 +512,7 @@ public class ListActivity extends AppCompatActivity {
                 bsd.first.dismiss();
                 deleteEntry(v, ListActivity.this, e);
             });
+            bsd.first.show();
         });
 
         if (showGroupInfo) {
