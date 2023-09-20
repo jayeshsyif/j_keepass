@@ -707,8 +707,7 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void showInfoDialog() {
-        final Dialog dialog = new InfoDialogUtil().getInfoDialog(binding.getRoot().getContext(), getLayoutInflater());
-        dialog.show();
+        new InfoDialogUtil().showInfoDialog(binding.getRoot().getContext());
     }
 
     private void copyFile() {
