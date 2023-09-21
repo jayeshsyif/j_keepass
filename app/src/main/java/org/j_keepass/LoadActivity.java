@@ -3,14 +3,20 @@ package org.j_keepass;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,11 +40,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.io.ByteStreams;
 
@@ -51,7 +57,6 @@ import org.j_keepass.util.DatabaseCreateDialogUtil;
 import org.j_keepass.util.InfoDialogUtil;
 import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Pair;
-import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.Quadruple;
 import org.j_keepass.util.ToastUtil;
@@ -69,6 +74,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -79,6 +85,7 @@ public class LoadActivity extends AppCompatActivity {
     private ActivityLoadBinding binding;
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
+    private static final int ALARM = 101;
     private int defaultThemeCode = Configuration.UI_MODE_NIGHT_NO;
     private String dirPath = null;
     private String subFilesDirPath = null;
@@ -165,6 +172,7 @@ public class LoadActivity extends AppCompatActivity {
             if (!isFileAvailable) {
                 fetchAndShowFiles();
             }
+            startAlarmBroadcastReceiver(binding.getRoot().getContext());
         });
     }
 
@@ -1015,5 +1023,59 @@ public class LoadActivity extends AppCompatActivity {
             }
         }
         return isOK;
+    }
+
+    private boolean checkAndGetAlarmPermission(View v, Activity activity) {
+        boolean isOK = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.USE_EXACT_ALARM}, ALARM);
+            }
+
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                isOK = true;
+            } else {
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, ALARM);
+            }
+
+            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                isOK = true;
+            } else {
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+            }
+        }
+        return isOK;
+    }
+
+    public void startAlarmBroadcastReceiver(Context context) {
+        if (checkAndGetAlarmPermission(binding.getRoot().getRootView(), this)) {
+            try {
+                boolean isCancelled = false;
+                Intent _intent = new Intent(context, AlarmBroadcastReceiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, _intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                if (pendingIntent != null && alarmManager != null) {
+                    alarmManager.cancel(pendingIntent);
+                    isCancelled = true;
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis() + 1000);
+                calendar.set(Calendar.HOUR_OF_DAY, 10);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                }
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String formattedDate = simpleDateFormat.format(calendar.getTime());
+                //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.okBtn));
+            } catch (Exception e) {
+                //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+            }
+        }
     }
 }
