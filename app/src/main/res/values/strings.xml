@@ -135,6 +135,8 @@
     <string name="changeLogsVer7ChangesText">   Fixes which supports Android 13+.</string>
     <string name="changeLogsVer71Text">Version 7.1</string>
     <string name="changeLogsVer71ChangesText">   Fixes which supports Android 13+.</string>
+    <string name="changeLogsVer72Text">Version 7.2</string>
+    <string name="changeLogsVer72ChangesText">   Fixes.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
