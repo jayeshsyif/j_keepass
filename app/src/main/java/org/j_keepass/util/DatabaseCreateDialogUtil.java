@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -95,35 +97,21 @@ public class DatabaseCreateDialogUtil {
         return penta;
     }
 
-    static public Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> getConfirmDialogChangePassword(LayoutInflater layoutInflater, Context
+    static public Quadruple<BottomSheetDialog, MaterialButton, TextInputEditText, TextInputEditText> getConfirmDialogChangePassword(String name, Context
             context) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        AlertDialog alertDialog = null;
-        Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> penta = new Penta();
+        BottomSheetDialog bsd  = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.database_change_password_dialog_layout);
+        Quadruple<BottomSheetDialog, MaterialButton, TextInputEditText, TextInputEditText> quadruple = new Quadruple();
         try {
 
-            View mView = layoutInflater.inflate(R.layout.database_change_password_dialog_layout, null);
-            alert.setView(mView);
-            alertDialog = alert.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            alertDialog.getWindow().getAttributes().windowAnimations = BaseTransientBottomBar.ANIMATION_MODE_SLIDE;
-            alertDialog.getWindow().setGravity(Gravity.CENTER);
-            //((ScrollView) mView.findViewById(R.id.confirmScrollView)).setAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
-            MaterialButton save = mView.findViewById(R.id.saveDatabase);
-            FloatingActionButton cancel = mView.findViewById(R.id.cancelDatabase);
-            cancel.setOnClickListener(v -> {
-                penta.first.dismiss();
-            });
-
-            penta.second = save;
-            penta.third = cancel;
-            penta.fourth = mView.findViewById(R.id.databaseOldPassword);
-            penta.fifth = mView.findViewById(R.id.databaseNewPassword);
+            MaterialButton save = bsd.findViewById(R.id.saveDatabase);
+            quadruple.second = save;
+            quadruple.third = bsd.findViewById(R.id.databaseOldPassword);
+            quadruple.fourth = bsd.findViewById(R.id.databaseNewPassword);
+            ((TextView)bsd.findViewById(R.id.nameMenuText)).setText(name);
         } catch (Exception e) {
-            alertDialog = alert.create();
         }
-        penta.first = alertDialog;
-        return penta;
+        quadruple.first = bsd;
+        return quadruple;
     }
 }

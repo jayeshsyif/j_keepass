@@ -53,6 +53,7 @@ import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.Penta;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.Quadruple;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
@@ -902,28 +903,29 @@ public class LoadActivity extends AppCompatActivity {
             });
             bsd.second.get(1).setOnClickListener(view -> {
                 bsd.first.dismiss();
-                Penta<AlertDialog, MaterialButton, FloatingActionButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(getLayoutInflater(), binding.getRoot().getContext());
+                Quadruple<BottomSheetDialog, MaterialButton, TextInputEditText, TextInputEditText> confirmDialog = DatabaseCreateDialogUtil.getConfirmDialogChangePassword(f.getName(), binding.getRoot().getContext());
                 confirmDialog.second.setOnClickListener(v1 -> {
+                    confirmDialog.first.dismiss();
                     if (!Common.isCodecAvailable) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress,binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.devInProgress,binding.getRoot().findViewById(R.id.okBtn));
+                    } else if (confirmDialog.third.getText() == null || confirmDialog.third.getText().toString().length() <= 0) {
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
                     } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
-                    } else if (confirmDialog.fifth.getText() == null || confirmDialog.fifth.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterPassword,binding.getRoot().findViewById(R.id.okBtn));
                     } else {
                         if (v1 != null) {
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
                         }
                         confirmDialog.first.dismiss();
-                        AlertDialog changePasswordDialog = ProgressDialogUtil.getSaving(LayoutInflater.from(v1.getContext()), v1.getContext());
+                        AlertDialog changePasswordDialog = ProgressDialogUtil.getSaving(LayoutInflater.from(binding.getRoot().getRootView().getContext()), binding.getRoot().getRootView().getContext());
                         ProgressDialogUtil.showSavingDialog(changePasswordDialog);
                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 10);
                         new Thread(() -> {
                             runOnUiThread(() -> {
                                 try {
                                     kdbxFileUri = Uri.fromFile(f);
-                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
+                                    KdbxCreds creds = new KdbxCreds(confirmDialog.third.getText().toString().getBytes());
                                     Database<?, ?, ?, ?> database = null;
                                     ProgressDialogUtil.setSavingProgress(changePasswordDialog, 20);
                                     InputStream inputStream = getContentResolver().openInputStream(kdbxFileUri);
@@ -931,7 +933,7 @@ public class LoadActivity extends AppCompatActivity {
                                     ProgressDialogUtil.setSavingProgress(changePasswordDialog, 50);
                                     if (database != null) {
                                         OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
-                                        KdbxCreds newCreds = new KdbxCreds(confirmDialog.fifth.getText().toString().getBytes());
+                                        KdbxCreds newCreds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
                                         database.save(newCreds, fileOutputStream);
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 60);
                                         fetchAndShowFiles();
@@ -939,17 +941,17 @@ public class LoadActivity extends AppCompatActivity {
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
                                     } else {
-                                        ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
+                                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
                                     }
                                 } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
+                                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError,binding.getRoot().findViewById(R.id.okBtn));
                                 }
                                 ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
                             });
                         }).start();
                     }
                 });
-                DatabaseCreateDialogUtil.showDialog(confirmDialog.first);
+                confirmDialog.first.show();
             });
             bsd.second.get(2).setOnClickListener(view -> {
                 bsd.first.dismiss();
