@@ -30,7 +30,6 @@
                 android:singleLine="true"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
-                android:textSize="@dimen/kp_small_text_size"
                 android:textColor="@color/kp_white"
                 android:textStyle="normal"></TextView>
 

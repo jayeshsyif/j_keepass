@@ -32,7 +32,6 @@
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/kp_static_white"
-                android:textSize="@dimen/kp_small_text_size"
                 android:textStyle="normal"></TextView>
 
             <ScrollView

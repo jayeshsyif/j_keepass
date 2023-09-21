@@ -23,7 +23,6 @@
                 android:id="@+id/editEntryTitleNameHeader"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/kp_small_text_size"
                 android:layout_weight="80"
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center"
