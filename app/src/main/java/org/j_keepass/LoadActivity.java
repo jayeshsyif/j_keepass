@@ -1030,7 +1030,7 @@ public class LoadActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
             }
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, ALARM);
@@ -1038,7 +1038,7 @@ public class LoadActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
                 isOK = false;
             }
         } else {
@@ -1049,10 +1049,22 @@ public class LoadActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
             }
         }
         return isOK;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == ALARM) {
+            if (!Arrays.asList(grantResults).contains(PackageManager.PERMISSION_DENIED)) {
+                startAlarmBroadcastReceiver(this);
+            }
+        }else if (requestCode == READ_EXTERNAL_STORAGE) {
+
+        }
     }
 
     public void startAlarmBroadcastReceiver(Context context) {
@@ -1069,8 +1081,9 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 18);
-                calendar.set(Calendar.MINUTE, 35);
+                calendar.set(Calendar.HOUR_OF_DAY, 19);
+                calendar.set(Calendar.MINUTE, 05);
+                calendar.set(Calendar.SECOND, 00);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                     //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
