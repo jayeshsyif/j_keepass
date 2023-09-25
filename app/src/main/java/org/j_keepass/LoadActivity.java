@@ -1063,7 +1063,7 @@ public class LoadActivity extends AppCompatActivity {
                 startAlarmBroadcastReceiver(this);
             }
         }else if (requestCode == READ_EXTERNAL_STORAGE) {
-
+            binding.createBtn.performClick();
         }
     }
 
@@ -1081,8 +1081,8 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 19);
-                calendar.set(Calendar.MINUTE, 05);
+                calendar.set(Calendar.HOUR_OF_DAY, 10);
+                calendar.set(Calendar.MINUTE, 00);
                 calendar.set(Calendar.SECOND, 00);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
