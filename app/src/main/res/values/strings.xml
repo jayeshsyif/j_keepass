@@ -140,6 +140,8 @@
     <string name="changeLogsVer72ChangesText">   Fixes.</string>
     <string name="changeLogsVer73Text">Version 7.3</string>
     <string name="changeLogsVer73ChangesText">   Notification Fixes.</string>
+    <string name="changeLogsVer731Text">Version 7.3.1</string>
+    <string name="changeLogsVer731ChangesText">   Notification Fixes.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

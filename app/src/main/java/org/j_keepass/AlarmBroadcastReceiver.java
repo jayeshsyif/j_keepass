@@ -27,7 +27,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         try {
             Log.i("@@ JKeePass","recieved alaram 1");
             String CHANNEL_ID = "" + context.getString(R.string.app_name) + "-channel";// The id of the channel.
-            CharSequence name = context.getResources().getString(R.string.app_name);// The user-visible name of the channel.
+            CharSequence name = context.getResources().getString(R.string.app_name)+" - Reminder";// The user-visible name of the channel.
             NotificationCompat.Builder mBuilder;
             Log.i("@@ JKeePass","recieved alaram 2");
             Intent notificationIntent = new Intent(context, LoadActivity.class);
@@ -73,7 +73,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             Log.i("@@ JKeePass","recieved alaram 14");
             mBuilder.setContentIntent(contentIntent);
             Log.i("@@ JKeePass","recieved alaram 15");
-            mBuilder.setContentText("Keep your passwords update-to-date with JKeePass app.");
+            mBuilder.setContentText("Keep your passwords update with JKeePass app.");
             mBuilder.setAutoCancel(true);
             Log.i("@@ JKeePass","recieved alaram 16");
             mNotificationManager.notify(1, mBuilder.build());
