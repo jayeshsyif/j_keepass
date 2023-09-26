@@ -80,7 +80,9 @@ public class LoadActivity extends AppCompatActivity {
     private ActivityLoadBinding binding;
     private Uri kdbxFileUri = null;
     private static final int READ_EXTERNAL_STORAGE = 100;
+    private static boolean IS_READ_EXTERNAL_STORAGE_RECEIVED = false;
     private static final int ALARM = 101;
+    private static boolean IS_ALARM_PERMISSION_RECEIVED = false;
     private int defaultThemeCode = Configuration.UI_MODE_NIGHT_NO;
     private String dirPath = null;
     private String subFilesDirPath = null;
@@ -228,11 +230,14 @@ public class LoadActivity extends AppCompatActivity {
 
                     confirmDialog.second.setOnClickListener(v1 -> {
                         if (!Common.isCodecAvailable) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.devInProgress, binding.getRoot().findViewById(R.id.okBtn));
+                            confirmDialog.first.dismiss();
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.devInProgress, binding.getRoot().findViewById(R.id.okBtn));
                         } else if (confirmDialog.third.getText() == null || confirmDialog.third.getText().toString().length() <= 0) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterDatabaseName, binding.getRoot().findViewById(R.id.okBtn));
+                            confirmDialog.first.dismiss();
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterDatabaseName, binding.getRoot().findViewById(R.id.okBtn));
                         } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                            ToastUtil.showToast(getLayoutInflater(), v1, R.string.enterPassword, binding.getRoot().findViewById(R.id.okBtn));
+                            confirmDialog.first.dismiss();
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword, binding.getRoot().findViewById(R.id.okBtn));
                         } else {
                             String dbName = confirmDialog.third.getText().toString();
                             if (!dbName.endsWith("kdbx")) {
@@ -995,69 +1000,80 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private boolean checkAndGetPermission(View v, Activity activity) {
-        boolean isOK = false;
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
-            }
+        boolean isOK = IS_READ_EXTERNAL_STORAGE_RECEIVED;
+        if(!isOK) {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
+                }
 
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                isOK = true;
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    isOK = true;
+                } else {
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                }
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
-            }
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
+                }
 
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                isOK = true;
-            } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                    isOK = true;
+                } else {
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                }
             }
         }
+        IS_READ_EXTERNAL_STORAGE_RECEIVED = isOK;
         return isOK;
     }
 
     private boolean checkAndGetAlarmPermission(View v, Activity activity) {
-        boolean isOK = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.USE_EXACT_ALARM}, ALARM);
-            }
+        Log.i("JKEEPASS", "checkAndGetAlarmPermission");
+        boolean isOK = IS_ALARM_PERMISSION_RECEIVED;
+        if(!isOK) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.USE_EXACT_ALARM}, ALARM);
+                }
 
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
-                isOK = true;
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                    isOK = true;
+                } else {
+                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                }
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, ALARM);
+                }
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                    isOK = true;
+                } else {
+                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    isOK = false;
+                }
             } else {
-                //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
-            }
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, ALARM);
-            }
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                isOK = true;
-            } else {
-                //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
-                isOK = false;
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, ALARM);
-            }
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("JKEEPASS", "checkAndGetAlarmPermission not granted");
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, ALARM);
+                    isOK = true;
+                }
 
-            if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
-                isOK = true;
-            } else {
-                //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                    isOK = true;
+                } else {
+                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                }
             }
         }
+        IS_ALARM_PERMISSION_RECEIVED = isOK;
+        Log.i("JKEEPASS", "checkAndGetAlarmPermission isOK is "+isOK);
         return isOK;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.i("JKEEPASS", "onRequestPermissionsResult");
         if (requestCode == ALARM) {
             if (!Arrays.asList(grantResults).contains(PackageManager.PERMISSION_DENIED)) {
                 startAlarmBroadcastReceiver(this);
@@ -1070,27 +1086,31 @@ public class LoadActivity extends AppCompatActivity {
     public void startAlarmBroadcastReceiver(Context context) {
         try {
             if (checkAndGetAlarmPermission(binding.getRoot().getRootView(), this)) {
-                boolean isCancelled = false;
+                boolean isAvailable = false;
                 Intent _intent = new Intent(context, AlarmBroadcastReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, _intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 //PendingIntent pendingIntent = PendingIntent.getService(context, 1, _intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 if (pendingIntent != null && alarmManager != null) {
-                    alarmManager.cancel(pendingIntent);
-                    isCancelled = true;
+                    //alarmManager.cancel(pendingIntent);
+                    isAvailable = true;
                 }
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 10);
-                calendar.set(Calendar.MINUTE, 00);
-                calendar.set(Calendar.SECOND, 00);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-                    //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                    String formattedDate = simpleDateFormat.format(calendar.getTime());
-                    Log.i("JKEEPASS", "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate);
-                    //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.okBtn));
+                if(!isAvailable) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.set(Calendar.HOUR_OF_DAY, 10);
+                    calendar.set(Calendar.MINUTE, 00);
+                    calendar.set(Calendar.SECOND, 00);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        String formattedDate = simpleDateFormat.format(calendar.getTime());
+                        Log.i("JKEEPASS", " Not Available and Notification set. " + formattedDate);
+                        //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.okBtn));
+                    }
+                }else {
+                    Log.i("JKEEPASS", "Notification is available and set to "+alarmManager);
                 }
             }
         } catch (Exception e) {
