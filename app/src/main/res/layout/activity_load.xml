@@ -26,12 +26,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
+                android:background="@color/kp_light_blue"
                 android:fontFamily="@font/megrim"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:background="@color/kp_light_blue"
                 android:textColor="@color/kp_white"
                 android:textStyle="bold" />
 
@@ -40,8 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@color/kp_whitesh_grey"
-                android:layout_weight="20">
+                android:layout_weight="20"
+                android:background="@color/kp_whitesh_grey">
 
                 <LinearLayout
                     android:id="@+id/loadScrollviewLinearLayout"
@@ -151,10 +151,10 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:fontFamily="@font/josefin_sans_extra_light"
                         android:backgroundTint="@color/kp_grey"
-                        android:textStyle="italic"
-                        android:text="@string/databases">
+                        android:fontFamily="@font/josefin_sans_extra_light"
+                        android:text="@string/databases"
+                        android:textStyle="italic">
 
                     </TextView>
 
@@ -174,8 +174,8 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
-                        android:gravity="center"
                         android:fontFamily="@font/josefin_sans_extra_light"
+                        android:gravity="center"
                         android:text="@string/importDatabase"></TextView>
                 </LinearLayout>
             </ScrollView>
@@ -221,14 +221,14 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/okBtn"
+            android:id="@+id/floatGenerateNewPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
             android:backgroundTint="@color/float_btn_back"
             android:textColor="@color/float_btn_fore"
-            app:icon="@drawable/ic_login_fill0_wght300_grad_25_opsz24"
+            app:icon="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
             app:iconTint="@color/float_btn_fore"
             app:tint="@color/float_btn_fore" />
     </androidx.cardview.widget.CardView>

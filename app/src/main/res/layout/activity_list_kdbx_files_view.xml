@@ -94,39 +94,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/kdbxListFilePasswordLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/kp_margin"
-                android:orientation="horizontal"
-                android:weightSum="100">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/kp_margin"
-                    android:layout_weight="30"
-                    android:fontFamily="@font/josefin_sans_regular"
-                    android:textColorHint="@color/kp_grey"
-                    app:boxStrokeColor="@color/kp_grey"
-                    app:hintTextColor="@color/kp_grey"
-                    app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/kp_grey">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/kdbxListFilePassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:backgroundTint="@color/kp_changing_white"
-                        android:fontFamily="@font/josefin_sans_regular"
-                        android:hint="@string/enterPassword"
-                        android:inputType="textPassword"
-                        android:textColor="@color/kp_dark_blue" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

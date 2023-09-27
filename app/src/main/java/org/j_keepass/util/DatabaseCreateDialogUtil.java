@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.j_keepass.R;
 
@@ -73,5 +74,24 @@ public class DatabaseCreateDialogUtil {
         }
         quadruple.first = bsd;
         return quadruple;
+    }
+
+    static public Triplet<BottomSheetDialog, MaterialButton, TextInputEditText> getOpenDialog(String name, Context context) {
+        BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.database_change_password_dialog_layout);
+        Triplet<BottomSheetDialog, MaterialButton, TextInputEditText> triplet = new Triplet();
+        try {
+
+            MaterialButton save = bsd.findViewById(R.id.saveDatabase);
+            save.setText(R.string.open);
+            triplet.second = save;
+            bsd.findViewById(R.id.databaseOldPasswordLayout).setVisibility(View.GONE);
+            triplet.third = bsd.findViewById(R.id.databaseNewPassword);
+            ((TextInputLayout)bsd.findViewById(R.id.databaseNewPasswordLayout)).setHint(R.string.enterPassword);
+            ((TextView) bsd.findViewById(R.id.nameMenuText)).setText(name);
+        } catch (Exception e) {
+        }
+        triplet.first = bsd;
+        return triplet;
     }
 }

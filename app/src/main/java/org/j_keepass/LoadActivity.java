@@ -7,6 +7,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,6 +52,7 @@ import org.j_keepass.util.ConfirmDialogUtil;
 import org.j_keepass.util.DatabaseCreateDialogUtil;
 import org.j_keepass.util.InfoDialogUtil;
 import org.j_keepass.util.KpCustomException;
+import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.Quadruple;
@@ -187,17 +189,10 @@ public class LoadActivity extends AppCompatActivity {
             return false;
         });
 
-        binding.okBtn.setOnClickListener(new View.OnClickListener() {
+        binding.floatGenerateNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), LoadActivity.this);
-                ProgressDialogUtil.showLoadingDialog(alertDialog);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        process(alertDialog, v);
-                    }
-                }).start();
+                NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             }
         });
         binding.importBtn.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +209,7 @@ public class LoadActivity extends AppCompatActivity {
                     chooseFile = Intent.createChooser(chooseFile, "Choose a file");
                     startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
                 } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
             }
         });
@@ -231,13 +226,13 @@ public class LoadActivity extends AppCompatActivity {
                     confirmDialog.second.setOnClickListener(v1 -> {
                         if (!Common.isCodecAvailable) {
                             confirmDialog.first.dismiss();
-                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.devInProgress, binding.getRoot().findViewById(R.id.okBtn));
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.devInProgress, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                         } else if (confirmDialog.third.getText() == null || confirmDialog.third.getText().toString().length() <= 0) {
                             confirmDialog.first.dismiss();
-                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterDatabaseName, binding.getRoot().findViewById(R.id.okBtn));
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterDatabaseName, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                         } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
                             confirmDialog.first.dismiss();
-                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword, binding.getRoot().findViewById(R.id.okBtn));
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                         } else {
                             String dbName = confirmDialog.third.getText().toString();
                             if (!dbName.endsWith("kdbx")) {
@@ -262,7 +257,7 @@ public class LoadActivity extends AppCompatActivity {
                                     }
                                     confirmDialog.first.dismiss();
                                 } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                 }
                             }
                         }
@@ -322,7 +317,7 @@ public class LoadActivity extends AppCompatActivity {
                 this.grantUriPermission(this.getPackageName(), kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } catch (Exception e) {
                 if (!isFileAvailable) {
-                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
             }
             try {
@@ -353,7 +348,7 @@ public class LoadActivity extends AppCompatActivity {
             Validate();
         } catch (KpCustomException e) {
             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-            ToastUtil.showToast(getLayoutInflater(), v, e, binding.getRoot().findViewById(R.id.okBtn));
+            ToastUtil.showToast(getLayoutInflater(), v, e, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             proceed = false;
         }
         TextInputEditText kdbxPasswordET = binding.kdbxFileGotPassword;
@@ -361,7 +356,7 @@ public class LoadActivity extends AppCompatActivity {
         if (proceed) {
             if (kdbxFileUri == null) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError, binding.getRoot().findViewById(R.id.okBtn));
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 proceed = false;
             } else {
                 /*try {
@@ -383,7 +378,7 @@ public class LoadActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                 proceed = false;
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             }
             ProgressDialogUtil.setLoadingProgress(alertDialog, 60);
             if (inputStream != null) {
@@ -392,11 +387,11 @@ public class LoadActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     proceed = false;
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
                 if (database == null) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError, binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     proceed = false;
                 }
             }
@@ -422,7 +417,7 @@ public class LoadActivity extends AppCompatActivity {
                     finish();
                 } catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError, binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
             }
         }
@@ -440,7 +435,7 @@ public class LoadActivity extends AppCompatActivity {
             ValidateCodec();
         } catch (KpCustomException e) {
             ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-            ToastUtil.showToast(getLayoutInflater(), v, e, binding.getRoot().findViewById(R.id.okBtn));
+            ToastUtil.showToast(getLayoutInflater(), v, e, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             proceed = false;
         }
         if (proceed) {
@@ -461,10 +456,10 @@ public class LoadActivity extends AppCompatActivity {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
             } catch (NoSuchMethodError e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             } catch (Exception e) {
                 ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+                ToastUtil.showToast(getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 Log.e("KP", "KP error ", e);
             } finally {
                 if (fileOutputStream != null) {
@@ -487,7 +482,7 @@ public class LoadActivity extends AppCompatActivity {
                         finish();
                     } catch (Exception e) {
                         ProgressDialogUtil.dismissLoadingDialog(alertDialog);
-                        ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError, binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.unableToNavigateError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     }
                 }
             }
@@ -675,7 +670,7 @@ public class LoadActivity extends AppCompatActivity {
                     break;
             }
         } catch (Exception e) {
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError, binding.getRoot().findViewById(R.id.okBtn));
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         }
 
         binding.themeFloatBtn.setOnClickListener(v -> {
@@ -697,7 +692,7 @@ public class LoadActivity extends AppCompatActivity {
                         break;
                 }
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError, binding.getRoot().findViewById(R.id.okBtn));
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             }
         });
     }
@@ -708,10 +703,10 @@ public class LoadActivity extends AppCompatActivity {
             Common.isCodecAvailable = true;
         } catch (NoSuchMethodError e) {
             Common.isCodecAvailable = false;
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.okBtn));
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         } catch (Exception e) {
             Common.isCodecAvailable = false;
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.okBtn));
+            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         }
     }
 
@@ -827,59 +822,52 @@ public class LoadActivity extends AppCompatActivity {
         View viewToLoad = inflater.inflate(R.layout.activity_list_kdbx_files_view, null);
         ((TextView) viewToLoad.findViewById(R.id.databaseName)).setText(f.getName());
         viewToLoad.setTag(f.getPath());
-        LinearLayout kdbxListFilePasswordLayout = viewToLoad.findViewById(R.id.kdbxListFilePasswordLayout);
-        kdbxListFilePasswordLayout.setVisibility(View.GONE);
         LinearLayout databaseNameLinearLayout = viewToLoad.findViewById(R.id.databaseNameLinearLayout);
-        databaseNameLinearLayout.setOnClickListener(v -> {
-            runOnUiThread(() -> {
-                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), inflater.getContext());
-                ProgressDialogUtil.showLoadingDialog(alertDialog);
-                ProgressDialogUtil.setLoadingProgress(alertDialog, 10);
+        /*try {
+            LayerDrawable layerDrawable = (LayerDrawable) getResources()
+                    .getDrawable(R.drawable.bottom_color_style);
+            GradientDrawable gradientDrawable = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.itemId);
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.5f, getResources().getDisplayMetrics());
 
-                if (kdbxFileUri != null) {
-                    int ch = binding.listDatabasesLinerLayout.getChildCount();
-                    if (ch > 0) {
-                        for (int i = 0; i < ch; i++) {
-                            if (binding.listDatabasesLinerLayout.getChildAt(i).getTag() != null) {
-                                if (binding.listDatabasesLinerLayout.getChildAt(i).getTag().toString().equals(kdbxFileUri.getPath())) {
-                                    kdbxFileUri = null;
-                                    binding.listDatabasesLinerLayout.getChildAt(i).findViewById(R.id.databaseNameLinearLayout).performClick();
-                                    break;
-                                }
-                            }
-                        }
+            gradientDrawable.setStroke(layerDrawable.getIntrinsicWidth(), getResources().getColor(R.color.kp_red));
+            databaseNameLinearLayout.setBackground(layerDrawable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        databaseNameLinearLayout.setOnClickListener(v -> {
+            kdbxFileUri = Uri.fromFile(f);
+            binding.kdbxFileName.setText(f.getName());
+            Triplet<BottomSheetDialog, MaterialButton, TextInputEditText> openTriplet = DatabaseCreateDialogUtil.getOpenDialog(f.getName(), v.getContext());
+            openTriplet.first.show();
+            TextInputEditText kdbxListFilePassword = openTriplet.third;
+            kdbxListFilePassword.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (kdbxListFilePassword.getText() != null) {
+                        binding.kdbxFileGotPassword.setText(kdbxListFilePassword.getText().toString());
                     }
                 }
-                ProgressDialogUtil.setLoadingProgress(alertDialog, 50);
-                if (kdbxListFilePasswordLayout.getVisibility() == View.VISIBLE) {
-                    kdbxListFilePasswordLayout.setVisibility(View.GONE);
-                    kdbxFileUri = null;
-                    binding.kdbxFileName.setText("");
-                } else {
-                    kdbxListFilePasswordLayout.setVisibility(View.VISIBLE);
-                    kdbxFileUri = Uri.fromFile(f);
-                    binding.kdbxFileName.setText(f.getName());
-                }
-                ProgressDialogUtil.dismissLoadingDialog(alertDialog);
             });
-        });
-        TextInputEditText kdbxListFilePassword = viewToLoad.findViewById(R.id.kdbxListFilePassword);
-        kdbxListFilePassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (kdbxListFilePassword.getText() != null) {
-                    binding.kdbxFileGotPassword.setText(kdbxListFilePassword.getText().toString());
-                }
-            }
+            openTriplet.second.setOnClickListener(view -> {
+                openTriplet.first.dismiss();
+                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), LoadActivity.this);
+                ProgressDialogUtil.showLoadingDialog(alertDialog);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        process(alertDialog, v);
+                    }
+                }).start();
+            });
         });
         viewToLoad.findViewById(R.id.databaseMoreOption).setOnClickListener(v -> {
             Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getDbMenuOptions(f.getName(), v.getContext());
@@ -890,9 +878,9 @@ public class LoadActivity extends AppCompatActivity {
                 editDatabaseNameDialog.second.setOnClickListener(v1 -> {
                     editDatabaseNameDialog.first.dismiss();
                     if (!Common.isCodecAvailable) {
-                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.devInProgress, binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.devInProgress, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     } else if (editDatabaseNameDialog.third.getText() == null || editDatabaseNameDialog.third.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterDatabaseName, binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterDatabaseName, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     } else {
                         String dbName = editDatabaseNameDialog.third.getText().toString();
                         if (!dbName.endsWith("kdbx")) {
@@ -916,11 +904,11 @@ public class LoadActivity extends AppCompatActivity {
                 confirmDialog.second.setOnClickListener(v1 -> {
                     confirmDialog.first.dismiss();
                     if (!Common.isCodecAvailable) {
-                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.devInProgress, binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.devInProgress, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     } else if (confirmDialog.third.getText() == null || confirmDialog.third.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterPassword, binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterPassword, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     } else if (confirmDialog.fourth.getText() == null || confirmDialog.fourth.getText().toString().length() <= 0) {
-                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterPassword, binding.getRoot().findViewById(R.id.okBtn));
+                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.enterPassword, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     } else {
                         if (v1 != null) {
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -950,10 +938,10 @@ public class LoadActivity extends AppCompatActivity {
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
                                     } else {
-                                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.okBtn));
+                                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                     }
                                 } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.okBtn));
+                                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                 }
                                 ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
                             });
@@ -1001,7 +989,7 @@ public class LoadActivity extends AppCompatActivity {
 
     private boolean checkAndGetPermission(View v, Activity activity) {
         boolean isOK = IS_READ_EXTERNAL_STORAGE_RECEIVED;
-        if(!isOK) {
+        if (!isOK) {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
@@ -1010,7 +998,7 @@ public class LoadActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
             } else {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -1020,7 +1008,7 @@ public class LoadActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
             }
         }
@@ -1031,7 +1019,7 @@ public class LoadActivity extends AppCompatActivity {
     private boolean checkAndGetAlarmPermission(View v, Activity activity) {
         Log.i("JKEEPASS", "checkAndGetAlarmPermission");
         boolean isOK = IS_ALARM_PERMISSION_RECEIVED;
-        if(!isOK) {
+        if (!isOK) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.USE_EXACT_ALARM}, ALARM);
@@ -1040,7 +1028,7 @@ public class LoadActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 } else {
-                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, ALARM);
@@ -1048,7 +1036,7 @@ public class LoadActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 } else {
-                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     isOK = false;
                 }
             } else {
@@ -1061,12 +1049,12 @@ public class LoadActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 } else {
-                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.okBtn));
+                    //ToastUtil.showToast(getLayoutInflater(), v, R.string.NotificationPermissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
             }
         }
         IS_ALARM_PERMISSION_RECEIVED = isOK;
-        Log.i("JKEEPASS", "checkAndGetAlarmPermission isOK is "+isOK);
+        Log.i("JKEEPASS", "checkAndGetAlarmPermission isOK is " + isOK);
         return isOK;
     }
 
@@ -1078,7 +1066,7 @@ public class LoadActivity extends AppCompatActivity {
             if (!Arrays.asList(grantResults).contains(PackageManager.PERMISSION_DENIED)) {
                 startAlarmBroadcastReceiver(this);
             }
-        }else if (requestCode == READ_EXTERNAL_STORAGE) {
+        } else if (requestCode == READ_EXTERNAL_STORAGE) {
             binding.createBtn.performClick();
         }
     }
@@ -1095,7 +1083,7 @@ public class LoadActivity extends AppCompatActivity {
                     //alarmManager.cancel(pendingIntent);
                     isAvailable = true;
                 }
-                if(!isAvailable) {
+                if (!isAvailable) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(System.currentTimeMillis());
                     calendar.set(Calendar.HOUR_OF_DAY, 10);
@@ -1107,15 +1095,15 @@ public class LoadActivity extends AppCompatActivity {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         String formattedDate = simpleDateFormat.format(calendar.getTime());
                         Log.i("JKEEPASS", " Not Available and Notification set. " + formattedDate);
-                        //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.okBtn));
+                        //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     }
-                }else {
-                    Log.i("JKEEPASS", "Notification is available and set to "+alarmManager);
+                } else {
+                    Log.i("JKEEPASS", "Notification is available and set to " + alarmManager);
                 }
             }
         } catch (Exception e) {
             Log.i("JKEEPASS", "Notification set error ." + e.getMessage());
-            //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.okBtn));
+            //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         }
     }
 }

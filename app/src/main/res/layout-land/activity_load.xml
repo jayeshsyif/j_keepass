@@ -221,14 +221,14 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/okBtn"
+            android:id="@+id/floatGenerateNewPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
             android:backgroundTint="@color/float_btn_back"
             android:textColor="@color/float_btn_fore"
-            app:icon="@drawable/ic_login_fill0_wght300_grad_25_opsz24"
+            app:icon="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
             app:iconTint="@color/float_btn_fore"
             app:tint="@color/float_btn_fore" />
     </androidx.cardview.widget.CardView>
