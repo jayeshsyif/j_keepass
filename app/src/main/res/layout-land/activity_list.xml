@@ -235,6 +235,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_light_blue"
                         android:gravity="center"
+                        android:fontFamily="@font/josefin_sans_light"
                         android:text="@string/nothingHere"
                         android:visibility="gone"></TextView>
                 </LinearLayout>
