@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.databinding.ActivityListBinding;
@@ -258,7 +259,7 @@ public class ListActivity extends AppCompatActivity {
             search(v, this);
         });
         binding.generateNewPassword.setOnClickListener(v -> {
-            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),binding.getRoot().findViewById(R.id.floatAdd));
+            NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), binding.getRoot().findViewById(R.id.floatAdd));
         });
 
         binding.exportBtn.setOnClickListener(new View.OnClickListener() {
@@ -276,7 +277,7 @@ public class ListActivity extends AppCompatActivity {
                     chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
                     startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
                 } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
                 }
             }
         });
@@ -426,7 +427,7 @@ public class ListActivity extends AppCompatActivity {
 
         });
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
-            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(g.getName(),v.getContext());
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(g.getName(), v.getContext());
             bsd.second.get(0).setOnClickListener(view -> {
                 bsd.first.dismiss();
                 Common.group = g;
@@ -440,6 +441,14 @@ public class ListActivity extends AppCompatActivity {
             bsd.second.get(1).setOnClickListener(view -> {
                 bsd.first.dismiss();
                 deleteGroup(v, ListActivity.this, g);
+            });
+            bsd.second.get(2).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Pair<Snackbar, LinearLayout> pairToast = ToastUtil.showMoveToast(getLayoutInflater(), v, binding.floatAdd);
+                pairToast.second.setOnClickListener(view1 -> {
+                    pairToast.first.dismiss();
+                    moveCopyGroup(v, this, g, 1);
+                });
             });
             bsd.first.show();
         });
@@ -497,7 +506,7 @@ public class ListActivity extends AppCompatActivity {
         subCountArrowBtn.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         viewToLoad.findViewById(R.id.moreGroupBtn).setOnClickListener(v -> {
 
-            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(e.getTitle(),v.getContext());
+            Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getEntryAndGroupMenuOptions(e.getTitle(), v.getContext());
             bsd.second.get(0).setOnClickListener(view -> {
                 bsd.first.dismiss();
                 Common.entry = e;
@@ -511,6 +520,14 @@ public class ListActivity extends AppCompatActivity {
             bsd.second.get(1).setOnClickListener(view -> {
                 bsd.first.dismiss();
                 deleteEntry(v, ListActivity.this, e);
+            });
+            bsd.second.get(2).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Pair<Snackbar, LinearLayout> pairToast = ToastUtil.showMoveToast(getLayoutInflater(), v, binding.floatAdd);
+                pairToast.second.setOnClickListener(view1 -> {
+                    pairToast.first.dismiss();
+                    moveCopyEntry(v, this, e, 1);
+                });
             });
             bsd.first.show();
         });
@@ -550,13 +567,12 @@ public class ListActivity extends AppCompatActivity {
 
                 if (parent == null) {
                     ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Parent is null",binding.getRoot().findViewById(R.id.floatAdd));
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Parent is null", binding.getRoot().findViewById(R.id.floatAdd));
                 } else {
                     parent.removeGroup(group);
                     Common.group = parent;
                     boolean isOk = checkAndGetPermission(v, ListActivity.this);
-                    if (isOk && Common.isCodecAvailable)
-                    {
+                    if (isOk && Common.isCodecAvailable) {
                         ProgressDialogUtil.setSavingProgress(alertDialog, 30);
                         OutputStream fileOutputStream = null;
                         try {
@@ -574,10 +590,10 @@ public class ListActivity extends AppCompatActivity {
                             activity.finish();
                         } catch (NoSuchMethodError e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
                         } catch (Exception e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
                         } finally {
                             if (fileOutputStream != null) {
                                 try {
@@ -589,7 +605,7 @@ public class ListActivity extends AppCompatActivity {
                         }
                     } else {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
                     }
                 }
             }).start();
@@ -609,7 +625,7 @@ public class ListActivity extends AppCompatActivity {
 
                 if (parent == null) {
                     ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null",binding.getRoot().findViewById(R.id.floatAdd));
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null", binding.getRoot().findViewById(R.id.floatAdd));
                 } else {
                     parent.removeEntry(entry);
                     boolean isOk = checkAndGetPermission(v, ListActivity.this);
@@ -631,10 +647,10 @@ public class ListActivity extends AppCompatActivity {
                             activity.finish();
                         } catch (NoSuchMethodError e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
                         } catch (Exception e) {
                             ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
                         } finally {
                             if (fileOutputStream != null) {
                                 try {
@@ -646,7 +662,127 @@ public class ListActivity extends AppCompatActivity {
                         }
                     } else {
                         ProgressDialogUtil.dismissSavingDialog(alertDialog);
-                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
+                    }
+                }
+            }).start();
+        });
+        confirmDialog.first.show();
+    }
+
+    private void moveCopyEntry(View v, Activity activity, Entry entry, int type) {
+        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
+        confirmDialog.second.setOnClickListener(viewObj -> {
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+            new Thread(() -> {
+                Group group = null;
+                if (type == 1) {
+                    // move
+                    entry.getParent().removeEntry(entry);
+                    group = Common.group;
+                    group.addEntry(entry);
+                    Common.group = group;
+                }
+                if (group == null) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null", binding.getRoot().findViewById(R.id.floatAdd));
+                } else {
+                    boolean isOk = checkAndGetPermission(v, ListActivity.this);
+                    if (isOk && Common.isCodecAvailable) {
+                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                        OutputStream fileOutputStream = null;
+                        try {
+                            //activity.getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                            fileOutputStream = activity.getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                            Common.database.save(Common.creds, fileOutputStream);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            Intent intent = new Intent(activity, ListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        } catch (NoSuchMethodError e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
+                        } catch (Exception e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
+                        } finally {
+                            if (fileOutputStream != null) {
+                                try {
+                                    fileOutputStream.close();
+                                } catch (Exception e) {
+                                    //do nothing
+                                }
+                            }
+                        }
+                    } else {
+                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
+                    }
+                }
+            }).start();
+        });
+        confirmDialog.first.show();
+    }
+
+    private void moveCopyGroup(View v, Activity activity, Group group, int type) {
+        Triplet<AlertDialog, MaterialButton, MaterialButton> confirmDialog = ConfirmDialogUtil.getConfirmDialog(activity.getLayoutInflater(), activity);
+        confirmDialog.second.setOnClickListener(viewObj -> {
+            final AlertDialog alertDialog = ProgressDialogUtil.getSaving(activity.getLayoutInflater(), activity);
+            ProgressDialogUtil.showSavingDialog(alertDialog);
+            new Thread(() -> {
+                Group groupToMove = null;
+                if (type == 1) {
+                    groupToMove = Common.group;
+                    group.getParent().removeGroup(group);
+                    groupToMove.addGroup(group);
+                    Common.group = groupToMove;
+                }
+                if (groupToMove == null) {
+                    ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                    ToastUtil.showToast(activity.getLayoutInflater(), v, "Group is null", binding.getRoot().findViewById(R.id.floatAdd));
+                } else {
+                    boolean isOk = checkAndGetPermission(v, ListActivity.this);
+                    if (isOk && Common.isCodecAvailable) {
+                        ProgressDialogUtil.setSavingProgress(alertDialog, 30);
+                        OutputStream fileOutputStream = null;
+                        try {
+                            //activity.getContentResolver().takePersistableUriPermission(Common.kdbxFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 40);
+                            fileOutputStream = activity.getContentResolver().openOutputStream(Common.kdbxFileUri, "wt");
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 50);
+                            Common.database.save(Common.creds, fileOutputStream);
+                            ProgressDialogUtil.setSavingProgress(alertDialog, 100);
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            Intent intent = new Intent(activity, ListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("click", "group");
+                            intent.putExtras(bundle);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        } catch (NoSuchMethodError e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
+                        } catch (Exception e) {
+                            ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                            ToastUtil.showToast(activity.getLayoutInflater(), v, e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
+                        } finally {
+                            if (fileOutputStream != null) {
+                                try {
+                                    fileOutputStream.close();
+                                } catch (Exception e) {
+                                    //do nothing
+                                }
+                            }
+                        }
+                    } else {
+                        ProgressDialogUtil.dismissSavingDialog(alertDialog);
+                        ToastUtil.showToast(activity.getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
                     }
                 }
             }).start();
@@ -726,7 +862,7 @@ public class ListActivity extends AppCompatActivity {
                 getContentResolver().takePersistableUriPermission(newFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 this.grantUriPermission(this.getPackageName(), newFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError,binding.getRoot().findViewById(R.id.floatAdd));
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.writePermissionNotGotError, binding.getRoot().findViewById(R.id.floatAdd));
             }
             Database<?, ?, ?, ?> database = Common.database;
             OutputStream fileOutputStream = null;
@@ -736,9 +872,9 @@ public class ListActivity extends AppCompatActivity {
                 fileOutputStream = getContentResolver().openOutputStream(newFile, "wt");
                 database.save(creds, fileOutputStream);
             } catch (NoSuchMethodError e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
             } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage(),binding.getRoot().findViewById(R.id.floatAdd));
+                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), e.getMessage(), binding.getRoot().findViewById(R.id.floatAdd));
                 Log.e("KP", "KP error ", e);
             } finally {
                 ProgressDialogUtil.dismissSavingDialog(d);
@@ -763,7 +899,7 @@ public class ListActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
             }
         } else {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -773,7 +909,7 @@ public class ListActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 isOK = true;
             } else {
-                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted,binding.getRoot().findViewById(R.id.floatAdd));
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
             }
         }
         return isOK;

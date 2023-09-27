@@ -144,6 +144,108 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/copyMenuLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="90">
+
+            <ImageButton
+                android:id="@+id/copyMenuIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/copy"
+                android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                android:textAlignment="gravity"
+                android:tooltipText="@string/copy"
+                app:tint="@color/kp_dark_blue"></ImageButton>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/copyMenuText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/josefin_sans_regular"
+                android:gravity="center_vertical"
+                android:text="@string/copy"
+                android:textColor="@color/kp_dark_blue">
+
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/moveMenuLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="90">
+
+            <ImageButton
+                android:id="@+id/moveMenuIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/move"
+                android:src="@drawable/ic_move_fill0_wght300_grad_25_opsz24"
+                android:textAlignment="gravity"
+                android:tooltipText="@string/move"
+                app:tint="@color/kp_dark_blue"></ImageButton>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/moveMenuText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/josefin_sans_regular"
+                android:gravity="center_vertical"
+                android:text="@string/move"
+                android:textColor="@color/kp_dark_blue">
+
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/deleteMenuLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

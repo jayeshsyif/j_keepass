@@ -39,6 +39,8 @@ public class BottomMenuUtil {
         bsd.findViewById(R.id.addGroupMenuLinearLayout).setVisibility(View.GONE);
         options.add(bsd.findViewById(R.id.editMenuLinearLayout));
         options.add(bsd.findViewById(R.id.deleteMenuLinearLayout));
+        bsd.findViewById(R.id.moveMenuLinearLayout).setVisibility(View.VISIBLE);
+        options.add(bsd.findViewById(R.id.moveMenuLinearLayout));
         ((TextView) bsd.findViewById(R.id.nameMenuText)).setText(name);
         res.first = bsd;
         res.second = options;

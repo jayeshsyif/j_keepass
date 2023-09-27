@@ -57,4 +57,47 @@ public class ToastUtil {
             showToast(layoutInflater, v, exception.getMessage(), anchorView);
         }
     }
+
+    static public Pair<Snackbar, LinearLayout> showCopyToast(LayoutInflater layoutInflater, View
+            v, View anchorView) {
+        Pair<Snackbar, LinearLayout> pairToast = new Pair<>();
+        final Snackbar snackbar = Snackbar.make(v, "", Snackbar.LENGTH_INDEFINITE);
+        View customSnackView = layoutInflater.inflate(R.layout.toast_layout, null);
+        LinearLayout toastLayout = customSnackView.findViewById(R.id.toastLayout);
+        //toastLayout.startAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+        TextView toastText = customSnackView.findViewById(R.id.toastText);
+        toastText.setText(R.string.copyMsg);
+        snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
+        Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+        //snackbarLayout.setPadding(0, 0, 0, (int) v.getContext().getResources().getDimension(R.dimen.kp_toast_height));
+        snackbarLayout.addView(customSnackView, 0);
+        snackbarLayout.setAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
+        //snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+        snackbar.setAnchorView(anchorView);
+        snackbar.show();
+        pairToast.first = snackbar;
+        pairToast.second = toastLayout;
+        return pairToast;
+    }
+    static public Pair<Snackbar, LinearLayout> showMoveToast(LayoutInflater layoutInflater, View
+            v, View anchorView) {
+        Pair<Snackbar, LinearLayout> pairToast = new Pair<>();
+        final Snackbar snackbar = Snackbar.make(v, "", Snackbar.LENGTH_INDEFINITE);
+        View customSnackView = layoutInflater.inflate(R.layout.toast_layout, null);
+        LinearLayout toastLayout = customSnackView.findViewById(R.id.toastLayout);
+        //toastLayout.startAnimation(AnimationUtils.makeInAnimation(layoutInflater.getContext(), true));
+        TextView toastText = customSnackView.findViewById(R.id.toastText);
+        toastText.setText(R.string.moveMsg);
+        snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
+        Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+        //snackbarLayout.setPadding(0, 0, 0, (int) v.getContext().getResources().getDimension(R.dimen.kp_toast_height));
+        snackbarLayout.addView(customSnackView, 0);
+        snackbarLayout.setAnimation(AnimationUtils.loadAnimation(v.getContext(), androidx.transition.R.anim.abc_grow_fade_in_from_bottom));
+        //snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+        snackbar.setAnchorView(anchorView);
+        snackbar.show();
+        pairToast.first = snackbar;
+        pairToast.second = toastLayout;
+        return pairToast;
+    }
 }

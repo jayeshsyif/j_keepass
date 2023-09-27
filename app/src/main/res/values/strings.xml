@@ -173,4 +173,10 @@
     <string name="expiringSoonEntries">Exp. soon (Entries)</string>
     <string name="entriesStatistics">Statistics (Entries)</string>
     <string name="statistics">Statistics</string>
+
+    <string name="copy">Copy</string>
+    <string name="copyMsg">Copied. Please navigate to destination and press <u>here</u> </string>
+    <string name="move">Move</string>
+    <string name="moveMsg">Please navigate to destination and press <u>here</u> </string>
+    <string name="here"><u>here</u></string>
 </resources>
