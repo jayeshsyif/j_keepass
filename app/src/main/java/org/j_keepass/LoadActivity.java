@@ -123,10 +123,12 @@ public class LoadActivity extends AppCompatActivity {
             importConfirmDialog.third.setOnClickListener(v -> {
                 importConfirmDialog.first.dismiss();
                 loadFile();
+                showOpenDialog(binding.kdbxFileName.getText().toString(), v);
             });
             importConfirmDialog.second.setOnClickListener(v -> {
                 importConfirmDialog.first.dismiss();
                 importFile();
+                showOpenDialog(binding.kdbxFileName.getText().toString(), v);
             });
             ConfirmDialogUtil.showDialog(importConfirmDialog.first);
         }
@@ -136,17 +138,16 @@ public class LoadActivity extends AppCompatActivity {
 
         if (isFileAvailable) {
             binding.openImportLayout.setVisibility(View.GONE);
-            binding.kdbxFileName.setVisibility(View.VISIBLE);
-            binding.kdbxFileGotPasswordLayout.setVisibility(View.VISIBLE);
             binding.justDatabaseText.setVisibility(View.GONE);
+            binding.justImportCreateTextView.setVisibility(View.GONE);
             //ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword);
         } else {
-            binding.kdbxFileName.setVisibility(View.GONE);
             binding.openImportLayout.setVisibility(View.VISIBLE);
-            binding.kdbxFileName.setVisibility(View.GONE);
-            binding.kdbxFileGotPasswordLayout.setVisibility(View.GONE);
             binding.justDatabaseText.setVisibility(View.VISIBLE);
+            binding.justImportCreateTextView.setVisibility(View.VISIBLE);
         }
+        binding.kdbxFileName.setVisibility(View.GONE);
+        binding.kdbxFileGotPasswordLayout.setVisibility(View.GONE);
 
         Thread bannerThread = new Thread(() -> {
             try {
@@ -192,7 +193,7 @@ public class LoadActivity extends AppCompatActivity {
         binding.floatGenerateNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             }
         });
         binding.importBtn.setOnClickListener(new View.OnClickListener() {
@@ -837,37 +838,7 @@ public class LoadActivity extends AppCompatActivity {
         databaseNameLinearLayout.setOnClickListener(v -> {
             kdbxFileUri = Uri.fromFile(f);
             binding.kdbxFileName.setText(f.getName());
-            Triplet<BottomSheetDialog, MaterialButton, TextInputEditText> openTriplet = DatabaseCreateDialogUtil.getOpenDialog(f.getName(), v.getContext());
-            openTriplet.first.show();
-            TextInputEditText kdbxListFilePassword = openTriplet.third;
-            kdbxListFilePassword.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (kdbxListFilePassword.getText() != null) {
-                        binding.kdbxFileGotPassword.setText(kdbxListFilePassword.getText().toString());
-                    }
-                }
-            });
-            openTriplet.second.setOnClickListener(view -> {
-                openTriplet.first.dismiss();
-                final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), LoadActivity.this);
-                ProgressDialogUtil.showLoadingDialog(alertDialog);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        process(alertDialog, v);
-                    }
-                }).start();
-            });
+            showOpenDialog(f.getName(), v);
         });
         viewToLoad.findViewById(R.id.databaseMoreOption).setOnClickListener(v -> {
             Pair<BottomSheetDialog, ArrayList<LinearLayout>> bsd = BottomMenuUtil.getDbMenuOptions(f.getName(), v.getContext());
@@ -1105,5 +1076,39 @@ public class LoadActivity extends AppCompatActivity {
             Log.i("JKEEPASS", "Notification set error ." + e.getMessage());
             //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         }
+    }
+
+    private void showOpenDialog(String name, View v) {
+        Triplet<BottomSheetDialog, MaterialButton, TextInputEditText> openTriplet = DatabaseCreateDialogUtil.getOpenDialog(name, v.getContext());
+        openTriplet.first.show();
+        TextInputEditText kdbxListFilePassword = openTriplet.third;
+        kdbxListFilePassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (kdbxListFilePassword.getText() != null) {
+                    binding.kdbxFileGotPassword.setText(kdbxListFilePassword.getText().toString());
+                }
+            }
+        });
+        openTriplet.second.setOnClickListener(view -> {
+            openTriplet.first.dismiss();
+            final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), LoadActivity.this);
+            ProgressDialogUtil.showLoadingDialog(alertDialog);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    process(alertDialog, v);
+                }
+            }).start();
+        });
     }
 }
