@@ -367,7 +367,7 @@
                 android:src="@drawable/ic_key_fill1_wght300_grad_25_opsz24"
                 android:textAlignment="gravity"
                 android:tooltipText="@string/addEntry"
-                app:tint="@color/kp_green"></ImageButton>
+                app:tint="@color/kp_green_2"></ImageButton>
 
         </LinearLayout>
 

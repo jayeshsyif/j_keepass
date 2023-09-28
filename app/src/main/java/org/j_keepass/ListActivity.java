@@ -450,6 +450,14 @@ public class ListActivity extends AppCompatActivity {
                     moveCopyGroup(v, this, g, 1);
                 });
             });
+            bsd.second.get(3).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Pair<Snackbar, LinearLayout> pairToast = ToastUtil.showMoveToast(getLayoutInflater(), v, binding.floatAdd);
+                pairToast.second.setOnClickListener(view1 -> {
+                    pairToast.first.dismiss();
+                    moveCopyGroup(v, this, g, 2);
+                });
+            });
             bsd.first.show();
         });
         TextView subCountArrowBtn = viewToLoad.findViewById(R.id.subCountArrow);
@@ -527,6 +535,14 @@ public class ListActivity extends AppCompatActivity {
                 pairToast.second.setOnClickListener(view1 -> {
                     pairToast.first.dismiss();
                     moveCopyEntry(v, this, e, 1);
+                });
+            });
+            bsd.second.get(3).setOnClickListener(view -> {
+                bsd.first.dismiss();
+                Pair<Snackbar, LinearLayout> pairToast = ToastUtil.showMoveToast(getLayoutInflater(), v, binding.floatAdd);
+                pairToast.second.setOnClickListener(view1 -> {
+                    pairToast.first.dismiss();
+                    moveCopyEntry(v, this, e, 2);
                 });
             });
             bsd.first.show();
@@ -683,6 +699,12 @@ public class ListActivity extends AppCompatActivity {
                     group = Common.group;
                     group.addEntry(entry);
                     Common.group = group;
+                } else {
+                    // copy
+                    group = Common.group;
+                    Entry copied = (Entry) copyEntry(entry);
+                    group.addEntry(copied);
+                    Common.group = group;
                 }
                 if (group == null) {
                     ProgressDialogUtil.dismissSavingDialog(alertDialog);
@@ -741,6 +763,10 @@ public class ListActivity extends AppCompatActivity {
                     groupToMove = Common.group;
                     group.getParent().removeGroup(group);
                     groupToMove.addGroup(group);
+                    Common.group = groupToMove;
+                } else {
+                    groupToMove = Common.group;
+                    groupToMove.addGroup(copyGroup(group));
                     Common.group = groupToMove;
                 }
                 if (groupToMove == null) {
@@ -913,5 +939,38 @@ public class ListActivity extends AppCompatActivity {
             }
         }
         return isOK;
+    }
+
+    private Entry copyEntry(Entry e) {
+        Entry c = Common.database.newEntry();
+        c.setExpiryTime(e.getExpiryTime());
+        c.setTitle(e.getTitle());
+        c.setNotes(e.getNotes());
+        c.setPassword(e.getPassword());
+        c.setExpires(e.getExpires());
+        c.setIcon(e.getIcon());
+        c.setUrl(e.getUrl());
+        c.setUsername(e.getUsername());
+        ArrayList<String> props = (ArrayList<String>) e.getPropertyNames();
+        if (props != null) {
+            for (String p : props) {
+                c.setProperty(p, e.getProperty(p));
+            }
+        }
+        ArrayList<String> bprops = (ArrayList<String>) e.getBinaryPropertyNames();
+        if (bprops != null) {
+            for (String bp : bprops) {
+                c.setProperty(bp, e.getProperty(bp));
+            }
+        }
+        return c;
+
+    }
+
+    private Group copyGroup(Group g) {
+        Group c = Common.database.newGroup();
+        c.setName(g.getName());
+        c.setIcon(g.getIcon());
+        return c;
     }
 }
