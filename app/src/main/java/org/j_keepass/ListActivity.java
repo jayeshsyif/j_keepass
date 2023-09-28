@@ -951,17 +951,25 @@ public class ListActivity extends AppCompatActivity {
         c.setIcon(e.getIcon());
         c.setUrl(e.getUrl());
         c.setUsername(e.getUsername());
-        ArrayList<String> props = (ArrayList<String>) e.getPropertyNames();
-        if (props != null) {
-            for (String p : props) {
-                c.setProperty(p, e.getProperty(p));
+        try {
+            ArrayList<String> props = (ArrayList<String>) e.getPropertyNames();
+            if (props != null) {
+                for (String p : props) {
+                    c.setProperty(p, e.getProperty(p));
+                }
             }
+        } catch (ClassCastException ce) {
+
         }
-        ArrayList<String> bprops = (ArrayList<String>) e.getBinaryPropertyNames();
-        if (bprops != null) {
-            for (String bp : bprops) {
-                c.setProperty(bp, e.getProperty(bp));
+        try {
+            ArrayList<String> bprops = (ArrayList<String>) e.getBinaryPropertyNames();
+            if (bprops != null) {
+                for (String bp : bprops) {
+                    c.setProperty(bp, e.getProperty(bp));
+                }
             }
+        } catch (ClassCastException ce) {
+
         }
         return c;
 
@@ -971,6 +979,27 @@ public class ListActivity extends AppCompatActivity {
         Group c = Common.database.newGroup();
         c.setName(g.getName());
         c.setIcon(g.getIcon());
+        try {
+            ArrayList<Group> subG = (ArrayList<Group>) g.getGroups();
+            if (subG != null) {
+                for (Group sg : subG) {
+                    c.addGroup(copyGroup(sg));
+                }
+            }
+        } catch (ClassCastException ce) {
+
+        }
+        try {
+            ArrayList<Entry> subE = (ArrayList<Entry>) g.getEntries();
+            if (subE != null) {
+                for (Entry se : subE) {
+                    c.addEntry(copyEntry(se));
+                }
+            }
+        } catch (ClassCastException ce) {
+
+        }
+
         return c;
     }
 }
