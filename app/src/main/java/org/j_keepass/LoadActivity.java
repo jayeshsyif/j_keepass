@@ -250,13 +250,13 @@ public class LoadActivity extends AppCompatActivity {
                                     Database<?, ?, ?, ?> database = getDummyDatabase();
                                     OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
                                     database.save(creds, fileOutputStream);
-                                    fetchAndShowFiles();
-                                    kdbxFileUri = null;
+                                    confirmDialog.first.dismiss();
                                     if (v1 != null) {
                                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
                                     }
-                                    confirmDialog.first.dismiss();
+                                    fetchAndShowFiles();
+                                    kdbxFileUri = null;
                                 } catch (Exception e) {
                                     ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                 }
@@ -385,6 +385,7 @@ public class LoadActivity extends AppCompatActivity {
             if (inputStream != null) {
                 try {
                     database = SimpleDatabase.load(creds, inputStream);
+                    ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
                 } catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     proceed = false;
@@ -396,7 +397,6 @@ public class LoadActivity extends AppCompatActivity {
                     proceed = false;
                 }
             }
-            ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
             if (inputStream != null) {
                 try {
                     inputStream.close();
@@ -1106,7 +1106,7 @@ public class LoadActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    process(alertDialog, v);
+                    process(alertDialog, binding.getRoot().getRootView());
                 }
             }).start();
         });
