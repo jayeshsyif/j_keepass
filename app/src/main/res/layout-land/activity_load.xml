@@ -56,44 +56,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:weightSum="2">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/importBtn"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/kp_button_margin"
-                            android:layout_marginRight="@dimen/kp_button_margin"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/kp_light_blue"
-                            android:drawableLeft="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
-                            android:drawableTint="@color/kp_white"
-                            android:fontFamily="@font/mooli"
-                            android:text="@string/importStr"
-                            android:textAllCaps="true"
-                            android:textColor="@color/kp_white"
-                            android:textStyle="normal">
-
-                        </com.google.android.material.button.MaterialButton>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/createBtn"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/kp_button_margin"
-                            android:layout_marginRight="@dimen/kp_button_margin"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/kp_light_blue"
-                            android:drawableLeft="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
-                            android:drawableTint="@color/kp_white"
-                            android:fontFamily="@font/mooli"
-                            android:text="@string/create"
-                            android:textAllCaps="true"
-                            android:textColor="@color/kp_white"
-                            android:textStyle="normal">
-
-                        </com.google.android.material.button.MaterialButton>
-
                     </LinearLayout>
 
 
@@ -193,7 +157,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/themeFloatBtn"
@@ -204,6 +170,45 @@
                         android:backgroundTint="@android:color/transparent"
                         android:textStyle="bold"
                         app:tint="@color/kp_white" />
+
+                    <ImageButton
+                        android:id="@+id/importBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:src="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
+                        android:textColor="@color/kp_white"
+                        android:textStyle="bold"
+                        app:tint="@color/kp_white">
+
+                    </ImageButton>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/createBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:src="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
+                        android:textColor="@color/kp_white"
+                        android:textStyle="bold"
+                        app:tint="@color/kp_white"></ImageButton>
 
                     <ImageButton
                         android:id="@+id/floatInfo"

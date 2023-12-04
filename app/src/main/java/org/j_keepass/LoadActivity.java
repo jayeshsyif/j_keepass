@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -142,7 +143,7 @@ public class LoadActivity extends AppCompatActivity {
             binding.justImportCreateTextView.setVisibility(View.GONE);
             //ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword);
         } else {
-            binding.openImportLayout.setVisibility(View.VISIBLE);
+            binding.openImportLayout.setVisibility(View.GONE);
             binding.justDatabaseText.setVisibility(View.VISIBLE);
             binding.justImportCreateTextView.setVisibility(View.VISIBLE);
         }
@@ -214,7 +215,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
             }
         });
-        MaterialButton createBtn = binding.createBtn;
+        ImageButton createBtn = binding.createBtn;
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
