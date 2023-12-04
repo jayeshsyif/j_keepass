@@ -225,7 +225,7 @@
                             android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
                             android:textColor="@color/kp_white"
                             android:textStyle="bold"
-                            app:tint="@color/kp_white" />
+                            app:tint="@color/teal_200" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>
