@@ -1,6 +1,8 @@
 package org.j_keepass.util;
 
 
+import android.util.Log;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -104,5 +106,10 @@ public class Util {
 
     static public void sleepForHalfSec() {
         sleepInMilliSec(500);
+    }
+
+    public static void log(String msg)
+    {
+        Log.i("JKEEPASS", msg);
     }
 }

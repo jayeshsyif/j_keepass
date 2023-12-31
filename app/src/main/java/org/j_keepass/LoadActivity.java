@@ -72,6 +72,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -387,12 +389,17 @@ public class LoadActivity extends AppCompatActivity {
                 try {
                     database = SimpleDatabase.load(creds, inputStream);
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
-                } catch (Exception e) {
+                }
+                catch (NoClassDefFoundError e) {
+                    ProgressDialogUtil.dismissLoadingDialog(alertDialog);
+                    proceed = false;
+                    ToastUtil.showToast(getLayoutInflater(), v, R.string.devInProgress, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                }catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     proceed = false;
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
-                if (database == null) {
+                if ( proceed && database == null) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     proceed = false;
@@ -910,12 +917,14 @@ public class LoadActivity extends AppCompatActivity {
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
                                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
                                     } else {
+                                        ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
                                         ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                     }
                                 } catch (Exception e) {
+                                    e.printStackTrace();
+                                    ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
                                     ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                 }
-                                ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
                             });
                         }).start();
                     }
