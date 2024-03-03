@@ -26,14 +26,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:fontFamily="@font/megrim"
+                android:fontFamily="@font/milonga_regular"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:background="@color/kp_light_blue"
                 android:textColor="@color/kp_white"
                 android:textStyle="bold" />
+
 
             <ScrollView
                 android:id="@+id/loadScrollview"
@@ -157,70 +158,75 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent">
 
-                    <ImageButton
-                        android:id="@+id/themeFloatBtn"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:textStyle="bold"
-                        app:tint="@color/kp_white" />
+                        android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/importBtn"
+                        <ImageButton
+                            android:id="@+id/themeFloatBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:backgroundTint="@android:color/transparent"
+                            android:textStyle="bold"
+                            app:tint="@color/kp_white" />
+
+                        <ImageButton
+                            android:id="@+id/importBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:backgroundTint="@android:color/transparent"
+                            android:src="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
+                            android:textColor="@color/kp_white"
+                            android:textStyle="bold"
+                            app:tint="@color/kp_white">
+
+                        </ImageButton>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
-                        android:textColor="@color/kp_white"
-                        android:textStyle="bold"
-                        app:tint="@color/kp_white">
+                        android:orientation="horizontal"></LinearLayout>
 
-                    </ImageButton>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/createBtn"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
-                        android:textColor="@color/kp_white"
-                        android:textStyle="bold"
-                        app:tint="@color/kp_white"></ImageButton>
+                        android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/floatInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
-                        android:textColor="@color/kp_white"
-                        android:textStyle="bold"
-                        app:tint="@color/kp_white" />
+                        <ImageButton
+                            android:id="@+id/createBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:backgroundTint="@android:color/transparent"
+                            android:src="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
+                            android:textColor="@color/kp_white"
+                            android:textStyle="bold"
+                            app:tint="@color/kp_white"></ImageButton>
+
+                        <ImageButton
+                            android:id="@+id/floatInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:backgroundTint="@android:color/transparent"
+                            android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
+                            android:textColor="@color/kp_white"
+                            android:textStyle="bold"
+                            app:tint="@color/teal_200" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>
         </LinearLayout>
