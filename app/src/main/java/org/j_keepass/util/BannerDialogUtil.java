@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ public class BannerDialogUtil {
 
 
     @SuppressLint("ResourceType")
-    static public Dialog getBanner(LayoutInflater layoutInflater, Context
+    static public Dialog getBanner(Context
             context) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         Dialog dialog = null;
@@ -27,7 +28,7 @@ public class BannerDialogUtil {
             //tx.startAnimation(AnimationUtils.loadAnimation(context, R.animator.blink));
 
         } catch (Exception e) {
-
+            Log.e("JKEEPASS", "banner create error ",e);
         }
         return dialog;
     }

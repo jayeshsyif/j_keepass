@@ -115,13 +115,19 @@ public class LoadActivity extends AppCompatActivity {
         }
 
         Common.database = null;
-        if (banner != null) {
-            Log.i("JKEEPASS", "banner not null");
-        } else {
-            Log.i("JKEEPASS", "banner null");
+        try {
+            if (banner != null) {
+                Log.i("JKEEPASS", "banner not null");
+            } else {
+                banner = BannerDialogUtil.getBanner(binding.getRoot().getContext());
+                Log.i("JKEEPASS", "banner null");
+            }
+            banner.show();
+        } catch (IllegalArgumentException e) {
+            Log.e("JKEEPASS", "banner IllegalArgumentException ",e);
+        } catch (RuntimeException e) {
+            Log.e("JKEEPASS", "banner RuntimeException ",e);
         }
-        banner = BannerDialogUtil.getBanner(getLayoutInflater(), this);
-        banner.show();
         if (isFileAvailable) {
             Triplet<AlertDialog, MaterialButton, MaterialButton> importConfirmDialog = ConfirmDialogUtil.getImportConfirmDialog(getLayoutInflater(), this);
             importConfirmDialog.third.setOnClickListener(v -> {
@@ -153,20 +159,28 @@ public class LoadActivity extends AppCompatActivity {
         binding.kdbxFileName.setVisibility(View.GONE);
         binding.kdbxFileGotPasswordLayout.setVisibility(View.GONE);
 
-        Thread bannerThread = new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                //do nothing
+        if (banner != null) {
+            Thread bannerThread = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    //do nothing
+                }
+                if (banner.isShowing()) {
+                    banner.dismiss();
+                }
+                banner = null;
+                loadAfterDialog();
+            });
+            if (!isFileAvailable) {
+                bannerThread.start();
+            } else {
+                if (banner.isShowing()) {
+                    banner.dismiss();
+                }
+                banner = null;
+                loadAfterDialog();
             }
-            banner.dismiss();
-            loadAfterDialog();
-        });
-        if (!isFileAvailable) {
-            bannerThread.start();
-        } else {
-            banner.dismiss();
-            loadAfterDialog();
         }
     }
 
