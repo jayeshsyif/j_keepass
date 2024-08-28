@@ -206,7 +206,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/josefin_sans_light"
                         android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer8Text"
+                        android:text="@string/changeLogsVer9Text"
                         android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="?colorSecondary"
