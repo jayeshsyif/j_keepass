@@ -57,6 +57,7 @@ import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.Quadruple;
+import org.j_keepass.util.ThemeSettingDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
@@ -97,7 +98,7 @@ public class LoadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ThemeSettingDialogUtil.onActivityCreateSetTheme(this, true);
         binding = ActivityLoadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -655,54 +656,8 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void setThemeButton() {
-        try {
-            defaultThemeCode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-            SharedPreferences sharedPref = LoadActivity.this.getPreferences(Context.MODE_PRIVATE);
-            int themeCode = sharedPref.getInt(getString(R.string.themeCode), 0);
-            if (themeCode > 0) {
-                defaultThemeCode = themeCode;
-            }
-            switch (defaultThemeCode) {
-                case Configuration.UI_MODE_NIGHT_NO:
-                    // Night mode is not active on device
-                    binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    break;
-                case Configuration.UI_MODE_NIGHT_YES:
-                    // Night mode is active on device
-                    binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    break;
-                case 3:
-                    break;
-                default:
-                    break;
-            }
-        } catch (Exception e) {
-            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
-        }
-
         binding.themeFloatBtn.setOnClickListener(v -> {
-            try {
-                SharedPreferences sharedPref = LoadActivity.this.getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                switch (defaultThemeCode) {
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        binding.themeFloatBtn.setImageResource(R.drawable.ic_light_mode_fill0_wght300_grad_25_opsz24);
-                        editor.putInt(getString(R.string.themeCode), Configuration.UI_MODE_NIGHT_YES);
-                        editor.apply();
-                        break;
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        binding.themeFloatBtn.setImageResource(R.drawable.ic_dark_mode_fill0_wght300_grad_25_opsz24);
-                        editor.putInt(getString(R.string.themeCode), Configuration.UI_MODE_NIGHT_NO);
-                        editor.apply();
-                        break;
-                }
-            } catch (Exception e) {
-                ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.themeModeInfoNotGotError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
-            }
+            ThemeSettingDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), binding.getRoot().findViewById(R.id.floatGenerateNewPassword), this);
         });
     }
 
@@ -947,7 +902,7 @@ public class LoadActivity extends AppCompatActivity {
         databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()) + " ");
         databaseMoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
-        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME);
+        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(viewToLoad.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME);
         databaseNameCardView.setLayoutAnimation(lac);
         binding.listDatabasesLinerLayout.addView(viewToLoad);
     }

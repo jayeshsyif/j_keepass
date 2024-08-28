@@ -6,13 +6,16 @@
     android:layout_gravity="center"
     android:layout_weight="1"
     android:gravity="center"
+    android:backgroundTint="?colorPrimary"
+    android:background="?colorPrimary"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:backgroundTint="@color/kp_whitesh_grey"
+        android:backgroundTint="?colorPrimary"
+        android:background="?colorPrimary"
         android:padding="@dimen/kp_margin"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
@@ -42,7 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
-                        android:background="@color/kp_light_blue"
+                        android:background="?colorPrimaryVariant"
                         android:src="@drawable/me3" />
                 </androidx.cardview.widget.CardView>
 
@@ -52,11 +55,11 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/kp_card_view_margin"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/kp_light_blue"
+                    android:backgroundTint="?colorPrimaryVariant"
                     android:clickable="false"
                     android:fontFamily="@font/josefin_sans_regular"
                     android:text="@string/developer"
-                    android:textColor="@color/kp_grey"
+                    android:textColor="?colorSecondary"
                     android:textSize="@dimen/kp_small_text_size">
 
                 </com.google.android.material.button.MaterialButton>
@@ -71,7 +74,7 @@
                     android:gravity="center"
                     android:text="@string/developerName"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/kp_dark_blue" />
+                    android:textColor="?colorSecondary" />
 
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -88,7 +91,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
                         android:visibility="invisible"
-                        app:tint="@color/kp_dark_blue">
+                        app:tint="?colorOnPrimary">
 
                     </ImageButton>
 
@@ -100,7 +103,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        app:tint="@color/kp_green_2">
+                        app:tint="?colorOnPrimary">
 
                     </ImageButton>
 
@@ -112,7 +115,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        app:tint="@color/kp_green_2">
+                        app:tint="?colorOnPrimary">
 
                     </ImageButton>
 
@@ -124,7 +127,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
-                        app:tint="@color/kp_green_2"></ImageButton>
+                        app:tint="?colorOnPrimary"></ImageButton>
 
                     <ImageButton
                         android:layout_width="match_parent"
@@ -134,7 +137,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_link_fill0_wght300_grad_25_opsz24"
                         android:visibility="invisible"
-                        app:tint="@color/kp_dark_blue">
+                        app:tint="?colorOnPrimary">
 
                     </ImageButton>
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -150,8 +153,8 @@
                     android:text="@string/credit"
                     android:textAlignment="gravity"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kp_dark_blue"
-                    android:textColorLink="@color/kp_dark_blue"
+                    android:textColor="?colorSecondary"
+                    android:textColorLink="?colorSecondary"
                     android:textStyle="normal">
 
                 </TextView>
@@ -173,7 +176,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/changeLogs"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_dark_blue">
+                        android:textColor="?colorSecondary">
 
                     </TextView>
 
@@ -182,11 +185,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_whitesh_grey"
+                        android:backgroundTint="?colorPrimary"
                         android:fontFamily="@font/josefin_sans_light"
                         android:gravity="center|right"
                         android:src="@drawable/ic_visibility_fill0_wght300_grad_25_opsz24"
-                        android:tint="@color/kp_dark_blue" />
+                        android:tint="?colorOnPrimary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -206,7 +209,7 @@
                         android:text="@string/changeLogsVer8Text"
                         android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/kp_dark_blue"
+                        android:textColor="?colorSecondary"
                         android:textStyle="normal" />
 
                     <TextView
@@ -216,10 +219,10 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/josefin_sans_light"
                         android:gravity="center_vertical"
-                        android:text="@string/changeLogsVer8ChangesText"
+                        android:text="@string/changeLogsVer9ChangesText"
                         android:textAlignment="gravity"
-                        android:textColor="@color/kp_dark_blue"
-                        android:textColorLink="@color/kp_dark_blue"
+                        android:textColor="?colorSecondary"
+                        android:textColorLink="?colorSecondary"
                         android:textSize="@dimen/kp_small_text_size"
                         android:textStyle="italic" />
 

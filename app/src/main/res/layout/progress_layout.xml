@@ -12,7 +12,8 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/kp_card_view_margin"
         android:layout_weight="1"
-        android:backgroundTint="@color/kp_whitesh_grey"
+        android:background="?colorPrimary"
+        android:backgroundTint="?colorPrimary"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <ScrollView
@@ -33,9 +34,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:scaleY="2"
-                    android:progressBackgroundTint="@color/kp_dark_blue"
-                    android:progressTint="@color/kp_dark_blue"></ProgressBar>
+                    android:progressBackgroundTint="?colorOnPrimary"
+                    android:progressTint="?colorOnPrimary"
+                    android:scaleY="2"></ProgressBar>
 
                 <TextView
                     android:id="@+id/progressBarText"
@@ -46,7 +47,7 @@
                     android:gravity="center"
                     android:text="@string/loading"
                     android:textAlignment="center"
-                    android:textColor="@color/kp_dark_blue"
+                    android:textColor="?colorOnPrimary"
                     android:textStyle="bold"></TextView>
 
             </LinearLayout>

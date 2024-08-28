@@ -23,6 +23,7 @@ import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.ThemeSettingDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Group;
@@ -38,6 +39,7 @@ public class EditGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeSettingDialogUtil.onActivityCreateSetTheme(this, false);
         binding = EditNewGroupLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         if (Common.database == null) {

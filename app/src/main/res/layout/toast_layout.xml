@@ -23,13 +23,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@color/kp_light_blue"
+                android:background="?colorOnPrimary"
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center"
                 android:padding="@dimen/fab_new_padding"
                 android:text="@string/loading"
                 android:textAlignment="center"
-                android:textColor="@color/kp_white"
+                android:textColor="?colorPrimary"
                 android:textSize="@dimen/kp_small_text_size"
                 android:textStyle="bold"></TextView>
         </androidx.cardview.widget.CardView>

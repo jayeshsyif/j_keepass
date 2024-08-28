@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_weight="1"
+    android:backgroundTint="?colorPrimary"
+    android:background="?colorPrimary"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:backgroundTint="@color/kp_whitesh_grey"
-        android:padding="@dimen/kp_card_view_margin"
+        android:backgroundTint="?colorPrimary"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <ScrollView
@@ -40,21 +41,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="30"
-                        android:textColorHint="@color/kp_grey"
-                        app:boxStrokeColor="@color/kp_grey"
-                        app:hintTextColor="@color/kp_grey"
+                        android:textColorHint="?colorOnPrimary"
+                        app:boxStrokeColor="?colorSecondary"
+                        app:hintTextColor="?colorOnPrimary"
                         app:passwordToggleEnabled="false"
-                        app:passwordToggleTint="@color/kp_grey">
+                        android:background="?colorPrimary"
+                        android:backgroundTint="?colorPrimary"
+                        app:placeholderTextColor="?colorOnPrimary"
+                        app:passwordToggleTint="?colorOnPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/searchText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:backgroundTint="@color/kp_changing_white"
+                            android:backgroundTint="?colorPrimaryVariant"
                             android:fontFamily="@font/josefin_sans_regular"
                             android:hint="@string/enterToSearch"
                             android:inputType="text"
-                            android:textColor="@color/kp_dark_blue" />
+                            android:textColorHint="?colorOnPrimary"
+                            android:textColor="?colorSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -72,11 +77,11 @@
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="?colorPrimaryVariant"
                         android:fontFamily="@font/josefin_sans_regular"
                         android:text="@string/search"
                         android:textAllCaps="true"
-                        android:textColor="@color/kp_white"
+                        android:textColor="?colorSecondary"
                         android:textStyle="bold">
 
                     </com.google.android.material.button.MaterialButton>

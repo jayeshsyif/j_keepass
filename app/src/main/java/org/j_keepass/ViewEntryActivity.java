@@ -14,6 +14,7 @@ import org.j_keepass.databinding.ActivityViewEntryBinding;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.FieldUtil;
 import org.j_keepass.util.NewPasswordDialogUtil;
+import org.j_keepass.util.ThemeSettingDialogUtil;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Entry;
 
@@ -30,6 +31,7 @@ public class ViewEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeSettingDialogUtil.onActivityCreateSetTheme(this, false);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         binding = ActivityViewEntryBinding.inflate(getLayoutInflater());
         currentDate = Calendar.getInstance().getTime();

@@ -3,10 +3,10 @@
     android:shape="rectangle">
     <gradient
         android:angle="270"
-        android:endColor="@color/kp_light_blue"
-        android:startColor="@color/kp_light_blue" />
+        android:endColor="?colorPrimary"
+        android:startColor="?colorPrimary" />
     <corners android:radius="@dimen/cardview_default_radius" />
     <stroke
         android:width="0.5dp"
-        android:color="@color/kp_dark_blue" />
+        android:color="?colorPrimary" />
 </shape>

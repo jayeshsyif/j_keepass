@@ -20,4 +20,80 @@
         <item name="android:popupBackground">@drawable/round_corner_all_size</item>
         <item name="android:textColor">@color/kp_static_white</item>
     </style>
+
+    <style name="Theme.J_KeePass.br" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kp_br_black</item>
+        <item name="colorPrimaryVariant">@color/kp_br_grey</item>
+        <item name="colorOnPrimary">@color/kp_br_red</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kp_br_white</item>
+        <item name="colorSecondaryVariant">@color/kp_br_grey</item>
+        <item name="colorOnSecondary">@color/kp_br_red</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.J_KeePass.bb" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kp_bb_dark_blue</item>
+        <item name="colorPrimaryVariant">@color/kp_bb_light_blue</item>
+        <item name="colorOnPrimary">@color/kp_bb_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kp_bb_white</item>
+        <item name="colorSecondaryVariant">@color/kp_bb_light_blue</item>
+        <item name="colorOnSecondary">@color/kp_bb_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.J_KeePass.bl" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kp_bl_black</item>
+        <item name="colorPrimaryVariant">@color/kp_bl_grey</item>
+        <item name="colorOnPrimary">@color/kp_bl_lemon</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kp_bl_white</item>
+        <item name="colorSecondaryVariant">@color/kp_bl_grey</item>
+        <item name="colorOnSecondary">@color/kp_bl_lemon</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.J_KeePass.bg" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kp_bg_black</item>
+        <item name="colorPrimaryVariant">@color/kp_bg_grey</item>
+        <item name="colorOnPrimary">@color/kp_bg_green</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kp_bg_white</item>
+        <item name="colorSecondaryVariant">@color/kp_bg_grey</item>
+        <item name="colorOnSecondary">@color/kp_bg_green</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

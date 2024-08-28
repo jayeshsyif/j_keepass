@@ -8,10 +8,10 @@
         android:bottom="0dp">
 
         <shape android:shape="rectangle">
-            <solid android:color="@color/kp_changing_white"/>
+            <solid android:color="?colorPrimaryVariant"/>
             <stroke
-                android:width="0.5dp"
-                android:color="@color/kp_dark_blue"/>
+                android:width="0dp"
+                android:color="?colorPrimaryVariant"/>
         </shape>
     </item>
 </layer-list>

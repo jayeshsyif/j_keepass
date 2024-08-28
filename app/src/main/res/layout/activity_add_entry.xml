@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/kp_grey"
+    android:background="?colorPrimary"
     tools:context=".AddEntryActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/kp_whitesh_grey"
+        android:backgroundTint="?colorPrimary"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <LinearLayout
@@ -24,14 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:background="@color/kp_light_blue"
+                android:background="?colorPrimary"
                 android:fontFamily="@font/milonga_regular"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/entryName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/kp_static_white"
+                android:textColor="?colorSecondary"
                 android:textStyle="bold"></TextView>
 
             <ScrollView
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="20"
-                android:background="@color/kp_whitesh_grey">
+                android:background="?colorPrimary">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,10 +58,10 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
                         android:layout_margin="@dimen/kp_margin"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="?colorOnPrimary"
+                        android:tint="?colorPrimary"
                         android:fontFamily="@font/josefin_sans_regular"
-                        android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
-                        android:tint="@color/kp_white" />
+                        android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24" />
 
                     <LinearLayout
                         android:id="@+id/addAdditionalFieldEntryScrollViewLinearLayout"
@@ -76,7 +76,7 @@
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/kp_light_blue"
+                android:background="?colorPrimary"
                 app:labelVisibilityMode="unlabeled"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -95,7 +95,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
                         android:textStyle="bold"
-                        app:tint="@color/kp_white" />
+                        app:tint="?colorSecondary" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -117,9 +117,9 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
-                            android:textColor="@color/kp_white"
+                            android:textColor="?colorSecondary"
                             android:textStyle="bold"
-                            app:tint="@color/kp_white" />
+                            app:tint="?colorSecondary" />
 
                         <ImageButton
                             android:id="@+id/lockBtn"
@@ -142,11 +142,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/fab_new_margin"
-            android:backgroundTint="@color/float_btn_back"
-            android:textColor="@color/float_btn_fore"
+            android:backgroundTint="?colorOnPrimary"
+            android:textColor="?colorSecondary"
             app:icon="@drawable/ic_save_fill0_wght300_grad_25_opsz24"
-            app:iconTint="@color/float_btn_fore"
-            app:tint="@color/float_btn_fore" />
+            app:iconTint="?colorSecondary"
+            app:tint="?colorSecondary"  />
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

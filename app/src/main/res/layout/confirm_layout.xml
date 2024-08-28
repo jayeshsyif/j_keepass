@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_weight="1"
+    android:backgroundTint="?colorPrimary"
+    android:background="?colorPrimary"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -12,7 +14,8 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/kp_card_view_margin"
         android:layout_weight="1"
-        android:backgroundTint="@color/kp_whitesh_grey"
+        android:backgroundTint="?colorPrimary"
+        android:background="?colorPrimary"
         app:cardCornerRadius="@dimen/kp_card_view_radius">
 
         <ScrollView
@@ -39,7 +42,7 @@
                     android:gravity="center"
                     android:text="@string/areYouSure"
                     android:textAlignment="center"
-                    android:textColor="@color/kp_light_blue"
+                    android:textColor="?colorSecondary"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -55,11 +58,11 @@
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="?colorPrimaryVariant"
                         android:fontFamily="@font/josefin_sans_regular"
                         android:text="@string/yes"
                         android:textAllCaps="true"
-                        android:textColor="@color/kp_white"
+                        android:textColor="?colorSecondary"
                         android:textStyle="bold">
 
                     </com.google.android.material.button.MaterialButton>
@@ -70,11 +73,11 @@
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/kp_light_blue"
+                        android:backgroundTint="?colorPrimaryVariant"
                         android:fontFamily="@font/josefin_sans_regular"
                         android:text="@string/no"
                         android:textAllCaps="true"
-                        android:textColor="@color/kp_white"
+                        android:textColor="?colorSecondary"
                         android:textStyle="bold">
 
                     </com.google.android.material.button.MaterialButton>

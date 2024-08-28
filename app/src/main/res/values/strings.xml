@@ -144,6 +144,8 @@
     <string name="changeLogsVer731ChangesText">   Notification Fixes.</string>
     <string name="changeLogsVer8Text">Version 8</string>
     <string name="changeLogsVer8ChangesText">   Copy and move within same database/file feature added with UI enhancement.</string>
+    <string name="changeLogsVer9Text">Version 9</string>
+    <string name="changeLogsVer9ChangesText">   Layout changes and themes support added.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -166,6 +168,7 @@
     <string name="importDeclaration">Please export and save database before uninstallation of application</string>
 
     <string name="themeCode">themeCode</string>
+    <string name="themes">Themes</string>
 
     <string name="total">Total</string>
     <string name="expired">Expired</string>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <LinearLayout
+        android:id="@+id/nameMenuLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="vertical"
+            android:padding="@dimen/kp_button_margin"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/nameMenuText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:fontFamily="@font/josefin_sans_regular"
+                android:gravity="center_vertical"
+                android:text="@string/themes"
+                android:textColor="?colorSecondary">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="98"
+                android:background="?colorOnPrimary">
+
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/kp_button_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin">
+
+            <LinearLayout
+                android:id="@+id/wb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_wb_light_white"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_wb_blue"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/wr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_wr_light_white"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_wr_red"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/wl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_wl_light_white"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_wl_lemon"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/p"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_p_light_pink"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_p_pink"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/kp_button_margin">
+
+            <LinearLayout
+                android:id="@+id/bb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_bb_dark_blue"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_bb_blue"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/br"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_br_black"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_br_red"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_bl_black"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_bl_lemon"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_bg_black"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_bg_green"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

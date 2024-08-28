@@ -26,4 +26,62 @@
     <color name="float_btn_fore">#ffffff</color>
     <color name="kp_very_light_blue">#e3edff</color>
 
+    <!-- White blue-->
+    <color name="kp_wb_light_white">#dcdcdc</color>
+    <color name="kp_wb_grey">#ffffff</color>
+    <color name="kp_wb_blue">#66A5D0</color>
+    <color name="kp_wb_white">#535353</color>
+    <!-- White blue -->
+
+    <!-- Black blue-->
+    <color name="kp_bb_dark_blue">#0e151d</color>
+    <color name="kp_bb_light_blue">#22374c</color>
+    <color name="kp_bb_blue">#2ebdf9</color>
+    <color name="kp_bb_white">#EEEEEE</color>
+    <!-- Black blue-->
+
+    <!-- White red-->
+    <color name="kp_wr_light_white">#dcdcdc</color>
+    <color name="kp_wr_grey">#ffffff</color>
+    <color name="kp_wr_red">#cf5760</color>
+    <color name="kp_wr_white">#535353</color>
+    <!-- White red-->
+
+    <!-- Black red-->
+    <color name="kp_br_black">#2E2E2E</color>
+    <color name="kp_br_grey">#444444</color>
+    <color name="kp_br_red">#FE7678</color>
+    <color name="kp_br_white">#EEEEEE</color>
+    <!-- Black red-->
+
+    <!-- White lemon-->
+    <color name="kp_wl_light_white">#d8d8d8</color>
+    <color name="kp_wl_grey">#e4e4e4</color>
+    <color name="kp_wl_lemon">#af9d5d</color>
+    <color name="kp_wl_white">#3c3c3c</color>
+    <!-- White lemon-->
+
+    <!-- Black lemon-->
+    <color name="kp_bl_black">#191919</color>
+    <color name="kp_bl_grey">#6e6e6e</color>
+    <color name="kp_bl_lemon">#cab971</color>
+    <color name="kp_bl_white">#ffffff</color>
+    <!-- Black lemon-->
+
+
+    <!-- pink-->
+    <color name="kp_p_light_pink">#eae0df</color>
+    <color name="kp_p_grey">#ffffff</color>
+    <color name="kp_p_pink">#c2a4a6</color>
+    <color name="kp_p_white">#7a7373</color>
+    <!-- pink-->
+
+
+    <!-- Black green-->
+    <color name="kp_bg_black">#2a2c29</color>
+    <color name="kp_bg_grey">#485045</color>
+    <color name="kp_bg_green">#a3d880</color>
+    <color name="kp_bg_white">#f3f2f2</color>
+    <!-- Black green-->
+
 </resources>

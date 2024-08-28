@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/kp_changing_white"
+    android:background="?colorPrimary"
     android:orientation="vertical"
     android:padding="@dimen/kp_margin">
 
@@ -31,7 +31,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/menuText"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
 
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="98"
-                android:background="@color/kp_dark_blue">
+                android:background="?colorOnPrimary">
 
             </TextView>
         </LinearLayout>
@@ -69,7 +69,7 @@
                 android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
                 android:textAlignment="gravity"
                 android:tooltipText="@string/edit"
-                app:tint="@color/kp_dark_blue"></ImageButton>
+                app:tint="?colorSecondary"></ImageButton>
 
         </LinearLayout>
 
@@ -88,7 +88,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/edit"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>
@@ -118,7 +118,7 @@
                 android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
                 android:textAlignment="gravity"
                 android:tooltipText="@string/changePassword"
-                app:tint="@color/kp_dark_blue"></ImageButton>
+                app:tint="?colorSecondary"></ImageButton>
 
         </LinearLayout>
 
@@ -137,7 +137,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/changePassword"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>
@@ -168,7 +168,7 @@
                 android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
                 android:textAlignment="gravity"
                 android:tooltipText="@string/copy"
-                app:tint="@color/kp_dark_blue"></ImageButton>
+                app:tint="?colorSecondary"></ImageButton>
 
         </LinearLayout>
 
@@ -187,7 +187,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/copy"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>
@@ -219,7 +219,7 @@
                 android:src="@drawable/ic_move_fill0_wght300_grad_25_opsz24"
                 android:textAlignment="gravity"
                 android:tooltipText="@string/move"
-                app:tint="@color/kp_dark_blue"></ImageButton>
+                app:tint="?colorSecondary"></ImageButton>
 
         </LinearLayout>
 
@@ -238,7 +238,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/move"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>
@@ -288,7 +288,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/delete"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>
@@ -337,7 +337,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/addGroup"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>
@@ -386,7 +386,7 @@
                 android:fontFamily="@font/josefin_sans_regular"
                 android:gravity="center_vertical"
                 android:text="@string/addEntry"
-                android:textColor="@color/kp_dark_blue">
+                android:textColor="?colorSecondary">
 
             </TextView>
         </LinearLayout>

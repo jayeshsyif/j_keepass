@@ -29,6 +29,7 @@ import org.j_keepass.util.KpCustomException;
 import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
+import org.j_keepass.util.ThemeSettingDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
@@ -47,6 +48,7 @@ public class EditEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeSettingDialogUtil.onActivityCreateSetTheme(this, false);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         binding = ActivityEditEntryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

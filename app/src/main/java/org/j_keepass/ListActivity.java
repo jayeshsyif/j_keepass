@@ -41,6 +41,7 @@ import org.j_keepass.util.NewPasswordDialogUtil;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.ProgressDialogUtil;
 import org.j_keepass.util.SearchDialogUtil;
+import org.j_keepass.util.ThemeSettingDialogUtil;
 import org.j_keepass.util.ToastUtil;
 import org.j_keepass.util.Triplet;
 import org.j_keepass.util.Util;
@@ -71,7 +72,7 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ThemeSettingDialogUtil.onActivityCreateSetTheme(this, false);
         binding = ActivityListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         currentDate = Calendar.getInstance().getTime();
