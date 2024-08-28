@@ -94,6 +94,8 @@ public class LoadActivity extends AppCompatActivity {
     private String subFilesDirPath = null;
     boolean isFileAvailable = false;
     Dialog banner = null;
+    Thread bannerThread = null;
+    boolean showBanner = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,17 +118,19 @@ public class LoadActivity extends AppCompatActivity {
 
         Common.database = null;
         try {
-            if (banner != null) {
-                Log.i("JKEEPASS", "banner not null");
-            } else {
-                banner = BannerDialogUtil.getBanner(binding.getRoot().getContext());
-                Log.i("JKEEPASS", "banner null");
+            if (showBanner) {
+                if (banner != null) {
+                    Log.i("JKEEPASS", "banner not null");
+                } else {
+                    banner = BannerDialogUtil.getBanner(binding.getRoot().getContext());
+                    Log.i("JKEEPASS", "banner null");
+                }
+                banner.show();
             }
-            banner.show();
         } catch (IllegalArgumentException e) {
-            Log.e("JKEEPASS", "banner IllegalArgumentException ",e);
+            Log.e("JKEEPASS", "banner IllegalArgumentException ", e);
         } catch (RuntimeException e) {
-            Log.e("JKEEPASS", "banner RuntimeException ",e);
+            Log.e("JKEEPASS", "banner RuntimeException ", e);
         }
         if (isFileAvailable) {
             Triplet<AlertDialog, MaterialButton, MaterialButton> importConfirmDialog = ConfirmDialogUtil.getImportConfirmDialog(getLayoutInflater(), this);
@@ -159,8 +163,8 @@ public class LoadActivity extends AppCompatActivity {
         binding.kdbxFileName.setVisibility(View.GONE);
         binding.kdbxFileGotPasswordLayout.setVisibility(View.GONE);
 
-        if (banner != null) {
-            Thread bannerThread = new Thread(() -> {
+        if (banner != null && showBanner) {
+            bannerThread = new Thread(() -> {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -181,6 +185,8 @@ public class LoadActivity extends AppCompatActivity {
                 banner = null;
                 loadAfterDialog();
             }
+        } else {
+            loadAfterDialog();
         }
     }
 
@@ -404,17 +410,16 @@ public class LoadActivity extends AppCompatActivity {
                 try {
                     database = SimpleDatabase.load(creds, inputStream);
                     ProgressDialogUtil.setLoadingProgress(alertDialog, 90);
-                }
-                catch (NoClassDefFoundError e) {
+                } catch (NoClassDefFoundError e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     proceed = false;
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.devInProgress, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     proceed = false;
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.invalidFileError + " " + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 }
-                if ( proceed && database == null) {
+                if (proceed && database == null) {
                     ProgressDialogUtil.dismissLoadingDialog(alertDialog);
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     proceed = false;
@@ -923,16 +928,30 @@ public class LoadActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        if (banner != null && banner.isShowing()) {
-            banner.dismiss();
+        try {
+            if (banner != null && banner.isShowing()) {
+                banner.dismiss();
+            }
+            if (bannerThread != null && bannerThread.isAlive()) {
+                bannerThread.destroy();
+            }
+        } catch (Exception e) {
+            Log.e("JKEEPASS", "on save 1 error ", e);
         }
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if (banner != null && banner.isShowing()) {
-            banner.dismiss();
+        try {
+            if (banner != null && banner.isShowing()) {
+                banner.dismiss();
+            }
+            if (bannerThread != null && bannerThread.isAlive()) {
+                bannerThread.destroy();
+            }
+        } catch (Exception e) {
+            Log.e("JKEEPASS", "on save 2 error ", e);
         }
         super.onSaveInstanceState(outState);
     }
