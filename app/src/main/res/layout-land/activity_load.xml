@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:weightSum="100">
 
             <TextView
@@ -119,7 +119,7 @@
                         android:backgroundTint="?colorPrimary"
                         android:fontFamily="@font/josefin_sans_extra_light"
                         android:text="@string/databases"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorSecondary"
                         android:textStyle="italic">
 
                     </TextView>
@@ -150,8 +150,8 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:background="?colorPrimary"
                 app:labelVisibilityMode="unlabeled"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -160,13 +160,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <ImageButton
                             android:id="@+id/themeFloatBtn"
@@ -204,7 +205,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <ImageButton
                             android:id="@+id/createBtn"
@@ -238,7 +239,7 @@
             android:id="@+id/floatGenerateNewPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
+            android:layout_gravity="center|right"
             android:layout_margin="@dimen/fab_new_margin"
             android:backgroundTint="?colorOnPrimary"
             android:textColor="?colorSecondary"
