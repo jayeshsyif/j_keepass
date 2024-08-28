@@ -127,11 +127,17 @@ public class ThemeSettingDialogUtil {
 
     public static void onActivityCreateSetTheme(Activity activity, boolean loadFromShare) {
         if (loadFromShare) {
-            SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            String savedSTheme = sharedPref.getString("sTheme", null);
-            Log.i("JKEEPASS", "sTheme from shared: " + savedSTheme);
-            sTheme = savedSTheme;
+            try {
+                SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                String savedSTheme = sharedPref.getString("sTheme", null);
+                Log.i("JKEEPASS", "sTheme from shared: " + savedSTheme);
+                if (savedSTheme != null) {
+                    sTheme = savedSTheme;
+                }
+            } catch (Exception e) {
+                Log.i("JKEEPASS", "sTheme error is: ", e);
+            }
         }
         Log.i("JKEEPASS", "sTheme is: " + sTheme);
         changeToTheme(activity, true);
