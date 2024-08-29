@@ -26,7 +26,7 @@
                 android:layout_weight="80"
                 android:fontFamily="@font/milonga_regular"
                 android:gravity="center"
-                android:singleLine="true"
+                android:singleLine="false"
                 android:text="@string/entryName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceSmall"

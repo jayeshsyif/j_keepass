@@ -27,11 +27,11 @@
                 android:background="?colorPrimary"
                 android:fontFamily="@font/milonga_regular"
                 android:gravity="center"
-                android:padding="@dimen/kp_group_name_margin"
-                android:singleLine="true"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
                 android:textColor="?colorSecondary"
+                android:singleLine="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"></TextView>
 
             <ScrollView

@@ -28,8 +28,8 @@
                 android:gravity="center"
                 android:text="@string/enterGroupName"
                 android:textAlignment="gravity"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:singleLine="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?colorSecondary"
                 android:background="?colorPrimary"
                 android:textStyle="bold"></TextView>

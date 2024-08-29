@@ -27,10 +27,11 @@
                 android:background="?colorPrimary"
                 android:fontFamily="@font/milonga_regular"
                 android:gravity="center"
-                android:padding="@dimen/kp_group_name_margin"
+                android:singleLine="false"
                 android:singleLine="true"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?colorSecondary"
                 android:textStyle="bold"></TextView>
 
