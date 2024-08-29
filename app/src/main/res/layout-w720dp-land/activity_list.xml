@@ -28,7 +28,6 @@
                 android:fontFamily="@font/milonga_regular"
                 android:gravity="center"
                 android:singleLine="false"
-                android:singleLine="true"
                 android:text="@string/groupName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceSmall"
