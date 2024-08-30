@@ -147,6 +147,8 @@
     <string name="changeLogsVer8ChangesText">   Copy and move within same database/file feature added with UI enhancement.</string>
     <string name="changeLogsVer9Text">Version 9</string>
     <string name="changeLogsVer9ChangesText">   Layout changes and themes support added.</string>
+    <string name="changeLogsVer91Text">Version 9.1</string>
+    <string name="changeLogsVer91ChangesText">   Themes support added and performance improvement.</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
