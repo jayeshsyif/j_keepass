@@ -102,12 +102,17 @@ public class AddEntryActivity extends AppCompatActivity {
             viewsToAdd.add(expiryDatePicker.first);
             fields.add(expiryDatePicker);
 
-            for (View dynamicView : viewsToAdd) {
+            new Thread(() -> {
+                for (View dynamicView : viewsToAdd) {
+                    Util.sleepFor100Sec();
+                    runOnUiThread(() -> {
             /*    @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_slide_in_left), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
                 binding.addBasicFieldEntryScrollViewLinearLayout.setLayoutAnimation(lac);
                 binding.addBasicFieldEntryScrollViewLinearLayout.startLayoutAnimation();*/
-                binding.addBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
-            }
+                        binding.addBasicFieldEntryScrollViewLinearLayout.addView(dynamicView);
+                    });
+                }
+            }).start();
 
             binding.addMoreFieldBtn.setOnClickListener(v -> {
 

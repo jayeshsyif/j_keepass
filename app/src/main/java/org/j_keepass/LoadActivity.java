@@ -94,9 +94,6 @@ public class LoadActivity extends AppCompatActivity {
     private String dirPath = null;
     private String subFilesDirPath = null;
     boolean isFileAvailable = false;
-    Dialog banner = null;
-    Thread bannerThread = null;
-    boolean showBanner = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,21 +115,6 @@ public class LoadActivity extends AppCompatActivity {
         }
 
         Common.database = null;
-        try {
-            if (showBanner) {
-                if (banner != null) {
-                    Log.i("JKEEPASS", "banner not null");
-                } else {
-                    banner = BannerDialogUtil.getBanner(binding.getRoot().getContext());
-                    Log.i("JKEEPASS", "banner null");
-                }
-                banner.show();
-            }
-        } catch (IllegalArgumentException e) {
-            Log.e("JKEEPASS", "banner IllegalArgumentException ", e);
-        } catch (RuntimeException e) {
-            Log.e("JKEEPASS", "banner RuntimeException ", e);
-        }
         if (isFileAvailable) {
             Triplet<AlertDialog, MaterialButton, MaterialButton> importConfirmDialog = ConfirmDialogUtil.getImportConfirmDialog(getLayoutInflater(), this);
             importConfirmDialog.third.setOnClickListener(v -> {
@@ -164,41 +146,17 @@ public class LoadActivity extends AppCompatActivity {
         binding.kdbxFileName.setVisibility(View.GONE);
         binding.kdbxFileGotPasswordLayout.setVisibility(View.GONE);
 
-        if (banner != null && showBanner) {
-            bannerThread = new Thread(() -> {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    //do nothing
-                }
-                if (banner.isShowing()) {
-                    banner.dismiss();
-                }
-                banner = null;
-                loadAfterDialog();
-            });
-            if (!isFileAvailable) {
-                bannerThread.start();
-            } else {
-                if (banner.isShowing()) {
-                    banner.dismiss();
-                }
-                banner = null;
-                loadAfterDialog();
-            }
-        } else {
-            loadAfterDialog();
-        }
+        loadAfterDialog();
     }
 
     private void loadAfterDialog() {
-        runOnUiThread(() -> {
+        new Thread(() -> {
             showWelcomeMessage(binding.getRoot());
             if (!isFileAvailable) {
                 fetchAndShowFiles();
             }
             startAlarmBroadcastReceiver(binding.getRoot().getContext());
-        });
+        }).start();
     }
 
     private void setEvents() {
@@ -782,8 +740,13 @@ public class LoadActivity extends AppCompatActivity {
         File[] files = subFilesDir.listFiles();
         Arrays.sort(files);
         if (files != null && files.length > 0) {
+            binding.justImportCreateTextView.setText("Loading ... "+files.length);
+            int fCount = 0;
             for (File f : files) {
+                Util.sleepFor100Sec();
                 addFileLayout(f);
+                fCount++;
+                binding.justImportCreateTextView.setText("Loading ... done "+fCount+" of "+files.length);
             }
         }
         showDeclaration(files);
@@ -922,38 +885,21 @@ public class LoadActivity extends AppCompatActivity {
         databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()) + " ");
         databaseMoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
-        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(viewToLoad.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME);
-        databaseNameCardView.setLayoutAnimation(lac);
-        binding.listDatabasesLinerLayout.addView(viewToLoad);
+        runOnUiThread(() -> {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(viewToLoad.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME);
+            databaseNameCardView.setLayoutAnimation(lac);
+            binding.listDatabasesLinerLayout.addView(viewToLoad);
+        });
+
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        try {
-            if (banner != null && banner.isShowing()) {
-                banner.dismiss();
-            }
-            if (bannerThread != null && bannerThread.isAlive()) {
-                bannerThread.destroy();
-            }
-        } catch (Exception e) {
-            Log.e("JKEEPASS", "on save 1 error ", e);
-        }
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        try {
-            if (banner != null && banner.isShowing()) {
-                banner.dismiss();
-            }
-            if (bannerThread != null && bannerThread.isAlive()) {
-                bannerThread.destroy();
-            }
-        } catch (Exception e) {
-            Log.e("JKEEPASS", "on save 2 error ", e);
-        }
         super.onSaveInstanceState(outState);
     }
 

@@ -107,6 +107,9 @@ public class Util {
     static public void sleepForHalfSec() {
         sleepInMilliSec(500);
     }
+    static public void sleepFor100Sec() {
+        sleepInMilliSec(100);
+    }
 
     public static void log(String msg)
     {

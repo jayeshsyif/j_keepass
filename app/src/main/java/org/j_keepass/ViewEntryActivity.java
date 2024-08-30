@@ -115,12 +115,19 @@ public class ViewEntryActivity extends AppCompatActivity {
                     }
 
                 }
-                for (View dynamicView : viewsToAdd) {
+                new Thread(() -> {
+                    for (View dynamicView : viewsToAdd) {
+                        Util.sleepFor100Sec();
+                        runOnUiThread(() -> {
+
                     /*@SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(this, R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
                     binding.viewEntryScrollViewLinearLayout.setLayoutAnimation(lac);
                     binding.viewEntryScrollViewLinearLayout.startLayoutAnimation();*/
-                    binding.viewEntryScrollViewLinearLayout.addView(dynamicView);
-                }
+                            binding.viewEntryScrollViewLinearLayout.addView(dynamicView);
+                        });
+                    }
+                }).start();
+
             }
         }
 
