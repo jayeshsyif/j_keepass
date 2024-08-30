@@ -10,6 +10,7 @@
     <string name="open">Open</string>
     <string name="importStr">Import</string>
     <string name="create">Create</string>
+    <string name="creating">Creating</string>
     <string name="enterPassword">Enter Password</string>
     <string name="enterOldPassword">Enter Old Password</string>
     <string name="enterNewPassword">Enter New Password</string>

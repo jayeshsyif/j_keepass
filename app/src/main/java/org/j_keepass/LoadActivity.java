@@ -219,6 +219,8 @@ public class LoadActivity extends AppCompatActivity {
                             ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.enterPassword, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                         } else {
                             String dbName = confirmDialog.third.getText().toString();
+                            confirmDialog.first.dismiss();
+                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot(), R.string.creating, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                             if (!dbName.endsWith("kdbx")) {
                                 dbName = dbName + ".kdbx";
                             }
@@ -226,23 +228,24 @@ public class LoadActivity extends AppCompatActivity {
                             if (fromTo.exists()) {
                                 fromTo.delete();
                             } else {
-                                try {
-                                    fromTo.createNewFile();
-                                    kdbxFileUri = Uri.fromFile(fromTo);
-                                    KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
-                                    Database<?, ?, ?, ?> database = getDummyDatabase();
-                                    OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
-                                    database.save(creds, fileOutputStream);
-                                    confirmDialog.first.dismiss();
-                                    if (v1 != null) {
-                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                        imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                                new Thread(() -> {
+                                    try {
+                                        fromTo.createNewFile();
+                                        kdbxFileUri = Uri.fromFile(fromTo);
+                                        KdbxCreds creds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
+                                        Database<?, ?, ?, ?> database = getDummyDatabase();
+                                        OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
+                                        database.save(creds, fileOutputStream);
+                                        if (v1 != null) {
+                                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(v1.getWindowToken(), 0);
+                                        }
+                                        fetchAndShowFiles();
+                                        kdbxFileUri = null;
+                                    } catch (Exception e) {
+                                        ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                                     }
-                                    fetchAndShowFiles();
-                                    kdbxFileUri = null;
-                                } catch (Exception e) {
-                                    ToastUtil.showToast(getLayoutInflater(), v1, e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
-                                }
+                                }).start();
                             }
                         }
 
@@ -269,7 +272,9 @@ public class LoadActivity extends AppCompatActivity {
                     Log.i("JKeepass", "Flags: " + data.getFlags());
                     loadFile();
                     copyFile();
-                    fetchAndShowFiles();
+                    new Thread(() -> {
+                        fetchAndShowFiles();
+                    }).start();
                 }
                 break;
             case PICK_FOLDER_OPEN_RESULT_CODE:
@@ -733,20 +738,28 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void fetchAndShowFiles() {
-        binding.listDatabasesLinerLayout.removeAllViews();
+        runOnUiThread(() -> {
+            binding.listDatabasesLinerLayout.removeAllViews();
+        });
         createMainDirectory();
         createSubFilesDirectory();
         File subFilesDir = new File(subFilesDirPath);
         File[] files = subFilesDir.listFiles();
         Arrays.sort(files);
         if (files != null && files.length > 0) {
-            binding.justImportCreateTextView.setText("Loading ... "+files.length);
+            runOnUiThread(() -> {
+                binding.justImportCreateTextView.setText("Loading ... " + files.length);
+            });
+
             int fCount = 0;
             for (File f : files) {
                 Util.sleepFor100Sec();
                 addFileLayout(f);
                 fCount++;
-                binding.justImportCreateTextView.setText("Loading ... done "+fCount+" of "+files.length);
+                int finalFCount = fCount;
+                runOnUiThread(() -> {
+                    binding.justImportCreateTextView.setText("Loading ... done " + finalFCount + " of " + files.length);
+                });
             }
         }
         showDeclaration(files);
@@ -755,11 +768,15 @@ public class LoadActivity extends AppCompatActivity {
     @SuppressLint("ResourceType")
     private void showDeclaration(File[] files) {
         if (files == null || files.length <= 0) {
-            binding.justImportCreateTextView.setText(R.string.importDatabase);
-            binding.justImportCreateTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+            runOnUiThread(() -> {
+                binding.justImportCreateTextView.setText(R.string.importDatabase);
+                binding.justImportCreateTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+            });
         } else {
-            binding.justImportCreateTextView.setText(R.string.importDeclaration);
-            binding.justImportCreateTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+            runOnUiThread(() -> {
+                binding.justImportCreateTextView.setText(R.string.importDeclaration);
+                binding.justImportCreateTextView.startAnimation(AnimationUtils.loadAnimation(binding.getRoot().getContext(), R.animator.anim_bottom));
+            });
         }
     }
 
@@ -836,34 +853,39 @@ public class LoadActivity extends AppCompatActivity {
                         ProgressDialogUtil.showSavingDialog(changePasswordDialog);
                         ProgressDialogUtil.setSavingProgress(changePasswordDialog, 10);
                         new Thread(() -> {
-                            runOnUiThread(() -> {
+                            {
                                 try {
                                     kdbxFileUri = Uri.fromFile(f);
                                     KdbxCreds creds = new KdbxCreds(confirmDialog.third.getText().toString().getBytes());
                                     Database<?, ?, ?, ?> database = null;
-                                    ProgressDialogUtil.setSavingProgress(changePasswordDialog, 20);
+                                    updateSavingProgress(changePasswordDialog, 20);
                                     InputStream inputStream = getContentResolver().openInputStream(kdbxFileUri);
                                     database = SimpleDatabase.load(creds, inputStream);
-                                    ProgressDialogUtil.setSavingProgress(changePasswordDialog, 50);
+                                    updateSavingProgress(changePasswordDialog, 50);
                                     if (database != null) {
                                         OutputStream fileOutputStream = getContentResolver().openOutputStream(kdbxFileUri, "wt");
                                         KdbxCreds newCreds = new KdbxCreds(confirmDialog.fourth.getText().toString().getBytes());
                                         database.save(newCreds, fileOutputStream);
-                                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 60);
+                                        updateSavingProgress(changePasswordDialog, 60);
                                         fetchAndShowFiles();
                                         kdbxFileUri = null;
-                                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 80);
-                                        ProgressDialogUtil.setSavingProgress(changePasswordDialog, 90);
+                                        updateSavingProgress(changePasswordDialog, 80);
+                                        updateSavingProgress(changePasswordDialog, 90);
+                                        dismissSavingDialog(changePasswordDialog);
                                     } else {
-                                        ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
-                                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                                        dismissSavingDialog(changePasswordDialog);
+                                        runOnUiThread(() -> {
+                                            ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                                        });
                                     }
                                 } catch (Exception e) {
-                                    e.printStackTrace();
-                                    ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
-                                    ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                                    dismissSavingDialog(changePasswordDialog);
+                                    runOnUiThread(() -> {
+                                        ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), R.string.noDBError, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                                    });
                                 }
-                            });
+                            }
+                            ;
                         }).start();
                     }
                 });
@@ -891,6 +913,18 @@ public class LoadActivity extends AppCompatActivity {
             binding.listDatabasesLinerLayout.addView(viewToLoad);
         });
 
+    }
+
+    private void dismissSavingDialog(AlertDialog changePasswordDialog) {
+        runOnUiThread(() -> {
+            ProgressDialogUtil.dismissSavingDialog(changePasswordDialog);
+        });
+    }
+
+    private void updateSavingProgress(AlertDialog changePasswordDialog, int i) {
+        runOnUiThread(() -> {
+            ProgressDialogUtil.setSavingProgress(changePasswordDialog, i);
+        });
     }
 
     @Override
