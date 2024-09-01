@@ -15,6 +15,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -44,10 +45,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         field.setHint(hint);
         field.setText(value);
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -75,10 +76,10 @@ public class FieldUtil {
                 ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString, anchorView);
             }
         });
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -105,10 +106,10 @@ public class FieldUtil {
                 ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString, anchorView);
             }
         });
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -141,10 +142,10 @@ public class FieldUtil {
                 ToastUtil.showToast(inflater, v, hint + " " + copiedToClipboardString, anchorView);
             }
         });
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         return viewToLoad;
     }
 
@@ -165,10 +166,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         //field.setHint(hint);
         field.setText(value);
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -191,10 +192,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         //field.setHint(hint);
         field.setText(value);
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -223,10 +224,10 @@ public class FieldUtil {
 
         //field.setHint(hint);
         field.setText(value);
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -275,10 +276,10 @@ public class FieldUtil {
             }
         });
 
-        LinearLayout wholeAdditionalFieldLayout = viewToLoad.findViewById(R.id.wholeAdditionalFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeAdditionalFieldLayout.setLayoutAnimation(lac);
-        wholeAdditionalFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
 
         triplet.first = viewToLoad;
         triplet.second = additionalFieldValue;
@@ -330,10 +331,10 @@ public class FieldUtil {
             }
         });
 
-        LinearLayout wholeAdditionalFieldLayout = viewToLoad.findViewById(R.id.wholeAdditionalFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeAdditionalFieldLayout.setLayoutAnimation(lac);
-        wholeAdditionalFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
 
         triplet.first = viewToLoad;
         triplet.second = additionalFieldValue;
@@ -378,11 +379,10 @@ public class FieldUtil {
 
             datePickerDialog.show();
         });
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
-        @SuppressLint("ResourceType")
-        LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         pair.first = viewToLoad;
         pair.second = field;
         return pair;
@@ -402,10 +402,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         field.setHint(hint);
         field.setText(value);
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         return viewToLoad;
     }
     public View getTextFieldForExpirySoon(LayoutInflater inflater, String hint, String value) {
@@ -422,10 +422,10 @@ public class FieldUtil {
         field.setTransformationMethod(null);
         field.setHint(hint);
         field.setText(value);
-        LinearLayout wholeFieldLayout = viewToLoad.findViewById(R.id.wholeFieldLayout);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
-        wholeFieldLayout.setLayoutAnimation(lac);
-        wholeFieldLayout.startLayoutAnimation();
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
         return viewToLoad;
     }
 }
