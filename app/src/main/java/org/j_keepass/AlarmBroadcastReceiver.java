@@ -1,5 +1,7 @@
 package org.j_keepass;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,20 +9,26 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import org.j_keepass.util.Common;
+import org.j_keepass.util.ToastUtil;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Common.IS_ALARM_PERMISSION_RECEIVED) {
+        if (checkAndGetPermission(context)) {
             log("@@ JKeePass", "received alarm");
             showNotification(context);
             log("@@ JKeePass", "received alarm done");
@@ -28,7 +36,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
     void showNotification(Context context) {
-        if (Common.IS_ALARM_PERMISSION_RECEIVED) {
+        if (checkAndGetPermission(context)) {
             try {
                 log("@@ JKeePass", "received alarm 1");
                 String CHANNEL_ID = "" + context.getString(R.string.app_name) + "-channel";// The id of the channel.
@@ -50,28 +58,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                     NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
                     mNotificationManager.createNotificationChannel(mChannel);
                     log("@@ JKeePass", "received alarm 8");
-                    mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setLights(Color.RED, 300, 300)
-                            .setColor(context.getColor(R.color.kp_changing_white))
-                            .setChannelId(CHANNEL_ID)
-                            .setContentTitle(name);
+                    mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.mipmap.ic_launcher).setLights(Color.RED, 300, 300).setColor(context.getColor(R.color.kp_changing_white)).setChannelId(CHANNEL_ID).setContentTitle(name);
                     log("@@ JKeePass", "received alarm 9");
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         log("@@ JKeePass", "received alarm 10");
-                        mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setPriority(Notification.PRIORITY_HIGH)
-                                .setColor(context.getColor(R.color.kp_changing_white))
-                                .setContentTitle(name);
+                        mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.mipmap.ic_launcher).setPriority(Notification.PRIORITY_HIGH).setColor(context.getColor(R.color.kp_changing_white)).setContentTitle(name);
                         log("@@ JKeePass", "received alarm 11");
                     } else {
                         log("@@ JKeePass", "received alarm 12");
-                        mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setPriority(Notification.PRIORITY_HIGH)
-                                .setContentTitle(name);
+                        mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.mipmap.ic_launcher).setPriority(Notification.PRIORITY_HIGH).setContentTitle(name);
                         log("@@ JKeePass", "received alarm 13");
                     }
                 }
@@ -91,5 +87,32 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     private void log(String tag, String msg) {
         //Log.i(tag, msg);
+    }
+
+    private boolean checkAndGetPermission(Context context) {
+        boolean isOK = false;
+        try {
+            if (!isOK) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                            isOK = true;
+                        } else {
+                            isOK = false;
+                        }
+                    }
+                } else {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                            isOK = true;
+                        } else {
+                            isOK = false;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        return isOK;
     }
 }
