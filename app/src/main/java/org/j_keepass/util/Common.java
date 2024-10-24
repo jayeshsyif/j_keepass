@@ -21,7 +21,4 @@ public class Common {
 
     public static final String DOT_SYMBOL_CODE = " \u2192 ";
     public static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " \u21B3 ";
-
-    public static boolean IS_ALARM_PERMISSION_RECEIVED = false;
-
 }

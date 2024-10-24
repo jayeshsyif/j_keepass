@@ -94,6 +94,8 @@ public class LoadActivity extends AppCompatActivity {
     private String subFilesDirPath = null;
     boolean isFileAvailable = false;
 
+    public static boolean IS_ALARM_PERMISSION_RECEIVED = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -967,7 +969,7 @@ public class LoadActivity extends AppCompatActivity {
 
     private boolean checkAndGetAlarmPermission(View v, Activity activity) {
         Log.i("JKEEPASS", "checkAndGetAlarmPermission");
-        boolean isOK = Common.IS_ALARM_PERMISSION_RECEIVED;
+        boolean isOK = IS_ALARM_PERMISSION_RECEIVED;
         if (!isOK) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
@@ -1002,7 +1004,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
             }
         }
-        Common.IS_ALARM_PERMISSION_RECEIVED = isOK;
+        IS_ALARM_PERMISSION_RECEIVED = isOK;
         Log.i("JKEEPASS", "checkAndGetAlarmPermission isOK is " + isOK);
         return isOK;
     }
