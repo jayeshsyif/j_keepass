@@ -86,15 +86,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void log(String tag, String msg) {
-        //Log.i(tag, msg);
+        Log.i(tag, msg);
     }
 
     private boolean checkAndGetPermission(Context context) {
+        log("@@ JKeePass", "checkAndGetPermission inside broadcast receiver");
         boolean isOK = false;
         try {
             if (!isOK) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                         if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                             isOK = true;
                         } else {
@@ -102,17 +103,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                         }
                     }
                 } else {
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
-                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
-                            isOK = true;
-                        } else {
-                            isOK = false;
-                        }
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                        isOK = true;
+                    } else {
+                        isOK = false;
                     }
                 }
             }
         } catch (Exception e) {
         }
+        log("@@ JKeePass", "received check permission return is: " + isOK);
         return isOK;
     }
 }
