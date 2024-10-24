@@ -84,4 +84,33 @@
     <color name="kp_bg_white">#f3f2f2</color>
     <!-- Black green-->
 
+
+    <!-- White skin-->
+    <color name="kp_ws_light_white">#f3f3ee</color>
+    <color name="kp_ws_grey">#fcfcf9</color>
+    <color name="kp_ws_blue">#4b97a1</color>
+    <color name="kp_ws_white">#64645f</color>
+    <!-- White skin -->
+
+    <!-- Black skin-->
+    <color name="kp_bs_black">#202222</color>
+    <color name="kp_bs_grey">#191a1a</color>
+    <color name="kp_bs_green">#239cad</color>
+    <color name="kp_bs_white">#d7d7d6</color>
+    <!-- Black skin -->
+
+    <!-- White blue skin-->
+    <color name="kp_wbs_light_white">#f3f3ee</color>
+    <color name="kp_wbs_grey">#fcfcf9</color>
+    <color name="kp_wbs_blue">#66A5D0</color>
+    <color name="kp_wbs_white">#64645f</color>
+    <!-- White blue skin -->
+
+    <!-- Black blue skin-->
+    <color name="kp_bbs_black">#202222</color>
+    <color name="kp_bbs_grey">#191a1a</color>
+    <color name="kp_bbs_blue">#66A5D0</color>
+    <color name="kp_bbs_white">#d7d7d6</color>
+    <!-- Black blue skin -->
+
 </resources>

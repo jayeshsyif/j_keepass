@@ -18,7 +18,7 @@ import org.j_keepass.LoadActivity;
 import org.j_keepass.R;
 
 public class ThemeSettingDialogUtil {
-    private static String sTheme = "wb";
+    private static String sTheme = "wbs";
 
     static public void show(LayoutInflater layoutInflater, View mView, ClipboardManager clipboard, View anchorView, LoadActivity loadActivity) {
         BottomSheetDialog bsd = new BottomSheetDialog(mView.getContext());
@@ -75,6 +75,34 @@ public class ThemeSettingDialogUtil {
             changeToTheme(loadActivity, false);
         });
 
+        LinearLayout wsLl = bsd.findViewById(R.id.ws);
+        wsLl.setOnClickListener(view -> {
+            sTheme = "ws";
+            bsd.dismiss();
+            changeToTheme(loadActivity, false);
+        });
+
+        LinearLayout bsLl = bsd.findViewById(R.id.bs);
+        bsLl.setOnClickListener(view -> {
+            sTheme = "bs";
+            bsd.dismiss();
+            changeToTheme(loadActivity, false);
+        });
+
+        LinearLayout wbsLl = bsd.findViewById(R.id.wbs);
+        wbsLl.setOnClickListener(view -> {
+            sTheme = "wbs";
+            bsd.dismiss();
+            changeToTheme(loadActivity, false);
+        });
+
+        LinearLayout bbsLl = bsd.findViewById(R.id.bbs);
+        bbsLl.setOnClickListener(view -> {
+            sTheme = "bbs";
+            bsd.dismiss();
+            changeToTheme(loadActivity, false);
+        });
+
     }
 
     public static void changeToTheme(Activity activity, boolean isFromStart) {
@@ -107,9 +135,25 @@ public class ThemeSettingDialogUtil {
                 activity.setTheme(R.style.Theme_J_KeePass_wl);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
-            default:
             case "wb":
                 activity.setTheme(R.style.Theme_J_KeePass_wb);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "ws":
+                activity.setTheme(R.style.Theme_J_KeePass_ws);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "bs":
+                activity.setTheme(R.style.Theme_J_KeePass_bs);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "bbs":
+                activity.setTheme(R.style.Theme_J_KeePass_bbs);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            default:
+            case "wbs":
+                activity.setTheme(R.style.Theme_J_KeePass_wbs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
 

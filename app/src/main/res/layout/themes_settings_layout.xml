@@ -60,6 +60,34 @@
             android:padding="@dimen/kp_button_margin">
 
             <LinearLayout
+                android:id="@+id/wbs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_wbs_light_white"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_wbs_blue"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/wb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -162,6 +190,34 @@
 
                 </TextView>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ws"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_ws_light_white"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_ws_blue"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -170,6 +226,34 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:padding="@dimen/kp_button_margin">
+
+            <LinearLayout
+                android:id="@+id/bbs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_bbs_black"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_bbs_blue"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
 
             <LinearLayout
                 android:id="@+id/bb"
@@ -268,6 +352,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_bg_green"
+                    android:fontFamily="@font/josefin_sans_regular"
+                    android:gravity="center_vertical"
+                    android:text=" ">
+
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/kp_bs_black"
+                android:orientation="horizontal"
+                android:padding="@dimen/kp_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/kp_bs_green"
                     android:fontFamily="@font/josefin_sans_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
