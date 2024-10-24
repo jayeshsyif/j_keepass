@@ -5,12 +5,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -33,10 +31,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -47,7 +43,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.io.ByteStreams;
 
 import org.j_keepass.databinding.ActivityLoadBinding;
-import org.j_keepass.util.BannerDialogUtil;
 import org.j_keepass.util.BottomMenuUtil;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ConfirmDialogUtil;
@@ -74,8 +69,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -270,7 +263,7 @@ public class LoadActivity extends AppCompatActivity {
             case PICK_FILE_OPEN_RESULT_CODE:
                 if (resultCode == -1) {
                     kdbxFileUri = data.getData();
-                    Log.i("JKeepass", "Flags: " + data.getFlags());
+                    log("JKeepass", "Flags: " + data.getFlags());
                     loadFile();
                     copyFile();
                     new Thread(() -> {
@@ -689,7 +682,7 @@ public class LoadActivity extends AppCompatActivity {
             outputStream = new FileOutputStream(fromTo);
             ByteStreams.copy(inputStream, outputStream);
         } catch (Exception e) {
-            Log.i("JKEEPASS", "Error copying file : " + e.getMessage());
+            log("JKEEPASS", "Error copying file : " + e.getMessage());
         } finally {
             if (outputStream != null) {
                 try {
@@ -709,31 +702,31 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private void createMainDirectory() {
-        Log.i("JKEEPASS", "dirPath: " + dirPath);
+        log("JKEEPASS", "dirPath: " + dirPath);
         if (dirPath == null) {
-            Log.i("JKEEPASS", "Null dirPath: " + dirPath);
+            log("JKEEPASS", "Null dirPath: " + dirPath);
         } else {
             File projDir = new File(dirPath);
             if (!projDir.exists()) {
                 projDir.mkdirs();
-                Log.i("JKEEPASS", "Created dirPath: " + dirPath);
+                log("JKEEPASS", "Created dirPath: " + dirPath);
             } else {
-                Log.i("JKEEPASS", "Exists dirPath: " + dirPath);
+                log("JKEEPASS", "Exists dirPath: " + dirPath);
             }
         }
     }
 
     private void createSubFilesDirectory() {
-        Log.i("JKEEPASS", "subFilesDirPath: " + subFilesDirPath);
+        log("JKEEPASS", "subFilesDirPath: " + subFilesDirPath);
         if (subFilesDirPath == null) {
-            Log.i("JKEEPASS", "Null subFilesDirPath: " + subFilesDirPath);
+            log("JKEEPASS", "Null subFilesDirPath: " + subFilesDirPath);
         } else {
             File subFilesDir = new File(subFilesDirPath);
             if (!subFilesDir.exists()) {
                 subFilesDir.mkdirs();
-                Log.i("JKEEPASS", "Created subFilesDirPath: " + subFilesDirPath);
+                log("JKEEPASS", "Created subFilesDirPath: " + subFilesDirPath);
             } else {
-                Log.i("JKEEPASS", "Exists subFilesDirPath: " + subFilesDirPath);
+                log("JKEEPASS", "Exists subFilesDirPath: " + subFilesDirPath);
             }
         }
     }
@@ -968,7 +961,7 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     private boolean checkAndGetAlarmPermission(View v, Activity activity) {
-        Log.i("JKEEPASS", "checkAndGetAlarmPermission");
+        log("JKEEPASS", "checkAndGetAlarmPermission");
         boolean isOK = IS_ALARM_PERMISSION_RECEIVED;
         if (!isOK) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -992,7 +985,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
             } else {
                 if (ContextCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
-                    Log.i("JKEEPASS", "checkAndGetAlarmPermission not granted");
+                    log("JKEEPASS", "checkAndGetAlarmPermission not granted");
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, ALARM);
                     isOK = true;
                 }
@@ -1005,14 +998,14 @@ public class LoadActivity extends AppCompatActivity {
             }
         }
         IS_ALARM_PERMISSION_RECEIVED = isOK;
-        Log.i("JKEEPASS", "checkAndGetAlarmPermission isOK is " + isOK);
+        log("JKEEPASS", "checkAndGetAlarmPermission isOK is " + isOK);
         return isOK;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.i("JKEEPASS", "onRequestPermissionsResult");
+        log("JKEEPASS", "onRequestPermissionsResult");
         if (requestCode == ALARM) {
             if (!Arrays.asList(grantResults).contains(PackageManager.PERMISSION_DENIED)) {
                 startAlarmBroadcastReceiver(this);
@@ -1036,9 +1029,9 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 /*if(isAvailable)
                 {
-                    Log.i("JKEEPASS", " Cancelling ");
+                    log("JKEEPASS", " Cancelling ");
                     alarmManager.cancel(pendingIntent);
-                    Log.i("JKEEPASS", " Cancelled ");
+                    log("JKEEPASS", " Cancelled ");
                     isAvailable = false;
                 }*/
                 if (!isAvailable) {
@@ -1052,15 +1045,15 @@ public class LoadActivity extends AppCompatActivity {
                         //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         String formattedDate = simpleDateFormat.format(calendar.getTime());
-                        Log.i("JKEEPASS", " Not Available and Notification set. " + formattedDate);
+                        log("JKEEPASS", " Not Available and Notification set. " + formattedDate);
                         //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                     }
                 } else {
-                    Log.i("JKEEPASS", "Notification is available and set to " + alarmManager);
+                    log("JKEEPASS", "Notification is available and set to " + alarmManager);
                 }
             }
         } catch (Exception e) {
-            Log.i("JKEEPASS", "Notification set error ." + e.getMessage());
+            log("JKEEPASS", "Notification set error ." + e.getMessage());
             //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         }
     }
@@ -1097,5 +1090,8 @@ public class LoadActivity extends AppCompatActivity {
                 }
             }).start();
         });
+    }
+    private void log(String tag, String msg) {
+        Util.log(msg);
     }
 }

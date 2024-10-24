@@ -86,7 +86,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void log(String tag, String msg) {
-        Log.i(tag, msg);
+        //Log.i(tag, msg);
     }
 
     private boolean checkAndGetPermission(Context context) {

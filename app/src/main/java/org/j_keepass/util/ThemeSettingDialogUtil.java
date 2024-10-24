@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -198,15 +197,15 @@ public class ThemeSettingDialogUtil {
                 SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 String savedSTheme = sharedPref.getString("sTheme", null);
-                Log.i("JKEEPASS", "sTheme from shared: " + savedSTheme);
+                Util.log("sTheme from shared: " + savedSTheme);
                 if (savedSTheme != null) {
                     sTheme = savedSTheme;
                 }
             } catch (Exception e) {
-                Log.i("JKEEPASS", "sTheme error is: ", e);
+                Util.log("sTheme error is: "+e.getMessage());
             }
         }
-        Log.i("JKEEPASS", "sTheme is: " + sTheme);
+        Util.log("sTheme is: " + sTheme);
         changeToTheme(activity, true);
     }
 }

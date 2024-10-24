@@ -113,6 +113,6 @@ public class Util {
 
     public static void log(String msg)
     {
-        Log.i("JKEEPASS", msg);
+       // Log.i("JKEEPASS", msg);
     }
 }
