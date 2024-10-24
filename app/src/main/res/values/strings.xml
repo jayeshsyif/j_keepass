@@ -178,9 +178,9 @@
     <string name="total">Total</string>
     <string name="expired">Expired</string>
     <string name="expiringSoon">Exp. soon</string>
-    <string name="totalEntries">Total (Entries)</string>
-    <string name="expiredEntries">Expired (Entries)</string>
-    <string name="expiringSoonEntries">Exp. soon (Entries)</string>
+    <string name="totalEntries">Total</string>
+    <string name="expiredEntries">Expired</string>
+    <string name="expiringSoonEntries">Exp. soon</string>
     <string name="entriesStatistics">Statistics (Entries)</string>
     <string name="statistics">Statistics</string>
 

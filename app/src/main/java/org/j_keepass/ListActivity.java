@@ -106,6 +106,9 @@ public class ListActivity extends AppCompatActivity {
                     Group<?, ?, ?, ?> finalGroup = group;
                     new Thread(() -> {
                         if (finalGroup.isRootGroup()) {
+                            runOnUiThread(() -> {
+                                binding.entriesStatistics.setVisibility(View.VISIBLE);
+                            });
                             List<?> allEntriesList = database.findEntries(new Entry.Matcher() {
                                 @Override
                                 public boolean matches(Entry entry) {
@@ -360,6 +363,7 @@ public class ListActivity extends AppCompatActivity {
             } else {
                 binding.justNothingTextView.setVisibility(View.GONE);
             }
+            binding.entriesStatistics.setVisibility(View.GONE);
             binding.totalCountDisplayLayout.setVisibility(View.GONE);
             binding.totalExpiredCountDisplayLayout.setVisibility(View.GONE);
             binding.totalExpiringSoonCountDisplayLayout.setVisibility(View.GONE);
