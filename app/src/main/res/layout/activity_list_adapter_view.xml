@@ -131,7 +131,7 @@
                         android:layout_gravity="right"
                         android:layout_weight="1"
                         android:text="3 ↳"
-                        android:fontFamily="@font/spacemono_bold"
+                        android:fontFamily="@font/spacemono_regular"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="?colorOnPrimary" />
                 </LinearLayout>

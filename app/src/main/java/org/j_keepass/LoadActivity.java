@@ -1034,13 +1034,13 @@ public class LoadActivity extends AppCompatActivity {
                     //alarmManager.cancel(pendingIntent);
                     isAvailable = true;
                 }
-                if(isAvailable)
+                /*if(isAvailable)
                 {
                     Log.i("JKEEPASS", " Cancelling ");
                     alarmManager.cancel(pendingIntent);
                     Log.i("JKEEPASS", " Cancelled ");
                     isAvailable = false;
-                }
+                }*/
                 if (!isAvailable) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(System.currentTimeMillis());
