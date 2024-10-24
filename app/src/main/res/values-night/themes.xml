@@ -134,4 +134,23 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.J_KeePass.brs" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/kp_brs_black</item>
+        <item name="colorPrimaryVariant">@color/kp_brs_grey</item>
+        <item name="colorOnPrimary">@color/kp_brs_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/kp_brs_white</item>
+        <item name="colorSecondaryVariant">@color/kp_brs_grey</item>
+        <item name="colorOnSecondary">@color/kp_brs_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

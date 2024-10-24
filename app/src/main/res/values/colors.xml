@@ -113,4 +113,18 @@
     <color name="kp_bbs_white">#d7d7d6</color>
     <!-- Black blue skin -->
 
+    <!-- White red skin-->
+    <color name="kp_wrs_light_white">#f3f3ee</color>
+    <color name="kp_wrs_grey">#fcfcf9</color>
+    <color name="kp_wrs_blue">#cf5760</color>
+    <color name="kp_wrs_white">#64645f</color>
+    <!-- White red skin -->
+
+    <!-- Black red skin-->
+    <color name="kp_brs_black">#202222</color>
+    <color name="kp_brs_grey">#191a1a</color>
+    <color name="kp_brs_blue">#FE7678</color>
+    <color name="kp_brs_white">#d7d7d6</color>
+    <!-- Black red skin -->
+
 </resources>

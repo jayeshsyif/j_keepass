@@ -103,6 +103,21 @@ public class ThemeSettingDialogUtil {
             changeToTheme(loadActivity, false);
         });
 
+
+        LinearLayout wrsLl = bsd.findViewById(R.id.wrs);
+        wrsLl.setOnClickListener(view -> {
+            sTheme = "wrs";
+            bsd.dismiss();
+            changeToTheme(loadActivity, false);
+        });
+
+        LinearLayout brsLl = bsd.findViewById(R.id.brs);
+        brsLl.setOnClickListener(view -> {
+            sTheme = "brs";
+            bsd.dismiss();
+            changeToTheme(loadActivity, false);
+        });
+
     }
 
     public static void changeToTheme(Activity activity, boolean isFromStart) {
@@ -149,6 +164,14 @@ public class ThemeSettingDialogUtil {
                 break;
             case "bbs":
                 activity.setTheme(R.style.Theme_J_KeePass_bbs);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "wrs":
+                activity.setTheme(R.style.Theme_J_KeePass_wrs);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "brs":
+                activity.setTheme(R.style.Theme_J_KeePass_brs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
             default:
