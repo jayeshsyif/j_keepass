@@ -22,13 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/milonga_regular"
+            android:fontFamily="@font/spacemono_bold"
             android:gravity="center"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="?colorSecondary"
-            android:textStyle="bold" />
+            android:textColor="?colorSecondary" />
 
         <TextView
             android:id="@+id/bannerText"
@@ -38,7 +37,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/kp_always_1"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/josefin_sans_light"
+            android:fontFamily="@font/spacemono_regular"
             android:gravity="center"
             android:text="@string/app_desc"
             android:textAlignment="center"

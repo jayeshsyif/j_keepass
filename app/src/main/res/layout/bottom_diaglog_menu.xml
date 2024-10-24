@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_bold"
                 android:gravity="center_vertical"
                 android:text="@string/menuText"
                 android:textColor="?colorSecondary">
@@ -85,7 +85,7 @@
                 android:id="@+id/editMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/edit"
                 android:textColor="?colorSecondary">
@@ -134,7 +134,7 @@
                 android:id="@+id/changePwdMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/changePassword"
                 android:textColor="?colorSecondary">
@@ -184,7 +184,7 @@
                 android:id="@+id/copyMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/copy"
                 android:textColor="?colorSecondary">
@@ -235,7 +235,7 @@
                 android:id="@+id/moveMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/move"
                 android:textColor="?colorSecondary">
@@ -285,7 +285,7 @@
                 android:id="@+id/deleteMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/delete"
                 android:textColor="?colorSecondary">
@@ -334,7 +334,7 @@
                 android:id="@+id/addGroupMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/addGroup"
                 android:textColor="?colorSecondary">
@@ -383,7 +383,7 @@
                 android:id="@+id/addEntryMenuText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:text="@string/addEntry"
                 android:textColor="?colorSecondary">

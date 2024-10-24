@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:fontFamily="@font/milonga_regular"
+                android:fontFamily="@font/spacemono_bold"
                 android:gravity="center"
                 android:text="@string/entryName"
                 android:singleLine="false"
@@ -60,7 +60,7 @@
                         android:layout_margin="@dimen/kp_margin"
                         android:backgroundTint="?colorOnPrimary"
                         android:tint="?colorPrimary"
-                        android:fontFamily="@font/josefin_sans_regular"
+                        android:fontFamily="@font/spacemono_regular"
                         android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24" />
 
                     <LinearLayout

@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:fontFamily="@font/milonga_regular"
+                android:fontFamily="@font/spacemono_bold"
                 android:gravity="center"
                 android:singleLine="false"
                 android:text="@string/entryName"

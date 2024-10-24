@@ -904,7 +904,7 @@ public class LoadActivity extends AppCompatActivity {
         });
 
         TextView databaseMoreInfo = viewToLoad.findViewById(R.id.databaseMoreInfo);
-        databaseMoreInfo.setText("Last Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()) + " ");
+        databaseMoreInfo.setText("Modified: " + Util.convertDateToStringOnlyDate(f.lastModified()) + " ");
         databaseMoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 4);
         CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
         runOnUiThread(() -> {

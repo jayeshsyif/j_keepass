@@ -56,7 +56,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/kp_margin"
                     android:layout_weight="20"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text="@string/groupName"
                     android:textAlignment="gravity"
@@ -88,12 +88,12 @@
                         android:id="@+id/databaseMoreInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
                         android:layout_weight="1"
-                        android:fontFamily="@font/josefin_sans_regular"
-                        android:text=""
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:fontFamily="@font/spacemono_italic"
+                        android:text="modified: 24/10/24"
+                        android:textSize="@dimen/kp_extra_small_text_size"
                         android:textColor="?colorOnPrimary"
+                        android:layout_gravity="right"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>

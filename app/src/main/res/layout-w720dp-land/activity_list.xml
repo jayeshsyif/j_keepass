@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="80"
                 android:background="?colorPrimary"
-                android:fontFamily="@font/milonga_regular"
+                android:fontFamily="@font/spacemono_bold"
                 android:gravity="center"
                 android:singleLine="false"
                 android:text="@string/groupName"
@@ -56,7 +56,7 @@
                         android:text="@string/entriesStatistics"
                         android:textAlignment="viewStart"
                         android:textColor="?colorSecondary"
-                        android:fontFamily="@font/josefin_sans_extra_light"
+                        android:fontFamily="@font/spacemono_regular"
                         android:visibility="gone"></TextView>
 
                     <LinearLayout
@@ -91,7 +91,7 @@
                                     android:layout_weight="1"
                                     android:backgroundTint="?colorPrimary"
                                     android:textColor="?colorSecondary"
-                                    android:fontFamily="@font/josefin_sans_regular"
+                                    android:fontFamily="@font/spacemono_regular"
                                     android:gravity="center"
                                     android:text="@string/totalEntries"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
@@ -103,7 +103,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_light_blue"
-                                    android:fontFamily="@font/josefin_sans_regular"
+                                    android:fontFamily="@font/spacemono_regular"
                                     android:gravity="center"
                                     android:text="0"
                                     android:textAlignment="center"
@@ -130,7 +130,7 @@
                                     android:layout_weight="1"
                                     android:backgroundTint="?colorPrimary"
                                     android:textColor="?colorSecondary"
-                                    android:fontFamily="@font/josefin_sans_regular"
+                                    android:fontFamily="@font/spacemono_regular"
                                     android:gravity="center"
                                     android:text="@string/expiredEntries"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
@@ -142,7 +142,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_red"
-                                    android:fontFamily="@font/josefin_sans_regular"
+                                    android:fontFamily="@font/spacemono_regular"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
@@ -168,7 +168,7 @@
                                     android:layout_weight="1"
                                     android:backgroundTint="?colorPrimary"
                                     android:textColor="?colorSecondary"
-                                    android:fontFamily="@font/josefin_sans_regular"
+                                    android:fontFamily="@font/spacemono_regular"
                                     android:gravity="center"
                                     android:text="@string/expiringSoonEntries"
                                     android:textSize="@dimen/kp_small_text_size"></TextView>
@@ -180,7 +180,7 @@
                                     android:layout_margin="@dimen/kp_always_1"
                                     android:layout_weight="1"
                                     android:backgroundTint="@color/kp_coral"
-                                    android:fontFamily="@font/josefin_sans_regular"
+                                    android:fontFamily="@font/spacemono_regular"
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
@@ -199,7 +199,7 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
-                        android:fontFamily="@font/josefin_sans_extra_light"
+                        android:fontFamily="@font/spacemono_regular"
                         android:text="@string/groups"
                         android:visibility="gone"></TextView>
 
@@ -218,7 +218,7 @@
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="@color/kp_grey"
-                        android:fontFamily="@font/josefin_sans_extra_light"
+                        android:fontFamily="@font/spacemono_regular"
                         android:text="@string/entries"
                         android:visibility="gone"></TextView>
 
@@ -236,7 +236,7 @@
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_marginBottom="@dimen/kp_button_margin"
                         android:layout_weight="1"
-                        android:fontFamily="@font/josefin_sans_light"
+                        android:fontFamily="@font/spacemono_regular"
                         android:backgroundTint="@color/kp_light_blue"
                         android:gravity="center"
                         android:text="@string/nothingHere"

@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="?colorPrimaryVariant"
                         android:background="?colorPrimaryVariant"
-                        android:fontFamily="@font/josefin_sans_regular"
+                        android:fontFamily="@font/spacemono_regular"
                         android:hint="@string/enterFieldValue"
                         android:inputType="text"
                         android:textColorHint="?colorOnPrimary"

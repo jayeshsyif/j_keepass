@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="?colorOnPrimary"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_bold"
                 android:gravity="center"
                 android:padding="@dimen/fab_new_padding"
                 android:text="@string/loading"

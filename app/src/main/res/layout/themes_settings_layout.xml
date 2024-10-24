@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:fontFamily="@font/josefin_sans_regular"
+                android:fontFamily="@font/spacemono_bold"
                 android:gravity="center_vertical"
                 android:text="@string/themes"
                 android:textColor="?colorSecondary">
@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_wbs_blue"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -100,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_wb_blue"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -128,7 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_wr_red"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -156,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_wl_lemon"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -184,7 +184,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_p_pink"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -212,7 +212,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_ws_blue"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -240,7 +240,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_bbs_blue"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_bold"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -268,7 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_bb_blue"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -296,7 +296,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_br_red"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -324,7 +324,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_bl_lemon"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -352,7 +352,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_bg_green"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
@@ -379,7 +379,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/kp_bs_green"
-                    android:fontFamily="@font/josefin_sans_regular"
+                    android:fontFamily="@font/spacemono_regular"
                     android:gravity="center_vertical"
                     android:text=" ">
 
