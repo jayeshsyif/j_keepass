@@ -31,8 +31,7 @@
                 android:singleLine="false"
                 android:textAlignment="gravity"
                 android:textColor="?colorSecondary"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold"></TextView>
+                android:textAppearance="?android:attr/textAppearanceSmall"></TextView>
 
             <ScrollView
                 android:id="@+id/groupScrollView"
@@ -108,8 +107,7 @@
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
-                                    android:textSize="@dimen/kp_small_text_size"
-                                    android:textStyle="bold"></com.google.android.material.chip.Chip>
+                                    android:textSize="@dimen/kp_small_text_size"></com.google.android.material.chip.Chip>
                             </LinearLayout>
 
                             <LinearLayout
@@ -146,8 +144,7 @@
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
-                                    android:textSize="@dimen/kp_small_text_size"
-                                    android:textStyle="bold"></com.google.android.material.chip.Chip>
+                                    android:textSize="@dimen/kp_small_text_size"></com.google.android.material.chip.Chip>
                             </LinearLayout>
 
                             <LinearLayout
@@ -184,8 +181,7 @@
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/kp_static_white"
-                                    android:textSize="@dimen/kp_small_text_size"
-                                    android:textStyle="bold"></com.google.android.material.chip.Chip>
+                                    android:textSize="@dimen/kp_small_text_size"></com.google.android.material.chip.Chip>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -274,7 +270,6 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_export_fill0_wght300_grad_25_opsz24"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary" />
 
                         <ImageButton
@@ -285,7 +280,6 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_search_fill0_wght300_grad_25_opsz24"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary" />
                     </LinearLayout>
 
@@ -310,7 +304,6 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
                             android:textColor="?colorSecondary"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary" />
 
                         <ImageButton
@@ -321,7 +314,6 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
-                            android:textStyle="bold"
                             app:tint="@color/kp_red" />
                     </LinearLayout>
 

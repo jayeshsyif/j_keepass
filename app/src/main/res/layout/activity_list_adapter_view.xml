@@ -35,7 +35,7 @@
                 android:textAppearance="?android:attr/textAppearance"
                 android:textColor="?colorSecondary"
                 android:textSize="@dimen/kp_small_text_size"
-                android:textStyle="italic"
+                android:fontFamily="@font/spacemono_italic"
                 android:background="?colorPrimaryVariant"
                 android:visibility="gone"
                 ></TextView>
@@ -131,10 +131,9 @@
                         android:layout_gravity="right"
                         android:layout_weight="1"
                         android:text="3 ↳"
-                        android:fontFamily="@font/spacemono_regular"
+                        android:fontFamily="@font/spacemono_bold"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="?colorOnPrimary"
-                        android:textStyle="bold" />
+                        android:textColor="?colorOnPrimary" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

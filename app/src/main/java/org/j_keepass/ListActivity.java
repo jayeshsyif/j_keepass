@@ -50,6 +50,7 @@ import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -290,14 +291,18 @@ public class ListActivity extends AppCompatActivity {
                 boolean isOk = checkAndGetPermission(v, ListActivity.this);
 
                 if (isOk) {
-                    Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-                    chooseFile.setType("*/*");
-                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-                    chooseFile.putExtra(Intent.EXTRA_TITLE, "database.kdbx");
+                    if(Common.kdbxFileUri != null) {
+                        Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+                        chooseFile.setType("*/*");
+                        chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                        chooseFile.putExtra(Intent.EXTRA_TITLE, new File(Common.kdbxFileUri.getPath()).getName());
 
-                    chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
-                    startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+                        chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
+                        startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+                    }else {
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.emptyFileError, binding.getRoot().findViewById(R.id.floatAdd));
+                    }
                 } else {
                     ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatAdd));
                 }

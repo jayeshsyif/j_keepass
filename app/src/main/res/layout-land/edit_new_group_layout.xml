@@ -31,8 +31,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?colorSecondary"
                 android:background="?colorPrimary"
-                android:singleLine="false"
-                android:textStyle="bold"></TextView>
+                android:singleLine="false"></TextView>
 
             <ScrollView
                 android:id="@+id/editGroupScrollView"
@@ -72,7 +71,6 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
-                        android:textStyle="bold"
                         app:tint="?colorSecondary" />
 
                     <ImageButton
@@ -83,7 +81,6 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
-                        android:textStyle="bold"
                         app:tint="?colorSecondary" />
                 </LinearLayout>
             </com.google.android.material.bottomnavigation.BottomNavigationView>

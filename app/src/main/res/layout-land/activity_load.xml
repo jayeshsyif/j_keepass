@@ -32,8 +32,7 @@
                 android:text="@string/app_name"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?colorSecondary"
-                android:textStyle="bold" />
+                android:textColor="?colorSecondary" />
 
             <ScrollView
                 android:id="@+id/loadScrollview"
@@ -117,10 +116,9 @@
                         android:layout_marginTop="@dimen/kp_button_margin"
                         android:layout_weight="1"
                         android:backgroundTint="?colorPrimary"
-                        android:fontFamily="@font/spacemono_regular"
+                        android:fontFamily="@font/spacemono_italic"
                         android:text="@string/databases"
-                        android:textColor="?colorSecondary"
-                        android:textStyle="italic">
+                        android:textColor="?colorSecondary">
 
                     </TextView>
 
@@ -176,7 +174,6 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
-                            android:textStyle="bold"
                             android:src="@drawable/ic_palette_24dp_5f6368_fill0_wght300_grad_25_opsz24"
                             app:tint="?colorSecondary" />
 
@@ -189,7 +186,6 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_file_open_fill0_wght300_grad_25_opsz24"
                             android:textColor="?colorSecondary"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary">
 
                         </ImageButton>
@@ -216,7 +212,6 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_create_new_folder_fill0_wght300_grad_25_opsz24"
                             android:textColor="?colorSecondary"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary"></ImageButton>
 
                         <ImageButton
@@ -228,7 +223,6 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
                             android:textColor="?colorSecondary"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary" />
                     </LinearLayout>
                 </LinearLayout>

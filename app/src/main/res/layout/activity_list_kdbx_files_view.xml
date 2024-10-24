@@ -93,8 +93,7 @@
                         android:text="modified: 24/10/24"
                         android:textSize="@dimen/kp_extra_small_text_size"
                         android:textColor="?colorOnPrimary"
-                        android:layout_gravity="right"
-                        android:textStyle="bold" />
+                        android:layout_gravity="right"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -31,8 +31,7 @@
                 android:text="@string/entryName"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?colorSecondary"
-                android:textStyle="bold"></TextView>
+                android:textColor="?colorSecondary"></TextView>
 
             <ScrollView
                 android:id="@+id/addEntryScrollView"
@@ -95,7 +94,6 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
-                        android:textStyle="bold"
                         app:tint="?colorSecondary" />
 
                     <LinearLayout
@@ -119,7 +117,6 @@
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
                             android:textColor="?colorSecondary"
-                            android:textStyle="bold"
                             app:tint="?colorSecondary" />
 
                         <ImageButton
@@ -130,7 +127,6 @@
                             android:layout_weight="1"
                             android:backgroundTint="@android:color/transparent"
                             android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
-                            android:textStyle="bold"
                             app:tint="@color/kp_red" />
                     </LinearLayout>
                 </LinearLayout>
