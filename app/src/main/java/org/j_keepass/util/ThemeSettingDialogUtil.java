@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -120,65 +121,92 @@ public class ThemeSettingDialogUtil {
     }
 
     public static void changeToTheme(Activity activity, boolean isFromStart) {
+        boolean isLightTheme = false;
         switch (sTheme) {
             case "br":
                 activity.setTheme(R.style.Theme_J_KeePass_br);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             case "bb":
                 activity.setTheme(R.style.Theme_J_KeePass_bb);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             case "bl":
                 activity.setTheme(R.style.Theme_J_KeePass_bl);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             case "bg":
                 activity.setTheme(R.style.Theme_J_KeePass_bg);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             case "p":
                 activity.setTheme(R.style.Theme_J_KeePass_p);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
             case "wr":
                 activity.setTheme(R.style.Theme_J_KeePass_wr);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
             case "wl":
                 activity.setTheme(R.style.Theme_J_KeePass_wl);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
             case "wb":
                 activity.setTheme(R.style.Theme_J_KeePass_wb);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
             case "ws":
                 activity.setTheme(R.style.Theme_J_KeePass_ws);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
             case "bs":
                 activity.setTheme(R.style.Theme_J_KeePass_bs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             case "bbs":
                 activity.setTheme(R.style.Theme_J_KeePass_bbs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             case "wrs":
                 activity.setTheme(R.style.Theme_J_KeePass_wrs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
             case "brs":
                 activity.setTheme(R.style.Theme_J_KeePass_brs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                isLightTheme = false;
                 break;
             default:
             case "wbs":
                 activity.setTheme(R.style.Theme_J_KeePass_wbs);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                isLightTheme = true;
                 break;
 
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // Use flags to set light or dark text
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (isLightTheme) {
+                        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Util.log("Error setting light status " + e.getMessage());
         }
         if (!isFromStart) {
             SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
@@ -202,7 +230,7 @@ public class ThemeSettingDialogUtil {
                     sTheme = savedSTheme;
                 }
             } catch (Exception e) {
-                Util.log("sTheme error is: "+e.getMessage());
+                Util.log("sTheme error is: " + e.getMessage());
             }
         }
         Util.log("sTheme is: " + sTheme);
