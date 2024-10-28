@@ -13,6 +13,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/kp_light_blue</item>
         <!-- Customize your theme here. -->
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
 
@@ -38,6 +40,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
     <style name="Theme.J_KeePass.bb" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -57,6 +61,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
     <style name="Theme.J_KeePass.bl" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -76,6 +82,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
     <style name="Theme.J_KeePass.bg" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -95,6 +103,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
     <style name="Theme.J_KeePass.bs" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -114,6 +124,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
     <style name="Theme.J_KeePass.bbs" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -133,6 +145,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
     <style name="Theme.J_KeePass.brs" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -152,5 +166,34 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+    </style>
+
+    <style name="CustomDatePickerDialogDark" parent="ThemeOverlay.AppCompat.Dialog">
+        <!-- Header background -->
+        <item name="colorAccent">?colorOnPrimary</item>
+        <!-- Header text color -->
+        <item name="android:textColorPrimaryInverse">?colorSecondary</item>
+        <!-- Body background -->
+        <item name="android:windowBackground">?colorPrimaryVariant</item>
+        <!-- Selected day color -->
+        <item name="android:colorControlActivated">?colorOnPrimary</item>
+        <!-- Days of the month -->
+        <item name="android:textColorPrimary">?colorSecondary</item>
+        <!-- Days of the week -->
+        <item name="android:textColorSecondary">?colorSecondary</item>
+        <!-- Cancel & OK buttons -->
+        <item name="android:textColor">?colorOnPrimary</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/CancelButtonStyleDark</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/OkButtonStyleDark</item>
+    </style>
+
+    <style name="CancelButtonStyleDark" parent="@android:style/Widget.Button">
+        <item name="android:textColor">?colorSecondary</item>
+    </style>
+
+    <style name="OkButtonStyleDark" parent="@android:style/Widget.Button">
+        <item name="android:textColor">?colorSecondary</item>
     </style>
 </resources>
