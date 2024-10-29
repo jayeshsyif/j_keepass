@@ -2,6 +2,7 @@ package org.j_keepass;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -23,6 +24,9 @@ import androidx.core.content.ContextCompat;
 import org.j_keepass.util.Common;
 import org.j_keepass.util.ToastUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
 
@@ -32,6 +36,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             log("@@ JKeePass", "received alarm");
             showNotification(context);
             log("@@ JKeePass", "received alarm done");
+            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+                startAlarmBroadcastReceiver(context);
+            }
         }
     }
 
@@ -114,5 +121,50 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         }
         log("@@ JKeePass", "received check permission return is: " + isOK);
         return isOK;
+    }
+
+    public void startAlarmBroadcastReceiver(Context context) {
+        try {
+            if (checkAndGetPermission(context)) {
+                boolean isAvailable = false;
+                Intent _intent = new Intent(context, AlarmBroadcastReceiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, _intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                //PendingIntent pendingIntent = PendingIntent.getService(context, 1, _intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                if (pendingIntent != null && alarmManager != null) {
+                    //alarmManager.cancel(pendingIntent);
+                    isAvailable = true;
+                }
+                if (isAvailable) {
+                    log("JKEEPASS", " Cancelling ");
+                    alarmManager.cancel(pendingIntent);
+                    log("JKEEPASS", " Cancelled ");
+                    isAvailable = false;
+                }
+                if (!isAvailable) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.set(Calendar.HOUR_OF_DAY, 10);
+                    calendar.set(Calendar.MINUTE, 00);
+                    calendar.set(Calendar.SECOND, 00);
+                    if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+                        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        String formattedDate = simpleDateFormat.format(calendar.getTime());
+                        log("JKEEPASS", " Not Available and Notification set. " + formattedDate);
+                        //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                    }
+                } else {
+                    log("JKEEPASS", "Notification is available and set to " + alarmManager);
+                }
+            }
+        } catch (Exception e) {
+            log("JKEEPASS", "Notification set error ." + e.getMessage());
+            //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+        }
     }
 }

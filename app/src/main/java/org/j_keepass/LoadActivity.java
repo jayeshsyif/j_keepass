@@ -1027,21 +1027,24 @@ public class LoadActivity extends AppCompatActivity {
                     //alarmManager.cancel(pendingIntent);
                     isAvailable = true;
                 }
-                /*if(isAvailable)
+                if(isAvailable)
                 {
                     log("JKEEPASS", " Cancelling ");
                     alarmManager.cancel(pendingIntent);
                     log("JKEEPASS", " Cancelled ");
                     isAvailable = false;
-                }*/
+                }
                 if (!isAvailable) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(System.currentTimeMillis());
                     calendar.set(Calendar.HOUR_OF_DAY, 10);
                     calendar.set(Calendar.MINUTE, 00);
                     calendar.set(Calendar.SECOND, 00);
+                    if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
                         //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         String formattedDate = simpleDateFormat.format(calendar.getTime());
