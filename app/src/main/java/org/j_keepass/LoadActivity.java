@@ -156,7 +156,7 @@ public class LoadActivity extends AppCompatActivity {
     private void setEvents() {
         TextInputEditText kdbxPasswordET = binding.kdbxFileGotPassword;
 
-        kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
+        /*kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 if (binding.getRoot().getContext() != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -165,7 +165,7 @@ public class LoadActivity extends AppCompatActivity {
                 return true;
             }
             return false;
-        });
+        });*/
 
         binding.floatGenerateNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
