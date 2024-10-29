@@ -36,7 +36,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             log("@@ JKeePass", "received alarm");
             showNotification(context);
             log("@@ JKeePass", "received alarm done");
-            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            //if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
+            {
                 startAlarmBroadcastReceiver(context);
             }
         }
@@ -164,7 +165,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             log("JKEEPASS", "Notification set error ." + e.getMessage());
-            //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "Notification set error ." + e.getMessage(), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
         }
     }
 }
