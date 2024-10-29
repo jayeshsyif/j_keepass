@@ -151,8 +151,8 @@
     <string name="changeLogsVer91ChangesText">   Themes support added and performance improvement.</string>
     <string name="changeLogsVer10Text">Version 10</string>
     <string name="changeLogsVer10ChangesText">   New font, new themes and new default theme changes and bug fixes.</string>
-    <string name="changeLogsVer10_4Text">Version 10.4</string>
-    <string name="changeLogsVer10_4ChangesText">   New font, new themes and new default theme changes and bug fixes(notification and start bug).</string>
+    <string name="changeLogsVer10_5Text">Version 10.4</string>
+    <string name="changeLogsVer10_5ChangesText">   New font, new themes and new default theme changes and bug fixes(notification and start bug).</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
