@@ -1089,7 +1089,12 @@ public class LoadActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    process(alertDialog, binding.getRoot().getRootView());
+                    try {
+                        process(alertDialog, binding.getRoot().getRootView());
+                    }catch (Exception e)
+                    {
+                        ToastUtil.showToast(getLayoutInflater(), v, R.string.somethingWentWrong, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
+                    }
                 }
             }).start();
         });
