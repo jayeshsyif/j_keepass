@@ -83,6 +83,30 @@ public class FieldUtil {
         return viewToLoad;
     }
 
+    public View getTextFieldWithOutCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString, View anchorView) {
+        final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
+        final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);
+        final LinearLayout copyLayout = viewToLoad.findViewById(R.id.copyLayout);
+        copyLayout.setVisibility(View.VISIBLE);
+        final TextInputLayout fieldText = viewToLoad.findViewById(R.id.fieldText);
+        fieldText.setId(new Random().nextInt());
+        fieldText.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        fieldText.setHint(hint);
+        final TextInputEditText field = viewToLoad.findViewById(R.id.field);
+        field.setId(new Random().nextInt());
+        field.setEnabled(false);
+        field.setText(value);
+        field.setInputType(InputType.TYPE_NULL);
+        field.setTransformationMethod(null);
+        copy.setVisibility(View.GONE);
+        //field.setHint(hint);
+        CardView databaseNameCardView = viewToLoad.findViewById(R.id.databaseNameCardView);
+        @SuppressLint("ResourceType") LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(inflater.getContext(), R.animator.anim_bottom), Common.ANIMATION_TIME); //0.5f == time between appearance of listview items.
+        databaseNameCardView.setLayoutAnimation(lac);
+        databaseNameCardView.startLayoutAnimation();
+        return viewToLoad;
+    }
+
     public View getPasswordFieldWithCopy(LayoutInflater inflater, String hint, String value, ClipboardManager clipboard, String copiedToClipboardString, View anchorView) {
         final View viewToLoad = inflater.inflate(R.layout.field_layout, null);
         final ImageButton copy = viewToLoad.findViewById(R.id.fieldCopy);

@@ -181,7 +181,7 @@ public class LoadActivity extends AppCompatActivity {
 
                 if (isOk) {
                     Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    chooseFile.setType("*/*");
+                    chooseFile.setType("application/octet-stream");
                     chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
                     chooseFile = Intent.createChooser(chooseFile, "Choose a file");

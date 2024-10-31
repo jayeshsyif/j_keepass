@@ -93,6 +93,18 @@ public class ViewEntryActivity extends AppCompatActivity {
                     }
                 }
                 {
+                    if (entry.getBinaryPropertyNames().size() > 0) {
+                        for (String pn : entry.getBinaryPropertyNames()) {
+                            if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password")
+                                    && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
+                                final View pnView = new FieldUtil().getTextFieldWithOutCopy((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                                        "Attachment", pn, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), getString(R.string.copiedToClipboard), binding.getRoot().findViewById(R.id.entryPasswordCopyFloatBtn));
+                                viewsToAdd.add(pnView);
+                            }
+                        }
+                    }
+                }
+                {
                     final View creationView = new FieldUtil().getTextField((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             getString(R.string.creationDate), Util.convertDateToString(finalEntry.getCreationTime()));
                     viewsToAdd.add(creationView);
