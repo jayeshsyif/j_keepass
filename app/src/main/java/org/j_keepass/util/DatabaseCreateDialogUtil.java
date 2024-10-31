@@ -2,11 +2,16 @@ package org.j_keepass.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,6 +33,17 @@ public class DatabaseCreateDialogUtil {
             quadruple.third = bsd.findViewById(R.id.databaseName);
             quadruple.fourth = bsd.findViewById(R.id.databasePassword);
         } catch (Exception e) {
+        }
+        try {
+            int orientation = context.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                FrameLayout bottomSheet = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                expandBottomSheet(bottomSheetBehavior);
+            }
+        } catch (Exception e) {
+            Util.log("Error expanding get confirm sheet " + e.getMessage());
         }
         quadruple.first = bsd;
         return quadruple;
@@ -55,6 +71,17 @@ public class DatabaseCreateDialogUtil {
             triplet.third.setText(value);
         } catch (Exception e) {
         }
+        try {
+            int orientation = context.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                FrameLayout bottomSheet = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                expandBottomSheet(bottomSheetBehavior);
+            }
+        } catch (Exception e) {
+            Util.log("Error expanding get cofirm dialog edit name sheet " + e.getMessage());
+        }
         triplet.first = bsd;
         return triplet;
     }
@@ -71,6 +98,17 @@ public class DatabaseCreateDialogUtil {
             quadruple.fourth = bsd.findViewById(R.id.databaseNewPassword);
             ((TextView) bsd.findViewById(R.id.nameMenuText)).setText(name);
         } catch (Exception e) {
+        }
+        try {
+            int orientation = context.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                FrameLayout bottomSheet = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                expandBottomSheet(bottomSheetBehavior);
+            }
+        } catch (Exception e) {
+            Util.log("Error expanding change password sheet " + e.getMessage());
         }
         quadruple.first = bsd;
         return quadruple;
@@ -91,7 +129,31 @@ public class DatabaseCreateDialogUtil {
             ((TextView) bsd.findViewById(R.id.nameMenuText)).setText(name);
         } catch (Exception e) {
         }
+        try {
+            int orientation = context.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                FrameLayout bottomSheet = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                expandBottomSheet(bottomSheetBehavior);
+            }
+        } catch (Exception e) {
+            Util.log("Error expanding open dialog sheet " + e.getMessage());
+        }
         triplet.first = bsd;
         return triplet;
     }
+
+
+    public static void showFullScreenBottomSheet(FrameLayout bottomSheet) {
+        ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+        layoutParams.height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        bottomSheet.setLayoutParams(layoutParams);
+    }
+
+    public static void expandBottomSheet(BottomSheetBehavior<FrameLayout> bottomSheetBehavior) {
+        bottomSheetBehavior.setSkipCollapsed(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
 }

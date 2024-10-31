@@ -3,14 +3,19 @@ package org.j_keepass.util;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.slider.Slider;
@@ -23,6 +28,17 @@ public class NewPasswordDialogUtil {
         BottomSheetDialog bsd = new BottomSheetDialog(mView.getContext());
         bsd.setContentView(R.layout.new_password_layout);
         bsd.show();
+        try {
+            int orientation = mView.getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                FrameLayout bottomSheet = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                expandBottomSheet(bottomSheetBehavior);
+            }
+        } catch (Exception e) {
+            Util.log("Error expanding new password sheet " + e.getMessage());
+        }
         String pwd = new PasswordGenerator().generate(20);
         TextView pwdF = bsd.findViewById(R.id.newPassword);
         pwdF.setText(pwd);
@@ -117,5 +133,17 @@ public class NewPasswordDialogUtil {
         } else {
             return false;
         }
+    }
+
+
+    public static void showFullScreenBottomSheet(FrameLayout bottomSheet) {
+        ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+        layoutParams.height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        bottomSheet.setLayoutParams(layoutParams);
+    }
+
+    public static void expandBottomSheet(BottomSheetBehavior<FrameLayout> bottomSheetBehavior) {
+        bottomSheetBehavior.setSkipCollapsed(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }
