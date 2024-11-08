@@ -5,13 +5,18 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.j_keepass.LoadActivity;
@@ -24,6 +29,17 @@ public class ThemeSettingDialogUtil {
         BottomSheetDialog bsd = new BottomSheetDialog(mView.getContext());
         bsd.setContentView(R.layout.themes_settings_layout);
         bsd.show();
+        try {
+            int orientation = mView.getContext().getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                FrameLayout bottomSheet = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                expandBottomSheet(bottomSheetBehavior);
+            }
+        } catch (Exception e) {
+            Util.log("Error expanding db menu sheet " + e.getMessage());
+        }
         LinearLayout wbLl = bsd.findViewById(R.id.wb);
         wbLl.setOnClickListener(view -> {
             sTheme = "wb";
@@ -235,5 +251,16 @@ public class ThemeSettingDialogUtil {
         }
         Util.log("sTheme is: " + sTheme);
         changeToTheme(activity, true);
+    }
+
+    public static void showFullScreenBottomSheet(FrameLayout bottomSheet) {
+        ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+        layoutParams.height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        bottomSheet.setLayoutParams(layoutParams);
+    }
+
+    public static void expandBottomSheet(BottomSheetBehavior<FrameLayout> bottomSheetBehavior) {
+        bottomSheetBehavior.setSkipCollapsed(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }
