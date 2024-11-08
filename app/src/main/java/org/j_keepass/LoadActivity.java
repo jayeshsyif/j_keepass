@@ -156,16 +156,24 @@ public class LoadActivity extends AppCompatActivity {
     private void setEvents() {
         TextInputEditText kdbxPasswordET = binding.kdbxFileGotPassword;
 
-        /*kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                if (binding.getRoot().getContext() != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+        try {
+            kdbxPasswordET.setOnKeyListener((v, keyCode, event) -> {
+                try {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        if (binding.getRoot().getContext() != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+                        }
+                        return true;
+                    }
+                } catch (Throwable t) {
+                    Util.log("Ignoring pass inside key listener " + t.getMessage());
                 }
-                return true;
-            }
-            return false;
-        });*/
+                return false;
+            });
+        } catch (Throwable t) {
+            Util.log("Ignoring pass on key listener " + t.getMessage());
+        }
 
         binding.floatGenerateNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,22 +181,19 @@ public class LoadActivity extends AppCompatActivity {
                 NewPasswordDialogUtil.show(getLayoutInflater(), v, (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE), binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             }
         });
-        binding.importBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.importBtn.setOnClickListener(v -> {
 
-                boolean isOk = checkAndGetPermission(v, LoadActivity.this);
+            boolean isOk = checkAndGetPermission(v, LoadActivity.this);
 
-                if (isOk) {
-                    Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    chooseFile.setType("application/octet-stream");
-                    chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            if (isOk) {
+                Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                chooseFile.setType("application/octet-stream");
+                chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
-                    chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-                    startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
-                } else {
-                    ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
-                }
+                chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+                startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+            } else {
+                ToastUtil.showToast(getLayoutInflater(), v, R.string.permissionNotGranted, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
             }
         });
         ImageButton createBtn = binding.createBtn;
@@ -1011,7 +1016,7 @@ public class LoadActivity extends AppCompatActivity {
                 startAlarmBroadcastReceiver(this);
             }
         } else if (requestCode == READ_EXTERNAL_STORAGE) {
-            binding.createBtn.performClick();
+            //binding.createBtn.performClick();
         }
     }
 
