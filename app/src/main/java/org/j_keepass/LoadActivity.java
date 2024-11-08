@@ -1087,6 +1087,25 @@ public class LoadActivity extends AppCompatActivity {
                 }
             }
         });
+        try {
+            kdbxListFilePassword.setOnKeyListener((view, keyCode, event) -> {
+                try {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        if (binding.getRoot().getContext() != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+                            openTriplet.second.performClick();
+                        }
+                        return true;
+                    }
+                } catch (Throwable t) {
+                    Util.log("Ignoring pass inside key listener " + t.getMessage());
+                }
+                return false;
+            });
+        } catch (Throwable t) {
+            Util.log("Ignoring pass on key listener " + t.getMessage());
+        }
         openTriplet.second.setOnClickListener(view -> {
             openTriplet.first.dismiss();
             final AlertDialog alertDialog = ProgressDialogUtil.getLoading(getLayoutInflater(), LoadActivity.this);
