@@ -21,7 +21,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new SetTheme(this, true).run();
+        new SetTheme(this, false).run();
         binding = ListGroupEntryActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.groupName.setText(Db.getInstance().getRootGroupName());

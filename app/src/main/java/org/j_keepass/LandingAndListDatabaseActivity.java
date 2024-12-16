@@ -247,7 +247,11 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void askPwdForDb(Context context, String dbName, String fullPath) {
-        new BottomMenuUtil().showAskPwdForDb(context, dbName, fullPath);
+        try {
+            new BottomMenuUtil().showAskPwdForDb(context, dbName, fullPath);
+        } catch (Throwable e) {
+            //ignore
+        }
     }
 
     @Override

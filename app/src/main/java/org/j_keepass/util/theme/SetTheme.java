@@ -11,6 +11,7 @@ import org.j_keepass.util.Util;
 public class SetTheme {
     Activity activity;
     boolean loadFromShare;
+    public static String sThemeId = "wbs";
 
 
     public SetTheme(Activity activity, boolean loadFromShare) {
@@ -20,7 +21,6 @@ public class SetTheme {
 
 
     public void run() {
-        String sThemeId = "wbs";
         if (loadFromShare) {
             sThemeId = loadFromShare();
         }
