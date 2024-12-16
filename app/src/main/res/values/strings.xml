@@ -12,6 +12,7 @@
     <string name="database">Database</string>
     <string name="createNewDatabase">Create New Database</string>
     <string name="create">Create</string>
+    <string name="open">Open</string>
     <string name="importNewDatabase">Import Database</string>
     <string name="creatingNewDatabase">Creating New Database .....</string>
 
@@ -19,6 +20,7 @@
     <string name="importOrCreateDb">Import or Create Database ...</string>
     <string name="declaration">Please export and save database before uninstallation of application</string>
     <string name="loading">Loading .....</string>
+    <string name="opening">Opening .....</string>
     <string name="modifiedDate">modified: 24/10/24</string>
     <string name="themes">Themes</string>
     <string name="enterDatabaseName">Enter File/Database name</string>

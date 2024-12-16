@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.j_keepass.LandingAndListDatabaseActivity;
+import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.Util;
 
 public class SetTheme {
@@ -46,7 +47,7 @@ public class SetTheme {
     private void changeToTheme(Activity activity, String sThemeId) {
         Util.log("Change theme is called with : " + sThemeId);
         Theme themeToApply = ThemeUtil.getThemes().get(sThemeId);
-        ((LandingAndListDatabaseActivity) activity).applyTheme(themeToApply, false);
+        ((ThemeEvent) activity).applyTheme(themeToApply, false);
         Util.log("Done Changing theme is called with : " + sThemeId);
     }
 }

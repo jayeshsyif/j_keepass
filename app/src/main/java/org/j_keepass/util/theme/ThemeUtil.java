@@ -112,7 +112,7 @@ public class ThemeUtil {
             pos++;
             theme.setPos(pos);
             theme.setMode(AppCompatDelegate.MODE_NIGHT_YES);
-            theme.setResId(R.style.Theme_J_KeePass_bb);
+            theme.setResId(R.style.Theme_J_KeePass_br);
             theme.setLightTheme(false);
             theme.setColor1(R.color.kp_br_black);
             theme.setColor2(R.color.kp_br_red);

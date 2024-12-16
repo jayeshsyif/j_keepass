@@ -8,7 +8,7 @@
     android:padding="@dimen/kp_margin">
 
     <TextView
-        android:id="@+id/newDbJustText"
+        android:id="@+id/dbNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -25,7 +25,7 @@
         android:id="@+id/databaseNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/newDbJustText"
+        android:layout_below="@id/dbNameText"
         android:layout_margin="@dimen/kp_margin"
         android:textColorHint="?colorSecondary"
         app:boxStrokeColor="?colorSecondary"

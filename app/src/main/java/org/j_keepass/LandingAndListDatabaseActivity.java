@@ -244,4 +244,21 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void reloadDbFile() {
     }
+
+    @Override
+    public void askPwdForDb(Context context, String dbName, String fullPath) {
+        new BottomMenuUtil().showAskPwdForDb(context, dbName, fullPath);
+    }
+
+    @Override
+    public void failedToOpenDb(String errorMsg) {
+
+    }
+
+    @Override
+    public void loadSuccessDb() {
+        Intent intent = new Intent(this, ListGroupEntriesActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

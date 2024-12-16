@@ -96,6 +96,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ListGroupEntriesActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

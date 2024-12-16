@@ -94,6 +94,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                     ListDbsAdapter.DbData d = adapter.getDbDatObj();
                     d.lastModified = f.lastModified();
                     d.dbName = f.getName();
+                    d.fullPath = f.getAbsolutePath();
                     adapter.addValue(d);
                     try {
                         requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
@@ -101,7 +102,6 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                         //ignore
                     }
                     fCount++;
-                    Util.sleepFor3MSec();
                 }
                 try {
                     requireActivity().runOnUiThread(() -> binding.dbDeclarationTextView.setText(R.string.declaration));
@@ -166,6 +166,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     private void shutDownExecutor() {
         executor.shutdownNow();
     }
+
     private void initExecutor() {
         if (executor == null || executor.isShutdown() || executor.isTerminated()) {
             executor = Executors.newSingleThreadExecutor();
@@ -180,5 +181,19 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     public void reloadDbFile() {
         initExecutor();
         executor.execute(this::showDbs);
+    }
+
+    @Override
+    public void askPwdForDb(Context context, String name, String fullPath) {
+    }
+
+    @Override
+    public void failedToOpenDb(String errorMsg) {
+        LoadingEventSource.getInstance().updateLoadingText(errorMsg);
+        LoadingEventSource.getInstance().showLoading();
+    }
+
+    @Override
+    public void loadSuccessDb() {
     }
 }

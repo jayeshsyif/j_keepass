@@ -5,9 +5,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.j_keepass.databinding.ListDbItemViewBinding;
+import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.util.Util;
 
 import java.util.ArrayList;
@@ -49,12 +51,15 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
 
         TextView mDbName;
         TextView mDbModifiedDate;
+        CardView cardView;
         public DbData mItem;
 
         public ViewHolder(@NonNull ListDbItemViewBinding binding) {
             super(binding.getRoot());
             mDbName = binding.databaseName;
             mDbModifiedDate = binding.dbModifiedDate;
+            cardView = binding.databaseNameCardView;
+            cardView.setOnClickListener(view -> DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), mItem.dbName, mItem.fullPath));
         }
     }
 
@@ -65,5 +70,6 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
     public class DbData {
         public String dbName;
         public long lastModified;
+        public String fullPath;
     }
 }

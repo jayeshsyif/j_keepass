@@ -3,6 +3,7 @@ package org.j_keepass.util.bsd;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -20,8 +21,10 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.R;
 import org.j_keepass.adapter.ListThemesAdapter;
+import org.j_keepass.db.eventinterface.DbAndFileOperations;
 import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
+import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.theme.Theme;
@@ -31,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BottomMenuUtil {
 
@@ -120,6 +125,42 @@ public class BottomMenuUtil {
                 } else {
                     bsd.dismiss();
                     DbEventSource.getInstance().createDb(dbName.getText().toString(), dbPwd.getText().toString());
+                }
+            });
+        }
+        bsd.show();
+    }
+
+    public void showAskPwdForDb(Context context, String dbName, String fullPath) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.db_enter_name_and_pwd);
+        expandBsd(bsd);
+        final MaterialButton saveBtn = bsd.findViewById(R.id.saveDatabase);
+        final TextInputEditText dbNameEt = bsd.findViewById(R.id.databaseName);
+        if (dbNameEt != null) {
+            dbNameEt.setText(dbName);
+            dbNameEt.setVisibility(View.GONE);
+        }
+        TextView dbNameText = bsd.findViewById(R.id.dbNameText);
+        if (dbNameText != null) {
+            dbNameText.setText(dbName);
+        }
+        final TextInputEditText dbPwd = bsd.findViewById(R.id.databasePassword);
+        if (saveBtn != null) {
+            saveBtn.setText(R.string.open);
+            saveBtn.setOnClickListener(view -> {
+                Util.log(" ask pass db btn is clicked");
+                if (dbPwd != null && dbPwd.getText() == null) {
+                    dbPwd.requestFocus();
+                } else {
+                    bsd.dismiss();
+                    String openingStr = view.getContext().getString(R.string.opening);
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        LoadingEventSource.getInstance().updateLoadingText(openingStr + " " + dbName);
+                        LoadingEventSource.getInstance().showLoading();
+                    });
+                    executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), fullPath, view.getContext().getContentResolver()));
                 }
             });
         }

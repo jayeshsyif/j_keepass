@@ -1,6 +1,8 @@
 package org.j_keepass.db.eventinterface;
 
 
+import android.content.Context;
+
 import org.j_keepass.util.Util;
 
 import java.util.ArrayList;
@@ -39,4 +41,26 @@ public class DbEventSource {
             listener.reloadDbFile();
         }
     }
+
+    public void askPwdForDb(Context context, String dbName, String fullPath) {
+        Util.log("In listener ask Pwd For Db");
+        for (DbEvent listener : listeners) {
+            listener.askPwdForDb(context, dbName, fullPath);
+        }
+    }
+
+    public void failedToOpenDb(String errorMsg) {
+        Util.log("In listener failed to open db");
+        for (DbEvent listener : listeners) {
+            listener.failedToOpenDb(errorMsg);
+        }
+    }
+
+    public void loadSuccessDb() {
+        Util.log("In listener failed to open db");
+        for (DbEvent listener : listeners) {
+            listener.loadSuccessDb();
+        }
+    }
+
 }

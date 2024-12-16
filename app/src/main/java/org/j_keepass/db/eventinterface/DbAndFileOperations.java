@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.net.Uri;
 
+import org.j_keepass.R;
+import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
+import org.j_keepass.util.db.Db;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
@@ -12,7 +15,9 @@ import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
@@ -223,5 +228,36 @@ public class DbAndFileOperations {
             }
         }
         return database;
+    }
+
+    public void openDb(String dbName, String pwd, String fullPath, ContentResolver contentResolver) {
+        KdbxCreds creds = new KdbxCreds(pwd.getBytes());
+        Uri kdbxFileUri = Uri.fromFile(new File(fullPath));
+        InputStream inputStream = null;
+        try {
+            inputStream = contentResolver.openInputStream(kdbxFileUri);
+        } catch (FileNotFoundException e) {
+        }
+        if (inputStream != null) {
+            try {
+                Database<?, ?, ?, ?> database = SimpleDatabase.load(creds, inputStream);
+                if (database != null) {
+                    Util.log("Load done");
+                    Db.getInstance().setDatabase(database);
+                    DbEventSource.getInstance().loadSuccessDb();
+                } else {
+                    DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
+                }
+            } catch (NoClassDefFoundError e) {
+                DbEventSource.getInstance().failedToOpenDb(""+e.getMessage());
+            } catch (Exception e) {
+                DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
+                }
+            }
+        }
     }
 }
