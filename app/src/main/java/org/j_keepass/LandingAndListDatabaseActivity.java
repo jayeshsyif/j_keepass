@@ -37,11 +37,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent {
-
     private LandingAndListDatabaseActivityLayoutBinding binding;
-
     ExecutorService executor = Executors.newSingleThreadExecutor();
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +85,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         Util.log("Landing destroy");
         MoreOptionEventSource.getInstance().removeListener(this);
         ThemeEventSource.getInstance().removeListener(this);
+        DbEventSource.getInstance().addListener(this);
         shutDownExecutor();
     }
 

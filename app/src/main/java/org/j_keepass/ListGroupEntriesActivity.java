@@ -16,7 +16,6 @@ import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
 public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent {
-
     private ListGroupEntryActivityLayoutBinding binding;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {

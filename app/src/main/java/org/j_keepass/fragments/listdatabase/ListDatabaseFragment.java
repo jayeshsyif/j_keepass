@@ -160,6 +160,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
         super.onDestroy();
         Util.log("List frag destroy");
         LoadingEventSource.getInstance().removeListener(this);
+        DbEventSource.getInstance().removeListener(this);
         shutDownExecutor();
     }
 
