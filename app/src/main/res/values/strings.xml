@@ -1,131 +1,41 @@
 <resources>
     <string name="app_name">JKeePass</string>
     <string name="app_desc">100% Safe, Ad-Free and Secure. Password Management Application. </string>
-    <string name="title_activity_load">LoadActivity</string>
-    <string name="welcomeBackMsg">JKeePass</string>
-
-
-    <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
-    <string name="kdbxFile">kdbx File: </string>
-    <string name="open">Open</string>
-    <string name="importStr">Import</string>
-    <string name="create">Create</string>
-    <string name="creating">Creating</string>
-    <string name="enterPassword">Enter Password</string>
-    <string name="enterOldPassword">Enter Old Password</string>
-    <string name="enterNewPassword">Enter New Password</string>
-    <string name="enterDatabaseName">Enter File/Database name</string>
-    <string name="ok">Ok</string>
-    <string name="close">Close</string>
-    <string name="newText">New</string>
+    <string name="moreOptionDesc">More options</string>
+    <string name="createNewDatabaseDesc">Create New Database</string>
+    <string name="generateNewDatabaseDesc">Generate New password</string>
+    <string name="appInfoDesc">App Info</string>
+    <string name="empty"> </string>
+    <string name="info">App Information</string>
     <string name="menuText">Menu</string>
-    <string name="getRandomPwd">New Random Password</string>
-    <string name="addGroup">Add Group</string>
-    <string name="addEntry">Add Entry</string>
-    <string name="importComfirmText">Do you want to Import and store it for further use?</string>
 
+    <string name="database">Database</string>
+    <string name="createNewDatabase">Create New Database</string>
+    <string name="create">Create</string>
+    <string name="importNewDatabase">Import Database</string>
+    <string name="creatingNewDatabase">Creating New Database .....</string>
+
+    <string name="changeTheme">Change Theme</string>
+    <string name="importOrCreateDb">Import or Create Database ...</string>
+    <string name="declaration">Please export and save database before uninstallation of application</string>
+    <string name="loading">Loading .....</string>
+    <string name="modifiedDate">modified: 24/10/24</string>
+    <string name="themes">Themes</string>
+    <string name="enterDatabaseName">Enter File/Database name</string>
     <string name="save">Save</string>
-
-    <string name="processingFile">Please wait processing file.</string>
-    <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
-    <string name="NotificationPermissionNotGranted">Notification Permission Not Granted!</string>
-    <string name="emptyPasswordError">Password cannot be Empty.</string>
-    <string name="emptyFileError">Please select kdbx File.</string>
-    <string name="invalidFileError">Invalid kdbx File.</string>
-    <string name="noDBError">Please check password. No database found in kdbx File.</string>
-    <string name="databases">Databases:</string>
-
-    <string name="unableToNavigateError">Unable to navigate.</string>
-    <string name="groups">Groups</string>
-    <string name="groupName">Group Name</string>
-    <string name="groupNameDesc">\n It indicates Group Name.</string>
-
-    <string name="enterGroupName">Enter Group Name</string>
-
-    <string name="entryName">Entry Name</string>
-    <string name="userName">User name</string>
-    <string name="password">Password</string>
+    <string name="enterPassword">Enter Password</string>
+    <string name="applyingTheme">Applying Theme .....</string>
     <string name="newPassword">New Generated Password</string>
-    <string name="entryTitle">Title</string>
-
-    <string name="url">URL</string>
-
-    <string name="loading">Loading ...</string>
-    <string name="loadingWithPercentage">Loading ... ($per$%)</string>
-    <string name="saving">Saving ...</string>
-    <string name="savingWithPercentage">Saving ... ($per$%)</string>
-
-    <string name="areYouSure">Are you sure?</string>
-
-    <string name="notes">Notes</string>
-    <string name="creationDate">Created Date</string>
-    <string name="expiryDate">Expiry Date</string>
-
-    <string name="groupNameEmptyErrorMsg">Group Name cannot be empty!</string>
-
-
-    <string name="search">Search</string>
-    <string name="enterToSearch">Type here to search ....</string>
-    <string name="searching">Searching....</string>
-
-    <string name="entryTitleEmptyErrorMsg">Title cannot be empty!</string>
-    <string name="entryUsernameEmptyErrorMsg">Username cannot be empty!</string>
-    <string name="entryPasswordEmptyErrorMsg">Password cannot be empty!</string>
-
-    <string name="emptySearchKeyErrorMsg">Please enter some text to Search!</string>
-    <string name="noEntriesSearchKeyErrorMsg">No entries found.</string>
-
-    <string name="copiedToClipboard">Copied to clipboard!</string>
-
-    <string name="devInProgress">Development yet to be done!</string>
-    <string name="writePermissionNotGotError">Write permission not got!</string>
-
-    <string name="themeModeInfoNotGotError">Unable to get mode info. Using light mode.</string>
-
-    <string name="developer">Developer</string>
-    <string name="developerName">Jayesh Ganatra</string>
-    <string name="fullStack">Full stack developer</string>
-
-    <string name="changeLogs">Change Logs: </string>
-    <string name="changeLogsVer10_6Text">Version 10.6</string>
-    <string name="changeLogsVer10_6ChangesText">   Minor fixes.</string>
-
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="cancel">Cancel</string>
-    <string name="enterFieldName">Enter Field Name</string>
-    <string name="enterFieldValue">Enter Field Value</string>
+    <string name="newPasswordCopy">Copy Newly Generated Password</string>
     <string name="useDigit">Digit</string>
+    <string name="newPasswordSlider">Slider to generate new password with given length</string>
     <string name="useLowerCase">Lower Case</string>
     <string name="useUpperCase">Upper Case</string>
     <string name="useSymbol">Symbol</string>
-    <string name="newPasswordAllFalse">All cannot be false! Please provide proper Input.</string>
-    <string name="edit">Edit</string>
-    <string name="changePassword">Change Password</string>
-    <string name="delete">Delete</string>
-    <string name="show">Show</string>
-    <string name="hide">Hide</string>
-    <string name="entries">Entries</string>
-    <string name="nothingHere">Nothing here .. !</string>
-    <string name="importDatabase">Import or Create Database ...</string>
-    <string name="importDeclaration">Please export and save database before uninstallation of application</string>
+    <string name="generatingNewPassword">Generating New Password</string>
+    <string name="generateNewPassword">Generate New Password</string>
+    <string name="developer">Developed by Jayesh Ganatra</string>
+    <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
+    <string name="changeLogsVer10_6Text">Version 10.6</string>
 
-    <string name="themeCode">themeCode</string>
-    <string name="themes">Themes</string>
-
-    <string name="total">Total</string>
-    <string name="expired">Expired</string>
-    <string name="expiringSoon">Exp. soon</string>
-    <string name="totalEntries">Total</string>
-    <string name="expiredEntries">Expired</string>
-    <string name="expiringSoonEntries">Exp. soon</string>
-    <string name="entriesStatistics">Statistics (Entries)</string>
-    <string name="statistics">Statistics</string>
-
-    <string name="copy">Copy</string>
-    <string name="copyMsg">Copied. Please navigate to destination and press <u>here</u> </string>
-    <string name="move">Move</string>
-    <string name="moveMsg">Please navigate to destination and press <u>here</u> </string>
-    <string name="here"><u>here</u></string>
-    <string name="somethingWentWrong">Something went wrong! please try again later.</string>
 </resources>

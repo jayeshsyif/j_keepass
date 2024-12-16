@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <TextView
+        android:id="@+id/landingMoreOptionMenuText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/tab_selected_indicator"
+        android:fontFamily="@font/spacemono_bold"
+        android:gravity="center_vertical"
+        android:padding="@dimen/kp_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/menuText"
+        android:textColor="?colorSecondary"></TextView>
+
+
+    <LinearLayout
+        android:id="@+id/landingMoreOptionCreateDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landingMoreOptionMenuText"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/createNewDatabase"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_database_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/createNewDatabase"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/landingMoreOptionImportDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landingMoreOptionCreateDb"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/importNewDatabase"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_database_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/importNewDatabase"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/landingMoreOptionGenerateNewPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landingMoreOptionImportDb"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/changeTheme"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/generateNewPassword"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/landingMoreOptionChangeTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landingMoreOptionGenerateNewPassword"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/changeTheme"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_theme_24dp_5f6368_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/changeTheme"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/landingMoreOptionInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landingMoreOptionChangeTheme"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/info"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/info"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+</RelativeLayout>

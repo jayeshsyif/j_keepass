@@ -21,8 +21,7 @@ public class Util {
         return baos.toByteArray();
     }
 
-    static public Object bytes2Object(byte raw[])
-            throws Exception, ClassNotFoundException {
+    static public Object bytes2Object(byte raw[]) throws Exception, ClassNotFoundException {
         ByteArrayInputStream bais = new ByteArrayInputStream(raw);
         ObjectInputStream ois = new ObjectInputStream(bais);
         Object o = ois.readObject();
@@ -107,12 +106,22 @@ public class Util {
     static public void sleepForHalfSec() {
         sleepInMilliSec(500);
     }
-    static public void sleepFor100Sec() {
+
+    static public void sleepFor1MSec() {
         sleepInMilliSec(100);
     }
+    static public void sleepFor3MSec() {
+        sleepInMilliSec(300);
+    }
 
-    public static void log(String msg)
-    {
-       Log.i("JKEEPASS", msg);
+    static public void sleepFor5Sec() {
+        sleepInMilliSec(5000);
+    }
+
+    public static void log(String msg) {
+        boolean flag = true;
+        if (flag) {
+            Log.i("JKEEPASS", msg);
+        }
     }
 }

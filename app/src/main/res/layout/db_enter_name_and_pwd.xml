@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <TextView
+        android:id="@+id/newDbJustText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/kp_margin"
+        android:background="@drawable/tab_selected_indicator"
+        android:fontFamily="@font/spacemono_bold"
+        android:gravity="center_vertical"
+        android:text="@string/createNewDatabase"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?colorSecondary" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/databaseNameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newDbJustText"
+        android:layout_margin="@dimen/kp_margin"
+        android:textColorHint="?colorSecondary"
+        app:boxStrokeColor="?colorSecondary"
+        app:hintTextColor="?colorSecondary"
+        app:passwordToggleEnabled="false"
+        app:passwordToggleTint="?colorOnPrimary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/databaseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimaryVariant"
+            android:fontFamily="@font/spacemono_regular"
+            android:hint="@string/enterDatabaseName"
+            android:inputType="text"
+            android:textColor="?colorSecondary"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/databasePasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/databaseNameLayout"
+        android:layout_margin="@dimen/kp_margin"
+        android:textColorHint="?colorSecondary"
+        app:boxStrokeColor="?colorSecondary"
+        app:hintTextColor="?colorSecondary"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="?colorOnPrimary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/databasePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimaryVariant"
+            android:fontFamily="@font/spacemono_regular"
+            android:hint="@string/enterPassword"
+            android:inputType="textPassword"
+            android:textColor="?colorSecondary"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveDatabase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/databasePasswordLayout"
+        android:layout_marginStart="@dimen/kp_margin"
+        android:layout_marginTop="@dimen/kp_margin"
+        android:layout_marginEnd="@dimen/kp_margin"
+        android:layout_marginBottom="@dimen/kp_margin"
+        android:backgroundTint="?colorPrimaryVariant"
+        android:fontFamily="@font/spacemono_bold"
+        android:text="@string/save"
+        android:textAllCaps="true"
+        android:textColor="?colorSecondary">
+
+    </com.google.android.material.button.MaterialButton>
+
+</RelativeLayout>

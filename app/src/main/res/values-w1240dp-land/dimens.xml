@@ -1,9 +1,0 @@
-<resources>
-    <dimen name="fab_margin">48dp</dimen>
-    <dimen name="kp_small_text_size">5pt</dimen>
-    <dimen name="kp_extra_small_text_size">3pt</dimen>
-    <dimen name="kp_always_0">0pt</dimen>
-    <dimen name="kp_always_1">1pt</dimen>
-    <dimen name="kp_group_name_margin">0pt</dimen>
-    <dimen name="kp_group_name_text_size">16pt</dimen>
-</resources>
