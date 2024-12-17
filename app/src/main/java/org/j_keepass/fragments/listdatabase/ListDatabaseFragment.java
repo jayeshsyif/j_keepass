@@ -22,14 +22,14 @@ import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEvent {
-    ExecutorService executor = Executors.newSingleThreadExecutor();
-
+    ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListAllDatabaseFragmentBinding binding;
 
     @Nullable
@@ -39,7 +39,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
         View view = binding.getRoot();
         LoadingEventSource.getInstance().addListener(this);
         DbEventSource.getInstance().addListener(this);
-        initExecutor();
+        ExecutorService executor = getExecutor();
         executor.execute(this::showDbs);
         return view;
     }
@@ -48,7 +48,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
         AtomicReference<String> dirPath = new AtomicReference<>("");
         AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
         AtomicReference<ListDbsAdapter> adapter = new AtomicReference<>();
-        initExecutor();
+        ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
         executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(getActivity())));
         executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(getActivity())));
@@ -101,6 +101,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                     } catch (Exception e) {
                         //ignore
                     }
+                    Util.sleepFor1Sec();
                     fCount++;
                 }
                 try {
@@ -159,19 +160,26 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     public void onDestroy() {
         super.onDestroy();
         Util.log("List frag destroy");
+        destroy();
+    }
+
+    private void destroy() {
         LoadingEventSource.getInstance().removeListener(this);
         DbEventSource.getInstance().removeListener(this);
         shutDownExecutor();
     }
 
-    private void shutDownExecutor() {
-        executor.shutdownNow();
+    private ExecutorService getExecutor() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executorServices.add(executor);
+        return executor;
     }
 
-    private void initExecutor() {
-        if (executor == null || executor.isShutdown() || executor.isTerminated()) {
-            executor = Executors.newSingleThreadExecutor();
+    private void shutDownExecutor() {
+        for (ExecutorService executor : executorServices) {
+            executor.shutdownNow();
         }
+        executorServices = new ArrayList<>();
     }
 
     @Override
@@ -180,7 +188,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
 
     @Override
     public void reloadDbFile() {
-        initExecutor();
+        ExecutorService executor = getExecutor();
         executor.execute(this::showDbs);
     }
 

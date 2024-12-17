@@ -43,7 +43,7 @@ public class DbEventSource {
     }
 
     public void askPwdForDb(Context context, String dbName, String fullPath) {
-        Util.log("In listener ask Pwd For Db");
+        Util.log("In listener ask Pwd For Db, listener count is "+listeners.size());
         for (DbEvent listener : listeners) {
             listener.askPwdForDb(context, dbName, fullPath);
         }

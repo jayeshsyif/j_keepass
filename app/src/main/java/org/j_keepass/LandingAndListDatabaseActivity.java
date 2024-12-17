@@ -32,13 +32,15 @@ import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent {
     private LandingAndListDatabaseActivityLayoutBinding binding;
-    ExecutorService executor = Executors.newSingleThreadExecutor();
+    ArrayList<ExecutorService> executorServices = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,28 +50,32 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         MoreOptionEventSource.getInstance().addListener(this);
         ThemeEventSource.getInstance().addListener(this);
         DbEventSource.getInstance().addListener(this);
-        initExecutor();
+        ExecutorService executor = getExecutor();
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureClicks);
         executor.execute(this::configureTabLayout);
         executor.execute(this::addTabs);
     }
 
-    private void initExecutor() {
-        if (executor == null || executor.isShutdown() || executor.isTerminated()) {
-            executor = Executors.newSingleThreadExecutor();
-        }
+    private ExecutorService getExecutor() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executorServices.add(executor);
+        return executor;
     }
 
     private void shutDownExecutor() {
-        executor.shutdownNow();
+        Util.log("shutdown all");
+        for (ExecutorService executor : executorServices) {
+            executor.shutdownNow();
+        }
+        executorServices = new ArrayList<>();
     }
 
     private void configureClicks() {
         binding.landingMoreOption.setOnClickListener(view -> MoreOptionEventSource.getInstance().showMenu(view.getContext()));
         binding.landingCreateDatabaseBtn.setOnClickListener(view -> MoreOptionEventSource.getInstance().showCreateNewDb(view.getContext()));
         binding.landingGenerateNewPasswordBtn.setOnClickListener(view -> {
-            initExecutor();
+            ExecutorService executor = getExecutor();
             executor.execute(() -> {
                 LoadingEventSource.getInstance().updateLoadingText(getString(R.string.generatingNewPassword));
                 LoadingEventSource.getInstance().showLoading();
@@ -83,9 +89,14 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         Util.log("Landing destroy");
+        destroy();
+    }
+
+    private void destroy() {
+        Util.log("unregister");
         MoreOptionEventSource.getInstance().removeListener(this);
         ThemeEventSource.getInstance().removeListener(this);
-        DbEventSource.getInstance().addListener(this);
+        DbEventSource.getInstance().removeListener(this);
         shutDownExecutor();
     }
 
@@ -213,7 +224,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         AtomicReference<String> dirPath = new AtomicReference<>("");
         AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
         AtomicReference<File> newDbFile = new AtomicReference<>();
-        initExecutor();
+        ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.creatingNewDatabase));
             LoadingEventSource.getInstance().showLoading();
