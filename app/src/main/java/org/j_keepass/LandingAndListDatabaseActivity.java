@@ -1,5 +1,6 @@
 package org.j_keepass;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,8 @@ import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.landing.eventinterface.MoreOptionsEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
+import org.j_keepass.permission.eventinterface.PermissionEvent;
+import org.j_keepass.permission.eventinterface.PermissionEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.theme.eventinterface.ThemeEventSource;
 import org.j_keepass.util.bsd.BottomMenuUtil;
@@ -37,9 +40,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent {
+public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent, PermissionEvent {
     private LandingAndListDatabaseActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
+    public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,14 +51,19 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         new SetTheme(this, true).run();
         binding = LandingAndListDatabaseActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        MoreOptionEventSource.getInstance().addListener(this);
-        ThemeEventSource.getInstance().addListener(this);
-        DbEventSource.getInstance().addListener(this);
+        register();
         ExecutorService executor = getExecutor();
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureClicks);
         executor.execute(this::configureTabLayout);
         executor.execute(this::addTabs);
+    }
+
+    private void register() {
+        MoreOptionEventSource.getInstance().addListener(this);
+        ThemeEventSource.getInstance().addListener(this);
+        DbEventSource.getInstance().addListener(this);
+        PermissionEventSource.getInstance().addListener(this);
     }
 
     private ExecutorService getExecutor() {
@@ -94,10 +103,15 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     private void destroy() {
         Util.log("unregister");
+        unregister();
+        shutDownExecutor();
+    }
+
+    private void unregister() {
         MoreOptionEventSource.getInstance().removeListener(this);
         ThemeEventSource.getInstance().removeListener(this);
         DbEventSource.getInstance().removeListener(this);
-        shutDownExecutor();
+        PermissionEventSource.getInstance().removeListener(this);
     }
 
     private void configureTabLayout() {
@@ -105,15 +119,11 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         binding.landingTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Util.log("Tab selected " + tab.getId() + " " + tab.getText().toString());
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
-                for (Fragment f : getSupportFragmentManager().getFragments()) {
-                    if (!isFinishing() && !isDestroyed()) {
-                        getSupportFragmentManager().beginTransaction().remove(f).commit();
-                    }
-                }
                 if (tab.getId() == 0) {
                     if (!isFinishing() && !isDestroyed()) {
-                        Util.log("Tab selected ");
+                        Util.log("Tab selected, frag counts are " + getSupportFragmentManager().getFragments().size());
                         getSupportFragmentManager().beginTransaction().replace(R.id.landingFragmentContainerView, new ListDatabaseFragment()).commit();
                         Util.log("Tab selected done");
                     }
@@ -143,6 +153,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
             Util.log("Added tab");
         });
     }
+
 
     @Override
     public void applyTheme(Theme theme, boolean updatePref) {
@@ -181,7 +192,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void showMenu(Context context) {
         Util.log("Show menu via listener");
-        new BottomMenuUtil().showLandingMoreOptionsMenu(context);
+        new BottomMenuUtil().showLandingMoreOptionsMenu(context, this);
     }
 
     @Override
@@ -293,5 +304,52 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, ListGroupEntriesActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void checkAndGetPermission(View v, Activity activity, Action action) {
+        Util.log("Landing skipping check and get permission");
+    }
+
+    @Override
+    public void permissionDenied(Action action) {
+        Util.log("Landing Permission Not Granted");
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(getString(R.string.permissionNotGranted));
+            LoadingEventSource.getInstance().showLoading();
+        });
+    }
+
+    @Override
+    public void permissionGranted(Action action) {
+        Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        chooseFile.setType("application/octet-stream");
+        chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case PICK_FILE_OPEN_RESULT_CODE:
+                if (resultCode == -1) {
+                    AtomicReference<String> dirPath = new AtomicReference<>("");
+                    AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
+                    ExecutorService executor = getExecutor();
+                    executor.execute(() -> {
+                        LoadingEventSource.getInstance().updateLoadingText(getString(R.string.importing));
+                        LoadingEventSource.getInstance().showLoading();
+                    });
+                    executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
+                    executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
+                    executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), data.getData(), getContentResolver(), this));
+                    executor.execute(() -> DbEventSource.getInstance().reloadDbFile());
+                }
+                break;
+        }
     }
 }

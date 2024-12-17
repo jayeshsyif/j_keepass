@@ -1,5 +1,6 @@
 package org.j_keepass.util.bsd;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,6 +27,8 @@ import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
+import org.j_keepass.permission.eventinterface.PermissionEvent;
+import org.j_keepass.permission.eventinterface.PermissionEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.theme.Theme;
 import org.j_keepass.util.theme.ThemeUtil;
@@ -39,7 +42,7 @@ import java.util.concurrent.Executors;
 
 public class BottomMenuUtil {
 
-    public void showLandingMoreOptionsMenu(Context context) {
+    public void showLandingMoreOptionsMenu(Context context, Activity activity) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.landing_more_option_list);
         LinearLayout landingMoreOptionChangeTheme = bsd.findViewById(R.id.landingMoreOptionChangeTheme);
@@ -74,6 +77,14 @@ public class BottomMenuUtil {
             landingMoreOptionInfo.setOnClickListener(view -> {
                 bsd.dismiss();
                 MoreOptionEventSource.getInstance().showInfo(view.getContext());
+            });
+        }
+
+        LinearLayout landingMoreOptionImportDb = bsd.findViewById(R.id.landingMoreOptionImportDb);
+        if (landingMoreOptionImportDb != null) {
+            landingMoreOptionImportDb.setOnClickListener(view -> {
+                bsd.dismiss();
+                PermissionEventSource.getInstance().checkAndGetPermission(view, activity, PermissionEvent.Action.IMPORT);
             });
         }
 

@@ -18,14 +18,14 @@ public class PasswordGenerator implements GenerateNewPwdEvent {
         return SOURCE;
     }
 
+    public static void register() {
+        GenerateNewPasswordEventSource.getInstance().addListener(SOURCE);
+    }
+
     private static final String LOWER = "abcdefghijklmnopqrstuvwxyz";
     private static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String DIGITS = "0123456789";
     private static final String PUNCTUATION = "!@#$%&*()_+-=[]|,./?><";
-
-    public static void register() {
-        GenerateNewPasswordEventSource.getInstance().addListener(SOURCE);
-    }
 
     @Override
     public void generateNewPwd(boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {

@@ -41,5 +41,7 @@
     <string name="changeLogsVer11Text">Version 11</string>
 
     <string name="devInProgress">Development yet to be done!</string>
+    <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
+    <string name="importing">Importing .....</string>
 
 </resources>

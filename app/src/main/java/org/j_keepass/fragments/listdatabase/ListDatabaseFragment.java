@@ -37,11 +37,15 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Util.log("List db frag on create view");
         View view = binding.getRoot();
-        LoadingEventSource.getInstance().addListener(this);
-        DbEventSource.getInstance().addListener(this);
+        register();
         ExecutorService executor = getExecutor();
         executor.execute(this::showDbs);
         return view;
+    }
+
+    private void register() {
+        LoadingEventSource.getInstance().addListener(this);
+        DbEventSource.getInstance().addListener(this);
     }
 
     private void showDbs() {
@@ -164,9 +168,13 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     }
 
     private void destroy() {
+        unregister();
+        shutDownExecutor();
+    }
+
+    private void unregister() {
         LoadingEventSource.getInstance().removeListener(this);
         DbEventSource.getInstance().removeListener(this);
-        shutDownExecutor();
     }
 
     private ExecutorService getExecutor() {
