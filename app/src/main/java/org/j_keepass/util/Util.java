@@ -14,6 +14,9 @@ import java.util.Date;
 
 public class Util {
 
+    private static final String TAG = "JKEEPASS";
+    private static final boolean LOG_FLAG = true;
+
     static public byte[] object2Bytes(Object o) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -29,7 +32,7 @@ public class Util {
     }
 
     static public boolean isUsable(String str) {
-        if (str == null || str.length() <= 0) {
+        if (str == null || str.length() == 0) {
             return false;
         } else {
             return true;
@@ -96,6 +99,7 @@ public class Util {
         try {
             Thread.sleep(millisec);
         } catch (Exception e) {
+            //ignore
         }
     }
 
@@ -110,6 +114,7 @@ public class Util {
     static public void sleepFor1MSec() {
         sleepInMilliSec(100);
     }
+
     static public void sleepFor3MSec() {
         sleepInMilliSec(300);
     }
@@ -119,9 +124,19 @@ public class Util {
     }
 
     public static void log(String msg) {
-        boolean flag = true;
-        if (flag) {
-            Log.i("JKEEPASS", msg);
+        if (LOG_FLAG) {
+            Log.i(TAG, msg);
         }
+    }
+
+    public static boolean checkCodecAvailable() {
+        boolean isCodecAvailable = false;
+        try {
+            org.apache.commons.codec.binary.Base64.encodeBase64String("".getBytes());
+            isCodecAvailable = true;
+        } catch (Throwable e) {
+            //ignore
+        }
+        return isCodecAvailable;
     }
 }

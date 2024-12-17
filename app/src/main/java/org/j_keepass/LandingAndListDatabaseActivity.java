@@ -224,6 +224,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         AtomicReference<String> dirPath = new AtomicReference<>("");
         AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
         AtomicReference<File> newDbFile = new AtomicReference<>();
+        AtomicReference<Boolean> isCodecAvailable = new AtomicReference<>(false);
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.creatingNewDatabase));
@@ -244,10 +245,29 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
         executor.execute(() -> new DbAndFileOperations().createMainDirectory(dirPath.get()));
         executor.execute(() -> new DbAndFileOperations().createSubFilesDirectory(subFilesDirPath.get()));
-        executor.execute(() -> newDbFile.set(new DbAndFileOperations().createFile(subFilesDirPath.get(), dbNameAr.get())));
-        executor.execute(() -> new DbAndFileOperations().writeDbToFile(newDbFile.get(), pwd, getContentResolver()));
-        executor.execute(() -> LoadingEventSource.getInstance().dismissLoading());
-        executor.execute(() -> DbEventSource.getInstance().reloadDbFile());
+        executor.execute(() -> isCodecAvailable.set(Util.checkCodecAvailable()));
+        executor.execute(() -> {
+            if (isCodecAvailable.get()) {
+                newDbFile.set(new DbAndFileOperations().createFile(subFilesDirPath.get(), dbNameAr.get()));
+            }
+        });
+        executor.execute(() -> {
+            if (isCodecAvailable.get()) {
+                new DbAndFileOperations().writeDbToFile(newDbFile.get(), pwd, getContentResolver());
+            }
+        });
+        executor.execute(() -> {
+            if (isCodecAvailable.get()) {
+                LoadingEventSource.getInstance().dismissLoading();
+            } else {
+                LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.devInProgress));
+            }
+        });
+        executor.execute(() -> {
+            if (isCodecAvailable.get()) {
+                DbEventSource.getInstance().reloadDbFile();
+            }
+        });
     }
 
     @Override

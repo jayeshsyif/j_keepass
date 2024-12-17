@@ -38,6 +38,8 @@
     <string name="generateNewPassword">Generate New Password</string>
     <string name="developer">Developed by Jayesh Ganatra</string>
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
-    <string name="changeLogsVer10_6Text">Version 10.6</string>
+    <string name="changeLogsVer11Text">Version 11</string>
+
+    <string name="devInProgress">Development yet to be done!</string>
 
 </resources>

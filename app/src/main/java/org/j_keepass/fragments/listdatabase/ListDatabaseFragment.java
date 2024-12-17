@@ -101,7 +101,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                     } catch (Exception e) {
                         //ignore
                     }
-                    Util.sleepFor1Sec();
+                    Util.sleepFor3MSec();
                     fCount++;
                 }
                 try {
