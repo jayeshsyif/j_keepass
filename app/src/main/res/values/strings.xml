@@ -44,4 +44,8 @@
     <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
     <string name="importing">Importing .....</string>
 
+    <string name="all">All</string>
+    <string name="groupFolder">Group/Folder</string>
+    <string name="entries">Entries</string>
+    <string name="statistics">Statistics</string>
 </resources>

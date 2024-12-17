@@ -11,7 +11,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -28,9 +27,9 @@ import org.j_keepass.permission.eventinterface.PermissionEvent;
 import org.j_keepass.permission.eventinterface.PermissionEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.theme.eventinterface.ThemeEventSource;
-import org.j_keepass.util.bsd.BottomMenuUtil;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
+import org.j_keepass.util.bsd.BottomMenuUtil;
 import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
@@ -119,7 +118,6 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         binding.landingTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Util.log("Tab selected " + tab.getId() + " " + tab.getText().toString());
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
                     if (!isFinishing() && !isDestroyed()) {
@@ -235,7 +233,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         AtomicReference<String> dirPath = new AtomicReference<>("");
         AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
         AtomicReference<File> newDbFile = new AtomicReference<>();
-        AtomicReference<Boolean> isCodecAvailable = new AtomicReference<>(false);
+        AtomicReference<Boolean> proceed = new AtomicReference<>(true);
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.creatingNewDatabase));
@@ -244,38 +242,58 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         executor.execute(() -> {
             if (dbNameAr.get() == null || dbNameAr.get().length() == 0) {
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterDatabaseName));
-            }
-            if (pwd == null || pwd.length() == 0) {
+                proceed.set(false);
+            } else if (pwd == null || pwd.length() == 0) {
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterPassword));
-            }
-            if (!dbName.endsWith("kdbx")) {
+                proceed.set(false);
+            } else if (!dbName.endsWith("kdbx")) {
                 dbNameAr.set(dbName + ".kdbx");
             }
         });
-        executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
-        executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
-        executor.execute(() -> new DbAndFileOperations().createMainDirectory(dirPath.get()));
-        executor.execute(() -> new DbAndFileOperations().createSubFilesDirectory(subFilesDirPath.get()));
-        executor.execute(() -> isCodecAvailable.set(Util.checkCodecAvailable()));
         executor.execute(() -> {
-            if (isCodecAvailable.get()) {
+            if (proceed.get()) {
+                dirPath.set(new DbAndFileOperations().getDir(this));
+            }
+        });
+        executor.execute(() -> {
+            if (proceed.get()) {
+                subFilesDirPath.set(new DbAndFileOperations().getSubDir(this));
+            }
+        });
+        executor.execute(() -> {
+            if (proceed.get()) {
+                new DbAndFileOperations().createMainDirectory(dirPath.get());
+            }
+        });
+        executor.execute(() -> {
+            if (proceed.get()) {
+                new DbAndFileOperations().createSubFilesDirectory(subFilesDirPath.get());
+            }
+        });
+        executor.execute(() -> {
+            if (proceed.get()) {
+                proceed.set(Util.checkCodecAvailable());
+            }
+        });
+        executor.execute(() -> {
+            if (proceed.get()) {
                 newDbFile.set(new DbAndFileOperations().createFile(subFilesDirPath.get(), dbNameAr.get()));
             }
         });
         executor.execute(() -> {
-            if (isCodecAvailable.get()) {
+            if (proceed.get()) {
                 new DbAndFileOperations().writeDbToFile(newDbFile.get(), pwd, getContentResolver());
             }
         });
         executor.execute(() -> {
-            if (isCodecAvailable.get()) {
+            if (proceed.get()) {
                 LoadingEventSource.getInstance().dismissLoading();
             } else {
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.devInProgress));
             }
         });
         executor.execute(() -> {
-            if (isCodecAvailable.get()) {
+            if (proceed.get()) {
                 DbEventSource.getInstance().reloadDbFile();
             }
         });
@@ -334,22 +352,20 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case PICK_FILE_OPEN_RESULT_CODE:
-                if (resultCode == -1) {
-                    AtomicReference<String> dirPath = new AtomicReference<>("");
-                    AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
-                    ExecutorService executor = getExecutor();
-                    executor.execute(() -> {
-                        LoadingEventSource.getInstance().updateLoadingText(getString(R.string.importing));
-                        LoadingEventSource.getInstance().showLoading();
-                    });
-                    executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
-                    executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
-                    executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), data.getData(), getContentResolver(), this));
-                    executor.execute(() -> DbEventSource.getInstance().reloadDbFile());
-                }
-                break;
+        if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
+            if (resultCode == -1) {
+                AtomicReference<String> dirPath = new AtomicReference<>("");
+                AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
+                ExecutorService executor = getExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(getString(R.string.importing));
+                    LoadingEventSource.getInstance().showLoading();
+                });
+                executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
+                executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
+                executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), data.getData(), getContentResolver(), this));
+                executor.execute(() -> DbEventSource.getInstance().reloadDbFile());
+            }
         }
     }
 }

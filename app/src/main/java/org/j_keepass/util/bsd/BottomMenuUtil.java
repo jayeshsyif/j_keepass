@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -139,6 +140,7 @@ public class BottomMenuUtil {
                 } else if (dbPwd != null && dbPwd.getText() == null) {
                     dbPwd.requestFocus();
                 } else {
+                    hideKeyboard(view);
                     bsd.dismiss();
                     DbEventSource.getInstance().createDb(dbName.getText().toString(), dbPwd.getText().toString());
                 }
@@ -238,5 +240,12 @@ public class BottomMenuUtil {
         });
         expandBsd(bsd);
         bsd.show();
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
