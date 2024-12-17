@@ -60,7 +60,12 @@ public class BottomMenuUtil {
         if (landingMoreOptionGenerateNewPassword != null) {
             landingMoreOptionGenerateNewPassword.setOnClickListener(view -> {
                 bsd.dismiss();
-                GenerateNewPasswordEventSource.getInstance().generateNewPwd();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
+                    LoadingEventSource.getInstance().showLoading();
+                });
+                executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
             });
         }
 
@@ -184,7 +189,14 @@ public class BottomMenuUtil {
         slider.setValue((float) length);
         reGenerateNewPassword.setOnClickListener(view -> {
             bsd.dismiss();
-            GenerateNewPasswordEventSource.getInstance().generateNewPwd(useDigitMcb.isChecked(), useLowerCaseMcb.isChecked(), useUpperCaseMcb.isChecked(), useSymbolMcb.isChecked(), Float.valueOf(slider.getValue()).intValue());
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().showLoading();
+            });
+            executor.execute(() -> {
+                GenerateNewPasswordEventSource.getInstance().generateNewPwd(useDigitMcb.isChecked(), useLowerCaseMcb.isChecked(), useUpperCaseMcb.isChecked(), useSymbolMcb.isChecked(), Float.valueOf(slider.getValue()).intValue());
+            });
         });
         expandBsd(bsd);
         bsd.show();

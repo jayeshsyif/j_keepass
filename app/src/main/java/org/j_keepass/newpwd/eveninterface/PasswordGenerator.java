@@ -57,6 +57,7 @@ public class PasswordGenerator implements GenerateNewPwdEvent {
                 password.append(charCategory.charAt(position));
             }
             Util.log("Generated new pwd");
+            Util.sleepFor3MSec();
             MoreOptionEventSource.getInstance().showNewPwd(new String(password), useDigit, useLowerCase, useUpperCase, useSymbol, length);
         }
     }
