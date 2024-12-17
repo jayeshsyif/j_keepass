@@ -169,6 +169,7 @@ public class DbAndFileOperations {
 
 
     public void openDb(String dbName, String pwd, String fullPath, ContentResolver contentResolver) {
+        Util.log("Loading "+fullPath);
         KdbxCreds creds = new KdbxCreds(pwd.getBytes());
         Uri kdbxFileUri = Uri.fromFile(new File(fullPath));
         InputStream inputStream = null;

@@ -89,7 +89,10 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
             File[] files = subFilesDir.listFiles();
             if (files != null && files.length > 0) {
                 Arrays.sort(files);
-                requireActivity().runOnUiThread(() -> binding.showDbsRecyclerView.setVisibility(View.VISIBLE));
+                requireActivity().runOnUiThread(() -> {
+                    binding.showDbsRecyclerView.setVisibility(View.VISIBLE);
+                    binding.dbDeclarationTextView.setText(R.string.declaration);
+                });
                 int fCount = 1;
                 String loadingStr = getString(R.string.loading);
                 for (File f : files) {
@@ -109,7 +112,17 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                     fCount++;
                 }
                 try {
-                    requireActivity().runOnUiThread(() -> binding.dbDeclarationTextView.setText(R.string.declaration));
+                    ListDbsAdapter.DbData d = adapter.getDbDatObj();
+                    d.lastModified = -1;
+                    d.dbName = getString(R.string.declaration);
+                    d.fullPath = "";
+                    Util.log(d.toString());
+                    adapter.addValue(d);
+                    try {
+                        requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                    } catch (Exception e) {
+                        //ignore
+                    }
                 } catch (Exception e) {
                     //ignore
                 }

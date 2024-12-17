@@ -1,12 +1,16 @@
 package org.j_keepass.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.imageview.ShapeableImageView;
 
 import org.j_keepass.databinding.ListDbItemViewBinding;
 import org.j_keepass.db.eventinterface.DbEventSource;
@@ -40,6 +44,12 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
         holder.mItem = mValues.get(position);
         holder.mDbName.setText(mValues.get(position).dbName);
         holder.mDbModifiedDate.setText("Modified: " + Util.convertDateToStringOnlyDate(mValues.get(position).lastModified) + " ");
+        if (holder.mItem.lastModified == -1) {
+            holder.cardView.setVisibility(View.INVISIBLE);
+            holder.mDbModifiedDate.setVisibility(View.GONE);
+            holder.mImage.setVisibility(View.GONE);
+            holder.mDatabaseMoreOption.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -53,13 +63,21 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
         TextView mDbModifiedDate;
         CardView cardView;
         public DbData mItem;
+        ShapeableImageView mImage;
+        ImageButton mDatabaseMoreOption;
 
         public ViewHolder(@NonNull ListDbItemViewBinding binding) {
             super(binding.getRoot());
             mDbName = binding.databaseName;
             mDbModifiedDate = binding.dbModifiedDate;
             cardView = binding.databaseNameCardView;
-            cardView.setOnClickListener(view -> DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), mItem.dbName, mItem.fullPath));
+            mImage = binding.image;
+            mDatabaseMoreOption = binding.databaseMoreOption;
+            cardView.setOnClickListener(view -> {
+                if (mItem.lastModified != -1) {
+                    DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), mItem.dbName, mItem.fullPath);
+                }
+            });
         }
     }
 
@@ -71,5 +89,14 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
         public String dbName;
         public long lastModified;
         public String fullPath;
+
+        @Override
+        public String toString() {
+            return "DbData{" +
+                    "dbName='" + dbName + '\'' +
+                    ", lastModified=" + lastModified +
+                    ", fullPath='" + fullPath + '\'' +
+                    '}';
+        }
     }
 }

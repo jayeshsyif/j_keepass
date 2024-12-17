@@ -171,6 +171,7 @@ public class BottomMenuUtil {
                 if (dbPwd != null && dbPwd.getText() == null) {
                     dbPwd.requestFocus();
                 } else {
+                    hideKeyboard(view);
                     bsd.dismiss();
                     String openingStr = view.getContext().getString(R.string.opening);
                     ExecutorService executor = Executors.newSingleThreadExecutor();
