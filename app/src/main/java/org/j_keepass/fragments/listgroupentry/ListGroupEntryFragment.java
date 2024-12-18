@@ -152,7 +152,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                     //ignore
                 }
                 updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
-                Util.sleepFor3MSec();
+                Util.sleepFor1MSec();
             }
             {
                 //dummy
@@ -210,9 +210,9 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
 
     @Override
     public void setGroup(UUID gId) {
+        Util.log("currentGid " + currentGid + " gId " + gId);
         shutDownExecutor();
         currentGid = gId;
-        Util.log("currentGid " + currentGid + " gId " + gId);
         show(gId, Action.ALL);
     }
 
