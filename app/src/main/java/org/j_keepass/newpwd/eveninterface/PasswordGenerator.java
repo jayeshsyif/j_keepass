@@ -31,9 +31,9 @@ public class PasswordGenerator implements GenerateNewPwdEvent {
     public void generateNewPwd(boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         Util.log("Generate new pwd event received");
         if (!useDigit && !useSymbol && !useLowerCase && !useLowerCase) {
-            MoreOptionEventSource.getInstance().showFailedNewGenPwd("All cannot be false! Please provide proper Input.");
+            GenerateNewPasswordEventSource.getInstance().showFailedNewGenPwd("All cannot be false! Please provide proper Input.");
         } else if (length == 0) {
-            MoreOptionEventSource.getInstance().showFailedNewGenPwd("Password length can't be 0 (Zero)");
+            GenerateNewPasswordEventSource.getInstance().showFailedNewGenPwd("Password length can't be 0 (Zero)");
         } else {
             StringBuilder password = new StringBuilder(length);
             Random random = new Random(System.nanoTime());
@@ -58,12 +58,22 @@ public class PasswordGenerator implements GenerateNewPwdEvent {
             }
             Util.log("Generated new pwd");
             Util.sleepFor3MSec();
-            MoreOptionEventSource.getInstance().showNewPwd(new String(password), useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            GenerateNewPasswordEventSource.getInstance().showNewPwd(new String(password), useDigit, useLowerCase, useUpperCase, useSymbol, length);
         }
     }
 
     @Override
     public void generateNewPwd() {
         generateNewPwd(true, true, true, true, 20);
+    }
+
+    @Override
+    public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
+        //ignore
+    }
+
+    @Override
+    public void showFailedNewGenPwd(String errorMsg) {
+        //ignore
     }
 }

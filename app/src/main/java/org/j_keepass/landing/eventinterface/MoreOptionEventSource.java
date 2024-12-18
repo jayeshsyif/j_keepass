@@ -48,20 +48,6 @@ public class MoreOptionEventSource {
         }
     }
 
-    public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
-        Util.log("In listener show new pwd");
-        for (MoreOptionsEvent listener : listeners) {
-            listener.showNewPwd(newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
-        }
-    }
-
-    public void showFailedNewGenPwd(String errorMsg) {
-        Util.log("In listener show failed gen pwd");
-        for (MoreOptionsEvent listener : listeners) {
-            listener.showFailedNewGenPwd(errorMsg);
-        }
-    }
-
     public void showInfo(Context context) {
         Util.log("In listener got show Create New Db with context");
         for (MoreOptionsEvent listener : listeners) {

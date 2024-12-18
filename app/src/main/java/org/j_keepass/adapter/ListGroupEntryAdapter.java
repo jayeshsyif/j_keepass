@@ -99,7 +99,9 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
             groupEntryNameCardView = binding.groupEntryNameCardView;
             groupEntryImage = binding.groupEntryImage;
             groupEntryNameCardView.setOnClickListener(view -> {
-                GroupEntryEventSource.getInstance().setGroup(mItem.id);
+                if (mItem.type.name().equals(GroupEntryType.GROUP.name())) {
+                    GroupEntryEventSource.getInstance().setGroup(mItem.id);
+                }
             });
         }
     }

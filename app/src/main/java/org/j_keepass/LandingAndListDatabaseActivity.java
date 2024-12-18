@@ -23,6 +23,7 @@ import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.landing.eventinterface.MoreOptionsEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.eveninterface.GenerateNewPwdEvent;
 import org.j_keepass.permission.eventinterface.PermissionEvent;
 import org.j_keepass.permission.eventinterface.PermissionEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
@@ -39,7 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent, PermissionEvent {
+public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent, PermissionEvent, GenerateNewPwdEvent {
     private LandingAndListDatabaseActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -59,6 +60,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     }
 
     private void register() {
+        GenerateNewPasswordEventSource.getInstance().addListener(this);
         MoreOptionEventSource.getInstance().addListener(this);
         ThemeEventSource.getInstance().addListener(this);
         DbEventSource.getInstance().addListener(this);
@@ -111,6 +113,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         ThemeEventSource.getInstance().removeListener(this);
         DbEventSource.getInstance().removeListener(this);
         PermissionEventSource.getInstance().removeListener(this);
+        GenerateNewPasswordEventSource.getInstance().removeListener(this);
     }
 
     private void configureTabLayout() {
@@ -208,6 +211,16 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
 
     @Override
+    public void generateNewPwd(boolean useDigit, boolean useUpperCase, boolean useLowerCase, boolean useSymbol, int length) {
+        //ignore
+    }
+
+    @Override
+    public void generateNewPwd() {
+        //ignore
+    }
+
+    @Override
     public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         runOnUiThread(() -> {
             new BottomMenuUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
@@ -302,6 +315,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void reloadDbFile() {
+        //ignore
     }
 
     @Override
@@ -315,7 +329,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void failedToOpenDb(String errorMsg) {
-
+    //ignore
     }
 
     @Override

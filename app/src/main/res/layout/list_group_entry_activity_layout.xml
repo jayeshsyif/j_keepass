@@ -111,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_toEndOf="@id/groupAndEntryHomeDatabaseBtn"
-                    android:background="?colorPrimary"
+                    android:background="@drawable/background_transparent"
                     app:tint="?colorPrimary" />
 
                 <ImageButton
@@ -134,7 +134,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_toEndOf="@id/groupAndEntryGenerateNewPasswordBtn"
-                    android:background="?colorPrimary"
+                    android:background="@drawable/background_transparent"
                     app:tint="?colorPrimary" />
 
                 <ImageButton
@@ -156,7 +156,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_toEndOf="@id/groupAndEntryAddNewBtn"
-                    android:background="?colorPrimary"
+                    android:background="@drawable/background_transparent"
                     app:tint="?colorPrimary" />
 
                 <ImageButton

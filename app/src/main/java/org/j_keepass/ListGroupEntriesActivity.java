@@ -18,9 +18,12 @@ import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
+import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.eveninterface.GenerateNewPwdEvent;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
+import org.j_keepass.util.bsd.BottomMenuUtil;
 import org.j_keepass.util.db.Db;
 import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
@@ -30,7 +33,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent {
+public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent {
     private ListGroupEntryActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private UUID currentGid;
@@ -55,6 +58,14 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             binding.groupAndEntryTabLayout.getTabAt(0).select();
             GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
         });
+        binding.groupAndEntryGenerateNewPasswordBtn.setOnClickListener(view -> {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().showLoading();
+            });
+            executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
+        });
     }
 
     private ExecutorService getExecutor() {
@@ -64,10 +75,12 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     }
 
     private void register() {
+        GenerateNewPasswordEventSource.getInstance().addListener(this);
         GroupEntryEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
+        GenerateNewPasswordEventSource.getInstance().removeListener(this);
         GroupEntryEventSource.getInstance().removeListener(this);
     }
 
@@ -264,5 +277,31 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     @Override
     public void showAll() {
         //ignore
+    }
+
+    @Override
+    public void generateNewPwd(boolean useDigit, boolean useUpperCase, boolean useLowerCase, boolean useSymbol, int length) {
+        //ignore
+    }
+
+    @Override
+    public void generateNewPwd() {
+        //ignore
+    }
+
+    @Override
+    public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
+        runOnUiThread(() -> {
+            new BottomMenuUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            LoadingEventSource.getInstance().dismissLoading();
+        });
+    }
+
+    @Override
+    public void showFailedNewGenPwd(String errorMsg) {
+        runOnUiThread(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(errorMsg);
+            LoadingEventSource.getInstance().showLoading();
+        });
     }
 }
