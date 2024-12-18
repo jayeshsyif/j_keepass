@@ -143,7 +143,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 } catch (Throwable e) {
                     //ignore
                 }
-                updateLoadingText(getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
+                updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
                 Util.sleepFor3MSec();
             }
             {

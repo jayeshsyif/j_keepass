@@ -31,7 +31,7 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:background="@drawable/background_transparent"
-                android:src="@drawable/ic_database_fill0_wght300_grad_25_opsz24"
+                android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
                 android:textAlignment="center"
                 app:tint="?colorOnPrimary" />
 

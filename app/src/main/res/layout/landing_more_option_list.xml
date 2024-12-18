@@ -38,7 +38,7 @@
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
             android:padding="@dimen/kp_margin"
-            android:src="@drawable/ic_database_fill0_wght300_grad_25_opsz24"
+            android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
             app:tint="?colorSecondary"></ImageButton>
 
@@ -68,7 +68,7 @@
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
             android:padding="@dimen/kp_margin"
-            android:src="@drawable/ic_database_fill0_wght300_grad_25_opsz24"
+            android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
             app:tint="?colorSecondary"></ImageButton>
 

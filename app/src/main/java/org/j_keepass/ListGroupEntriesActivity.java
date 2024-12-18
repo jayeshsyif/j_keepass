@@ -115,12 +115,19 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             public void onTabSelected(TabLayout.Tab tab) {
                 Util.log("Tab selected " + tab.getId() + " " + tab.getText().toString());
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
-                tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
+                    tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
                     if (!isFinishing() && !isDestroyed()) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, new ListGroupEntryFragment()).commit();
                     }
                 } else {
+                    if (tab.getId() == 1) {
+                        tab.setIcon(R.drawable.ic_folder_fill1_wght300_grad_25_opsz24);
+                    } else if (tab.getId() == 2) {
+                        tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
+                    } else if (tab.getId() == 3) {
+                        tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
+                    }
                     for (Fragment f : getSupportFragmentManager().getFragments()) {
                         getSupportFragmentManager().beginTransaction().remove(f).commit();
                     }
@@ -130,6 +137,18 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 tab.view.setBackgroundResource(R.drawable.background_transparent);
+                if (tab.getId() == 0) {
+                    tab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+                    if (!isFinishing() && !isDestroyed()) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, new ListGroupEntryFragment()).commit();
+                    }
+                } else if (tab.getId() == 1) {
+                    tab.setIcon(R.drawable.ic_folder_fill0_wght300_grad_25_opsz24);
+                } else if (tab.getId() == 2) {
+                    tab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
+                } else if (tab.getId() == 3) {
+                    tab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
+                }
             }
 
             @Override
@@ -156,7 +175,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         {
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.groupFolder);
-            databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+            databaseTab.setIcon(R.drawable.ic_folder_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
             id++;
@@ -168,7 +187,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         {
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.entries);
-            databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+            databaseTab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
             id++;
@@ -180,7 +199,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         {
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.statistics);
-            databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+            databaseTab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
             id++;

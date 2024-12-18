@@ -120,6 +120,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
+                    tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
                     if (!isFinishing() && !isDestroyed()) {
                         Util.log("Tab selected, frag counts are " + getSupportFragmentManager().getFragments().size());
                         getSupportFragmentManager().beginTransaction().replace(R.id.landingFragmentContainerView, new ListDatabaseFragment()).commit();
