@@ -48,7 +48,16 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         View view = binding.getRoot();
         register();
         configureClick();
-        GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String show = bundle.getString("show");
+            if (show != null && show.equals("showEntryOnly")) {
+                GroupEntryEventSource.getInstance().showAllEntryOnly();
+            } else {
+                GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+            }
+        }
+
         return view;
     }
 
@@ -60,6 +69,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 GroupEntryEventSource.getInstance().showAllEntryOnly(query);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;

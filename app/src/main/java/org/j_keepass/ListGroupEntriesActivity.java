@@ -139,20 +139,27 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
                     tab.setIcon(R.drawable.ic_list_fill1_wght300_grad_25_opsz24);
-                    tab.setId(-1);
                     if (!isFinishing() && !isDestroyed()) {
                         ListGroupEntryFragment listGroupEntryFragment = new ListGroupEntryFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("show", "showAll");
+                        listGroupEntryFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, listGroupEntryFragment).commit();
                     }
-                } else if (tab.getId() == -1) {
-                    tab.setIcon(R.drawable.ic_list_fill1_wght300_grad_25_opsz24);
-                    GroupEntryEventSource.getInstance().showAll();
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
-                    GroupEntryEventSource.getInstance().showAllEntryOnly();
+                    if (!isFinishing() && !isDestroyed()) {
+                        binding.groupNameOnTop.setText(tab.view.getResources().getString(R.string.entries));
+                        ListGroupEntryFragment listGroupEntryFragment = new ListGroupEntryFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("show", "showEntryOnly");
+                        listGroupEntryFragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, listGroupEntryFragment).commit();
+                    }
                 } else if (tab.getId() == 2) {
                     tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
                     if (!isFinishing() && !isDestroyed()) {
+                        binding.groupNameOnTop.setText(tab.view.getResources().getString(R.string.statistics));
                         StatsFragment statsFragment = new StatsFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, statsFragment).commit();
                     }
@@ -162,7 +169,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 tab.view.setBackgroundResource(R.drawable.background_transparent);
-                if (tab.getId() == 0 || tab.getId() == -1) {
+                if (tab.getId() == 0) {
                     tab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);

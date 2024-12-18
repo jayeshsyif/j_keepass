@@ -63,30 +63,42 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         ArrayList<Float> values = new ArrayList<>();
         ArrayList<String> text = new ArrayList<>();
         ArrayList<Integer> colors = new ArrayList<>();
-        long totalEntries = Db.getInstance().getAllExpiredEntriesCount();
-        long allExpiredEntriesCount = totalEntries;
-        long allExpiringSoonEntriesCount = Db.getInstance().getAllExpiringSoonEntriesCount();
-        long ok = Db.getInstance().getAllEntriesCount() - (allExpiringSoonEntriesCount + allExpiredEntriesCount);
-        binding.expiredCountDisplay.setText(String.valueOf(allExpiredEntriesCount));
-        binding.expiringSoonCountDisplay.setText(String.valueOf(allExpiringSoonEntriesCount));
-        binding.goodCountDisplay.setText(String.valueOf(ok));
+        final long totalEntries = Db.getInstance().getAllExpiredEntriesCount();
+        final long allExpiredEntriesCount = totalEntries;
+        final long allExpiringSoonEntriesCount = Db.getInstance().getAllExpiringSoonEntriesCount();
+        final long ok = Db.getInstance().getAllEntriesCount() - (allExpiringSoonEntriesCount + allExpiredEntriesCount);
+        try {
+            requireActivity().runOnUiThread(() -> {
+                binding.expiredCountDisplay.setText(String.valueOf(allExpiredEntriesCount));
+                binding.expiringSoonCountDisplay.setText(String.valueOf(allExpiringSoonEntriesCount));
+                binding.goodCountDisplay.setText(String.valueOf(ok));
+            });
+        } catch (Throwable e) {
+            //ignore
+        }
         values.add(Float.valueOf(allExpiredEntriesCount));
         values.add(Float.valueOf(allExpiringSoonEntriesCount));
         values.add(Float.valueOf(ok));
-        Util.log("Total "+totalEntries);
-        Util.log("Expired "+allExpiredEntriesCount);
-        Util.log("Expiring Soon "+allExpiringSoonEntriesCount);
-        Util.log("Good "+ok);
-        text.add("Expired "+allExpiredEntriesCount);
-        text.add("Expiring Soon "+allExpiringSoonEntriesCount);
-        text.add("Good "+ok);
+        Util.log("Total " + totalEntries);
+        Util.log("Expired " + allExpiredEntriesCount);
+        Util.log("Expiring Soon " + allExpiringSoonEntriesCount);
+        Util.log("Good " + ok);
+        text.add("Expired " + allExpiredEntriesCount);
+        text.add("Expiring Soon " + allExpiringSoonEntriesCount);
+        text.add("Good " + ok);
         int textColor = getPrimaryColor(binding.graph.getContext());
         float textSize = 30;
         colors.add(binding.graph.getResources().getColor(android.R.color.holo_red_dark));
         colors.add(binding.graph.getResources().getColor(R.color.kp_coral));
         colors.add(binding.graph.getResources().getColor(R.color.kp_green));
-        PieChartView pieChartView = new PieChartView(binding.graph.getContext(), values, colors, text, textColor, textSize);
-        binding.graph.addView(pieChartView);
+        try {
+            PieChartView pieChartView = new PieChartView(binding.graph.getContext(), values, colors, text, textColor, textSize);
+            requireActivity().runOnUiThread(() -> {
+                binding.graph.addView(pieChartView);
+            });
+        } catch (Throwable e) {
+            //ignore
+        }
     }
 
     public static int getPrimaryColor(Context context) {
