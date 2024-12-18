@@ -19,6 +19,7 @@ import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
+import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
@@ -71,10 +72,12 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     }
 
     private void register() {
+        LoadingEventSource.getInstance().addListener(this);
         GroupEntryEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
+        LoadingEventSource.getInstance().removeListener(this);
         GroupEntryEventSource.getInstance().removeListener(this);
     }
 
@@ -110,7 +113,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 binding.showGroupEntriesRecyclerView.setAdapter(adapter);
                 Util.log("Configuration recycler view done");
             });
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Util.log("Configuration recycler view, Error " + e.getMessage());
         }
         return adapter;
@@ -119,10 +122,14 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     private void listFromGroupId(UUID gId, ListGroupEntryAdapter adapter) {
         final int totalSubs = Db.getInstance().getSubGroupsCount(gId) + Db.getInstance().getSubEntriesCount(gId);
         if (totalSubs > 0) {
-            requireActivity().runOnUiThread(() -> {
-                binding.showGroupEntriesRecyclerView.setVisibility(View.VISIBLE);
-                binding.noGroupEntryDeclarationView.setVisibility(View.GONE);
-            });
+            try {
+                requireActivity().runOnUiThread(() -> {
+                    binding.showGroupEntriesRecyclerView.setVisibility(View.VISIBLE);
+                    binding.noGroupEntryDeclarationView.setVisibility(View.GONE);
+                });
+            } catch (Throwable e) {
+                //ignore
+            }
             updateLoadingText(getString(R.string.loading) + " [0/" + totalSubs + "]");
             ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsAndEntries(gId);
             Collections.sort(subs, (d1, d2) -> d1.name.compareTo(d2.name));
@@ -131,7 +138,11 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 Util.log("Adding " + data.name);
                 adapter.addValue(data);
                 subCountAdded++;
-                requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                try {
+                    requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                } catch (Throwable e) {
+                    //ignore
+                }
                 updateLoadingText(getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
                 Util.sleepFor3MSec();
             }
@@ -140,7 +151,17 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 GroupEntryData dummyData = new GroupEntryData();
                 dummyData.type = GroupEntryType.DUMMY;
                 adapter.addValue(dummyData);
-                requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                try {
+                    requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                } catch (Throwable e) {
+                    //ignore
+                }
+            }
+        } else {
+            try {
+                requireActivity().runOnUiThread(() -> binding.noGroupEntryDeclarationView.setVisibility(View.VISIBLE));
+            } catch (Throwable e) {
+                //ignore
             }
         }
     }
@@ -185,4 +206,8 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         show(gId);
     }
 
+    @Override
+    public void lock() {
+        //ignore
+    }
 }

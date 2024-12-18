@@ -55,36 +55,44 @@ public class Db {
 
     public UUID getParentGroupId(UUID gId) {
         UUID pGid = null;
-        Group<?, ?, ?, ?> group = database.findGroup(gId);
-        if (group != null) {
-            pGid = group.getParent().getUuid();
+        if (database != null) {
+            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            if (group != null) {
+                pGid = group.getParent().getUuid();
+            }
         }
         return pGid;
     }
 
     public String getGroupName(UUID gId) {
         String name = "";
-        Group<?, ?, ?, ?> group = database.findGroup(gId);
-        if (group != null) {
-            name = group.getName();
+        if (database != null) {
+            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            if (group != null) {
+                name = group.getName();
+            }
         }
         return name;
     }
 
     public int getSubGroupsCount(UUID gId) {
         int gCount = 0;
-        Group<?, ?, ?, ?> group = database.findGroup(gId);
-        if (group != null) {
-            gCount = group.getGroupsCount();
+        if (database != null) {
+            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            if (group != null) {
+                gCount = group.getGroupsCount();
+            }
         }
         return gCount;
     }
 
     public int getSubEntriesCount(UUID gId) {
         int gCount = 0;
-        Group<?, ?, ?, ?> group = database.findGroup(gId);
-        if (group != null) {
-            gCount = group.getEntriesCount();
+        if (database != null) {
+            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            if (group != null) {
+                gCount = group.getEntriesCount();
+            }
         }
         return gCount;
     }
@@ -121,5 +129,9 @@ public class Db {
             }
         }
         return list;
+    }
+
+    public void deSetDatabase() {
+        database = null;
     }
 }

@@ -21,6 +21,7 @@
     <string name="declaration">Please export and save database before uninstallation of application</string>
     <string name="loading">Loading .....</string>
     <string name="opening">Opening .....</string>
+    <string name="locking">Locking .....</string>
     <string name="modifiedDate">modified: 24/10/24</string>
     <string name="themes">Themes</string>
     <string name="enterDatabaseName">Enter File/Database name</string>
@@ -50,4 +51,8 @@
     <string name="statistics">Statistics</string>
     <string name="groupName">Group Name</string>
     <string name="nothingHere">Nothing here .. !</string>
+    <string name="lockDb">Lock Database</string>
+    <string name="expiredInDays">Expired {0} days ago!</string>
+    <string name="expiringSoonInDays">Expires soon, in {0} days!</string>
+    <string name="expiringInDays">Expires in {0} days</string>
 </resources>

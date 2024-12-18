@@ -4,4 +4,5 @@ import java.util.UUID;
 
 public interface GroupEntryEvent {
     void setGroup(UUID gId);
+    void lock();
 }

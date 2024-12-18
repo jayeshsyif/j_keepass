@@ -68,6 +68,7 @@
                 app:tabGravity="fill"
                 app:tabIconTint="?colorSecondary"
                 app:tabMode="fixed"
+                app:tabTextAppearance="?android:attr/textAppearanceSmall"
                 app:tabTextColor="?colorSecondary" />
 
             <androidx.fragment.app.FragmentContainerView
@@ -85,7 +86,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_marginBottom="@dimen/kp_always_5"
-            android:background="@drawable/round_corner_all_size_on_primary">
+            android:background="@drawable/background_transparent">
 
             <RelativeLayout
                 android:id="@+id/landingBottomNavigationRelLayout"
@@ -97,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:backgroundTint="@android:color/transparent"
+                    android:background="@drawable/round_corner_left_bottom_top_on_primary"
                     android:contentDescription="@string/createNewDatabaseDesc"
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
@@ -119,7 +120,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_toEndOf="@id/emptyView1"
-                    android:backgroundTint="@android:color/transparent"
+                    android:background="?colorOnPrimary"
                     android:contentDescription="@string/generateNewDatabaseDesc"
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
@@ -142,7 +143,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_toEndOf="@id/emptyView2"
-                    android:backgroundTint="@android:color/transparent"
+                    android:background="@drawable/round_corner_right_bottom_top_on_primary"
                     android:contentDescription="@string/appInfoDesc"
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"

@@ -1,5 +1,6 @@
 package org.j_keepass;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -15,6 +17,7 @@ import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
@@ -40,9 +43,14 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         configureBackPressed();
         register();
         ExecutorService executor = getExecutor();
+        executor.execute(this::configureClicks);
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureTabLayout);
         executor.execute(this::addTabs);
+    }
+
+    private void configureClicks() {
+        binding.lockBtn.setOnClickListener(view -> GroupEntryEventSource.getInstance().lock());
     }
 
     private ExecutorService getExecutor() {
@@ -112,6 +120,10 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                     if (!isFinishing() && !isDestroyed()) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, new ListGroupEntryFragment()).commit();
                     }
+                } else {
+                    for (Fragment f : getSupportFragmentManager().getFragments()) {
+                        getSupportFragmentManager().beginTransaction().remove(f).commit();
+                    }
                 }
             }
 
@@ -165,6 +177,18 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 Util.log("Added tab");
             });
         }
+        {
+            TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
+            databaseTab.setText(R.string.statistics);
+            databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+            databaseTab.view.setSelected(false);
+            databaseTab.setId(id);
+            id++;
+            runOnUiThread(() -> {
+                binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
+                Util.log("Added tab");
+            });
+        }
     }
 
     @Override
@@ -185,5 +209,21 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    @Override
+    public void lock() {
+        Db.getInstance().deSetDatabase();
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(getString(R.string.locking));
+            LoadingEventSource.getInstance().showLoading();
+            Util.sleepFor3MSec();
+        });
+        executor.execute(() -> runOnUiThread(() -> {
+            Intent intent = new Intent(this, LandingAndListDatabaseActivity.class);
+            startActivity(intent);
+            finish();
+        }));
     }
 }

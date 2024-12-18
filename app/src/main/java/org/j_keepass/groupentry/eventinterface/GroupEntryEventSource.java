@@ -33,4 +33,11 @@ public class GroupEntryEventSource {
             listener.setGroup(uuid);
         }
     }
+
+    public void lock() {
+        Util.log("In listener lock");
+        for (GroupEntryEvent listener : listeners) {
+            listener.lock();
+        }
+    }
 }

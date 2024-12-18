@@ -31,6 +31,7 @@
                 android:background="?colorOnPrimary"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center"
+                android:textAllCaps="false"
                 android:text="@string/loading"
                 android:textAppearance="?android:attr/textAppearanceButton"
                 android:textColor="?colorPrimary"></TextView>
@@ -40,7 +41,6 @@
             android:id="@+id/showGroupEntriesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/loadingNavView"
             android:visibility="gone"
             tools:listitem="@layout/list_group_entriy_item_view"></androidx.recyclerview.widget.RecyclerView>
 
