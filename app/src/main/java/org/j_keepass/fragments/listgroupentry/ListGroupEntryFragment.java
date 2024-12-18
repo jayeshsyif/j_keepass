@@ -24,7 +24,6 @@ import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ListGroupEntryFragment extends Fragment implements LoadingEvent, GroupEntryEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListAllGroupEntryFragmentBinding binding;
+    private UUID currentGid;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         return view;
     }
 
-    private void show(final UUID gId) {
+    private void show(final UUID gId, Action action) {
         ExecutorService executor = getExecutor();
         AtomicReference<ListGroupEntryAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> updateLoadingText(getString(R.string.loading)));
@@ -59,7 +59,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         executor.execute(() -> adapter.set(configureRecyclerView(binding.showGroupEntriesRecyclerView.getContext())));
         executor.execute(() -> {
             if (Db.getInstance() != null && Db.getInstance().getRootGroupId() != null) {
-                listFromGroupId(gId, adapter.get());
+                listFromGroupId(gId, adapter.get(), action);
             }
         });
         executor.execute(this::dismissLoading);
@@ -119,8 +119,15 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         return adapter;
     }
 
-    private void listFromGroupId(UUID gId, ListGroupEntryAdapter adapter) {
-        final int totalSubs = Db.getInstance().getSubGroupsCount(gId) + Db.getInstance().getSubEntriesCount(gId);
+    private void listFromGroupId(UUID gId, ListGroupEntryAdapter adapter, Action action) {
+        final int totalSubs;
+        if (action.name().equals(Action.GROUP_ONLY.name())) {
+            totalSubs = Db.getInstance().getSubGroupsCount(gId);
+        } else if (action.name().equals(Action.ENTRY_ONLY.name())) {
+            totalSubs = Db.getInstance().getSubEntriesCount(gId);
+        } else {
+            totalSubs = Db.getInstance().getSubGroupsCount(gId) + Db.getInstance().getSubEntriesCount(gId);
+        }
         if (totalSubs > 0) {
             try {
                 requireActivity().runOnUiThread(() -> {
@@ -131,12 +138,13 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 //ignore
             }
             updateLoadingText(getString(R.string.loading) + " [0/" + totalSubs + "]");
-            ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsAndEntries(gId);
-            Collections.sort(subs, (d1, d2) -> d1.name.compareTo(d2.name));
+            ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsAndEntries(gId, action);
             int subCountAdded = 0;
+            Util.log("Got action as " + action.name());
             for (final GroupEntryData data : subs) {
-                Util.log("Adding " + data.name);
+                Util.log("Got " + data.name);
                 adapter.addValue(data);
+                Util.log("Adding " + data.name);
                 subCountAdded++;
                 try {
                     requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
@@ -203,11 +211,32 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     @Override
     public void setGroup(UUID gId) {
         shutDownExecutor();
-        show(gId);
+        currentGid = gId;
+        Util.log("currentGid " + currentGid + " gId " + gId);
+        show(gId, Action.ALL);
     }
 
     @Override
     public void lock() {
         //ignore
     }
+
+    @Override
+    public void showGroupOnly() {
+        shutDownExecutor();
+        show(currentGid, Action.GROUP_ONLY);
+    }
+
+    @Override
+    public void showEntryOnly() {
+        shutDownExecutor();
+        show(currentGid, Action.ENTRY_ONLY);
+    }
+
+    @Override
+    public void showAll() {
+        shutDownExecutor();
+        show(currentGid, Action.ALL);
+    }
+
 }

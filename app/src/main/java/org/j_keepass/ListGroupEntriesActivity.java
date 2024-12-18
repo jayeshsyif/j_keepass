@@ -51,6 +51,10 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
 
     private void configureClicks() {
         binding.lockBtn.setOnClickListener(view -> GroupEntryEventSource.getInstance().lock());
+        binding.groupAndEntryHomeDatabaseBtn.setOnClickListener(view -> {
+            binding.groupAndEntryTabLayout.getTabAt(0).select();
+            GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+        });
     }
 
     private ExecutorService getExecutor() {
@@ -117,19 +121,23 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
                     tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
+                    tab.setId(-1);
                     if (!isFinishing() && !isDestroyed()) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, new ListGroupEntryFragment()).commit();
+                        ListGroupEntryFragment listGroupEntryFragment = new ListGroupEntryFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, listGroupEntryFragment).commit();
                     }
                 } else {
-                    if (tab.getId() == 1) {
+                    if (tab.getId() == -1) {
+                        tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
+                        GroupEntryEventSource.getInstance().showAll();
+                    } else if (tab.getId() == 1) {
                         tab.setIcon(R.drawable.ic_folder_fill1_wght300_grad_25_opsz24);
+                        GroupEntryEventSource.getInstance().showGroupOnly();
                     } else if (tab.getId() == 2) {
                         tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
+                        GroupEntryEventSource.getInstance().showEntryOnly();
                     } else if (tab.getId() == 3) {
                         tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
-                    }
-                    for (Fragment f : getSupportFragmentManager().getFragments()) {
-                        getSupportFragmentManager().beginTransaction().remove(f).commit();
                     }
                 }
             }
@@ -137,11 +145,8 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 tab.view.setBackgroundResource(R.drawable.background_transparent);
-                if (tab.getId() == 0) {
+                if (tab.getId() == 0 || tab.getId() == -1) {
                     tab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
-                    if (!isFinishing() && !isDestroyed()) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, new ListGroupEntryFragment()).commit();
-                    }
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_folder_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 2) {
@@ -196,7 +201,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 Util.log("Added tab");
             });
         }
-        {
+        /*{
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.statistics);
             databaseTab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
@@ -207,7 +212,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
                 Util.log("Added tab");
             });
-        }
+        }*/
     }
 
     @Override
@@ -244,5 +249,20 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             startActivity(intent);
             finish();
         }));
+    }
+
+    @Override
+    public void showGroupOnly() {
+        //ignore
+    }
+
+    @Override
+    public void showEntryOnly() {
+        //ignore
+    }
+
+    @Override
+    public void showAll() {
+        //ignore
     }
 }

@@ -40,4 +40,22 @@ public class GroupEntryEventSource {
             listener.lock();
         }
     }
+    public void showGroupOnly() {
+        Util.log("In listener show group only");
+        for (GroupEntryEvent listener : listeners) {
+            listener.showGroupOnly();
+        }
+    }
+    public void showEntryOnly() {
+        Util.log("In listener show entry only");
+        for (GroupEntryEvent listener : listeners) {
+            listener.showEntryOnly();
+        }
+    }
+    public void showAll() {
+        Util.log("In listener show group only");
+        for (GroupEntryEvent listener : listeners) {
+            listener.showAll();
+        }
+    }
 }
