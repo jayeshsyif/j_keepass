@@ -85,7 +85,7 @@ public class BsdUtil {
         if (landingMoreOptionImportDb != null) {
             landingMoreOptionImportDb.setOnClickListener(view -> {
                 bsd.dismiss();
-                PermissionEventSource.getInstance().checkAndGetPermission(view, activity, PermissionEvent.Action.IMPORT);
+                PermissionEventSource.getInstance().checkAndGetPermissionReadWriteStorage(view, activity, PermissionEvent.Action.IMPORT);
             });
         }
 

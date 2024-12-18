@@ -53,6 +53,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         setContentView(binding.getRoot());
         register();
         ExecutorService executor = getExecutor();
+        executor.execute(() -> PermissionEventSource.getInstance().checkAndGetPermissionAlarm(binding.getRoot(), this, Action.ALARM));
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureClicks);
         executor.execute(this::configureTabLayout);
@@ -329,7 +330,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void failedToOpenDb(String errorMsg) {
-    //ignore
+        //ignore
     }
 
     @Override
@@ -340,8 +341,8 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void checkAndGetPermission(View v, Activity activity, Action action) {
-        Util.log("Landing skipping check and get permission");
+    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, Action action) {
+        //ignore
     }
 
     @Override
@@ -356,12 +357,22 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void permissionGranted(Action action) {
-        Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        chooseFile.setType("application/octet-stream");
-        chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        if (action.name().equals(Action.IMPORT.name())) {
+            Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            chooseFile.setType("application/octet-stream");
+            chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
-        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-        startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+            chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+            startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+        } else if (action.name().equals(Action.ALARM.name())) {
+            Util.log("Landing Alarm Permission Granted, setting notification");
+            new org.j_keepass.util.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
+        }
+    }
+
+    @Override
+    public void checkAndGetPermissionAlarm(View v, Activity activity, Action action) {
+        //ignore
     }
 
     @Override

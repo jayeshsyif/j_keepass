@@ -28,7 +28,7 @@ public class PermissionEventSource {
         listeners.remove(listener);
     }
 
-    public void checkAndGetPermission(View v, Activity activity, PermissionEvent.Action action) {
+    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionEvent.Action action) {
         Util.log("In listener got Check And Get Permission, listener count is "+listeners.size());
         if (listeners.size() == 0 || listeners.size() > 0) {
             if (!listeners.contains(PermissionCheckerAndGetter.getInstance())) {
@@ -36,7 +36,7 @@ public class PermissionEventSource {
             }
         }
         for (PermissionEvent listener : listeners) {
-            listener.checkAndGetPermission(v, activity, action);
+            listener.checkAndGetPermissionReadWriteStorage(v, activity, action);
         }
     }
 
@@ -49,6 +49,17 @@ public class PermissionEventSource {
     public void permissionGranted(PermissionEvent.Action action) {
         for (PermissionEvent listener : listeners) {
             listener.permissionGranted(action);
+        }
+    }
+    public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionEvent.Action action) {
+        Util.log("In listener got Check And Get Permission, listener count is "+listeners.size());
+        if (listeners.size() == 0 || listeners.size() > 0) {
+            if (!listeners.contains(PermissionCheckerAndGetter.getInstance())) {
+                PermissionCheckerAndGetter.register();
+            }
+        }
+        for (PermissionEvent listener : listeners) {
+            listener.checkAndGetPermissionAlarm(v, activity, action);
         }
     }
 }
