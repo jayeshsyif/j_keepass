@@ -16,19 +16,20 @@ import org.j_keepass.adapter.ListGroupEntryAdapter;
 import org.j_keepass.databinding.ListAllGroupEntryFragmentBinding;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ListGroupEntryFragment extends Fragment implements LoadingEvent {
+public class ListGroupEntryFragment extends Fragment implements LoadingEvent, GroupEntryEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListAllGroupEntryFragmentBinding binding;
 
@@ -44,20 +45,58 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Util.log("List group entry frag on create view");
         View view = binding.getRoot();
+        register();
+        GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+        return view;
+    }
+
+    private void show(final UUID gId) {
         ExecutorService executor = getExecutor();
         AtomicReference<ListGroupEntryAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> updateLoadingText(getString(R.string.loading)));
         executor.execute(this::showLoading);
         executor.execute(() -> adapter.set(configureRecyclerView(binding.showGroupEntriesRecyclerView.getContext())));
-        executor.execute(() -> listFromGroupId(Db.getInstance().getRootGroupId(), adapter.get()));
+        executor.execute(() -> {
+            if (Db.getInstance() != null && Db.getInstance().getRootGroupId() != null) {
+                listFromGroupId(gId, adapter.get());
+            }
+        });
         executor.execute(this::dismissLoading);
-        return view;
     }
 
     private ExecutorService getExecutor() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executorServices.add(executor);
         return executor;
+    }
+
+    private void register() {
+        GroupEntryEventSource.getInstance().addListener(this);
+    }
+
+    private void unregister() {
+        GroupEntryEventSource.getInstance().removeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Util.log("Landing destroy");
+        destroy();
+    }
+
+    private void destroy() {
+        Util.log("unregister");
+        unregister();
+        shutDownExecutor();
+    }
+
+    private void shutDownExecutor() {
+        Util.log("shutdown all");
+        for (ExecutorService executor : executorServices) {
+            executor.shutdownNow();
+        }
+        executorServices = new ArrayList<>();
     }
 
     private ListGroupEntryAdapter configureRecyclerView(Context context) {
@@ -92,9 +131,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent {
                 Util.log("Adding " + data.name);
                 adapter.addValue(data);
                 subCountAdded++;
-                requireActivity().runOnUiThread(() -> {
-                    adapter.notifyDataSetChanged();
-                });
+                requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
                 updateLoadingText(getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
                 Util.sleepFor3MSec();
             }
@@ -103,9 +140,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent {
                 GroupEntryData dummyData = new GroupEntryData();
                 dummyData.type = GroupEntryType.DUMMY;
                 adapter.addValue(dummyData);
-                requireActivity().runOnUiThread(() -> {
-                    adapter.notifyDataSetChanged();
-                });
+                requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
             }
         }
     }
@@ -133,10 +168,21 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent {
     @Override
     public void updateLoadingText(String text) {
         try {
-            requireActivity().runOnUiThread(() -> binding.loadingTextView.setText(text));
+            requireActivity().runOnUiThread(() -> {
+                binding.loadingTextView.setText(text);
+                if (binding.loadingTextView.getVisibility() == View.GONE) {
+                    binding.loadingNavView.setVisibility(View.VISIBLE);
+                }
+            });
         } catch (Exception e) {
             //ignore
         }
+    }
+
+    @Override
+    public void setGroup(UUID gId) {
+        shutDownExecutor();
+        show(gId);
     }
 
 }

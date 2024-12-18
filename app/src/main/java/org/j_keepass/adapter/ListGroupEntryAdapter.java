@@ -7,11 +7,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
+
+import org.j_keepass.R;
 import org.j_keepass.databinding.ListGroupEntriyItemViewBinding;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,10 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
         holder.name.setText(holder.mItem.name);
         if (holder.mItem.type.name().toString().equals(GroupEntryType.DUMMY.name().toString())) {
             holder.groupEntryNameCardView.setVisibility(View.INVISIBLE);
+        } else if (holder.mItem.type.name().toString().equals(GroupEntryType.ENTRY.name().toString())) {
+            holder.groupEntryImage.setImageResource(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
+            holder.groupEntryImage.setColorFilter(ContextCompat.getColor(holder.groupEntryImage.getContext(), R.color.kp_green_2));
+            holder.groupEntryCountOrStatus.setText(holder.mItem.status.name());
         } else if (holder.mItem.type.name().toString().equals(GroupEntryType.GROUP.name().toString())) {
             holder.groupEntryCountOrStatus.setText("" + holder.mItem.subCount + SUB_DIRECTORY_ARROW_SYMBOL_CODE);
         }
@@ -66,12 +75,17 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
         public GroupEntryData mItem;
         TextView name, groupEntryCountOrStatus;
         CardView groupEntryNameCardView;
+        ShapeableImageView groupEntryImage;
 
         public ViewHolder(@NonNull ListGroupEntriyItemViewBinding binding) {
             super(binding.getRoot());
             name = binding.groupName;
             groupEntryCountOrStatus = binding.groupEntryCountOrStatus;
             groupEntryNameCardView = binding.groupEntryNameCardView;
+            groupEntryImage = binding.groupEntryImage;
+            groupEntryNameCardView.setOnClickListener(view -> {
+                GroupEntryEventSource.getInstance().setGroup(mItem.id);
+            });
         }
     }
 }

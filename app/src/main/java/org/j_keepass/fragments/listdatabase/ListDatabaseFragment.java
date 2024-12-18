@@ -166,7 +166,12 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     @Override
     public void updateLoadingText(String text) {
         try {
-            requireActivity().runOnUiThread(() -> binding.loadingTextView.setText(text));
+            requireActivity().runOnUiThread(() -> {
+                binding.loadingTextView.setText(text);
+                if (binding.loadingTextView.getVisibility() == View.GONE) {
+                    binding.loadingNavView.setVisibility(View.VISIBLE);
+                }
+            });
         } catch (Exception e) {
             //ignore
         }

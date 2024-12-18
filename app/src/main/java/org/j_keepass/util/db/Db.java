@@ -53,6 +53,24 @@ public class Db {
         }
     }
 
+    public UUID getParentGroupId(UUID gId) {
+        UUID pGid = null;
+        Group<?, ?, ?, ?> group = database.findGroup(gId);
+        if (group != null) {
+            pGid = group.getParent().getUuid();
+        }
+        return pGid;
+    }
+
+    public String getGroupName(UUID gId) {
+        String name = "";
+        Group<?, ?, ?, ?> group = database.findGroup(gId);
+        if (group != null) {
+            name = group.getName();
+        }
+        return name;
+    }
+
     public int getSubGroupsCount(UUID gId) {
         int gCount = 0;
         Group<?, ?, ?, ?> group = database.findGroup(gId);

@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -12,6 +13,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
@@ -20,19 +23,22 @@ import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent {
+public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent {
     private ListGroupEntryActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
+    private UUID currentGid;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new SetTheme(this, false).run();
         binding = ListGroupEntryActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.groupNameOnTop.setText(Db.getInstance().getRootGroupName());
+        configureBackPressed();
+        register();
         ExecutorService executor = getExecutor();
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureTabLayout);
@@ -45,6 +51,14 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         return executor;
     }
 
+    private void register() {
+        GroupEntryEventSource.getInstance().addListener(this);
+    }
+
+    private void unregister() {
+        GroupEntryEventSource.getInstance().removeListener(this);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -54,6 +68,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
 
     private void destroy() {
         Util.log("unregister");
+        unregister();
         shutDownExecutor();
     }
 
@@ -150,5 +165,25 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 Util.log("Added tab");
             });
         }
+    }
+
+    @Override
+    public void setGroup(UUID gId) {
+        currentGid = gId;
+        runOnUiThread(() -> binding.groupNameOnTop.setText(Db.getInstance().getGroupName(gId)));
+    }
+
+    private void configureBackPressed() {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (Db.getInstance().getRootGroupId().equals(currentGid)) {
+                    finish();
+                } else {
+                    GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getParentGroupId(currentGid));
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 }
