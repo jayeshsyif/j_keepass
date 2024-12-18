@@ -149,8 +149,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
                     GroupEntryEventSource.getInstance().showAllEntryOnly();
-                } else if (tab.getId() == 2) {
-                    tab.setIcon(R.drawable.ic_search_fill1_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 3) {
                     tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
                 }
@@ -163,8 +161,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                     tab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
-                } else if (tab.getId() == 2) {
-                    tab.setIcon(R.drawable.ic_search_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 3) {
                     tab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
                 }
@@ -195,18 +191,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.entries);
             databaseTab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
-            databaseTab.view.setSelected(false);
-            databaseTab.setId(id);
-            id++;
-            runOnUiThread(() -> {
-                binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
-                Util.log("Added tab");
-            });
-        }
-        {
-            TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
-            databaseTab.setText(R.string.searchEntry);
-            databaseTab.setIcon(R.drawable.ic_search_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
             id++;
@@ -271,6 +255,11 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     }
 
     @Override
+    public void showAllEntryOnly(String query) {
+        // ignore
+    }
+
+    @Override
     public void showAll() {
         //ignore
     }
@@ -305,4 +294,5 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     public void showMenu(Context context) {
         new org.j_keepass.util.bsd.groupentry.BsdUtil().showGroupEntryMoreOptionsMenu(context, this, Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
     }
+
 }

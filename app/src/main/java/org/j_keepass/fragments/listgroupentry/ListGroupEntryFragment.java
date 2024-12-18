@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -46,11 +47,31 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         Util.log("List group entry frag on create view");
         View view = binding.getRoot();
         register();
+        configureClick();
         GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
         return view;
     }
 
-    private void show(final UUID gId, Action action) {
+    private void configureClick() {
+        binding.searchEntryView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Util.log("Search query entered is " + query);
+                GroupEntryEventSource.getInstance().showAllEntryOnly(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        binding.searchEntryView.setOnCloseListener(() -> {
+            GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+            return false;
+        });
+    }
+
+    private void show(final UUID gId, Action action, String query) {
         ExecutorService executor = getExecutor();
         AtomicReference<ListGroupEntryAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> updateLoadingText(getString(R.string.loading)));
@@ -58,7 +79,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         executor.execute(() -> adapter.set(configureRecyclerView(binding.showGroupEntriesRecyclerView.getContext())));
         executor.execute(() -> {
             if (Db.getInstance() != null && Db.getInstance().getRootGroupId() != null) {
-                listFromGroupId(gId, adapter.get(), action);
+                listFromGroupId(gId, adapter.get(), action, query);
             }
         });
         executor.execute(this::dismissLoading);
@@ -118,10 +139,14 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         return adapter;
     }
 
-    private void listFromGroupId(UUID gId, ListGroupEntryAdapter adapter, Action action) {
+    private void listFromGroupId(UUID gId, ListGroupEntryAdapter adapter, Action action, String query) {
         final int totalSubs;
         if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
-            totalSubs = Db.getInstance().getAllEntriesCount();
+            if (query == null) {
+                totalSubs = Db.getInstance().getAllEntriesCount();
+            } else {
+                totalSubs = Db.getInstance().getAllEntriesCount(query);
+            }
         } else {
             totalSubs = Db.getInstance().getSubGroupsCount(gId) + Db.getInstance().getSubEntriesCount(gId);
         }
@@ -137,7 +162,11 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
             updateLoadingText(getString(R.string.loading) + " [0/" + totalSubs + "]");
             ArrayList<GroupEntryData> subs;
             if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
-                subs = Db.getInstance().getAllEntries();
+                if (query == null) {
+                    subs = Db.getInstance().getAllEntries();
+                } else {
+                    subs = Db.getInstance().getAllEntries(query);
+                }
             } else {
                 subs = Db.getInstance().getSubGroupsAndEntries(gId);
             }
@@ -212,10 +241,10 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
 
     @Override
     public void setGroup(UUID gId) {
-        Util.log("currentGid " + Db.getInstance().getCurrentGroupId()+ " gId " + gId);
+        Util.log("currentGid " + Db.getInstance().getCurrentGroupId() + " gId " + gId);
         shutDownExecutor();
         Db.getInstance().setCurrentGroupId(gId);
-        show(gId, Action.ALL);
+        show(gId, Action.ALL, null);
     }
 
     @Override
@@ -226,13 +255,19 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     @Override
     public void showAllEntryOnly() {
         shutDownExecutor();
-        show(Db.getInstance().getCurrentGroupId(), Action.ALL_ENTRIES_ONLY);
+        show(Db.getInstance().getCurrentGroupId(), Action.ALL_ENTRIES_ONLY, null);
+    }
+
+    @Override
+    public void showAllEntryOnly(String query) {
+        shutDownExecutor();
+        show(Db.getInstance().getCurrentGroupId(), Action.ALL_ENTRIES_ONLY, query);
     }
 
     @Override
     public void showAll() {
         shutDownExecutor();
-        show(Db.getInstance().getCurrentGroupId(), Action.ALL);
+        show(Db.getInstance().getCurrentGroupId(), Action.ALL, null);
     }
 
 }

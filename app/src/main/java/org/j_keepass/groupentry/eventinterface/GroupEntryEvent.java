@@ -7,4 +7,5 @@ public interface GroupEntryEvent {
     void lock();
     void showAll();
     void showAllEntryOnly();
+    void showAllEntryOnly(String query);
 }

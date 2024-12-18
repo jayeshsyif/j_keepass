@@ -142,42 +142,11 @@
             android:textColor="?colorSecondary"></TextView>
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/groupEntryMoreOptionSearchEntry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/groupEntryMoreOptionExportDb"
-        android:padding="@dimen/kp_margin">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/searchEntry"
-            android:minWidth="@dimen/kp_min_image_width"
-            android:minHeight="@dimen/kp_min_image_height"
-            android:padding="@dimen/kp_margin"
-            android:src="@drawable/ic_search_fill0_wght300_grad_25_opsz24"
-            android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/spacemono_regular"
-            android:gravity="center_vertical"
-            android:padding="@dimen/kp_margin"
-            android:text="@string/searchEntry"
-            android:textColor="?colorSecondary"></TextView>
-    </LinearLayout>
-
     <LinearLayout
         android:id="@+id/groupEntryMoreOptionLock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupEntryMoreOptionSearchEntry"
+        android:layout_below="@id/groupEntryMoreOptionExportDb"
         android:padding="@dimen/kp_margin">
 
         <ImageButton

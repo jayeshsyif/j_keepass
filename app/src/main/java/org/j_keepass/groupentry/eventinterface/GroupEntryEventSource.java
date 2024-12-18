@@ -49,6 +49,13 @@ public class GroupEntryEventSource {
         }
     }
 
+    public void showAllEntryOnly(String query) {
+        Util.log("In listener show entry only with query "+query);
+        for (GroupEntryEvent listener : listeners) {
+            listener.showAllEntryOnly(query);
+        }
+    }
+
     public void showAll() {
         Util.log("In listener show group only");
         for (GroupEntryEvent listener : listeners) {

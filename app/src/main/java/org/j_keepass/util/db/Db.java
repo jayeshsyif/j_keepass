@@ -112,11 +112,47 @@ public class Db {
         }
         return eCount;
     }
+    public int getAllEntriesCount(String query) {
+        int eCount = 0;
+        if (database != null) {
+            List<?> entries = database.findEntries(entry -> entry.match(query));
+            if (entries != null) {
+                eCount = entries.size();
+            }
+        }
+        return eCount;
+    }
 
     public ArrayList<GroupEntryData> getAllEntries() {
         ArrayList<GroupEntryData> list = new ArrayList<>();
         Date currentDate = Calendar.getInstance().getTime();
         List<?> entries = database.findEntries(entry -> true);
+        if (entries != null) {
+            for (int eCount = 0; eCount < entries.size(); eCount++) {
+                Entry<?, ?, ?, ?> entry = (Entry<?, ?, ?, ?>) entries.get(eCount);
+                GroupEntryData data = new GroupEntryData();
+                data.id = entry.getUuid();
+                data.name = entry.getTitle();
+                data.type = GroupEntryType.ENTRY;
+                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                data.daysToExpire = daysToExpire;
+                if (daysToExpire <= 0) {
+                    data.status = GroupEntryStatus.EXPIRED;
+                } else if (daysToExpire > 0 && daysToExpire <= 10) {
+                    data.status = GroupEntryStatus.EXPIRNG_SOON;
+                } else {
+                    data.status = GroupEntryStatus.OK;
+                }
+                list.add(data);
+            }
+        }
+        return list;
+    }
+    public ArrayList<GroupEntryData> getAllEntries(String query) {
+        ArrayList<GroupEntryData> list = new ArrayList<>();
+        Date currentDate = Calendar.getInstance().getTime();
+        List<?> entries = database.findEntries(entry -> entry.match(query));
         if (entries != null) {
             for (int eCount = 0; eCount < entries.size(); eCount++) {
                 Entry<?, ?, ?, ?> entry = (Entry<?, ?, ?, ?>) entries.get(eCount);

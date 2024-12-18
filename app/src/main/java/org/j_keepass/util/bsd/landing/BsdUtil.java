@@ -243,7 +243,7 @@ public class BsdUtil {
         bsd.show();
     }
 
-    private void hideKeyboard(View view) {
+    public void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);

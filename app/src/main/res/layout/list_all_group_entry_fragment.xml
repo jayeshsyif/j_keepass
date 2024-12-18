@@ -31,16 +31,24 @@
                 android:background="?colorOnPrimary"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center"
-                android:textAllCaps="false"
                 android:text="@string/loading"
+                android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
                 android:textColor="?colorPrimary"></TextView>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchEntryView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:layout_margin="@dimen/kp_margin" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/showGroupEntriesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/searchEntryView"
             android:visibility="gone"
             tools:listitem="@layout/list_group_entriy_item_view"></androidx.recyclerview.widget.RecyclerView>
 
