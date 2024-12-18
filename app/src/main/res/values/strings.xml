@@ -46,6 +46,7 @@
     <string name="importing">Importing .....</string>
 
     <string name="all">All</string>
+    <string name="list">List</string>
     <string name="groupFolder">Group/Folder</string>
     <string name="entries">Entries</string>
     <string name="statistics">Statistics</string>

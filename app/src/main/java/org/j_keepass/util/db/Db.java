@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +27,8 @@ public class Db {
     }
 
     private Database<?, ?, ?, ?> database;
+
+    private UUID currentGroupId = null;
 
     public void setDatabase(Database<?, ?, ?, ?> database) {
         this.database = database;
@@ -99,39 +102,73 @@ public class Db {
         return gCount;
     }
 
-    public ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId, Action action) {
+    public int getAllEntriesCount() {
+        int eCount = 0;
+        if (database != null) {
+            List<?> entries = database.findEntries(entry -> true);
+            if (entries != null) {
+                eCount = entries.size();
+            }
+        }
+        return eCount;
+    }
+
+    public ArrayList<GroupEntryData> getAllEntries() {
         ArrayList<GroupEntryData> list = new ArrayList<>();
+        Date currentDate = Calendar.getInstance().getTime();
+        List<?> entries = database.findEntries(entry -> true);
+        if (entries != null) {
+            for (int eCount = 0; eCount < entries.size(); eCount++) {
+                Entry<?, ?, ?, ?> entry = (Entry<?, ?, ?, ?>) entries.get(eCount);
+                GroupEntryData data = new GroupEntryData();
+                data.id = entry.getUuid();
+                data.name = entry.getTitle();
+                data.type = GroupEntryType.ENTRY;
+                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                data.daysToExpire = daysToExpire;
+                if (daysToExpire <= 0) {
+                    data.status = GroupEntryStatus.EXPIRED;
+                } else if (daysToExpire > 0 && daysToExpire <= 10) {
+                    data.status = GroupEntryStatus.EXPIRNG_SOON;
+                } else {
+                    data.status = GroupEntryStatus.OK;
+                }
+                list.add(data);
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId) {
+        ArrayList<GroupEntryData> list = new ArrayList<>();
+        Date currentDate = Calendar.getInstance().getTime();
         Group<?, ?, ?, ?> group = database.findGroup(gId);
         if (group != null) {
-            if (action.name().equals(Action.ALL.name()) || action.name().equals(Action.GROUP_ONLY.name())) {
-                for (Group<?, ?, ?, ?> suGroup : group.getGroups()) {
-                    GroupEntryData data = new GroupEntryData();
-                    data.id = suGroup.getUuid();
-                    data.name = suGroup.getName();
-                    data.type = GroupEntryType.GROUP;
-                    data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
-                    list.add(data);
-                }
+            for (Group<?, ?, ?, ?> suGroup : group.getGroups()) {
+                GroupEntryData data = new GroupEntryData();
+                data.id = suGroup.getUuid();
+                data.name = suGroup.getName();
+                data.type = GroupEntryType.GROUP;
+                data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
+                list.add(data);
             }
-            if (action.name().equals(Action.ALL.name()) || action.name().equals(Action.ENTRY_ONLY.name())) {
-                Date currentDate = Calendar.getInstance().getTime();
-                for (Entry<?, ?, ?, ?> suEntry : group.getEntries()) {
-                    GroupEntryData data = new GroupEntryData();
-                    data.id = suEntry.getUuid();
-                    data.name = suEntry.getTitle();
-                    data.type = GroupEntryType.ENTRY;
-                    long diff = suEntry.getExpiryTime().getTime() - currentDate.getTime();
-                    long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                    data.daysToExpire = daysToExpire;
-                    if (daysToExpire <= 0) {
-                        data.status = GroupEntryStatus.EXPIRED;
-                    } else if (daysToExpire > 0 && daysToExpire <= 10) {
-                        data.status = GroupEntryStatus.EXPIRNG_SOON;
-                    } else {
-                        data.status = GroupEntryStatus.OK;
-                    }
-                    list.add(data);
+            for (Entry<?, ?, ?, ?> suEntry : group.getEntries()) {
+                GroupEntryData data = new GroupEntryData();
+                data.id = suEntry.getUuid();
+                data.name = suEntry.getTitle();
+                data.type = GroupEntryType.ENTRY;
+                long diff = suEntry.getExpiryTime().getTime() - currentDate.getTime();
+                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                data.daysToExpire = daysToExpire;
+                if (daysToExpire <= 0) {
+                    data.status = GroupEntryStatus.EXPIRED;
+                } else if (daysToExpire > 0 && daysToExpire <= 10) {
+                    data.status = GroupEntryStatus.EXPIRNG_SOON;
+                } else {
+                    data.status = GroupEntryStatus.OK;
                 }
+                list.add(data);
             }
         }
         return list;
@@ -139,5 +176,13 @@ public class Db {
 
     public void deSetDatabase() {
         database = null;
+    }
+
+    public UUID getCurrentGroupId() {
+        return currentGroupId;
+    }
+
+    public void setCurrentGroupId(UUID currentGroupId) {
+        this.currentGroupId = currentGroupId;
     }
 }

@@ -6,6 +6,5 @@ public interface GroupEntryEvent {
     void setGroup(UUID gId);
     void lock();
     void showAll();
-    void showGroupOnly();
-    void showEntryOnly();
+    void showAllEntryOnly();
 }

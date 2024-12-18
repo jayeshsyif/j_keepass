@@ -13,6 +13,7 @@ public class GroupEntryEventSource {
     private GroupEntryEventSource() {
 
     }
+
     public static GroupEntryEventSource getInstance() {
         return SOURCE;
     }
@@ -40,18 +41,14 @@ public class GroupEntryEventSource {
             listener.lock();
         }
     }
-    public void showGroupOnly() {
-        Util.log("In listener show group only");
-        for (GroupEntryEvent listener : listeners) {
-            listener.showGroupOnly();
-        }
-    }
-    public void showEntryOnly() {
+
+    public void showAllEntryOnly() {
         Util.log("In listener show entry only");
         for (GroupEntryEvent listener : listeners) {
-            listener.showEntryOnly();
+            listener.showAllEntryOnly();
         }
     }
+
     public void showAll() {
         Util.log("In listener show group only");
         for (GroupEntryEvent listener : listeners) {

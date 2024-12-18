@@ -38,7 +38,6 @@ import java.util.concurrent.Executors;
 public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent, MoreOptionsEvent {
     private ListGroupEntryActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
-    private UUID currentGid;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,25 +137,22 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 Util.log("Tab selected " + tab.getId() + " " + tab.getText().toString());
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
-                    tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
+                    tab.setIcon(R.drawable.ic_list_fill1_wght300_grad_25_opsz24);
                     tab.setId(-1);
                     if (!isFinishing() && !isDestroyed()) {
                         ListGroupEntryFragment listGroupEntryFragment = new ListGroupEntryFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, listGroupEntryFragment).commit();
                     }
-                } else {
-                    if (tab.getId() == -1) {
-                        tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
-                        GroupEntryEventSource.getInstance().showAll();
-                    } else if (tab.getId() == 1) {
-                        tab.setIcon(R.drawable.ic_folder_fill1_wght300_grad_25_opsz24);
-                        GroupEntryEventSource.getInstance().showGroupOnly();
-                    } else if (tab.getId() == 2) {
-                        tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
-                        GroupEntryEventSource.getInstance().showEntryOnly();
-                    } else if (tab.getId() == 3) {
-                        tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
-                    }
+                } else if (tab.getId() == -1) {
+                    tab.setIcon(R.drawable.ic_list_fill1_wght300_grad_25_opsz24);
+                    GroupEntryEventSource.getInstance().showAll();
+                } else if (tab.getId() == 1) {
+                    tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
+                    GroupEntryEventSource.getInstance().showAllEntryOnly();
+                } else if (tab.getId() == 2) {
+                    tab.setIcon(R.drawable.ic_search_fill1_wght300_grad_25_opsz24);
+                } else if (tab.getId() == 3) {
+                    tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
                 }
             }
 
@@ -164,11 +160,11 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             public void onTabUnselected(TabLayout.Tab tab) {
                 tab.view.setBackgroundResource(R.drawable.background_transparent);
                 if (tab.getId() == 0 || tab.getId() == -1) {
-                    tab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+                    tab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 1) {
-                    tab.setIcon(R.drawable.ic_folder_fill0_wght300_grad_25_opsz24);
-                } else if (tab.getId() == 2) {
                     tab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
+                } else if (tab.getId() == 2) {
+                    tab.setIcon(R.drawable.ic_search_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 3) {
                     tab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
                 }
@@ -185,21 +181,9 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         int id = 0;
         {
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
-            databaseTab.setText(R.string.all);
-            databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
+            databaseTab.setText(R.string.list);
+            databaseTab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(true);
-            databaseTab.setId(id);
-            id++;
-            runOnUiThread(() -> {
-                binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
-                Util.log("Added tab");
-            });
-        }
-        {
-            TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
-            databaseTab.setText(R.string.groupFolder);
-            databaseTab.setIcon(R.drawable.ic_folder_fill0_wght300_grad_25_opsz24);
-            databaseTab.view.setSelected(false);
             databaseTab.setId(id);
             id++;
             runOnUiThread(() -> {
@@ -219,7 +203,19 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 Util.log("Added tab");
             });
         }
-        /*{
+        {
+            TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
+            databaseTab.setText(R.string.searchEntry);
+            databaseTab.setIcon(R.drawable.ic_search_fill0_wght300_grad_25_opsz24);
+            databaseTab.view.setSelected(false);
+            databaseTab.setId(id);
+            id++;
+            runOnUiThread(() -> {
+                binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
+                Util.log("Added tab");
+            });
+        }
+        {
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.statistics);
             databaseTab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
@@ -230,12 +226,12 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
                 Util.log("Added tab");
             });
-        }*/
+        }
     }
 
     @Override
     public void setGroup(UUID gId) {
-        currentGid = gId;
+        Db.getInstance().setCurrentGroupId(gId);
         runOnUiThread(() -> binding.groupNameOnTop.setText(Db.getInstance().getGroupName(gId)));
     }
 
@@ -243,10 +239,10 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (Db.getInstance().getRootGroupId().equals(currentGid)) {
+                if (Db.getInstance().getRootGroupId().equals(Db.getInstance().getCurrentGroupId())) {
                     finish();
                 } else {
-                    GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getParentGroupId(currentGid));
+                    GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getParentGroupId(Db.getInstance().getCurrentGroupId()));
                 }
             }
         };
@@ -270,12 +266,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     }
 
     @Override
-    public void showGroupOnly() {
-        //ignore
-    }
-
-    @Override
-    public void showEntryOnly() {
+    public void showAllEntryOnly() {
         //ignore
     }
 
@@ -312,6 +303,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
 
     @Override
     public void showMenu(Context context) {
-        new org.j_keepass.util.bsd.groupentry.BsdUtil().showGroupEntryMoreOptionsMenu(context, this, Db.getInstance().getGroupName(currentGid));
+        new org.j_keepass.util.bsd.groupentry.BsdUtil().showGroupEntryMoreOptionsMenu(context, this, Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
     }
 }
