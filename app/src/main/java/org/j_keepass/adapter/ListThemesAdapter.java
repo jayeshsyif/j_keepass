@@ -58,6 +58,17 @@ public class ListThemesAdapter extends RecyclerView.Adapter<ListThemesAdapter.Vi
         return mValues.size();
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout themeColor1;

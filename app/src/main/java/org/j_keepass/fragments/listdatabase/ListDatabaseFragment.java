@@ -32,6 +32,13 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListAllDatabaseFragmentBinding binding;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Util.log("List db frag on create");
+        super.onCreate(savedInstanceState);
+        binding = ListAllDatabaseFragmentBinding.inflate(getLayoutInflater());
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,14 +143,6 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
             }
         }
     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        Util.log("List db frag on create");
-        super.onCreate(savedInstanceState);
-        binding = ListAllDatabaseFragmentBinding.inflate(getLayoutInflater());
-    }
-
 
     @Override
     public void showLoading() {

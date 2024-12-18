@@ -48,4 +48,6 @@
     <string name="groupFolder">Group/Folder</string>
     <string name="entries">Entries</string>
     <string name="statistics">Statistics</string>
+    <string name="groupName">Group Name</string>
+    <string name="nothingHere">Nothing here .. !</string>
 </resources>

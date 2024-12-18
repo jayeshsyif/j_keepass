@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
-import org.j_keepass.fragments.listdatabase.ListDatabaseFragment;
+import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
@@ -32,7 +32,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         new SetTheme(this, false).run();
         binding = ListGroupEntryActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.groupName.setText(Db.getInstance().getRootGroupName());
+        binding.groupNameOnTop.setText(Db.getInstance().getRootGroupName());
         ExecutorService executor = getExecutor();
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureTabLayout);
@@ -92,6 +92,12 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             public void onTabSelected(TabLayout.Tab tab) {
                 Util.log("Tab selected " + tab.getId() + " " + tab.getText().toString());
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
+                tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
+                if (tab.getId() == 0) {
+                    if (!isFinishing() && !isDestroyed()) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, new ListGroupEntryFragment()).commit();
+                    }
+                }
             }
 
             @Override
@@ -135,18 +141,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         {
             TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
             databaseTab.setText(R.string.entries);
-            databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
-            databaseTab.view.setSelected(false);
-            databaseTab.setId(id);
-            id++;
-            runOnUiThread(() -> {
-                binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
-                Util.log("Added tab");
-            });
-        }
-        {
-            TabLayout.Tab databaseTab = binding.groupAndEntryTabLayout.newTab();
-            databaseTab.setText(R.string.statistics);
             databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
