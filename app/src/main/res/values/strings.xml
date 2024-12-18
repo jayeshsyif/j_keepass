@@ -60,4 +60,7 @@
     <string name="createNewEntry">Create New Entry</string>
     <string name="exportDatabase">Export Database</string>
     <string name="searchEntry">Search Entry</string>
+    <string name="good">Good</string>
+    <string name="expiringSoon">Exp. Soon</string>
+    <string name="expired">Expired</string>
 </resources>

@@ -140,7 +140,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     }
 
     private void listFromGroupId(UUID gId, ListGroupEntryAdapter adapter, Action action, String query) {
-        final int totalSubs;
+        final long totalSubs;
         if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
             if (query == null) {
                 totalSubs = Db.getInstance().getAllEntriesCount();

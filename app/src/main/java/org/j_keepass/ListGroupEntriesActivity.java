@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
+import org.j_keepass.fragments.StatsFragment;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
@@ -149,8 +150,12 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
                     GroupEntryEventSource.getInstance().showAllEntryOnly();
-                } else if (tab.getId() == 3) {
+                } else if (tab.getId() == 2) {
                     tab.setIcon(R.drawable.ic_graph_fill1_wght300_grad_25_opsz24);
+                    if (!isFinishing() && !isDestroyed()) {
+                        StatsFragment statsFragment = new StatsFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, statsFragment).commit();
+                    }
                 }
             }
 
@@ -161,7 +166,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                     tab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
-                } else if (tab.getId() == 3) {
+                } else if (tab.getId() == 2) {
                     tab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
                 }
             }
