@@ -1,6 +1,5 @@
-package org.j_keepass.newpwd.eveninterface;
+package org.j_keepass.newpwd.eventinterface;
 
-import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.util.Util;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class PasswordGenerator implements GenerateNewPwdEvent {
     @Override
     public void generateNewPwd(boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         Util.log("Generate new pwd event received");
-        if (!useDigit && !useSymbol && !useLowerCase && !useLowerCase) {
+        if (!useDigit && !useSymbol && !useLowerCase && !useUpperCase) {
             GenerateNewPasswordEventSource.getInstance().showFailedNewGenPwd("All cannot be false! Please provide proper Input.");
         } else if (length == 0) {
             GenerateNewPasswordEventSource.getInstance().showFailedNewGenPwd("Password length can't be 0 (Zero)");

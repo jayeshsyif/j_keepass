@@ -1,4 +1,4 @@
-package org.j_keepass.util.bsd;
+package org.j_keepass.util.bsd.landing;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,7 +27,7 @@ import org.j_keepass.db.eventinterface.DbAndFileOperations;
 import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.permission.eventinterface.PermissionEvent;
 import org.j_keepass.permission.eventinterface.PermissionEventSource;
 import org.j_keepass.util.Util;
@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class BottomMenuUtil {
+public class BsdUtil {
 
     public void showLandingMoreOptionsMenu(Context context, Activity activity) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);

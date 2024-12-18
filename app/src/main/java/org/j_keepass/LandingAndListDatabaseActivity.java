@@ -22,15 +22,15 @@ import org.j_keepass.fragments.listdatabase.ListDatabaseFragment;
 import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.landing.eventinterface.MoreOptionsEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
-import org.j_keepass.newpwd.eveninterface.GenerateNewPwdEvent;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
 import org.j_keepass.permission.eventinterface.PermissionEvent;
 import org.j_keepass.permission.eventinterface.PermissionEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.theme.eventinterface.ThemeEventSource;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
-import org.j_keepass.util.bsd.BottomMenuUtil;
+import org.j_keepass.util.bsd.landing.BsdUtil;
 import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
@@ -194,19 +194,19 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void showMenu(Context context) {
         Util.log("Show menu via listener");
-        new BottomMenuUtil().showLandingMoreOptionsMenu(context, this);
+        new BsdUtil().showLandingMoreOptionsMenu(context, this);
     }
 
     @Override
     public void changeThemeIsClickedShowThemes(Context context) {
         Util.log("Change theme option in menu is clicked");
-        new BottomMenuUtil().showThemesMenu(context);
+        new BsdUtil().showThemesMenu(context);
     }
 
     @Override
     public void showCreateNewDb(Context context) {
         Util.log("Showing db create bsd");
-        new BottomMenuUtil().showCreateDbBsd(context);
+        new BsdUtil().showCreateDbBsd(context);
     }
 
 
@@ -223,7 +223,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         runOnUiThread(() -> {
-            new BottomMenuUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            new BsdUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
             LoadingEventSource.getInstance().dismissLoading();
         });
     }
@@ -238,7 +238,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void showInfo(Context context) {
-        new BottomMenuUtil().showInfo(context);
+        new BsdUtil().showInfo(context);
     }
 
     @Override
@@ -321,7 +321,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void askPwdForDb(Context context, String dbName, String fullPath) {
         try {
-            new BottomMenuUtil().showAskPwdForDb(context, dbName, fullPath);
+            new BsdUtil().showAskPwdForDb(context, dbName, fullPath);
         } catch (Throwable e) {
             //ignore
         }

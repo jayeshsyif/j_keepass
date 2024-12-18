@@ -1,7 +1,6 @@
-package org.j_keepass.newpwd.eveninterface;
+package org.j_keepass.newpwd.eventinterface;
 
 
-import org.j_keepass.permission.eventinterface.PermissionCheckerAndGetter;
 import org.j_keepass.util.Util;
 
 import java.util.ArrayList;

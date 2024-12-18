@@ -55,4 +55,8 @@
     <string name="expiredInDays">Expired {0} days ago!</string>
     <string name="expiringSoonInDays">Expires soon, in {0} days!</string>
     <string name="expiringInDays">Expires in {0} days</string>
+    <string name="createNewGroup">Create New Group/Folder</string>
+    <string name="createNewEntry">Create New Entry</string>
+    <string name="exportDatabase">Export Database</string>
+    <string name="searchEntry">Search Entry</string>
 </resources>

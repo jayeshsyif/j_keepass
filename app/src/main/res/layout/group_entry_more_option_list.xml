@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <TextView
+        android:id="@+id/groupEntryMenuText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/tab_selected_indicator"
+        android:fontFamily="@font/spacemono_bold"
+        android:gravity="center_vertical"
+        android:padding="@dimen/kp_margin"
+        android:text="@string/menuText"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?colorSecondary"></TextView>
+
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionCreateNewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMenuText"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/createNewGroup"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_folder_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/createNewGroup"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionCreateNewEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionCreateNewGroup"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/createNewEntry"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_key_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/createNewEntry"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionGenerateNewPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionCreateNewEntry"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/changeTheme"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/generateNewPassword"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionExportDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionGenerateNewPassword"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/exportDatabase"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_export_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/exportDatabase"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionSearchEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionExportDb"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/searchEntry"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_search_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/searchEntry"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionLock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionSearchEntry"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/lockDb"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="@android:color/holo_red_dark"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/lockDb"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+</RelativeLayout>

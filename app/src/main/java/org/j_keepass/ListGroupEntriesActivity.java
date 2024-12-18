@@ -1,5 +1,6 @@
 package org.j_keepass;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -17,13 +17,15 @@ import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.listgroupentry.eventinterface.MoreOptionEventSource;
+import org.j_keepass.listgroupentry.eventinterface.MoreOptionsEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eveninterface.GenerateNewPasswordEventSource;
-import org.j_keepass.newpwd.eveninterface.GenerateNewPwdEvent;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
-import org.j_keepass.util.bsd.BottomMenuUtil;
+import org.j_keepass.util.bsd.landing.BsdUtil;
 import org.j_keepass.util.db.Db;
 import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
@@ -33,7 +35,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent {
+public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent, MoreOptionsEvent {
     private ListGroupEntryActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private UUID currentGid;
@@ -66,6 +68,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
         });
+        binding.groupMoreOption.setOnClickListener(view -> MoreOptionEventSource.getInstance().showMenu(view.getContext()));
     }
 
     private ExecutorService getExecutor() {
@@ -77,11 +80,13 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     private void register() {
         GenerateNewPasswordEventSource.getInstance().addListener(this);
         GroupEntryEventSource.getInstance().addListener(this);
+        MoreOptionEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
         GroupEntryEventSource.getInstance().removeListener(this);
+        MoreOptionEventSource.getInstance().removeListener(this);
     }
 
     @Override
@@ -292,7 +297,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     @Override
     public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         runOnUiThread(() -> {
-            new BottomMenuUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            new BsdUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
             LoadingEventSource.getInstance().dismissLoading();
         });
     }
@@ -303,5 +308,10 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             LoadingEventSource.getInstance().updateLoadingText(errorMsg);
             LoadingEventSource.getInstance().showLoading();
         });
+    }
+
+    @Override
+    public void showMenu(Context context) {
+        new org.j_keepass.util.bsd.groupentry.BsdUtil().showGroupEntryMoreOptionsMenu(context, this, Db.getInstance().getGroupName(currentGid));
     }
 }
