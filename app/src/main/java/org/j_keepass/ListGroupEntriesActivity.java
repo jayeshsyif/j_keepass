@@ -235,10 +235,15 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (Db.getInstance().getRootGroupId().equals(Db.getInstance().getCurrentGroupId())) {
-                    finish();
+                Util.log("On back selected tab pos is "+binding.groupAndEntryTabLayout.getSelectedTabPosition());
+                if (binding.groupAndEntryTabLayout.getSelectedTabPosition() == 0) {
+                    if (Db.getInstance().getRootGroupId().equals(Db.getInstance().getCurrentGroupId())) {
+                        finish();
+                    } else {
+                        GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getParentGroupId(Db.getInstance().getCurrentGroupId()));
+                    }
                 } else {
-                    GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getParentGroupId(Db.getInstance().getCurrentGroupId()));
+                    finish();
                 }
             }
         };

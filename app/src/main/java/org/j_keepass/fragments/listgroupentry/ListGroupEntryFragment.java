@@ -84,7 +84,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     private void show(final UUID gId, Action action, String query) {
         ExecutorService executor = getExecutor();
         AtomicReference<ListGroupEntryAdapter> adapter = new AtomicReference<>();
-        executor.execute(() -> updateLoadingText(getString(R.string.loading)));
+        executor.execute(() -> updateLoadingText(binding.getRoot().getContext().getString(R.string.loading)));
         executor.execute(this::showLoading);
         executor.execute(() -> adapter.set(configureRecyclerView(binding.showGroupEntriesRecyclerView.getContext())));
         executor.execute(() -> {
