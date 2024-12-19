@@ -343,6 +343,7 @@ public class Db {
                     fd.value = Util.convertDateToString(entry.getExpiryTime());
                     fd.fieldValueType = FieldValueType.TEXT;
                     fd.fieldNameType = FieldNameType.EXPIRY_DATE;
+                    fd.expiryDate = entry.getExpiryTime();
                     if (fd.value != null && fd.value.length() > 0) {
                         fields.add(fd);
                     }

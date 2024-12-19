@@ -60,4 +60,5 @@ public enum FieldNameType {
             return "Attachment";
         }
     },
+    DUMMY,
 }

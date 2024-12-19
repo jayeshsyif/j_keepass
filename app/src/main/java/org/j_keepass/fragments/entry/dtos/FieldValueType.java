@@ -6,4 +6,5 @@ public enum FieldValueType {
     URL,
     LARGE_TEXT,
     ATTACHMENT,
+    DUMMY,
 }

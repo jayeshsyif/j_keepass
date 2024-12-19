@@ -15,6 +15,8 @@ import org.j_keepass.R;
 import org.j_keepass.adapter.ListFieldAdapter;
 import org.j_keepass.databinding.FieldFragmentBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
+import org.j_keepass.fragments.entry.dtos.FieldNameType;
+import org.j_keepass.fragments.entry.dtos.FieldValueType;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
@@ -104,6 +106,22 @@ public class FieldFragment extends Fragment implements LoadingEvent {
                     requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
                 } catch (Throwable e) {
                     //ignore
+                }
+            }
+            {
+                //Dummy
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.DUMMY.toString();
+                fd.value = "DUMMY";
+                fd.fieldValueType = FieldValueType.DUMMY;
+                fd.fieldNameType = FieldNameType.DUMMY;
+                if (fd.value != null && fd.value.length() > 0) {
+                    adapter.addValue(fd);
+                    try {
+                        requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
+                    } catch (Throwable e) {
+                        //ignore
+                    }
                 }
             }
         }
