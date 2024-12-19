@@ -2,7 +2,9 @@ package org.j_keepass.adapter;
 
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.j_keepass.databinding.FieldItemViewBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
+import org.j_keepass.util.CopyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,12 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                 holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
                 holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             }
+            if (holder.mItem.fieldValueType.name().equals(FieldValueType.ATTACHMENT.name())) {
+                holder.fieldCopy.setVisibility(View.GONE);
+            }
+            holder.fieldCopy.setOnClickListener(view -> {
+                CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value);
+            });
         }
     }
 
@@ -79,11 +88,13 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         public FieldData mItem;
         TextInputEditText editText;
         TextInputLayout editTextLayout;
+        ImageButton fieldCopy;
 
         public ViewHolder(@NonNull FieldItemViewBinding binding) {
             super(binding.getRoot());
             editText = binding.fieldValue;
             editTextLayout = binding.fieldNameValue;
+            fieldCopy = binding.fieldCopy;
         }
     }
 }

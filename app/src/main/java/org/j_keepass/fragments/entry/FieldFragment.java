@@ -63,7 +63,6 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         }
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
-        executor.execute(() -> binding.entryTitleView.setText(Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId())));
         executor.execute(this::dismissLoading);
         executor.execute(() -> setAdapterAndShowFields(show.get()));
         return view;
@@ -81,10 +80,13 @@ public class FieldFragment extends Fragment implements LoadingEvent {
 
     private void showFields(ListFieldAdapter adapter, final String show) {
         ArrayList<FieldData> fields = null;
-        if (show.equals("base")) {
-            fields = Db.getInstance().getFields(Db.getInstance().getCurrentEntryId());
-        } else {
+        if (show.equals("additional")) {
             fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId());
+        } else if (show.equals("attachment")) {
+            fields = Db.getInstance().getAttachments(Db.getInstance().getCurrentEntryId());
+        } else {
+            //base
+            fields = Db.getInstance().getFields(Db.getInstance().getCurrentEntryId());
         }
         if (fields != null && fields.size() > 0) {
             requireActivity().runOnUiThread(() -> {

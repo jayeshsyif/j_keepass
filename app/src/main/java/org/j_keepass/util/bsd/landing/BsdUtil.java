@@ -30,6 +30,7 @@ import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.permission.eventinterface.PermissionEvent;
 import org.j_keepass.permission.eventinterface.PermissionEventSource;
+import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.theme.Theme;
 import org.j_keepass.util.theme.ThemeUtil;
@@ -195,12 +196,17 @@ public class BsdUtil {
         MaterialCheckBox useUpperCaseMcb = bsd.findViewById(R.id.useUpperCase);
         MaterialCheckBox useSymbolMcb = bsd.findViewById(R.id.useSymbol);
         MaterialButton reGenerateNewPassword = bsd.findViewById(R.id.reGenerateNewPassword);
+        ImageButton newPasswordCopy = bsd.findViewById(R.id.newPasswordCopy);
         useDigitMcb.setChecked(useDigit);
         useLowerCaseMcb.setChecked(useLowerCase);
         useUpperCaseMcb.setChecked(useUpperCase);
         useSymbolMcb.setChecked(useSymbol);
         Slider slider = bsd.findViewById(R.id.newPasswordSlider);
         slider.setValue((float) length);
+        newPasswordCopy.setOnClickListener(view -> {
+            bsd.dismiss();
+            CopyUtil.copyToClipboard(view.getContext(),pwd,pwd);
+        });
         reGenerateNewPassword.setOnClickListener(view -> {
             bsd.dismiss();
             ExecutorService executor = Executors.newSingleThreadExecutor();

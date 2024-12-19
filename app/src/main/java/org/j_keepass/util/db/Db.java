@@ -365,21 +365,53 @@ public class Db {
     }
 
     public ArrayList<FieldData> getAdditionalFields(UUID eId) {
+        ArrayList<String> ignoreFields = new ArrayList<>() {{
+            add("username".toLowerCase());
+            add("password".toLowerCase());
+            add("url".toLowerCase());
+            add("title".toLowerCase());
+            add("notes".toLowerCase());
+        }};
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
             Entry<?, ?, ?, ?> entry = database.findEntry(eId);
             if (entry != null) {
                 if (entry.getPropertyNames().size() > 0) {
                     for (String pn : entry.getPropertyNames()) {
-                        if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password") && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
+                        Util.log("Additional property found "+pn);
+                        if (!ignoreFields.contains(pn.toLowerCase())) {
                             FieldData fd = new FieldData();
                             fd.name = pn;
                             fd.value = entry.getProperty(pn);
                             fd.fieldNameType = FieldNameType.ADDITIONAL;
                             fd.fieldValueType = FieldValueType.TEXT;
                             if (fd.value != null && fd.value.length() > 0) {
+                                Util.log("Additional property added "+pn);
                                 fields.add(fd);
                             }
+                        }
+                    }
+                }
+            }
+        }
+        return fields;
+    }
+
+    public ArrayList<FieldData> getAttachments(UUID eId) {
+        ArrayList<FieldData> fields = new ArrayList<>();
+        if (database != null) {
+            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            if (entry != null) {
+                if (entry.getBinaryPropertyNames().size() > 0) {
+                    for (String bn : entry.getBinaryPropertyNames()) {
+                        Util.log("binary property found "+bn);
+                        FieldData fd = new FieldData();
+                        fd.name = FieldNameType.ATTACHMENT.toString();
+                        fd.value = bn;
+                        fd.fieldNameType = FieldNameType.ATTACHMENT;
+                        fd.fieldValueType = FieldValueType.ATTACHMENT;
+                        if (fd.value != null && fd.value.length() > 0) {
+                            fields.add(fd);
                         }
                     }
                 }

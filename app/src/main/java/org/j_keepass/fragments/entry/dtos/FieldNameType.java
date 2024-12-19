@@ -53,4 +53,11 @@ public enum FieldNameType {
         }
     },
     ADDITIONAL,
+    ATTACHMENT {
+        @NonNull
+        @Override
+        public String toString() {
+            return "Attachment";
+        }
+    },
 }

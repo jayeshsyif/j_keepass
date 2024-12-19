@@ -113,6 +113,15 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
+                } else if (tab.getId() == 2) {
+                    tab.setIcon(R.drawable.ic_attachment_fill0_wght300_grad_25_opsz24);
+                    if (!isFinishing() && !isDestroyed()) {
+                        FieldFragment fieldFragment = new FieldFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("show", "attachment");
+                        fieldFragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
+                    }
                 }
             }
 
@@ -123,6 +132,8 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
                     tab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
                 } else if (tab.getId() == 1) {
                     tab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
+                } else if (tab.getId() == 2) {
+                    tab.setIcon(R.drawable.ic_attachment_fill0_wght300_grad_25_opsz24);
                 }
             }
 
@@ -151,6 +162,18 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
             TabLayout.Tab databaseTab = binding.entryTabLayout.newTab();
             databaseTab.setText(R.string.additionalDetails);
             databaseTab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
+            databaseTab.view.setSelected(true);
+            databaseTab.setId(id);
+            id++;
+            runOnUiThread(() -> {
+                binding.entryTabLayout.addTab(databaseTab, databaseTab.getId());
+                Util.log("Added tab");
+            });
+        }
+        {
+            TabLayout.Tab databaseTab = binding.entryTabLayout.newTab();
+            databaseTab.setText(R.string.attachments);
+            databaseTab.setIcon(R.drawable.ic_attachment_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(true);
             databaseTab.setId(id);
             id++;

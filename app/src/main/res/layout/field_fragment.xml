@@ -58,7 +58,7 @@
             android:backgroundTint="?colorPrimary"
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center"
-            android:text="@string/entry"
+            android:text="@string/nothingHere"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?colorSecondary"></TextView>
 
