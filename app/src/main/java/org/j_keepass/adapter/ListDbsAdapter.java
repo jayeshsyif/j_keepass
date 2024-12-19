@@ -3,6 +3,7 @@ package org.j_keepass.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 
+import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbItemViewBinding;
 import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.util.Util;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHolder> {
 
     List<DbData> mValues = new ArrayList<>();
+    boolean animationFlag = false;
 
     public void setValues() {
         DbData d = new DbData();
@@ -36,7 +39,9 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ListDbItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder vh = new ViewHolder(ListDbItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        setAnimation(vh.itemView);
+        return vh;
     }
 
     @Override
@@ -59,6 +64,12 @@ public class ListDbsAdapter extends RecyclerView.Adapter<ListDbsAdapter.ViewHold
             holder.mDbModifiedDate.setVisibility(View.GONE);
             holder.mImage.setVisibility(View.GONE);
             holder.mDatabaseMoreOption.setVisibility(View.GONE);
+        }
+    }
+
+    private void setAnimation(View view) {
+        if (animationFlag) {
+            view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in));
         }
     }
 

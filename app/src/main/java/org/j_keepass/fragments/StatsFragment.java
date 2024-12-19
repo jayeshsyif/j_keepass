@@ -76,20 +76,29 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         } catch (Throwable e) {
             //ignore
         }
-        values.add(Float.valueOf(allExpiredEntriesCount));
-        values.add(Float.valueOf(allExpiringSoonEntriesCount));
-        values.add(Float.valueOf(ok));
+        if (allExpiredEntriesCount > 0) {
+            values.add(Float.valueOf(allExpiredEntriesCount));
+            colors.add(binding.graph.getResources().getColor(android.R.color.holo_red_dark));
+            text.add("Expired " + allExpiredEntriesCount);
+        }
+        if (allExpiringSoonEntriesCount > 0) {
+            values.add(Float.valueOf(allExpiringSoonEntriesCount));
+            colors.add(binding.graph.getResources().getColor(R.color.kp_coral));
+            text.add("Expiring Soon " + allExpiringSoonEntriesCount);
+        }
+        if (ok > 0) {
+            values.add(Float.valueOf(ok));
+            colors.add(binding.graph.getResources().getColor(R.color.kp_green));
+            text.add("Good " + ok);
+        }
         Util.log("Total " + totalEntries);
         Util.log("Expired " + allExpiredEntriesCount);
         Util.log("Expiring Soon " + allExpiringSoonEntriesCount);
         Util.log("Good " + ok);
-        text.add("Expired " + allExpiredEntriesCount);
-        text.add("Expiring Soon " + allExpiringSoonEntriesCount);
-        text.add("Good " + ok);
-        int textColor = getPrimaryColor(binding.graph.getContext());
+
+        int textColor = getSecondaryColor(binding.graph.getContext());
         float textSize = 30;
-        colors.add(binding.graph.getResources().getColor(android.R.color.holo_red_dark));
-        colors.add(binding.graph.getResources().getColor(R.color.kp_coral));
+
         colors.add(binding.graph.getResources().getColor(R.color.kp_green));
         try {
             PieChartView pieChartView = new PieChartView(binding.graph.getContext(), values, colors, text, textColor, textSize);
@@ -101,10 +110,10 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         }
     }
 
-    public static int getPrimaryColor(Context context) {
+    public static int getSecondaryColor(Context context) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
-        boolean resolved = theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true);
+        boolean resolved = theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true);
 
         if (resolved) {
             return typedValue.resourceId != 0 ? ContextCompat.getColor(context, typedValue.resourceId) : typedValue.data;

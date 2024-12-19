@@ -55,7 +55,7 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
                 String text = holder.groupEntryCountOrStatus.getContext().getString(R.string.expiredInDays);
                 text = text.replace("{0}", "" + holder.mItem.daysToExpire);
                 holder.groupEntryCountOrStatus.setText(text);
-                holder.groupEntryCountOrStatus.setTextColor(holder.groupEntryCountOrStatus.getContext().getResources().getColor(android.R.color.holo_red_dark));
+                holder.groupEntryCountOrStatus.setTextColor(holder.groupEntryCountOrStatus.getContext().getResources().getColor(android.R.color.holo_red_light));
             } else if (holder.mItem.status.name().equals(GroupEntryStatus.EXPIRNG_SOON.name())) {
                 String text = holder.groupEntryCountOrStatus.getContext().getString(R.string.expiringSoonInDays);
                 text = text.replace("{0}", "" + holder.mItem.daysToExpire);

@@ -111,7 +111,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                     d.fullPath = f.getAbsolutePath();
                     adapter.addValue(d);
                     try {
-                        requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                        requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
                     } catch (Exception e) {
                         //ignore
                     }
@@ -126,7 +126,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
                     Util.log(d.toString());
                     adapter.addValue(d);
                     try {
-                        requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                        requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
                     } catch (Exception e) {
                         //ignore
                     }

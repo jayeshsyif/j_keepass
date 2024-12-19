@@ -188,7 +188,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 Util.log("Adding " + data.name);
                 subCountAdded++;
                 try {
-                    requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                    requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
                 } catch (Throwable e) {
                     //ignore
                 }
@@ -201,7 +201,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
                 dummyData.type = GroupEntryType.DUMMY;
                 adapter.addValue(dummyData);
                 try {
-                    requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                    requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
                 } catch (Throwable e) {
                     //ignore
                 }
