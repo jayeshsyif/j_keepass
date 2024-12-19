@@ -15,9 +15,13 @@ import com.google.android.material.tabs.TabLayout;
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
 import org.j_keepass.fragments.entry.FieldFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.loading.eventinterface.LoadingEventSource;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
+import org.j_keepass.util.bsd.landing.BsdUtil;
 import org.j_keepass.util.db.Db;
 import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
@@ -26,9 +30,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FieldActivity extends AppCompatActivity implements ThemeEvent {
+public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent {
     private FieldActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
+
+    private boolean isEdit = false;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,12 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
         binding = FieldActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        Intent intent = getIntent();
+        isEdit = intent.getBooleanExtra("isEdit", false);
+        if (isEdit) {
+            binding.entryEditSaveBtn.setImageDrawable(binding.entryEditSaveBtn.getResources().getDrawable(R.drawable.ic_save_fill0_wght300_grad_25_opsz24));
+            binding.entryEditSaveBtn.setBackgroundResource(R.drawable.round_corner_right_bottom_top_green);
+        }
         register();
         ExecutorService executor = getExecutor();
         executor.execute(new SleepFor1Ms());
@@ -51,11 +63,11 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
     }
 
     private void register() {
-
+        GenerateNewPasswordEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
-
+        GenerateNewPasswordEventSource.getInstance().removeListener(this);
     }
 
     private void configureClicks() {
@@ -64,6 +76,20 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
             Intent intent = new Intent(this, ListGroupEntriesActivity.class);
             startActivity(intent);
             finish();
+        });
+        binding.entryEditSaveBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, FieldActivity.class);
+            intent.putExtra("isEdit", true);
+            startActivity(intent);
+            finish();
+        });
+        binding.entryGenerateNewPasswordBtn.setOnClickListener(view -> {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().showLoading();
+            });
+            executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
         });
     }
 
@@ -101,6 +127,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
                         FieldFragment fieldFragment = new FieldFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("show", "base");
+                        bundle.putBoolean("isEdit", isEdit);
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
@@ -110,6 +137,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
                         FieldFragment fieldFragment = new FieldFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("show", "additional");
+                        bundle.putBoolean("isEdit", isEdit);
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
@@ -119,6 +147,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
                         FieldFragment fieldFragment = new FieldFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("show", "attachment");
+                        bundle.putBoolean("isEdit", isEdit);
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
@@ -201,6 +230,32 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent {
             } catch (Exception e) {
                 Util.log("Error setting light status " + e.getMessage());
             }
+        });
+    }
+
+    @Override
+    public void generateNewPwd(boolean useDigit, boolean useUpperCase, boolean useLowerCase, boolean useSymbol, int length) {
+        //ignore
+    }
+
+    @Override
+    public void generateNewPwd() {
+        //ignore
+    }
+
+    @Override
+    public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
+        runOnUiThread(() -> {
+            new BsdUtil().newPwdBsd(binding.getRoot().getContext(), newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            LoadingEventSource.getInstance().dismissLoading();
+        });
+    }
+
+    @Override
+    public void showFailedNewGenPwd(final String errorMsg) {
+        runOnUiThread(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(errorMsg);
+            LoadingEventSource.getInstance().showLoading();
         });
     }
 }

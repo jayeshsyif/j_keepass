@@ -54,26 +54,31 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         register();
         Util.log("Entry title is " + Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()));
         AtomicReference<String> show = new AtomicReference<>("base");
+        AtomicReference<Boolean> isEdit = new AtomicReference<>(false);
         Bundle bundle = getArguments();
         if (bundle != null) {
             String showBundle = bundle.getString("show");
+            Boolean isEditBundle = bundle.getBoolean("isEdit");
             if (showBundle != null && showBundle.length() > 0) {
                 show.set(showBundle);
+            }
+            if (isEditBundle != null) {
+                isEdit.set(isEditBundle);
             }
         }
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
         executor.execute(this::dismissLoading);
-        executor.execute(() -> setAdapterAndShowFields(show.get()));
+        executor.execute(() -> setAdapterAndShowFields(show.get(), isEdit.get()));
         return view;
     }
 
-    private void setAdapterAndShowFields(final String show) {
+    private void setAdapterAndShowFields(final String show, final Boolean isEdit) {
         ExecutorService executor = getExecutor();
         executor.execute(() -> updateLoadingText(binding.getRoot().getContext().getString(R.string.loading)));
         executor.execute(this::showLoading);
         AtomicReference<ListFieldAdapter> adapter = new AtomicReference<>();
-        executor.execute(() -> adapter.set(configureRecyclerView(binding.entryFieldsRecyclerView.getContext())));
+        executor.execute(() -> adapter.set(configureRecyclerView(binding.entryFieldsRecyclerView.getContext(), isEdit)));
         executor.execute(() -> showFields(adapter.get(), show));
         executor.execute(this::dismissLoading);
     }
@@ -104,10 +109,10 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         }
     }
 
-    private ListFieldAdapter configureRecyclerView(Context context) {
+    private ListFieldAdapter configureRecyclerView(Context context, final Boolean isEdit) {
         Util.log("Configuration recycler view");
         ListFieldAdapter adapter = new ListFieldAdapter();
-        adapter.setEditable(false);
+        adapter.setEditable(isEdit);
         try {
             requireActivity().runOnUiThread(() -> {
                 Util.log("Configuration recycler view inside ui thread");
