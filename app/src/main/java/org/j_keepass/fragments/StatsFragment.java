@@ -52,7 +52,7 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         View view = binding.getRoot();
         register();
         ExecutorService executor = getExecutor();
-        executor.execute(() -> updateLoadingText(getString(R.string.loading)));
+        executor.execute(() -> updateLoadingText(view.getContext().getString(R.string.loading)));
         executor.execute(this::showLoading);
         executor.execute(this::loadStat);
         executor.execute(this::dismissLoading);

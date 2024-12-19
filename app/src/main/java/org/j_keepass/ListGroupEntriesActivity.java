@@ -63,7 +63,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         binding.groupAndEntryGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
             executor.execute(() -> {
-                LoadingEventSource.getInstance().updateLoadingText(getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
                 LoadingEventSource.getInstance().showLoading();
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
@@ -255,7 +255,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         Db.getInstance().deSetDatabase();
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
-            LoadingEventSource.getInstance().updateLoadingText(getString(R.string.locking));
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.locking));
             LoadingEventSource.getInstance().showLoading();
             Util.sleepFor3MSec();
         });

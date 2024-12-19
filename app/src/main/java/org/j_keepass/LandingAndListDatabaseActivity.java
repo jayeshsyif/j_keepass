@@ -88,7 +88,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         binding.landingGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
             executor.execute(() -> {
-                LoadingEventSource.getInstance().updateLoadingText(getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
                 LoadingEventSource.getInstance().showLoading();
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
@@ -350,7 +350,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         Util.log("Landing Permission Not Granted");
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
-            LoadingEventSource.getInstance().updateLoadingText(getString(R.string.permissionNotGranted));
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));
             LoadingEventSource.getInstance().showLoading();
         });
     }
@@ -384,7 +384,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
                 AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
                 ExecutorService executor = getExecutor();
                 executor.execute(() -> {
-                    LoadingEventSource.getInstance().updateLoadingText(getString(R.string.importing));
+                    LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.importing));
                     LoadingEventSource.getInstance().showLoading();
                 });
                 executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));

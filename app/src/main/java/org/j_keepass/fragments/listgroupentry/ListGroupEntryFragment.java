@@ -54,7 +54,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
             if (show != null && show.equals("showEntryOnly")) {
                 GroupEntryEventSource.getInstance().showAllEntryOnly();
             } else {
-                GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+                GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getCurrentGroupId());
             }
         }
 
@@ -169,7 +169,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
             } catch (Throwable e) {
                 //ignore
             }
-            updateLoadingText(getString(R.string.loading) + " [0/" + totalSubs + "]");
+            updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [0/" + totalSubs + "]");
             ArrayList<GroupEntryData> subs;
             if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
                 if (query == null) {

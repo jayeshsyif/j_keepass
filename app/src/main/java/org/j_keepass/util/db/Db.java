@@ -247,6 +247,9 @@ public class Db {
     }
 
     public UUID getCurrentGroupId() {
+        if (currentGroupId == null) {
+            currentGroupId = getRootGroupId();
+        }
         return currentGroupId;
     }
 
