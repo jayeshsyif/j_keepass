@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/kp_margin"
+    android:background="?colorPrimary">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fieldCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/kp_always_5"
+        android:background="?colorPrimary"
+        android:backgroundTint="?colorPrimary"
+        app:cardBackgroundColor="?colorPrimary"
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimaryVariant"
+            android:padding="@dimen/kp_margin"
+            android:weightSum="100">
+
+            <TableRow>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fieldNameValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"
+                    android:background="?colorPrimary"
+                    android:backgroundTint="?colorPrimary"
+                    android:contentDescription="@string/enterFieldValue"
+                    android:textColorHint="?colorOnPrimary"
+                    app:boxStrokeColor="?colorSecondary"
+                    app:hintTextColor="?colorOnPrimary"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="?colorOnPrimary"
+                    app:placeholderTextColor="?colorOnPrimary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fieldValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?colorPrimaryVariant"
+                        android:backgroundTint="?colorPrimaryVariant"
+                        android:fontFamily="@font/spacemono_regular"
+                        android:hint="@string/enterFieldValue"
+                        android:inputType="textPassword"
+                        android:textColor="?colorSecondary"
+                        android:textColorHint="?colorOnPrimary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/fieldCopy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/kp_always_1"
+                    android:layout_marginTop="@dimen/kp_always_1"
+                    android:layout_marginEnd="@dimen/kp_always_1"
+                    android:layout_marginBottom="@dimen/kp_always_1"
+                    android:layout_weight="10"
+                    android:background="@drawable/background_transparent"
+                    android:contentDescription="@string/copy"
+                    android:minWidth="@dimen/kp_min_image_width"
+                    android:minHeight="@dimen/kp_min_image_height"
+                    android:src="@drawable/ic_content_copy_fill0_wght300_grad_25_opsz24"
+                    android:textAlignment="center"
+                    app:layout_constraintStart_toEndOf="@id/fieldNameValue"
+                    app:tint="?colorSecondary" />
+            </TableRow>
+        </TableLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -78,7 +78,7 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         }
         if (allExpiredEntriesCount > 0) {
             values.add(Float.valueOf(allExpiredEntriesCount));
-            colors.add(binding.graph.getResources().getColor(android.R.color.holo_red_dark));
+            colors.add(binding.graph.getResources().getColor(R.color.kp_red));
             text.add("Expired " + allExpiredEntriesCount);
         }
         if (allExpiringSoonEntriesCount > 0) {
@@ -96,7 +96,8 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         Util.log("Expiring Soon " + allExpiringSoonEntriesCount);
         Util.log("Good " + ok);
 
-        int textColor = getSecondaryColor(binding.graph.getContext());
+        //int textColor = getSecondaryColor(binding.graph.getContext());
+        int textColor = binding.graph.getResources().getColor(R.color.kp_static_white);
         float textSize = 30;
 
         colors.add(binding.graph.getResources().getColor(R.color.kp_green));

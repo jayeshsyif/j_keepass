@@ -258,6 +258,11 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
     }
 
     @Override
+    public void setEntry(UUID gId) {
+
+    }
+
+    @Override
     public void lock() {
         //ignore
     }

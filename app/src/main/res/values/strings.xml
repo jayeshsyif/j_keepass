@@ -49,6 +49,7 @@
     <string name="list">List</string>
     <string name="groupFolder">Group/Folder</string>
     <string name="entries">Entries</string>
+    <string name="entry">Entry</string>
     <string name="statistics">Statistics</string>
     <string name="groupName">Group Name</string>
     <string name="nothingHere">Nothing here .. !</string>
@@ -63,4 +64,7 @@
     <string name="good">Good</string>
     <string name="expiringSoon">Exp. Soon</string>
     <string name="expired">Expired</string>
+    <string name="enterFieldValue">Enter Field Value</string>
+    <string name="copy">Copy</string>
+    <string name="edit">Edit</string>
 </resources>

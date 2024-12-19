@@ -231,11 +231,19 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         runOnUiThread(() -> binding.groupNameOnTop.setText(Db.getInstance().getGroupName(gId)));
     }
 
+    @Override
+    public void setEntry(UUID eId) {
+        Db.getInstance().setCurrentEntryId(eId);
+        Intent intent = new Intent(this, FieldActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void configureBackPressed() {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Util.log("On back selected tab pos is "+binding.groupAndEntryTabLayout.getSelectedTabPosition());
+                Util.log("On back selected tab pos is " + binding.groupAndEntryTabLayout.getSelectedTabPosition());
                 if (binding.groupAndEntryTabLayout.getSelectedTabPosition() == 0) {
                     if (Db.getInstance().getRootGroupId().equals(Db.getInstance().getCurrentGroupId())) {
                         finish();

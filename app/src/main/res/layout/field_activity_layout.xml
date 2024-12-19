@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FieldActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?colorPrimary">
+
+        <RelativeLayout
+            android:id="@+id/entryTopRelLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/kp_always_5">
+
+            <TextView
+                android:id="@+id/entryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="?colorPrimary"
+                android:ellipsize="end"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/entry"
+                android:textAlignment="gravity"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?colorSecondary"
+                app:layout_constraintEnd_toStartOf="@id/entryMoreOption" />
+
+            <ImageButton
+                android:id="@+id/entryMoreOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="@string/moreOptionDesc"
+                android:minWidth="@dimen/kp_min_image_width"
+                android:minHeight="@dimen/kp_min_image_height"
+                android:src="@drawable/ic_more_hori_fill0_wght300_grad_25_opsz24"
+                app:layout_constraintStart_toEndOf="@id/entryName"
+                app:tint="?colorSecondary" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/entryTopRelLayout"
+            android:background="?colorPrimary">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/entryTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/background_transparent"
+                app:tabGravity="fill"
+                app:tabIconTint="?colorSecondary"
+                app:tabMode="fixed"
+                app:tabTextAppearance="?android:attr/textAppearanceSmall"
+                app:tabTextColor="?colorSecondary" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/entryFragmentContainerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/entryTabLayout" />
+
+        </RelativeLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/entryBottomNavigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="@dimen/kp_always_5"
+            android:background="@drawable/background_transparent">
+
+            <RelativeLayout
+                android:id="@+id/entryBottomNavigationRelLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/entryHomeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/round_corner_left_bottom_top_on_primary"
+                    android:contentDescription="@string/createNewDatabaseDesc"
+                    android:minWidth="@dimen/kp_min_image_width"
+                    android:minHeight="@dimen/kp_min_image_height"
+                    android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
+                    app:tint="?colorPrimary" />
+
+                <View
+                    android:id="@+id/emptyView1"
+                    android:layout_width="@dimen/kp_always_1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toEndOf="@id/entryHomeBtn"
+                    android:background="@drawable/background_transparent"
+                    app:tint="?colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/entryGenerateNewPasswordBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toEndOf="@id/emptyView1"
+                    android:background="?colorOnPrimary"
+                    android:contentDescription="@string/generateNewDatabaseDesc"
+                    android:minWidth="@dimen/kp_min_image_width"
+                    android:minHeight="@dimen/kp_min_image_height"
+                    android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
+                    app:tint="?colorPrimary" />
+
+
+                <View
+                    android:id="@+id/emptyView2"
+                    android:layout_width="@dimen/kp_always_1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toEndOf="@id/entryGenerateNewPasswordBtn"
+                    android:background="@drawable/background_transparent"
+                    app:tint="?colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/entryEditSaveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toEndOf="@id/emptyView2"
+                    android:background="@drawable/round_corner_right_bottom_top_on_primary"
+                    android:contentDescription="@string/edit"
+                    android:minWidth="@dimen/kp_min_image_width"
+                    android:minHeight="@dimen/kp_min_image_height"
+                    android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
+                    app:tint="?colorPrimary" />
+            </RelativeLayout>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

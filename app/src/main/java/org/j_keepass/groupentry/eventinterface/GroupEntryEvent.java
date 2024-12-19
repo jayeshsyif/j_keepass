@@ -8,4 +8,5 @@ public interface GroupEntryEvent {
     void showAll();
     void showAllEntryOnly();
     void showAllEntryOnly(String query);
+    void setEntry(UUID gId);
 }

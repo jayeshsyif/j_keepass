@@ -101,6 +101,11 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+        <activity
+            android:name=".FieldActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

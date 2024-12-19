@@ -160,7 +160,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_lock_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="@android:color/holo_red_light"></ImageButton>
+            app:tint="@color/kp_red"></ImageButton>
 
         <TextView
             android:layout_width="match_parent"

@@ -3,12 +3,12 @@
     android:shape="rectangle">
     <gradient
         android:angle="270"
-        android:endColor="@color/kp_red"
-        android:startColor="@color/kp_red" />
+        android:endColor="@color/kp_green"
+        android:startColor="@color/kp_green" />
     <corners
         android:bottomRightRadius="@dimen/kp_card_view_radius"
         android:topRightRadius="@dimen/kp_card_view_radius" />
     <stroke
         android:width="0.1dp"
-        android:color="@color/kp_red" />
+        android:color="@color/kp_green" />
 </shape>
