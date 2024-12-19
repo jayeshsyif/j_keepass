@@ -280,6 +280,7 @@ public class Db {
                 {
                     FieldData fd = new FieldData();
                     fd.name = FieldNameType.TITLE.toString();
+                    fd.fieldNameType = FieldNameType.TITLE;
                     fd.value = entry.getTitle();
                     fd.fieldValueType = FieldValueType.TEXT;
                     if (fd.value != null && fd.value.length() > 0) {
@@ -290,6 +291,7 @@ public class Db {
                     FieldData fd = new FieldData();
                     fd.name = FieldNameType.USERNAME.toString();
                     fd.value = entry.getUsername();
+                    fd.fieldNameType = FieldNameType.USERNAME;
                     fd.fieldValueType = FieldValueType.TEXT;
                     if (fd.value != null && fd.value.length() > 0) {
                         fields.add(fd);
@@ -300,6 +302,7 @@ public class Db {
                     fd.name = FieldNameType.PASSWORD.toString();
                     fd.value = entry.getPassword();
                     fd.fieldValueType = FieldValueType.PASSWORD;
+                    fd.fieldNameType = FieldNameType.PASSWORD;
                     if (fd.value != null && fd.value.length() > 0) {
                         fields.add(fd);
                     }
@@ -307,6 +310,7 @@ public class Db {
                 {
                     FieldData fd = new FieldData();
                     fd.name = FieldNameType.URL.toString();
+                    fd.fieldNameType = FieldNameType.URL;
                     fd.value = entry.getUrl();
                     fd.fieldValueType = FieldValueType.URL;
                     if (fd.value != null && fd.value.length() > 0) {
@@ -316,6 +320,7 @@ public class Db {
                 {
                     FieldData fd = new FieldData();
                     fd.name = FieldNameType.NOTES.toString();
+                    fd.fieldNameType = FieldNameType.NOTES;
                     fd.value = entry.getNotes();
                     fd.fieldValueType = FieldValueType.LARGE_TEXT;
                     if (fd.value != null && fd.value.length() > 0) {
@@ -327,6 +332,7 @@ public class Db {
                     fd.name = FieldNameType.CREATED_DATE.toString();
                     fd.value = Util.convertDateToString(entry.getCreationTime());
                     fd.fieldValueType = FieldValueType.TEXT;
+                    fd.fieldNameType = FieldNameType.CREATED_DATE;
                     if (fd.value != null && fd.value.length() > 0) {
                         fields.add(fd);
                     }
@@ -336,6 +342,7 @@ public class Db {
                     fd.name = FieldNameType.EXPIRY_DATE.toString();
                     fd.value = Util.convertDateToString(entry.getExpiryTime());
                     fd.fieldValueType = FieldValueType.TEXT;
+                    fd.fieldNameType = FieldNameType.EXPIRY_DATE;
                     if (fd.value != null && fd.value.length() > 0) {
                         fields.add(fd);
                     }
@@ -355,5 +362,29 @@ public class Db {
 
     public void setCurrentEntryId(UUID currentEntryId) {
         this.currentEntryId = currentEntryId;
+    }
+
+    public ArrayList<FieldData> getAdditionalFields(UUID eId) {
+        ArrayList<FieldData> fields = new ArrayList<>();
+        if (database != null) {
+            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            if (entry != null) {
+                if (entry.getPropertyNames().size() > 0) {
+                    for (String pn : entry.getPropertyNames()) {
+                        if (!pn.equalsIgnoreCase("username") && !pn.equalsIgnoreCase("password") && !pn.equalsIgnoreCase("url") && !pn.equalsIgnoreCase("title") && !pn.equalsIgnoreCase("notes")) {
+                            FieldData fd = new FieldData();
+                            fd.name = pn;
+                            fd.value = entry.getProperty(pn);
+                            fd.fieldNameType = FieldNameType.ADDITIONAL;
+                            fd.fieldValueType = FieldValueType.TEXT;
+                            if (fd.value != null && fd.value.length() > 0) {
+                                fields.add(fd);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return fields;
     }
 }

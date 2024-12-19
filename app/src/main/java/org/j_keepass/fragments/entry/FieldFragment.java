@@ -53,27 +53,40 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         View view = binding.getRoot();
         register();
         Util.log("Entry title is " + Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()));
+        AtomicReference<String> show = new AtomicReference<>("base");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String showBundle = bundle.getString("show");
+            if (showBundle != null && showBundle.length() > 0) {
+                show.set(showBundle);
+            }
+        }
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
         executor.execute(() -> binding.entryTitleView.setText(Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId())));
         executor.execute(this::dismissLoading);
-        executor.execute(this::setAdapterAndShowFields);
+        executor.execute(() -> setAdapterAndShowFields(show.get()));
         return view;
     }
 
-    private void setAdapterAndShowFields() {
+    private void setAdapterAndShowFields(final String show) {
         ExecutorService executor = getExecutor();
         executor.execute(() -> updateLoadingText(binding.getRoot().getContext().getString(R.string.loading)));
         executor.execute(this::showLoading);
         AtomicReference<ListFieldAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> adapter.set(configureRecyclerView(binding.entryFieldsRecyclerView.getContext())));
-        executor.execute(() -> showFields(adapter.get()));
+        executor.execute(() -> showFields(adapter.get(), show));
         executor.execute(this::dismissLoading);
     }
 
-    private void showFields(ListFieldAdapter adapter) {
-        ArrayList<FieldData> fields = Db.getInstance().getFields(Db.getInstance().getCurrentEntryId());
-        if(fields != null && fields.size() > 0) {
+    private void showFields(ListFieldAdapter adapter, final String show) {
+        ArrayList<FieldData> fields = null;
+        if (show.equals("base")) {
+            fields = Db.getInstance().getFields(Db.getInstance().getCurrentEntryId());
+        } else {
+            fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId());
+        }
+        if (fields != null && fields.size() > 0) {
             requireActivity().runOnUiThread(() -> {
                 binding.entryFieldsRecyclerView.setVisibility(View.VISIBLE);
                 binding.entryTitleView.setVisibility(View.GONE);

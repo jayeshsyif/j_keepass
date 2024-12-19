@@ -6,5 +6,6 @@ public class FieldData {
     public UUID id;
     public String name;
     public String value;
+    public FieldNameType fieldNameType;
     public FieldValueType fieldValueType;
 }
