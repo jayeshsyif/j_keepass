@@ -132,6 +132,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
 
     private void destroy() {
         Util.log("unregister");
+        Db.getInstance().removeCacheEntry();
         unregister();
         shutDownExecutor();
     }

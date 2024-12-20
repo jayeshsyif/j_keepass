@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -23,8 +21,6 @@ import org.j_keepass.db.eventinterface.DbAndFileOperations;
 import org.j_keepass.db.eventinterface.DbEvent;
 import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.fragments.listdatabase.ListDatabaseFragment;
-import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
-import org.j_keepass.landing.eventinterface.MoreOptionsEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
@@ -46,7 +42,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class LandingAndListDatabaseActivity extends AppCompatActivity implements MoreOptionsEvent, ThemeEvent, DbEvent, PermissionEvent, GenerateNewPwdEvent {
+public class LandingAndListDatabaseActivity extends AppCompatActivity implements ThemeEvent, DbEvent, PermissionEvent, GenerateNewPwdEvent {
     private LandingAndListDatabaseActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -68,7 +64,6 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     private void register() {
         GenerateNewPasswordEventSource.getInstance().addListener(this);
-        MoreOptionEventSource.getInstance().addListener(this);
         ThemeEventSource.getInstance().addListener(this);
         DbEventSource.getInstance().addListener(this);
         PermissionEventSource.getInstance().addListener(this);
@@ -89,8 +84,8 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     }
 
     private void configureClicks() {
-        binding.landingMoreOption.setOnClickListener(view -> MoreOptionEventSource.getInstance().showMenu(view.getContext()));
-        binding.landingCreateDatabaseBtn.setOnClickListener(view -> MoreOptionEventSource.getInstance().showCreateNewDb(view.getContext()));
+        binding.landingMoreOption.setOnClickListener(view -> showMenu(view.getContext()));
+        binding.landingCreateDatabaseBtn.setOnClickListener(view -> new BsdUtil().showCreateDbBsd(view.getContext()));
         binding.landingGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
             executor.execute(() -> {
@@ -99,7 +94,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
         });
-        binding.landingInfoBtn.setOnClickListener(view -> MoreOptionEventSource.getInstance().showInfo(view.getContext()));
+        binding.landingInfoBtn.setOnClickListener(view -> showInfo(view.getContext()));
     }
 
     @Override
@@ -116,7 +111,6 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     }
 
     private void unregister() {
-        MoreOptionEventSource.getInstance().removeListener(this);
         ThemeEventSource.getInstance().removeListener(this);
         DbEventSource.getInstance().removeListener(this);
         PermissionEventSource.getInstance().removeListener(this);
@@ -198,24 +192,10 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    @Override
     public void showMenu(Context context) {
         Util.log("Show menu via listener");
         new BsdUtil().showLandingMoreOptionsMenu(context, this);
     }
-
-    @Override
-    public void changeThemeIsClickedShowThemes(Context context) {
-        Util.log("Change theme option in menu is clicked");
-        new BsdUtil().showThemesMenu(context);
-    }
-
-    @Override
-    public void showCreateNewDb(Context context) {
-        Util.log("Showing db create bsd");
-        new BsdUtil().showCreateDbBsd(context);
-    }
-
 
     @Override
     public void generateNewPwd(boolean useDigit, boolean useUpperCase, boolean useLowerCase, boolean useSymbol, int length) {
@@ -243,7 +223,6 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         });
     }
 
-    @Override
     public void showInfo(Context context) {
         new BsdUtil().showInfo(context);
     }
@@ -385,19 +364,17 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Util.log("Permission requestCode "+requestCode);
+        Util.log("Permission requestCode " + requestCode);
         int READ_EXTERNAL_STORAGE = 100;
         int ALARM = 101;
-        if (requestCode == READ_EXTERNAL_STORAGE)
-        {
+        if (requestCode == READ_EXTERNAL_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 PermissionEventSource.getInstance().permissionGranted(Action.IMPORT);
             } else {
                 PermissionEventSource.getInstance().permissionDenied(Action.IMPORT);
             }
         }
-        if (requestCode == ALARM)
-        {
+        if (requestCode == ALARM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 PermissionEventSource.getInstance().permissionGranted(Action.ALARM);
             } else {
@@ -410,7 +387,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Util.log("requestCode "+requestCode);
+        Util.log("requestCode " + requestCode);
         if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
             if (resultCode == -1) {
                 AtomicReference<String> dirPath = new AtomicReference<>("");

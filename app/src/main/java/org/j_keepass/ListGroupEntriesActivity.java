@@ -19,8 +19,6 @@ import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
-import org.j_keepass.listgroupentry.eventinterface.MoreOptionEventSource;
-import org.j_keepass.listgroupentry.eventinterface.MoreOptionsEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
@@ -37,7 +35,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent, MoreOptionsEvent {
+public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent {
     private ListGroupEntryActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
 
@@ -69,7 +67,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
         });
-        binding.groupMoreOption.setOnClickListener(view -> MoreOptionEventSource.getInstance().showMenu(view.getContext()));
+        binding.groupMoreOption.setOnClickListener(view -> showMenu(view.getContext()));
     }
 
     private ExecutorService getExecutor() {
@@ -81,13 +79,11 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     private void register() {
         GenerateNewPasswordEventSource.getInstance().addListener(this);
         GroupEntryEventSource.getInstance().addListener(this);
-        MoreOptionEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
         GroupEntryEventSource.getInstance().removeListener(this);
-        MoreOptionEventSource.getInstance().removeListener(this);
     }
 
     @Override
@@ -331,7 +327,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         });
     }
 
-    @Override
     public void showMenu(Context context) {
         new org.j_keepass.util.bsd.groupentry.BsdUtil().showGroupEntryMoreOptionsMenu(context, this, Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
     }

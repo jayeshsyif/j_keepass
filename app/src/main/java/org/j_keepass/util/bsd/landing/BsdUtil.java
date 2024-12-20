@@ -25,7 +25,6 @@ import org.j_keepass.R;
 import org.j_keepass.adapter.ListThemesAdapter;
 import org.j_keepass.db.eventinterface.DbAndFileOperations;
 import org.j_keepass.db.eventinterface.DbEventSource;
-import org.j_keepass.landing.eventinterface.MoreOptionEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.permission.eventinterface.PermissionEvent;
@@ -51,14 +50,14 @@ public class BsdUtil {
         if (landingMoreOptionChangeTheme != null) {
             landingMoreOptionChangeTheme.setOnClickListener(view -> {
                 bsd.dismiss();
-                MoreOptionEventSource.getInstance().changeThemeIsClickedShowThemes(context);
+                showThemesMenu(context);
             });
         }
         LinearLayout landingMoreOptionCreateDb = bsd.findViewById(R.id.landingMoreOptionCreateDb);
         if (landingMoreOptionCreateDb != null) {
             landingMoreOptionCreateDb.setOnClickListener(view -> {
                 bsd.dismiss();
-                MoreOptionEventSource.getInstance().showCreateNewDb(view.getContext());
+                showCreateDbBsd(view.getContext());
             });
         }
         LinearLayout landingMoreOptionGenerateNewPassword = bsd.findViewById(R.id.landingMoreOptionGenerateNewPassword);
@@ -78,7 +77,7 @@ public class BsdUtil {
         if (landingMoreOptionInfo != null) {
             landingMoreOptionInfo.setOnClickListener(view -> {
                 bsd.dismiss();
-                MoreOptionEventSource.getInstance().showInfo(view.getContext());
+                showInfo(view.getContext());
             });
         }
 
