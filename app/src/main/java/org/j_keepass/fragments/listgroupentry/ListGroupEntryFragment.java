@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.j_keepass.R;
 import org.j_keepass.adapter.ListGroupEntryAdapter;
 import org.j_keepass.databinding.ListAllGroupEntryFragmentBinding;
+import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
@@ -262,7 +263,22 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
 
     @Override
     public void setEntry(UUID gId) {
+        // ignore
+    }
 
+    @Override
+    public void updateCacheEntry(UUID eId) {
+        // ignore
+    }
+
+    @Override
+    public void updateEntryField(UUID eId, FieldData fieldData) {
+        // ignore
+    }
+
+    @Override
+    public void updateEntry(UUID eId) {
+        // ignore
     }
 
     @Override

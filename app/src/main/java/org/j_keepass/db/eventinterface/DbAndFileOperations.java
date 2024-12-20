@@ -87,10 +87,9 @@ public class DbAndFileOperations {
         return fromTo;
     }
 
-    public void writeDbToFile(File file, String pwd, ContentResolver contentResolver) {
+    public void writeDbToFile(File file, byte[] pwd, ContentResolver contentResolver, Database<?, ?, ?, ?> database) {
         Uri kdbxFileUri = Uri.fromFile(file);
-        KdbxCreds creds = new KdbxCreds(pwd.getBytes(StandardCharsets.UTF_8));
-        Database<?, ?, ?, ?> database = new DummyDbDataUtil().getDummyDatabase();
+        KdbxCreds creds = new KdbxCreds(pwd);
         OutputStream fileOutputStream = null;
         try {
             fileOutputStream = contentResolver.openOutputStream(kdbxFileUri, "wt");
@@ -135,6 +134,7 @@ public class DbAndFileOperations {
                     fromTo.setExecutable(true, true);
                     fromTo.setReadable(true, true);
                 } catch (IOException e) {
+                    // ignore
                 }
             }
 
@@ -142,6 +142,7 @@ public class DbAndFileOperations {
             try {
                 inputStream = contentResolver.openInputStream(uri);
             } catch (FileNotFoundException e) {
+                // ignore
             }
 
             FileOutputStream outputStream = null;
@@ -149,18 +150,20 @@ public class DbAndFileOperations {
                 outputStream = new FileOutputStream(fromTo);
                 ByteStreams.copy(inputStream, outputStream);
             } catch (Throwable e) {
+                // ignore
             } finally {
                 if (outputStream != null) {
                     try {
                         outputStream.close();
                     } catch (IOException e) {
+                        // ignore
                     }
                 }
                 if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (Exception e) {
-
+                        // ignore
                     }
                 }
             }
@@ -169,20 +172,22 @@ public class DbAndFileOperations {
 
 
     public void openDb(String dbName, String pwd, String fullPath, ContentResolver contentResolver) {
-        Util.log("Loading "+fullPath);
+        Util.log("Loading " + fullPath);
         KdbxCreds creds = new KdbxCreds(pwd.getBytes());
-        Uri kdbxFileUri = Uri.fromFile(new File(fullPath));
+        File kdbxFile = new File(fullPath);
+        Uri kdbxFileUri = Uri.fromFile(kdbxFile);
         InputStream inputStream = null;
         try {
             inputStream = contentResolver.openInputStream(kdbxFileUri);
         } catch (FileNotFoundException e) {
+            // ignore
         }
         if (inputStream != null) {
             try {
                 Database<?, ?, ?, ?> database = SimpleDatabase.load(creds, inputStream);
                 if (database != null) {
                     Util.log("Load done");
-                    Db.getInstance().setDatabase(database);
+                    Db.getInstance().setDatabase(database, kdbxFile, pwd.getBytes());
                     DbEventSource.getInstance().loadSuccessDb();
                 } else {
                     DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
@@ -195,6 +200,7 @@ public class DbAndFileOperations {
                 try {
                     inputStream.close();
                 } catch (Exception e) {
+                    // ignore
                 }
             }
         }

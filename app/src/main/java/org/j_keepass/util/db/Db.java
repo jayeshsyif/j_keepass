@@ -1,5 +1,8 @@
 package org.j_keepass.util.db;
 
+import android.content.ContentResolver;
+
+import org.j_keepass.db.eventinterface.DbAndFileOperations;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
@@ -12,6 +15,7 @@ import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
 import org.linguafranca.pwdb.Group;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,9 +38,15 @@ public class Db {
     private UUID currentGroupId = null;
 
     private UUID currentEntryId = null;
+    private ArrayList<UUID> listOfEntriesNotUpdatedInDb = new ArrayList<>();
 
-    public void setDatabase(Database<?, ?, ?, ?> database) {
+    private byte[] pwd = null;
+    private File kdbxFile = null;
+
+    public void setDatabase(Database<?, ?, ?, ?> database, File kdbxFile, byte[] pwd) {
         this.database = database;
+        this.kdbxFile = kdbxFile;
+        this.pwd = pwd;
     }
 
     public String getDbName() {
@@ -263,8 +273,11 @@ public class Db {
 
     public void deSetDatabase() {
         database = null;
+        pwd = null;
+        kdbxFile = null;
         currentGroupId = null;
         currentEntryId = null;
+        listOfEntriesNotUpdatedInDb = new ArrayList<>();
     }
 
     public UUID getCurrentGroupId() {
@@ -278,99 +291,105 @@ public class Db {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
             Entry<?, ?, ?, ?> entry = database.findEntry(eId);
-            if (entry != null) {
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.TITLE.toString();
-                    fd.fieldNameType = FieldNameType.TITLE;
-                    fd.value = entry.getTitle();
-                    fd.fieldValueType = FieldValueType.TEXT;
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            fields = getFields(entry);
+        }
+        return fields;
+    }
+
+    private ArrayList<FieldData> getFields(Entry<?, ?, ?, ?> entry) {
+        ArrayList<FieldData> fields = new ArrayList<>();
+        if (entry != null) {
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.TITLE.toString();
+                fd.fieldNameType = FieldNameType.TITLE;
+                fd.value = entry.getTitle();
+                fd.fieldValueType = FieldValueType.TEXT;
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.USERNAME.toString();
-                    fd.value = entry.getUsername();
-                    fd.fieldNameType = FieldNameType.USERNAME;
-                    fd.fieldValueType = FieldValueType.TEXT;
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.USERNAME.toString();
+                fd.value = entry.getUsername();
+                fd.fieldNameType = FieldNameType.USERNAME;
+                fd.fieldValueType = FieldValueType.TEXT;
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.PASSWORD.toString();
-                    fd.value = entry.getPassword();
-                    fd.fieldValueType = FieldValueType.PASSWORD;
-                    fd.fieldNameType = FieldNameType.PASSWORD;
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.PASSWORD.toString();
+                fd.value = entry.getPassword();
+                fd.fieldValueType = FieldValueType.PASSWORD;
+                fd.fieldNameType = FieldNameType.PASSWORD;
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.URL.toString();
-                    fd.fieldNameType = FieldNameType.URL;
-                    fd.value = entry.getUrl();
-                    fd.fieldValueType = FieldValueType.URL;
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.URL.toString();
+                fd.fieldNameType = FieldNameType.URL;
+                fd.value = entry.getUrl();
+                fd.fieldValueType = FieldValueType.URL;
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.NOTES.toString();
-                    fd.fieldNameType = FieldNameType.NOTES;
-                    fd.value = entry.getNotes();
-                    fd.fieldValueType = FieldValueType.LARGE_TEXT;
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.NOTES.toString();
+                fd.fieldNameType = FieldNameType.NOTES;
+                fd.value = entry.getNotes();
+                fd.fieldValueType = FieldValueType.LARGE_TEXT;
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.CREATED_DATE.toString();
-                    fd.value = Util.convertDateToString(entry.getCreationTime());
-                    fd.fieldValueType = FieldValueType.TEXT;
-                    fd.fieldNameType = FieldNameType.CREATED_DATE;
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.CREATED_DATE.toString();
+                fd.value = Util.convertDateToString(entry.getCreationTime());
+                fd.fieldValueType = FieldValueType.TEXT;
+                fd.fieldNameType = FieldNameType.CREATED_DATE;
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.EXPIRY_DATE.toString();
-                    fd.value = Util.convertDateToString(entry.getExpiryTime());
-                    fd.fieldValueType = FieldValueType.TEXT;
-                    fd.fieldNameType = FieldNameType.EXPIRY_DATE;
-                    fd.expiryDate = entry.getExpiryTime();
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.EXPIRY_DATE.toString();
+                fd.value = Util.convertDateToString(entry.getExpiryTime());
+                fd.fieldValueType = FieldValueType.TEXT;
+                fd.fieldNameType = FieldNameType.EXPIRY_DATE;
+                fd.expiryDate = entry.getExpiryTime();
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.LAST_ACCESSED.toString();
-                    fd.value = Util.convertDateToString(entry.getLastAccessTime());
-                    fd.fieldValueType = FieldValueType.TEXT;
-                    fd.fieldNameType = FieldNameType.DATE;
-                    fd.expiryDate = entry.getExpiryTime();
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.LAST_ACCESSED.toString();
+                fd.value = Util.convertDateToString(entry.getLastAccessTime());
+                fd.fieldValueType = FieldValueType.TEXT;
+                fd.fieldNameType = FieldNameType.DATE;
+                fd.expiryDate = entry.getExpiryTime();
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
-                {
-                    FieldData fd = new FieldData();
-                    fd.name = FieldNameType.LAST_MODIFIED.toString();
-                    fd.value = Util.convertDateToString(entry.getLastModificationTime());
-                    fd.fieldValueType = FieldValueType.TEXT;
-                    fd.fieldNameType = FieldNameType.DATE;
-                    fd.expiryDate = entry.getExpiryTime();
-                    if (fd.value != null && fd.value.length() > 0) {
-                        fields.add(fd);
-                    }
+            }
+            {
+                FieldData fd = new FieldData();
+                fd.name = FieldNameType.LAST_MODIFIED.toString();
+                fd.value = Util.convertDateToString(entry.getLastModificationTime());
+                fd.fieldValueType = FieldValueType.TEXT;
+                fd.fieldNameType = FieldNameType.DATE;
+                fd.expiryDate = entry.getExpiryTime();
+                if (fd.value != null && fd.value.length() > 0) {
+                    fields.add(fd);
                 }
             }
         }
@@ -389,7 +408,7 @@ public class Db {
         this.currentEntryId = currentEntryId;
     }
 
-    public ArrayList<FieldData> getAdditionalFields(UUID eId) {
+    public ArrayList<FieldData> getAdditionalFields(Entry<?, ?, ?, ?> entry) {
         ArrayList<String> ignoreFields = new ArrayList<>() {{
             add("username".toLowerCase());
             add("password".toLowerCase());
@@ -398,26 +417,32 @@ public class Db {
             add("notes".toLowerCase());
         }};
         ArrayList<FieldData> fields = new ArrayList<>();
-        if (database != null) {
-            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
-            if (entry != null) {
-                if (entry.getPropertyNames().size() > 0) {
-                    for (String pn : entry.getPropertyNames()) {
-                        Util.log("Additional property found " + pn);
-                        if (!ignoreFields.contains(pn.toLowerCase())) {
-                            FieldData fd = new FieldData();
-                            fd.name = pn;
-                            fd.value = entry.getProperty(pn);
-                            fd.fieldNameType = FieldNameType.ADDITIONAL;
-                            fd.fieldValueType = FieldValueType.TEXT;
-                            if (fd.value != null && fd.value.length() > 0) {
-                                Util.log("Additional property added " + pn);
-                                fields.add(fd);
-                            }
+        if (entry != null) {
+            if (entry.getPropertyNames().size() > 0) {
+                for (String pn : entry.getPropertyNames()) {
+                    Util.log("Additional property found " + pn);
+                    if (!ignoreFields.contains(pn.toLowerCase())) {
+                        FieldData fd = new FieldData();
+                        fd.name = pn;
+                        fd.value = entry.getProperty(pn);
+                        fd.fieldNameType = FieldNameType.ADDITIONAL;
+                        fd.fieldValueType = FieldValueType.TEXT;
+                        if (fd.value != null && fd.value.length() > 0) {
+                            Util.log("Additional property added " + pn);
+                            fields.add(fd);
                         }
                     }
                 }
             }
+        }
+        return fields;
+    }
+
+    public ArrayList<FieldData> getAdditionalFields(UUID eId) {
+        ArrayList<FieldData> fields = new ArrayList<>();
+        if (database != null) {
+            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            fields = getAdditionalFields(entry);
         }
         return fields;
     }
@@ -443,5 +468,64 @@ public class Db {
             }
         }
         return fields;
+    }
+
+
+    public boolean updateEntryField(UUID eId, FieldData fieldData) {
+        boolean isUpdated = false;
+        if (database != null) {
+            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            if (entry != null) {
+                updateEntryField(entry, fieldData);
+                isUpdated = true;
+            }
+        }
+        return isUpdated;
+    }
+
+    private boolean updateEntryField(Entry<?, ?, ?, ?> entry, FieldData fieldData) {
+        boolean isUpdated = false;
+        if (database != null) {
+            if (entry != null) {
+                if (fieldData.fieldNameType.name().equals(FieldNameType.USERNAME.name())) {
+                    entry.setUsername(fieldData.value);
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.PASSWORD.name())) {
+                    entry.setPassword(fieldData.value);
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.NOTES.name())) {
+                    entry.setNotes(fieldData.value);
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.URL.name())) {
+                    entry.setUrl(fieldData.value);
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.TITLE.name())) {
+                    entry.setTitle(fieldData.value);
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.EXPIRY_DATE.name())) {
+                    entry.setExpiryTime(Util.convertStringToDate(fieldData.value));
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.ADDITIONAL.name())) {
+                    entry.setProperty(fieldData.name, fieldData.value);
+                } else if (fieldData.fieldNameType.name().equals(FieldNameType.ATTACHMENT.name())) {
+                }
+                isUpdated = true;
+            }
+        }
+        return isUpdated;
+    }
+
+    public void updateCacheEntry(UUID eId) {
+        if (!listOfEntriesNotUpdatedInDb.contains(eId)) {
+            listOfEntriesNotUpdatedInDb.add(eId);
+        }
+    }
+
+    public boolean isEntryNotUpdatedInDb(UUID eId) {
+        return listOfEntriesNotUpdatedInDb.contains(eId);
+    }
+
+    public void updateDb(ContentResolver contentResolver) {
+        new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+    }
+
+    public void updateEntry(UUID eId) {
+        if (!listOfEntriesNotUpdatedInDb.contains(eId)) {
+            listOfEntriesNotUpdatedInDb.remove(eId);
+        }
     }
 }

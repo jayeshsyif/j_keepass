@@ -14,6 +14,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
 import org.j_keepass.fragments.entry.FieldFragment;
+import org.j_keepass.fragments.entry.dtos.FieldData;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
@@ -27,10 +29,11 @@ import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent {
+public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, GroupEntryEvent {
     private FieldActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
 
@@ -45,8 +48,11 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
         Intent intent = getIntent();
         isEdit = intent.getBooleanExtra("isEdit", false);
         if (isEdit) {
-            binding.entryEditSaveBtn.setImageDrawable(binding.entryEditSaveBtn.getResources().getDrawable(R.drawable.ic_save_fill0_wght300_grad_25_opsz24));
-            binding.entryEditSaveBtn.setBackgroundResource(R.drawable.round_corner_right_bottom_top_green);
+            binding.entryEditBtn.setVisibility(View.GONE);
+            binding.entrySaveBtn.setVisibility(View.VISIBLE);
+        } else {
+            binding.entryEditBtn.setVisibility(View.VISIBLE);
+            binding.entrySaveBtn.setVisibility(View.GONE);
         }
         register();
         ExecutorService executor = getExecutor();
@@ -63,10 +69,12 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     }
 
     private void register() {
+        GroupEntryEventSource.getInstance().addListener(this);
         GenerateNewPasswordEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
+        GroupEntryEventSource.getInstance().removeListener(this);
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
     }
 
@@ -77,11 +85,19 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             startActivity(intent);
             finish();
         });
-        binding.entryEditSaveBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, FieldActivity.class);
-            intent.putExtra("isEdit", true);
-            startActivity(intent);
-            finish();
+        binding.entryEditBtn.setOnClickListener(view -> {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.opening));
+                LoadingEventSource.getInstance().showLoading();
+            });
+            executor.execute(() -> GroupEntryEventSource.getInstance().updateCacheEntry(Db.getInstance().getCurrentEntryId()));
+            executor.execute(() -> runOnUiThread(() -> {
+                Intent intent = new Intent(this, FieldActivity.class);
+                intent.putExtra("isEdit", true);
+                startActivity(intent);
+                finish();
+            }));
         });
         binding.entryGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
@@ -90,6 +106,20 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                 LoadingEventSource.getInstance().showLoading();
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
+        });
+        binding.entrySaveBtn.setOnClickListener(view -> {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.saving));
+                LoadingEventSource.getInstance().showLoading();
+            });
+            executor.execute(() -> GroupEntryEventSource.getInstance().updateEntry(Db.getInstance().getCurrentEntryId()));
+            executor.execute(() -> runOnUiThread(() -> {
+                Intent intent = new Intent(this, ListGroupEntriesActivity.class);
+                intent.putExtra("isEdit", true);
+                startActivity(intent);
+                finish();
+            }));
         });
     }
 
@@ -257,5 +287,53 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             LoadingEventSource.getInstance().updateLoadingText(errorMsg);
             LoadingEventSource.getInstance().showLoading();
         });
+    }
+
+    @Override
+    public void setGroup(UUID gId) {
+        // ignore
+    }
+
+    @Override
+    public void lock() {
+        // ignore
+    }
+
+    @Override
+    public void showAll() {
+        // ignore
+    }
+
+    @Override
+    public void showAllEntryOnly() {
+        // ignore
+    }
+
+    @Override
+    public void showAllEntryOnly(String query) {
+        // ignore
+    }
+
+    @Override
+    public void setEntry(UUID eId) {
+        // ignore
+    }
+
+    @Override
+    public void updateCacheEntry(UUID eId) {
+        Util.log("Updating Cached entry");
+        Db.getInstance().updateCacheEntry(eId);
+    }
+
+    @Override
+    public void updateEntryField(UUID eId, FieldData fieldData) {
+        Util.log("Updating " + fieldData.name + " to " + fieldData.value);
+        Db.getInstance().updateEntryField(eId, fieldData);
+    }
+
+    @Override
+    public void updateEntry(UUID eId) {
+        Db.getInstance().updateDb(getContentResolver());
+        Db.getInstance().updateEntry(eId);
     }
 }

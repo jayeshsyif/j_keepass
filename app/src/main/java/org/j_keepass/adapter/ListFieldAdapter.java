@@ -19,10 +19,9 @@ import org.j_keepass.databinding.FieldItemViewBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
-import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.DateAndTimePickerUtil;
-import org.j_keepass.util.Pair;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
@@ -87,7 +86,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                 if (isExpiryDate) {
                     Util.setExpiryText(holder.expiryStatus, Db.getInstance().getStatus(holder.mItem.expiryDate));
                     if (isEditable) {
-                        holder.fieldCopy.setImageDrawable(holder.fieldCopy.getResources().getDrawable(R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
+                        holder.fieldCopy.setImageDrawable(holder.fieldCopy.getContext().getDrawable(R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
                         holder.fieldCopy.setOnClickListener(view -> new DateAndTimePickerUtil().showDateAndTimePicker(holder.editText, holder.mItem.expiryDate));
                     }
                 } else {
@@ -112,6 +111,18 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             if (!isEditable && !isAttachment && !isCreatedOrExpiryDate && !isDateOtherThenCreateAndExpire) {
                 holder.fieldCopy.setVisibility(View.VISIBLE);
                 holder.fieldCopy.setOnClickListener(view -> CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value));
+            }
+            if (isEditable) {
+                holder.editText.setOnFocusChangeListener((view, hasFocus) -> {
+                    if (!hasFocus && holder.editText.getText() != null) {
+                        String inputValue = holder.editText.getText().toString();
+                        if (inputValue != null) {
+                            holder.mItem.value = inputValue;
+                            Util.log("Calling update field Value");
+                            GroupEntryEventSource.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), holder.mItem);
+                        }
+                    }
+                });
             }
         }
     }

@@ -31,10 +31,12 @@ import org.j_keepass.theme.eventinterface.ThemeEventSource;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.bsd.landing.BsdUtil;
+import org.j_keepass.util.db.DummyDbDataUtil;
 import org.j_keepass.util.theme.SetTheme;
 import org.j_keepass.util.theme.Theme;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -297,7 +299,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         });
         executor.execute(() -> {
             if (proceed.get()) {
-                new DbAndFileOperations().writeDbToFile(newDbFile.get(), pwd, getContentResolver());
+                new DbAndFileOperations().writeDbToFile(newDbFile.get(), pwd.getBytes(StandardCharsets.UTF_8), getContentResolver(), new DummyDbDataUtil().getDummyDatabase());
             }
         });
         executor.execute(() -> {

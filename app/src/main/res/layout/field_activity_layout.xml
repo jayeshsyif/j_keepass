@@ -27,7 +27,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/spacemono_bold"
                 android:gravity="center"
-                android:maxLines="1"
+                android:maxLines="@integer/max_lines"
                 android:singleLine="true"
                 android:text="@string/entry"
                 android:textAlignment="gravity"
@@ -138,7 +138,7 @@
                     app:tint="?colorPrimary" />
 
                 <ImageButton
-                    android:id="@+id/entryEditSaveBtn"
+                    android:id="@+id/entryEditBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -148,6 +148,18 @@
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
                     android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
+                    app:tint="?colorPrimary" />
+                <ImageButton
+                    android:id="@+id/entrySaveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toEndOf="@id/entryEditBtn"
+                    android:background="@drawable/round_corner_right_bottom_top_green"
+                    android:contentDescription="@string/edit"
+                    android:minWidth="@dimen/kp_min_image_width"
+                    android:minHeight="@dimen/kp_min_image_height"
+                    android:src="@drawable/ic_save_fill0_wght300_grad_25_opsz24"
                     app:tint="?colorPrimary" />
             </RelativeLayout>
         </com.google.android.material.bottomnavigation.BottomNavigationView>

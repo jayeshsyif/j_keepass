@@ -1,6 +1,7 @@
 package org.j_keepass.groupentry.eventinterface;
 
 
+import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.util.Util;
 
 import java.util.ArrayList;
@@ -28,17 +29,30 @@ public class GroupEntryEventSource {
         listeners.remove(listener);
     }
 
-    public void setGroup(UUID uuid) {
+    public void setGroup(UUID gId) {
         Util.log("In listener set group");
         for (GroupEntryEvent listener : listeners) {
-            listener.setGroup(uuid);
+            listener.setGroup(gId);
         }
     }
 
-    public void setEntry(UUID uuid) {
+    public void setEntry(UUID eId) {
         Util.log("In listener set entry");
         for (GroupEntryEvent listener : listeners) {
-            listener.setEntry(uuid);
+            listener.setEntry(eId);
+        }
+    }
+
+    public void updateEntry(UUID eId) {
+        Util.log("In listener update entry");
+        for (GroupEntryEvent listener : listeners) {
+            listener.updateEntry(eId);
+        }
+    }
+    public void updateCacheEntry(UUID eId) {
+        Util.log("In listener update cached entry");
+        for (GroupEntryEvent listener : listeners) {
+            listener.updateCacheEntry(eId);
         }
     }
 
@@ -57,7 +71,7 @@ public class GroupEntryEventSource {
     }
 
     public void showAllEntryOnly(String query) {
-        Util.log("In listener show entry only with query "+query);
+        Util.log("In listener show entry only with query " + query);
         for (GroupEntryEvent listener : listeners) {
             listener.showAllEntryOnly(query);
         }
@@ -67,6 +81,13 @@ public class GroupEntryEventSource {
         Util.log("In listener show group only");
         for (GroupEntryEvent listener : listeners) {
             listener.showAll();
+        }
+    }
+
+    public void updateEntryField(UUID eId, FieldData fieldData) {
+        Util.log("In listener update entry field");
+        for (GroupEntryEvent listener : listeners) {
+            listener.updateEntryField(eId, fieldData);
         }
     }
 }

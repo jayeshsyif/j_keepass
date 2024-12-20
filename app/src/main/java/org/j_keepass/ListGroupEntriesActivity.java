@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
 import org.j_keepass.fragments.StatsFragment;
+import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
@@ -237,6 +238,21 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         Intent intent = new Intent(this, FieldActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void updateCacheEntry(UUID eId) {
+        // ignore
+    }
+
+    @Override
+    public void updateEntryField(UUID eId, FieldData fieldData) {
+        // ignore
+    }
+
+    @Override
+    public void updateEntry(UUID eId) {
+        // ignore
     }
 
     private void configureBackPressed() {

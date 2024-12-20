@@ -27,7 +27,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/spacemono_bold"
                 android:gravity="center"
-                android:maxLines="1"
+                android:maxLines="@integer/max_lines"
                 android:singleLine="true"
                 android:text="@string/app_name"
                 android:textAlignment="gravity"

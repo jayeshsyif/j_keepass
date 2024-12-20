@@ -17,17 +17,19 @@ import org.j_keepass.databinding.FieldFragmentBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class FieldFragment extends Fragment implements LoadingEvent {
+public class FieldFragment extends Fragment implements LoadingEvent, GroupEntryEvent {
 
     private FieldFragmentBinding binding;
 
@@ -51,7 +53,7 @@ public class FieldFragment extends Fragment implements LoadingEvent {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Util.log("List graph frag on create view");
+        Util.log("List entry frag on create view");
         View view = binding.getRoot();
         register();
         Util.log("Entry title is " + Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()));
@@ -84,6 +86,7 @@ public class FieldFragment extends Fragment implements LoadingEvent {
     }
 
     private void showFields(ListFieldAdapter adapter, final String show) {
+        Util.log("Entry show with " + show + " is edit as ");
         ArrayList<FieldData> fields;
         if (show.equals("additional")) {
             fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId());
@@ -197,5 +200,48 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         } catch (Exception e) {
             //ignore
         }
+    }
+
+    @Override
+    public void setGroup(UUID gId) {
+        //ignore
+    }
+
+    @Override
+    public void lock() {
+        //ignore
+    }
+
+    @Override
+    public void showAll() {
+        //ignore
+    }
+
+    @Override
+    public void showAllEntryOnly() {
+        //ignore
+    }
+
+    @Override
+    public void showAllEntryOnly(String query) {
+        //ignore
+    }
+
+    @Override
+    public void setEntry(UUID eId) {
+        //ignore
+    }
+
+    @Override
+    public void updateCacheEntry(UUID eId) {
+    }
+
+    @Override
+    public void updateEntryField(UUID eId, FieldData fieldData) {
+    }
+
+    @Override
+    public void updateEntry(UUID eId) {
+        // ignore
     }
 }
