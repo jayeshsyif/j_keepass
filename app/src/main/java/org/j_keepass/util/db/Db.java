@@ -2,7 +2,7 @@ package org.j_keepass.util.db;
 
 import android.content.ContentResolver;
 
-import org.j_keepass.db.eventinterface.DbAndFileOperations;
+import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;

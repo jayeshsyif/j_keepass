@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.j_keepass.LandingAndListDatabaseActivity;
-import org.j_keepass.theme.eventinterface.ThemeEvent;
+import org.j_keepass.theme.event.ThemeEvent;
 import org.j_keepass.util.Util;
 
 public class SetTheme {

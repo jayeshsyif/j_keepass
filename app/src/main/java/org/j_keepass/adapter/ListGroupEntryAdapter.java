@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import org.j_keepass.R;
-import org.j_keepass.changeactivity.ChangeActivityEvent;
-import org.j_keepass.changeactivity.ChangeActivityEventSource;
+import org.j_keepass.changeactivity.event.ChangeActivityEvent;
+import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupEntriyItemViewBinding;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
@@ -121,7 +121,7 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
                     ReloadEventSource.getInstance().reload();
                 } else if (mItem.type.name().equals(GroupEntryType.ENTRY.name())) {
                     Db.getInstance().setCurrentEntryId(mItem.id);
-                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.CHANGE);
+                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.ENTRY_SELECTED);
                 }
             });
         }

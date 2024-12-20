@@ -1,6 +1,4 @@
-package org.j_keepass.loading.eventinterface;
-
-import android.content.Context;
+package org.j_keepass.loading.event;
 
 public interface LoadingEvent {
     void showLoading();

@@ -1,4 +1,4 @@
-package org.j_keepass.newpwd.eventinterface;
+package org.j_keepass.newpwd.event;
 
 
 import org.j_keepass.util.Util;

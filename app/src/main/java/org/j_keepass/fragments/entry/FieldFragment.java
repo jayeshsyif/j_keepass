@@ -17,13 +17,12 @@ import org.j_keepass.databinding.FieldFragmentBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
-import org.j_keepass.loading.eventinterface.LoadingEvent;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
+import org.j_keepass.loading.event.LoadingEvent;
+import org.j_keepass.loading.event.LoadingEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;

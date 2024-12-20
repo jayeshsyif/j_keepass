@@ -15,14 +15,13 @@ import androidx.fragment.app.Fragment;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.StatsFragmentBinding;
-import org.j_keepass.loading.eventinterface.LoadingEvent;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
+import org.j_keepass.loading.event.LoadingEvent;
+import org.j_keepass.loading.event.LoadingEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 import org.j_keepass.util.stats.PieChartView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

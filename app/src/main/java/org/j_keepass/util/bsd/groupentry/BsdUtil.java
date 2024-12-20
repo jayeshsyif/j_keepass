@@ -10,10 +10,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.j_keepass.R;
-import org.j_keepass.changeactivity.ChangeActivityEvent;
-import org.j_keepass.changeactivity.ChangeActivityEventSource;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
+import org.j_keepass.changeactivity.event.ChangeActivityEvent;
+import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
+import org.j_keepass.loading.event.LoadingEventSource;
+import org.j_keepass.newpwd.event.GenerateNewPasswordEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 

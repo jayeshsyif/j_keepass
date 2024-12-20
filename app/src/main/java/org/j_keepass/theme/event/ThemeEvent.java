@@ -1,4 +1,4 @@
-package org.j_keepass.theme.eventinterface;
+package org.j_keepass.theme.event;
 
 import org.j_keepass.util.theme.Theme;
 

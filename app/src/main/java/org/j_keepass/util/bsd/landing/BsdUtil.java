@@ -23,12 +23,12 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.R;
 import org.j_keepass.adapter.ListThemesAdapter;
-import org.j_keepass.db.eventinterface.DbAndFileOperations;
-import org.j_keepass.db.eventinterface.DbEventSource;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
-import org.j_keepass.permission.eventinterface.PermissionEvent;
-import org.j_keepass.permission.eventinterface.PermissionEventSource;
+import org.j_keepass.db.event.DbAndFileOperations;
+import org.j_keepass.db.event.DbEventSource;
+import org.j_keepass.loading.event.LoadingEventSource;
+import org.j_keepass.newpwd.event.GenerateNewPasswordEventSource;
+import org.j_keepass.permission.event.PermissionEvent;
+import org.j_keepass.permission.event.PermissionEventSource;
 import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.theme.Theme;

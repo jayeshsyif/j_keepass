@@ -1,4 +1,4 @@
-package org.j_keepass.changeactivity;
+package org.j_keepass.changeactivity.event;
 
 import org.j_keepass.util.Util;
 

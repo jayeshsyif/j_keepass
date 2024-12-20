@@ -13,17 +13,17 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.j_keepass.changeactivity.ChangeActivityEvent;
-import org.j_keepass.changeactivity.ChangeActivityEventSource;
+import org.j_keepass.changeactivity.event.ChangeActivityEvent;
+import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
 import org.j_keepass.fragments.StatsFragment;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
-import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
+import org.j_keepass.loading.event.LoadingEventSource;
+import org.j_keepass.newpwd.event.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.event.GenerateNewPwdEvent;
 import org.j_keepass.reload.ReloadEvent;
 import org.j_keepass.reload.ReloadEventSource;
-import org.j_keepass.theme.eventinterface.ThemeEvent;
+import org.j_keepass.theme.event.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.bsd.landing.BsdUtil;
@@ -248,7 +248,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
 
     @Override
     public void changeActivity(Action action) {
-        if (action.name().equals(Action.CHANGE.name())) {
+        if (action.name().equals(Action.ENTRY_SELECTED.name())) {
             Intent intent = new Intent(this, FieldActivity.class);
             startActivity(intent);
             finish();

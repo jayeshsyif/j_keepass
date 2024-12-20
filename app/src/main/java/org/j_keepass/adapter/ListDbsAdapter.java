@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 
-import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbItemViewBinding;
-import org.j_keepass.db.eventinterface.DbEventSource;
+import org.j_keepass.db.event.DbEventSource;
 import org.j_keepass.util.Util;
 
 import java.util.ArrayList;

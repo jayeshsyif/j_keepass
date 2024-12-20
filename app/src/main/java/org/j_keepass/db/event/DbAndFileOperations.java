@@ -1,4 +1,4 @@
-package org.j_keepass.db.eventinterface;
+package org.j_keepass.db.event;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -9,10 +9,8 @@ import android.provider.OpenableColumns;
 
 import com.google.common.io.ByteStreams;
 
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
-import org.j_keepass.util.db.DummyDbDataUtil;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
@@ -23,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
 public class DbAndFileOperations {
 

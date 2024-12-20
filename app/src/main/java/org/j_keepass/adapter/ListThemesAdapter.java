@@ -4,19 +4,16 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import org.j_keepass.LandingAndListDatabaseActivity;
 import org.j_keepass.R;
-import org.j_keepass.databinding.ListDbItemViewBinding;
 import org.j_keepass.databinding.ListThemesItemViewBinding;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.theme.eventinterface.ThemeEventSource;
+import org.j_keepass.loading.event.LoadingEventSource;
+import org.j_keepass.theme.event.ThemeEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.theme.Theme;
 

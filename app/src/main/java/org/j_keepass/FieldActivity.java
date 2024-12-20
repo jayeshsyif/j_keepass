@@ -14,12 +14,11 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
 import org.j_keepass.fragments.entry.FieldFragment;
-import org.j_keepass.fragments.entry.dtos.FieldData;
-import org.j_keepass.loading.eventinterface.LoadingEventSource;
-import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
-import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
+import org.j_keepass.loading.event.LoadingEventSource;
+import org.j_keepass.newpwd.event.GenerateNewPasswordEventSource;
+import org.j_keepass.newpwd.event.GenerateNewPwdEvent;
 import org.j_keepass.reload.ReloadEventSource;
-import org.j_keepass.theme.eventinterface.ThemeEvent;
+import org.j_keepass.theme.event.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.bsd.landing.BsdUtil;

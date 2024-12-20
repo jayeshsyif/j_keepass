@@ -1,6 +1,4 @@
-package org.j_keepass.loading.eventinterface;
-
-import android.content.Context;
+package org.j_keepass.loading.event;
 
 import org.j_keepass.util.Util;
 

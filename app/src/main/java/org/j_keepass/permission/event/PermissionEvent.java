@@ -1,4 +1,4 @@
-package org.j_keepass.permission.eventinterface;
+package org.j_keepass.permission.event;
 
 import android.app.Activity;
 import android.view.View;
