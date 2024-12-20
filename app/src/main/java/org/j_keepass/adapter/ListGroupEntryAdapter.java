@@ -18,6 +18,8 @@ import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
 import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.util.Pair;
+import org.j_keepass.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,21 +71,10 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
             }
             holder.groupEntryImage.setImageResource(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
             holder.groupEntryImage.setColorFilter(ContextCompat.getColor(holder.groupEntryImage.getContext(), R.color.kp_green_2));
-            if (holder.mItem.status.name().equals(GroupEntryStatus.EXPIRED.name())) {
-                String text = holder.groupEntryCountOrStatus.getContext().getString(R.string.expiredInDays);
-                text = text.replace("{0}", "" + holder.mItem.daysToExpire);
-                holder.groupEntryCountOrStatus.setText(text);
-                holder.groupEntryCountOrStatus.setTextColor(holder.groupEntryCountOrStatus.getContext().getResources().getColor(R.color.kp_red));
-            } else if (holder.mItem.status.name().equals(GroupEntryStatus.EXPIRNG_SOON.name())) {
-                String text = holder.groupEntryCountOrStatus.getContext().getString(R.string.expiringSoonInDays);
-                text = text.replace("{0}", "" + holder.mItem.daysToExpire);
-                holder.groupEntryCountOrStatus.setText(text);
-                holder.groupEntryCountOrStatus.setTextColor(holder.groupEntryCountOrStatus.getContext().getResources().getColor(R.color.kp_coral));
-            } else if (holder.mItem.status.name().equals(GroupEntryStatus.OK.name())) {
-                String text = holder.groupEntryCountOrStatus.getContext().getString(R.string.expiringInDays);
-                text = text.replace("{0}", "" + holder.mItem.daysToExpire);
-                holder.groupEntryCountOrStatus.setText(text);
-            }
+            Pair<GroupEntryStatus, Long> statusLongPair = new Pair<>();
+            statusLongPair.first = holder.mItem.status;
+            statusLongPair.second = holder.mItem.daysToExpire;
+            Util.setExpiryText(holder.groupEntryCountOrStatus, statusLongPair);
         } else if (holder.mItem.type.name().toString().equals(GroupEntryType.GROUP.name().toString())) {
             holder.groupEntryCountOrStatus.setText("" + holder.mItem.subCount + SUB_DIRECTORY_ARROW_SYMBOL_CODE);
         }

@@ -75,6 +75,27 @@
                     app:layout_constraintStart_toEndOf="@id/fieldNameValue"
                     app:tint="?colorSecondary" />
             </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/expiryStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/groupEntryArrow"
+                    android:layout_marginStart="@dimen/kp_always_1"
+                    android:layout_marginTop="@dimen/kp_always_1"
+                    android:layout_marginBottom="@dimen/kp_always_1"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/spacemono_regular"
+                    android:gravity="end"
+                    android:text="@string/modifiedDate"
+                    android:textAlignment="gravity"
+                    android:textAllCaps="false"
+                    android:textColor="?colorSecondary"
+                    android:visibility="gone"
+                    android:textSize="@dimen/kp_extra_small_text_size" />
+            </TableRow>
         </TableLayout>
 
     </androidx.cardview.widget.CardView>

@@ -2,6 +2,11 @@ package org.j_keepass.util;
 
 
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import org.j_keepass.R;
+import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -138,5 +143,30 @@ public class Util {
             //ignore
         }
         return isCodecAvailable;
+    }
+
+    public static void setExpiryText(TextView tv, Pair<GroupEntryStatus, Long> statusLongPair) {
+        if (statusLongPair.first != null) {
+            if (statusLongPair.first.name().equals(GroupEntryStatus.EXPIRED.name())) {
+                String text = tv.getContext().getString(R.string.expiredInDays);
+                text = text.replace("{0}", "" + statusLongPair.second);
+                tv.setVisibility(View.VISIBLE);
+                tv.setText(text);
+                tv.setTextColor(tv.getContext().getResources().getColor(R.color.kp_red));
+            } else if (statusLongPair.first.name().equals(GroupEntryStatus.EXPIRING_SOON.name())) {
+                String text = tv.getContext().getString(R.string.expiringSoonInDays);
+                text = text.replace("{0}", "" + statusLongPair.second);
+                tv.setVisibility(View.VISIBLE);
+                tv.setText(text);
+                tv.setTextColor(tv.getContext().getResources().getColor(R.color.kp_coral));
+            } else if (statusLongPair.first.name().equals(GroupEntryStatus.OK.name())) {
+                tv.setVisibility(View.VISIBLE);
+                String text = tv.getContext().getString(R.string.expiringInDays);
+                text = text.replace("{0}", "" + statusLongPair.second);
+                tv.setText(text);
+            } else {
+                tv.setVisibility(View.GONE);
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,8 +19,12 @@ import org.j_keepass.databinding.FieldItemViewBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
+import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
 import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.DateAndTimePickerUtil;
+import org.j_keepass.util.Pair;
+import org.j_keepass.util.Util;
+import org.j_keepass.util.db.Db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,29 +63,44 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         holder.editText.setHint(holder.mItem.name);
         holder.editText.setText(holder.mItem.value);
         holder.editTextLayout.setHint(holder.mItem.name);
-        if (holder.mItem.fieldValueType.name().equals(FieldValueType.DUMMY.name())) {
+
+        boolean isDummy = holder.mItem.fieldValueType == FieldValueType.DUMMY;
+        boolean isCreated = holder.mItem.fieldNameType == FieldNameType.CREATED_DATE;
+        boolean isExpiryDate = holder.mItem.fieldNameType == FieldNameType.EXPIRY_DATE;
+        boolean isCreatedOrExpiryDate = isCreated || isExpiryDate;
+        boolean isAttachment = holder.mItem.fieldValueType == FieldValueType.ATTACHMENT;
+        boolean isPassword = holder.mItem.fieldValueType == FieldValueType.PASSWORD;
+        boolean isLargeText = holder.mItem.fieldValueType == FieldValueType.LARGE_TEXT;
+        boolean isDateOtherThenCreateAndExpire = holder.mItem.fieldNameType == FieldNameType.DATE;
+
+        if (isDummy) {
             holder.editText.setEnabled(false);
             holder.fieldCardView.setVisibility(View.INVISIBLE);
         } else {
-            if (holder.mItem.fieldNameType.name().equals(FieldNameType.CREATED_DATE.name()) || holder.mItem.fieldNameType.name().equals(FieldNameType.EXPIRY_DATE.name()) || holder.mItem.fieldValueType.name().equals(FieldValueType.ATTACHMENT.name())) {
+            holder.editText.setEnabled(isEditable);
+            holder.fieldCopy.setVisibility(isEditable && !isAttachment ? View.VISIBLE : View.GONE);
+
+            if (isCreatedOrExpiryDate || isDateOtherThenCreateAndExpire) {
                 holder.editText.setEnabled(false);
-                if (isEditable) {
-                    holder.fieldCopy.setImageDrawable(holder.fieldCopy.getResources().getDrawable(R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
-                    if (holder.mItem.fieldNameType.name().equals(FieldNameType.EXPIRY_DATE.name())) {
-                        holder.fieldCopy.setOnClickListener(view -> {
-                            new DateAndTimePickerUtil().showDateAndTimePicker(holder.editText, holder.mItem.expiryDate);
-                        });
-                    }
-                }
-            } else {
-                holder.editText.setEnabled(isEditable);
-                holder.fieldCopy.setVisibility(View.GONE);
-            }
-            if (!holder.mItem.fieldValueType.name().equals(FieldValueType.PASSWORD.name())) {
                 holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
                 holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                if (isExpiryDate) {
+                    Util.setExpiryText(holder.expiryStatus, Db.getInstance().getStatus(holder.mItem.expiryDate));
+                    if (isEditable) {
+                        holder.fieldCopy.setImageDrawable(holder.fieldCopy.getResources().getDrawable(R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
+                        holder.fieldCopy.setOnClickListener(view -> new DateAndTimePickerUtil().showDateAndTimePicker(holder.editText, holder.mItem.expiryDate));
+                    }
+                } else {
+                    holder.fieldCopy.setVisibility(View.GONE);
+                }
+            } else {
+                if (!isPassword) {
+                    holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+                    holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }
             }
-            if (holder.mItem.fieldValueType.name().equals(FieldValueType.LARGE_TEXT.name())) {
+
+            if (isLargeText) {
                 holder.editText.setLines(10);
                 holder.editText.setEms(10);
                 holder.editText.setSingleLine(false);
@@ -88,12 +108,9 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                 holder.editText.setHorizontallyScrolling(false);
                 holder.editText.setMaxLines(Integer.MAX_VALUE);
             }
-            if (!isEditable) {
-                if (holder.mItem.fieldValueType.name().equals(FieldValueType.ATTACHMENT.name())) {
-                    holder.fieldCopy.setVisibility(View.GONE);
-                } else {
-                    holder.fieldCopy.setVisibility(View.VISIBLE);
-                }
+
+            if (!isEditable && !isAttachment && !isCreatedOrExpiryDate && !isDateOtherThenCreateAndExpire) {
+                holder.fieldCopy.setVisibility(View.VISIBLE);
                 holder.fieldCopy.setOnClickListener(view -> CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value));
             }
         }
@@ -121,12 +138,15 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         TextInputLayout editTextLayout;
         ImageButton fieldCopy;
         CardView fieldCardView;
+        TextView expiryStatus;
+
         public ViewHolder(@NonNull FieldItemViewBinding binding) {
             super(binding.getRoot());
             editText = binding.fieldValue;
             editTextLayout = binding.fieldNameValue;
             fieldCopy = binding.fieldCopy;
             fieldCardView = binding.fieldCardView;
+            expiryStatus = binding.expiryStatus;
         }
     }
 }

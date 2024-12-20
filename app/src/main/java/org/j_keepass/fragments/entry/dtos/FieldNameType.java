@@ -60,5 +60,20 @@ public enum FieldNameType {
             return "Attachment";
         }
     },
+    LAST_ACCESSED {
+        @NonNull
+        @Override
+        public String toString() {
+            return "Last Access";
+        }
+    },
+    LAST_MODIFIED {
+        @NonNull
+        @Override
+        public String toString() {
+            return "Last Modified";
+        }
+    },
     DUMMY,
+    DATE,
 }

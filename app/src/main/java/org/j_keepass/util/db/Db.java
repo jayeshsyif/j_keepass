@@ -6,6 +6,7 @@ import org.j_keepass.fragments.entry.dtos.FieldValueType;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
+import org.j_keepass.util.Pair;
 import org.j_keepass.util.Util;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
@@ -141,7 +142,6 @@ public class Db {
 
     public ArrayList<GroupEntryData> getAllEntries() {
         ArrayList<GroupEntryData> list = new ArrayList<>();
-        Date currentDate = Calendar.getInstance().getTime();
         List<?> entries = database.findEntries(entry -> true);
         if (entries != null) {
             for (int eCount = 0; eCount < entries.size(); eCount++) {
@@ -150,17 +150,10 @@ public class Db {
                 data.id = entry.getUuid();
                 data.name = entry.getTitle();
                 data.type = GroupEntryType.ENTRY;
-                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
-                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                 data.path = entry.getPath();
-                data.daysToExpire = daysToExpire;
-                if (daysToExpire <= 0) {
-                    data.status = GroupEntryStatus.EXPIRED;
-                } else if (daysToExpire <= 10) {
-                    data.status = GroupEntryStatus.EXPIRNG_SOON;
-                } else {
-                    data.status = GroupEntryStatus.OK;
-                }
+                Pair<GroupEntryStatus, Long> statusLongPair = getStatus(entry.getExpiryTime());
+                data.status = statusLongPair.first;
+                data.daysToExpire = statusLongPair.second;
                 list.add(data);
             }
         }
@@ -178,17 +171,10 @@ public class Db {
                 data.id = entry.getUuid();
                 data.name = entry.getTitle();
                 data.type = GroupEntryType.ENTRY;
-                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
-                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                data.daysToExpire = daysToExpire;
                 data.path = entry.getPath();
-                if (daysToExpire <= 0) {
-                    data.status = GroupEntryStatus.EXPIRED;
-                } else if (daysToExpire <= 10) {
-                    data.status = GroupEntryStatus.EXPIRNG_SOON;
-                } else {
-                    data.status = GroupEntryStatus.OK;
-                }
+                Pair<GroupEntryStatus, Long> statusLongPair = getStatus(entry.getExpiryTime());
+                data.status = statusLongPair.first;
+                data.daysToExpire = statusLongPair.second;
                 list.add(data);
             }
         }
@@ -213,21 +199,34 @@ public class Db {
                 data.id = suEntry.getUuid();
                 data.name = suEntry.getTitle();
                 data.type = GroupEntryType.ENTRY;
-                long diff = suEntry.getExpiryTime().getTime() - currentDate.getTime();
-                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                data.daysToExpire = daysToExpire;
                 data.path = suEntry.getPath();
-                if (daysToExpire <= 0) {
-                    data.status = GroupEntryStatus.EXPIRED;
-                } else if (daysToExpire <= 10) {
-                    data.status = GroupEntryStatus.EXPIRNG_SOON;
-                } else {
-                    data.status = GroupEntryStatus.OK;
-                }
+                Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
+                data.status = statusLongPair.first;
+                data.daysToExpire = statusLongPair.second;
                 list.add(data);
             }
         }
         return list;
+    }
+
+    public Pair<GroupEntryStatus, Long> getStatus(Date date) {
+        GroupEntryStatus status;
+        Pair<GroupEntryStatus, Long> statusLongPair = new Pair<>();
+        statusLongPair.first = null;
+        statusLongPair.second = 0L;
+        Date currentDate = Calendar.getInstance().getTime();
+        long diff = date.getTime() - currentDate.getTime();
+        long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        statusLongPair.second = daysToExpire;
+        if (daysToExpire <= 0) {
+            status = GroupEntryStatus.EXPIRED;
+        } else if (daysToExpire <= 10) {
+            status = GroupEntryStatus.EXPIRING_SOON;
+        } else {
+            status = GroupEntryStatus.OK;
+        }
+        statusLongPair.first = status;
+        return statusLongPair;
     }
 
     public long getAllExpiredEntriesCount() {
@@ -351,6 +350,28 @@ public class Db {
                         fields.add(fd);
                     }
                 }
+                {
+                    FieldData fd = new FieldData();
+                    fd.name = FieldNameType.LAST_ACCESSED.toString();
+                    fd.value = Util.convertDateToString(entry.getLastAccessTime());
+                    fd.fieldValueType = FieldValueType.TEXT;
+                    fd.fieldNameType = FieldNameType.DATE;
+                    fd.expiryDate = entry.getExpiryTime();
+                    if (fd.value != null && fd.value.length() > 0) {
+                        fields.add(fd);
+                    }
+                }
+                {
+                    FieldData fd = new FieldData();
+                    fd.name = FieldNameType.LAST_MODIFIED.toString();
+                    fd.value = Util.convertDateToString(entry.getLastModificationTime());
+                    fd.fieldValueType = FieldValueType.TEXT;
+                    fd.fieldNameType = FieldNameType.DATE;
+                    fd.expiryDate = entry.getExpiryTime();
+                    if (fd.value != null && fd.value.length() > 0) {
+                        fields.add(fd);
+                    }
+                }
             }
         }
         return fields;
@@ -382,7 +403,7 @@ public class Db {
             if (entry != null) {
                 if (entry.getPropertyNames().size() > 0) {
                     for (String pn : entry.getPropertyNames()) {
-                        Util.log("Additional property found "+pn);
+                        Util.log("Additional property found " + pn);
                         if (!ignoreFields.contains(pn.toLowerCase())) {
                             FieldData fd = new FieldData();
                             fd.name = pn;
@@ -390,7 +411,7 @@ public class Db {
                             fd.fieldNameType = FieldNameType.ADDITIONAL;
                             fd.fieldValueType = FieldValueType.TEXT;
                             if (fd.value != null && fd.value.length() > 0) {
-                                Util.log("Additional property added "+pn);
+                                Util.log("Additional property added " + pn);
                                 fields.add(fd);
                             }
                         }
@@ -408,7 +429,7 @@ public class Db {
             if (entry != null) {
                 if (entry.getBinaryPropertyNames().size() > 0) {
                     for (String bn : entry.getBinaryPropertyNames()) {
-                        Util.log("binary property found "+bn);
+                        Util.log("binary property found " + bn);
                         FieldData fd = new FieldData();
                         fd.name = FieldNameType.ATTACHMENT.toString();
                         fd.value = bn;
