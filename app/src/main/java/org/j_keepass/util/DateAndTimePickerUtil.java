@@ -5,13 +5,17 @@ import android.app.TimePickerDialog;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.j_keepass.fragments.entry.dtos.FieldData;
+import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.util.db.Db;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DateAndTimePickerUtil {
-    public void showDateAndTimePicker(TextInputEditText editText, Date toBeDisplayedDateObj) {
+    public void showDateAndTimePicker(TextInputEditText editText, Date toBeDisplayedDateObj, FieldData fieldData) {
         Calendar toBeDisplayedDate = Calendar.getInstance();
         toBeDisplayedDate.setTime(toBeDisplayedDateObj);
         Calendar currentCalender = Calendar.getInstance(TimeZone.getDefault());
@@ -23,6 +27,9 @@ public class DateAndTimePickerUtil {
                 currentCalender.set(year, month, dayOfMonth, hourOfDay, minute);
                 selectedExpiryDate.set(currentCalender.getTime());
                 editText.setText(Util.convertDateToString(selectedExpiryDate.get()));
+                Util.log("Calling update field Value");
+                fieldData.value = editText.getText().toString();
+                GroupEntryEventSource.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), fieldData);
             }, toBeDisplayedDate.get(Calendar.HOUR_OF_DAY), toBeDisplayedDate.get(Calendar.MINUTE), true);
             timePickerDialog.show();
         }, toBeDisplayedDate.get(Calendar.YEAR), toBeDisplayedDate.get(Calendar.MONTH), toBeDisplayedDate.get(Calendar.DAY_OF_MONTH));

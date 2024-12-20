@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -379,8 +383,34 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Util.log("Permission requestCode "+requestCode);
+        int READ_EXTERNAL_STORAGE = 100;
+        int ALARM = 101;
+        if (requestCode == READ_EXTERNAL_STORAGE)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                PermissionEventSource.getInstance().permissionGranted(Action.IMPORT);
+            } else {
+                PermissionEventSource.getInstance().permissionDenied(Action.IMPORT);
+            }
+        }
+        if (requestCode == ALARM)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                PermissionEventSource.getInstance().permissionGranted(Action.ALARM);
+            } else {
+                PermissionEventSource.getInstance().permissionDenied(Action.ALARM);
+            }
+        }
+
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Util.log("requestCode "+requestCode);
         if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
             if (resultCode == -1) {
                 AtomicReference<String> dirPath = new AtomicReference<>("");

@@ -16,6 +16,7 @@ import java.util.Calendar;
 public class Util {
     public void startAlarmBroadcastReceiver(Context context) {
         try {
+            log("Start Alarm Broadcast Receiver");
             if (checkIsPermissionAvailable(context)) {
                 boolean isAvailable = false;
                 Intent _intent = new Intent(context, AlarmBroadcastReceiver.class);
@@ -64,6 +65,7 @@ public class Util {
         try {
             if (!isOK) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    log("Tri checkIsPermissionAvailable inside broadcast receiver");
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                         if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                             isOK = true;
@@ -72,6 +74,7 @@ public class Util {
                         }
                     }
                 } else {
+                    log("Non Tri checkIsPermissionAvailable inside broadcast receiver");
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                         isOK = true;
                     } else {

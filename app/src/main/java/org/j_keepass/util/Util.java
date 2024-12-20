@@ -45,7 +45,7 @@ public class Util {
     }
 
     static public String convertDateToString(Date d) {
-        String dateStr = "";
+        String dateStr;
         try {
             DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a");
             dateStr = df.format(d);
@@ -56,7 +56,7 @@ public class Util {
     }
 
     static public String convertDateToStringOtherFormat(Date d) {
-        String dateStr = "";
+        String dateStr;
         try {
             DateFormat df = new SimpleDateFormat("E, dd/M/yy, hh:mm: a");
             dateStr = df.format(d);
@@ -67,7 +67,7 @@ public class Util {
     }
 
     static public String convertDateToStringOnlyDate(Date d) {
-        String dateStr = "";
+        String dateStr;
         try {
             DateFormat df = new SimpleDateFormat("dd/M/yy");
             dateStr = df.format(d);
@@ -78,7 +78,7 @@ public class Util {
     }
 
     static public Date convertStringToDate(String d) {
-        Date date = null;
+        Date date;
         try {
             DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a");
             date = df.parse(d);

@@ -10,4 +10,15 @@ public class FieldData {
     public FieldNameType fieldNameType;
     public FieldValueType fieldValueType;
     public Date expiryDate;
+
+    public String asString() {
+        return "FieldData{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                ", fieldNameType=" + fieldNameType +
+                ", fieldValueType=" + fieldValueType +
+                ", expiryDate=" + expiryDate +
+                '}';
+    }
 }

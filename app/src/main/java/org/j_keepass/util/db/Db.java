@@ -484,6 +484,7 @@ public class Db {
     }
 
     private boolean updateEntryField(Entry<?, ?, ?, ?> entry, FieldData fieldData) {
+        Util.log("Update actual field data "+fieldData.asString());
         boolean isUpdated = false;
         if (database != null) {
             if (entry != null) {
@@ -524,7 +525,7 @@ public class Db {
     }
 
     public void updateEntry(UUID eId) {
-        if (!listOfEntriesNotUpdatedInDb.contains(eId)) {
+        if (listOfEntriesNotUpdatedInDb.contains(eId)) {
             listOfEntriesNotUpdatedInDb.remove(eId);
         }
     }
