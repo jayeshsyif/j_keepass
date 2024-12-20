@@ -15,10 +15,10 @@ import org.j_keepass.R;
 import org.j_keepass.adapter.ListDbsAdapter;
 import org.j_keepass.databinding.ListAllDatabaseFragmentBinding;
 import org.j_keepass.db.eventinterface.DbAndFileOperations;
-import org.j_keepass.db.eventinterface.DbEvent;
-import org.j_keepass.db.eventinterface.DbEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
+import org.j_keepass.reload.ReloadEvent;
+import org.j_keepass.reload.ReloadEventSource;
 import org.j_keepass.util.Util;
 
 import java.io.File;
@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEvent {
+public class ListDatabaseFragment extends Fragment implements LoadingEvent, ReloadEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListAllDatabaseFragmentBinding binding;
 
@@ -52,7 +52,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
 
     private void register() {
         LoadingEventSource.getInstance().addListener(this);
-        DbEventSource.getInstance().addListener(this);
+        ReloadEventSource.getInstance().addListener(this);
     }
 
     private void showDbs() {
@@ -191,7 +191,7 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
 
     private void unregister() {
         LoadingEventSource.getInstance().removeListener(this);
-        DbEventSource.getInstance().removeListener(this);
+        ReloadEventSource.getInstance().removeListener(this);
     }
 
     private ExecutorService getExecutor() {
@@ -208,26 +208,8 @@ public class ListDatabaseFragment extends Fragment implements LoadingEvent, DbEv
     }
 
     @Override
-    public void createDb(String name, String pwd) {
-    }
-
-    @Override
-    public void reloadDbFile() {
+    public void reload() {
         ExecutorService executor = getExecutor();
         executor.execute(this::showDbs);
-    }
-
-    @Override
-    public void askPwdForDb(Context context, String name, String fullPath) {
-    }
-
-    @Override
-    public void failedToOpenDb(String errorMsg) {
-        LoadingEventSource.getInstance().updateLoadingText(errorMsg);
-        LoadingEventSource.getInstance().showLoading();
-    }
-
-    @Override
-    public void loadSuccessDb() {
     }
 }

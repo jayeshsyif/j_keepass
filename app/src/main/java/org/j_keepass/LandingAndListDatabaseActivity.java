@@ -26,6 +26,7 @@ import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
 import org.j_keepass.permission.eventinterface.PermissionEvent;
 import org.j_keepass.permission.eventinterface.PermissionEventSource;
+import org.j_keepass.reload.ReloadEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.theme.eventinterface.ThemeEventSource;
 import org.j_keepass.util.SleepFor1Ms;
@@ -294,14 +295,9 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
         });
         executor.execute(() -> {
             if (proceed.get()) {
-                DbEventSource.getInstance().reloadDbFile();
+                ReloadEventSource.getInstance().reload();
             }
         });
-    }
-
-    @Override
-    public void reloadDbFile() {
-        //ignore
     }
 
     @Override
@@ -316,7 +312,8 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
 
     @Override
     public void failedToOpenDb(String errorMsg) {
-        //ignore
+        LoadingEventSource.getInstance().updateLoadingText(errorMsg);
+        LoadingEventSource.getInstance().showLoading();
     }
 
     @Override
@@ -400,7 +397,7 @@ public class LandingAndListDatabaseActivity extends AppCompatActivity implements
                 executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
                 executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
                 executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), data.getData(), getContentResolver(), this));
-                executor.execute(() -> DbEventSource.getInstance().reloadDbFile());
+                executor.execute(() -> ReloadEventSource.getInstance().reload());
             }
         }
     }
