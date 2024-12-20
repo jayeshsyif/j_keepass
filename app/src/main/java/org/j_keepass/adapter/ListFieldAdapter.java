@@ -19,7 +19,6 @@ import org.j_keepass.databinding.FieldItemViewBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.DateAndTimePickerUtil;
 import org.j_keepass.util.Util;
@@ -118,8 +117,8 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                         String inputValue = holder.editText.getText().toString();
                         if (inputValue != null) {
                             holder.mItem.value = inputValue;
-                            Util.log("Calling update field Value");
-                            GroupEntryEventSource.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), holder.mItem);
+                            Util.log("Calling update field Value for "+holder.mItem.asString());
+                            Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
                         }
                     }
                 });

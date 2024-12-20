@@ -47,6 +47,7 @@ public class Db {
         this.database = database;
         this.kdbxFile = kdbxFile;
         this.pwd = pwd;
+        currentGroupId = database.getRootGroup().getUuid();
     }
 
     public String getDbName() {
@@ -301,6 +302,7 @@ public class Db {
         if (entry != null) {
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.TITLE.toString();
                 fd.fieldNameType = FieldNameType.TITLE;
                 fd.value = entry.getTitle();
@@ -311,6 +313,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.USERNAME.toString();
                 fd.value = entry.getUsername();
                 fd.fieldNameType = FieldNameType.USERNAME;
@@ -321,6 +324,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.PASSWORD.toString();
                 fd.value = entry.getPassword();
                 fd.fieldValueType = FieldValueType.PASSWORD;
@@ -331,6 +335,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.URL.toString();
                 fd.fieldNameType = FieldNameType.URL;
                 fd.value = entry.getUrl();
@@ -341,6 +346,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.NOTES.toString();
                 fd.fieldNameType = FieldNameType.NOTES;
                 fd.value = entry.getNotes();
@@ -351,6 +357,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.CREATED_DATE.toString();
                 fd.value = Util.convertDateToString(entry.getCreationTime());
                 fd.fieldValueType = FieldValueType.TEXT;
@@ -361,6 +368,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.EXPIRY_DATE.toString();
                 fd.value = Util.convertDateToString(entry.getExpiryTime());
                 fd.fieldValueType = FieldValueType.TEXT;
@@ -372,6 +380,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.LAST_ACCESSED.toString();
                 fd.value = Util.convertDateToString(entry.getLastAccessTime());
                 fd.fieldValueType = FieldValueType.TEXT;
@@ -383,6 +392,7 @@ public class Db {
             }
             {
                 FieldData fd = new FieldData();
+                fd.eId = entry.getUuid();
                 fd.name = FieldNameType.LAST_MODIFIED.toString();
                 fd.value = Util.convertDateToString(entry.getLastModificationTime());
                 fd.fieldValueType = FieldValueType.TEXT;
@@ -423,6 +433,7 @@ public class Db {
                     Util.log("Additional property found " + pn);
                     if (!ignoreFields.contains(pn.toLowerCase())) {
                         FieldData fd = new FieldData();
+                        fd.eId = entry.getUuid();
                         fd.name = pn;
                         fd.value = entry.getProperty(pn);
                         fd.fieldNameType = FieldNameType.ADDITIONAL;
@@ -478,6 +489,8 @@ public class Db {
             if (entry != null) {
                 updateEntryField(entry, fieldData);
                 isUpdated = true;
+            } else {
+                Util.log("entry is null");
             }
         }
         return isUpdated;
@@ -528,9 +541,5 @@ public class Db {
         if (listOfEntriesNotUpdatedInDb.contains(eId)) {
             listOfEntriesNotUpdatedInDb.remove(eId);
         }
-    }
-
-    public void removeCacheEntry() {
-        currentEntryId = null;
     }
 }

@@ -15,11 +15,10 @@ import com.google.android.material.tabs.TabLayout;
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
 import org.j_keepass.fragments.entry.FieldFragment;
 import org.j_keepass.fragments.entry.dtos.FieldData;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
+import org.j_keepass.reload.ReloadEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
@@ -33,7 +32,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, GroupEntryEvent {
+public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent {
     private FieldActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
 
@@ -69,18 +68,17 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     }
 
     private void register() {
-        GroupEntryEventSource.getInstance().addListener(this);
         GenerateNewPasswordEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
-        GroupEntryEventSource.getInstance().removeListener(this);
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
     }
 
     private void configureClicks() {
         binding.entryHomeBtn.setOnClickListener(view -> {
-            GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+            Db.getInstance().setCurrentGroupId(Db.getInstance().getRootGroupId());
+            ReloadEventSource.getInstance().reload();
             Intent intent = new Intent(this, ListGroupEntriesActivity.class);
             startActivity(intent);
             finish();
@@ -91,7 +89,6 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                 LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.opening));
                 LoadingEventSource.getInstance().showLoading();
             });
-            executor.execute(() -> GroupEntryEventSource.getInstance().updateCacheEntry(Db.getInstance().getCurrentEntryId()));
             executor.execute(() -> runOnUiThread(() -> {
                 Intent intent = new Intent(this, FieldActivity.class);
                 intent.putExtra("isEdit", true);
@@ -113,7 +110,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                 LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.saving));
                 LoadingEventSource.getInstance().showLoading();
             });
-            executor.execute(() -> GroupEntryEventSource.getInstance().updateEntry(Db.getInstance().getCurrentEntryId()));
+            executor.execute(() -> updateEntry(Db.getInstance().getCurrentEntryId()));
             executor.execute(() -> runOnUiThread(() -> {
                 Intent intent = new Intent(this, ListGroupEntriesActivity.class);
                 intent.putExtra("isEdit", true);
@@ -132,7 +129,6 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
 
     private void destroy() {
         Util.log("unregister");
-        Db.getInstance().removeCacheEntry();
         unregister();
         shutDownExecutor();
     }
@@ -290,49 +286,11 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
         });
     }
 
-    @Override
-    public void setGroup(UUID gId) {
-        // ignore
-    }
-
-    @Override
-    public void lock() {
-        // ignore
-    }
-
-    @Override
-    public void showAll() {
-        // ignore
-    }
-
-    @Override
-    public void showAllEntryOnly() {
-        // ignore
-    }
-
-    @Override
-    public void showAllEntryOnly(String query) {
-        // ignore
-    }
-
-    @Override
-    public void setEntry(UUID eId) {
-        // ignore
-    }
-
-    @Override
     public void updateCacheEntry(UUID eId) {
         Util.log("Updating Cached entry");
         Db.getInstance().updateCacheEntry(eId);
     }
 
-    @Override
-    public void updateEntryField(UUID eId, FieldData fieldData) {
-        Util.log("Updating " + fieldData.name + " to " + fieldData.value);
-        Db.getInstance().updateEntryField(eId, fieldData);
-    }
-
-    @Override
     public void updateEntry(UUID eId) {
         Db.getInstance().updateDb(getContentResolver());
         Db.getInstance().updateEntry(eId);

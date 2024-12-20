@@ -17,7 +17,6 @@ import org.j_keepass.databinding.FieldFragmentBinding;
 import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.entry.dtos.FieldNameType;
 import org.j_keepass.fragments.entry.dtos.FieldValueType;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.util.Util;
@@ -29,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class FieldFragment extends Fragment implements LoadingEvent, GroupEntryEvent {
+public class FieldFragment extends Fragment implements LoadingEvent {
 
     private FieldFragmentBinding binding;
 
@@ -200,48 +199,5 @@ public class FieldFragment extends Fragment implements LoadingEvent, GroupEntryE
         } catch (Exception e) {
             //ignore
         }
-    }
-
-    @Override
-    public void setGroup(UUID gId) {
-        //ignore
-    }
-
-    @Override
-    public void lock() {
-        //ignore
-    }
-
-    @Override
-    public void showAll() {
-        //ignore
-    }
-
-    @Override
-    public void showAllEntryOnly() {
-        //ignore
-    }
-
-    @Override
-    public void showAllEntryOnly(String query) {
-        //ignore
-    }
-
-    @Override
-    public void setEntry(UUID eId) {
-        //ignore
-    }
-
-    @Override
-    public void updateCacheEntry(UUID eId) {
-    }
-
-    @Override
-    public void updateEntryField(UUID eId, FieldData fieldData) {
-    }
-
-    @Override
-    public void updateEntry(UUID eId) {
-        // ignore
     }
 }

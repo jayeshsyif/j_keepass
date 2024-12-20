@@ -10,9 +10,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.j_keepass.R;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.changeactivity.ChangeActivityEvent;
+import org.j_keepass.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
+import org.j_keepass.util.Util;
+import org.j_keepass.util.db.Db;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,7 +44,14 @@ public class BsdUtil {
         if (groupEntryMoreOptionLock != null) {
             groupEntryMoreOptionLock.setOnClickListener(view -> {
                 bsd.dismiss();
-                GroupEntryEventSource.getInstance().lock();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.locking));
+                    LoadingEventSource.getInstance().showLoading();
+                    Util.sleepFor3MSec();
+                    Db.getInstance().deSetDatabase();
+                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.LOCK);
+                });
             });
         }
         expandBsd(bsd);

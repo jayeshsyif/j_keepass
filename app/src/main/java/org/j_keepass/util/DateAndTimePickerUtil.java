@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.fragments.entry.dtos.FieldData;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.util.db.Db;
 
 import java.util.Calendar;
@@ -29,7 +28,7 @@ public class DateAndTimePickerUtil {
                 editText.setText(Util.convertDateToString(selectedExpiryDate.get()));
                 Util.log("Calling update field Value");
                 fieldData.value = editText.getText().toString();
-                GroupEntryEventSource.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), fieldData);
+                Db.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), fieldData);
             }, toBeDisplayedDate.get(Calendar.HOUR_OF_DAY), toBeDisplayedDate.get(Calendar.MINUTE), true);
             timePickerDialog.show();
         }, toBeDisplayedDate.get(Calendar.YEAR), toBeDisplayedDate.get(Calendar.MONTH), toBeDisplayedDate.get(Calendar.DAY_OF_MONTH));

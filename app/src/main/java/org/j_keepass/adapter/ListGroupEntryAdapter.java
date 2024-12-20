@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import org.j_keepass.R;
+import org.j_keepass.changeactivity.ChangeActivityEvent;
+import org.j_keepass.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupEntriyItemViewBinding;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryStatus;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
+import org.j_keepass.reload.ReloadEventSource;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
@@ -115,9 +117,11 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
             path = binding.path;
             groupEntryNameCardView.setOnClickListener(view -> {
                 if (mItem.type.name().equals(GroupEntryType.GROUP.name())) {
-                    GroupEntryEventSource.getInstance().setGroup(mItem.id);
+                    Db.getInstance().setCurrentGroupId(mItem.id);
+                    ReloadEventSource.getInstance().reload();
                 } else if (mItem.type.name().equals(GroupEntryType.ENTRY.name())) {
-                    GroupEntryEventSource.getInstance().setEntry(mItem.id);
+                    Db.getInstance().setCurrentEntryId(mItem.id);
+                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.CHANGE);
                 }
             });
         }

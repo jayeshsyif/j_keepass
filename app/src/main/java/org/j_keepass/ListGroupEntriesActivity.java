@@ -13,15 +13,16 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.tabs.TabLayout;
 
+import org.j_keepass.changeactivity.ChangeActivityEvent;
+import org.j_keepass.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
 import org.j_keepass.fragments.StatsFragment;
-import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.listgroupentry.ListGroupEntryFragment;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPasswordEventSource;
 import org.j_keepass.newpwd.eventinterface.GenerateNewPwdEvent;
+import org.j_keepass.reload.ReloadEvent;
+import org.j_keepass.reload.ReloadEventSource;
 import org.j_keepass.theme.eventinterface.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Util;
@@ -35,7 +36,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GroupEntryEvent, GenerateNewPwdEvent {
+public class ListGroupEntriesActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, ChangeActivityEvent, ReloadEvent {
     private ListGroupEntryActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
 
@@ -47,6 +48,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         configureBackPressed();
         register();
         ExecutorService executor = getExecutor();
+        executor.execute(() -> setGroup(Db.getInstance().getRootGroupId()));
         executor.execute(this::configureClicks);
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureTabLayout);
@@ -54,10 +56,19 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
     }
 
     private void configureClicks() {
-        binding.lockBtn.setOnClickListener(view -> GroupEntryEventSource.getInstance().lock());
+        binding.lockBtn.setOnClickListener(view -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.locking));
+                LoadingEventSource.getInstance().showLoading();
+                Util.sleepFor3MSec();
+                Db.getInstance().deSetDatabase();
+                ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.LOCK);
+            });
+        });
         binding.groupAndEntryHomeDatabaseBtn.setOnClickListener(view -> {
             binding.groupAndEntryTabLayout.getTabAt(0).select();
-            GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+            setGroup(Db.getInstance().getRootGroupId());
         });
         binding.groupAndEntryGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
@@ -78,12 +89,14 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
 
     private void register() {
         GenerateNewPasswordEventSource.getInstance().addListener(this);
-        GroupEntryEventSource.getInstance().addListener(this);
+        ChangeActivityEventSource.getInstance().addListener(this);
+        ReloadEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
-        GroupEntryEventSource.getInstance().removeListener(this);
+        ChangeActivityEventSource.getInstance().removeListener(this);
+        ReloadEventSource.getInstance().removeListener(this);
     }
 
     @Override
@@ -222,33 +235,30 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
         }
     }
 
-    @Override
     public void setGroup(UUID gId) {
         Db.getInstance().setCurrentGroupId(gId);
-        runOnUiThread(() -> binding.groupNameOnTop.setText(Db.getInstance().getGroupName(gId)));
+        binding.groupNameOnTop.setText(Db.getInstance().getGroupName(gId));
+        ReloadEventSource.getInstance().reload();
     }
 
     @Override
-    public void setEntry(UUID eId) {
-        Db.getInstance().setCurrentEntryId(eId);
-        Intent intent = new Intent(this, FieldActivity.class);
-        startActivity(intent);
-        finish();
+    public void reload() {
+        binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
     }
 
     @Override
-    public void updateCacheEntry(UUID eId) {
-        // ignore
-    }
-
-    @Override
-    public void updateEntryField(UUID eId, FieldData fieldData) {
-        // ignore
-    }
-
-    @Override
-    public void updateEntry(UUID eId) {
-        // ignore
+    public void changeActivity(Action action) {
+        if (action.name().equals(Action.CHANGE.name())) {
+            Intent intent = new Intent(this, FieldActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        if (action.name().equals(Action.LOCK.name())) {
+            Db.getInstance().deSetDatabase();
+            Intent intent = new Intent(this, LandingAndListDatabaseActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void configureBackPressed() {
@@ -260,7 +270,7 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
                     if (Db.getInstance().getRootGroupId().equals(Db.getInstance().getCurrentGroupId())) {
                         finish();
                     } else {
-                        GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getParentGroupId(Db.getInstance().getCurrentGroupId()));
+                        setGroup(Db.getInstance().getParentGroupId(Db.getInstance().getCurrentGroupId()));
                     }
                 } else {
                     finish();
@@ -268,37 +278,6 @@ public class ListGroupEntriesActivity extends AppCompatActivity implements Theme
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
-    }
-
-    @Override
-    public void lock() {
-        Db.getInstance().deSetDatabase();
-        ExecutorService executor = getExecutor();
-        executor.execute(() -> {
-            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.locking));
-            LoadingEventSource.getInstance().showLoading();
-            Util.sleepFor3MSec();
-        });
-        executor.execute(() -> runOnUiThread(() -> {
-            Intent intent = new Intent(this, LandingAndListDatabaseActivity.class);
-            startActivity(intent);
-            finish();
-        }));
-    }
-
-    @Override
-    public void showAllEntryOnly() {
-        //ignore
-    }
-
-    @Override
-    public void showAllEntryOnly(String query) {
-        // ignore
-    }
-
-    @Override
-    public void showAll() {
-        //ignore
     }
 
     @Override

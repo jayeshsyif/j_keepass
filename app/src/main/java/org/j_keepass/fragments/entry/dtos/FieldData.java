@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class FieldData {
-    public UUID id;
+    public UUID eId;
     public String name;
     public String value;
     public FieldNameType fieldNameType;
@@ -13,7 +13,7 @@ public class FieldData {
 
     public String asString() {
         return "FieldData{" +
-                "id=" + id +
+                "id=" + eId +
                 ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
                 ", fieldNameType=" + fieldNameType +

@@ -15,13 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.j_keepass.R;
 import org.j_keepass.adapter.ListGroupEntryAdapter;
 import org.j_keepass.databinding.ListAllGroupEntryFragmentBinding;
-import org.j_keepass.fragments.entry.dtos.FieldData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryData;
 import org.j_keepass.fragments.listdatabase.dtos.GroupEntryType;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEvent;
-import org.j_keepass.groupentry.eventinterface.GroupEntryEventSource;
 import org.j_keepass.loading.eventinterface.LoadingEvent;
 import org.j_keepass.loading.eventinterface.LoadingEventSource;
+import org.j_keepass.reload.ReloadEvent;
+import org.j_keepass.reload.ReloadEventSource;
 import org.j_keepass.util.Util;
 import org.j_keepass.util.db.Db;
 
@@ -31,7 +30,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ListGroupEntryFragment extends Fragment implements LoadingEvent, GroupEntryEvent {
+public class ListGroupEntryFragment extends Fragment implements LoadingEvent, ReloadEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListAllGroupEntryFragmentBinding binding;
 
@@ -53,9 +52,9 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         if (bundle != null) {
             String show = bundle.getString("show");
             if (show != null && show.equals("showEntryOnly")) {
-                GroupEntryEventSource.getInstance().showAllEntryOnly();
+                showAllEntryOnly();
             } else {
-                GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getCurrentGroupId());
+                setGroup(Db.getInstance().getCurrentGroupId());
             }
         }
 
@@ -67,7 +66,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Util.log("Search query entered is " + query);
-                GroupEntryEventSource.getInstance().showAllEntryOnly(query);
+                showAllEntryOnly(query);
                 return false;
             }
 
@@ -77,7 +76,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
             }
         });
         binding.searchEntryView.setOnCloseListener(() -> {
-            GroupEntryEventSource.getInstance().setGroup(Db.getInstance().getRootGroupId());
+            setGroup(Db.getInstance().getRootGroupId());
             return false;
         });
     }
@@ -104,12 +103,17 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
 
     private void register() {
         LoadingEventSource.getInstance().addListener(this);
-        GroupEntryEventSource.getInstance().addListener(this);
+        ReloadEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         LoadingEventSource.getInstance().removeListener(this);
-        GroupEntryEventSource.getInstance().removeListener(this);
+        ReloadEventSource.getInstance().removeListener(this);
+    }
+
+    @Override
+    public void reload() {
+        show(Db.getInstance().getCurrentGroupId(), Action.ALL, null);
     }
 
     @Override
@@ -253,7 +257,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         }
     }
 
-    @Override
+
     public void setGroup(UUID gId) {
         Util.log("currentGid " + Db.getInstance().getCurrentGroupId() + " gId " + gId);
         shutDownExecutor();
@@ -261,47 +265,14 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         show(gId, Action.ALL, null);
     }
 
-    @Override
-    public void setEntry(UUID gId) {
-        // ignore
-    }
-
-    @Override
-    public void updateCacheEntry(UUID eId) {
-        // ignore
-    }
-
-    @Override
-    public void updateEntryField(UUID eId, FieldData fieldData) {
-        // ignore
-    }
-
-    @Override
-    public void updateEntry(UUID eId) {
-        // ignore
-    }
-
-    @Override
-    public void lock() {
-        //ignore
-    }
-
-    @Override
     public void showAllEntryOnly() {
         shutDownExecutor();
         show(Db.getInstance().getCurrentGroupId(), Action.ALL_ENTRIES_ONLY, null);
     }
 
-    @Override
     public void showAllEntryOnly(String query) {
         shutDownExecutor();
         show(Db.getInstance().getCurrentGroupId(), Action.ALL_ENTRIES_ONLY, query);
-    }
-
-    @Override
-    public void showAll() {
-        shutDownExecutor();
-        show(Db.getInstance().getCurrentGroupId(), Action.ALL, null);
     }
 
 }
