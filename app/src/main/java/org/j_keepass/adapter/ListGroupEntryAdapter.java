@@ -26,7 +26,9 @@ import java.util.List;
 public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAdapter.ViewHolder> {
 
     List<GroupEntryData> mValues = new ArrayList<>();
-    static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " \u21B3 ";
+    private static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " \u21B3 ";
+    private static final String DOT_SYMBOL_CODE = " \u2192 ";
+    boolean showPath = false;
 
     public void addValue(GroupEntryData groupEntryData) {
         mValues.add(groupEntryData);
@@ -34,6 +36,14 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
 
     public void setValues(List<GroupEntryData> mValues) {
         this.mValues = mValues;
+    }
+
+    public boolean isShowPath() {
+        return showPath;
+    }
+
+    public void setShowPath(boolean showPath) {
+        this.showPath = showPath;
     }
 
     @NonNull
@@ -49,6 +59,14 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
         if (holder.mItem.type.name().toString().equals(GroupEntryType.DUMMY.name().toString())) {
             holder.groupEntryNameCardView.setVisibility(View.INVISIBLE);
         } else if (holder.mItem.type.name().toString().equals(GroupEntryType.ENTRY.name().toString())) {
+            if (showPath && holder.mItem.path != null) {
+                holder.path.setVisibility(View.VISIBLE);
+                String path = holder.mItem.path.substring(1, holder.mItem.path.length());
+                path = path.replace("/", DOT_SYMBOL_CODE);
+                holder.path.setText(path);
+            } else {
+                holder.path.setVisibility(View.GONE);
+            }
             holder.groupEntryImage.setImageResource(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
             holder.groupEntryImage.setColorFilter(ContextCompat.getColor(holder.groupEntryImage.getContext(), R.color.kp_green_2));
             if (holder.mItem.status.name().equals(GroupEntryStatus.EXPIRED.name())) {
@@ -88,7 +106,7 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public GroupEntryData mItem;
-        TextView name, groupEntryCountOrStatus;
+        TextView name, groupEntryCountOrStatus, path;
         CardView groupEntryNameCardView;
         ShapeableImageView groupEntryImage;
 
@@ -98,6 +116,7 @@ public class ListGroupEntryAdapter extends RecyclerView.Adapter<ListGroupEntryAd
             groupEntryCountOrStatus = binding.groupEntryCountOrStatus;
             groupEntryNameCardView = binding.groupEntryNameCardView;
             groupEntryImage = binding.groupEntryImage;
+            path = binding.path;
             groupEntryNameCardView.setOnClickListener(view -> {
                 if (mItem.type.name().equals(GroupEntryType.GROUP.name())) {
                     GroupEntryEventSource.getInstance().setGroup(mItem.id);

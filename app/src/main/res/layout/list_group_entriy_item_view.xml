@@ -23,6 +23,29 @@
             android:background="?colorPrimaryVariant"
             android:padding="@dimen/kp_margin">
 
+            <TextView
+                android:id="@+id/path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginTop="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:layout_marginBottom="@dimen/kp_always_1"
+                android:ellipsize="end"
+                android:fontFamily="@font/spacemono_regular"
+                android:gravity="center"
+                android:maxEms="@integer/max_ems"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/modifiedDate"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="?colorSecondary"
+                android:textSize="@dimen/kp_extra_small_text_size"
+                android:visibility="gone" />
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/groupEntryImage"
                 android:layout_width="wrap_content"
@@ -49,10 +72,10 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
-                android:text="@string/groupName"
-                android:textAlignment="gravity"
                 android:maxEms="@integer/max_ems"
                 android:singleLine="true"
+                android:text="@string/groupName"
+                android:textAlignment="gravity"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textColor="?colorSecondary"

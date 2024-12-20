@@ -152,6 +152,7 @@ public class Db {
                 data.type = GroupEntryType.ENTRY;
                 long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
                 long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                data.path = entry.getPath();
                 data.daysToExpire = daysToExpire;
                 if (daysToExpire <= 0) {
                     data.status = GroupEntryStatus.EXPIRED;
@@ -180,6 +181,7 @@ public class Db {
                 long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
                 long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                 data.daysToExpire = daysToExpire;
+                data.path = entry.getPath();
                 if (daysToExpire <= 0) {
                     data.status = GroupEntryStatus.EXPIRED;
                 } else if (daysToExpire <= 10) {
@@ -214,6 +216,7 @@ public class Db {
                 long diff = suEntry.getExpiryTime().getTime() - currentDate.getTime();
                 long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                 data.daysToExpire = daysToExpire;
+                data.path = suEntry.getPath();
                 if (daysToExpire <= 0) {
                     data.status = GroupEntryStatus.EXPIRED;
                 } else if (daysToExpire <= 10) {

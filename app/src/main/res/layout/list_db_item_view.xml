@@ -50,6 +50,7 @@
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
                 android:maxEms="@integer/max_ems"
+                android:maxLines="1"
                 android:singleLine="true"
                 android:text="@string/database"
                 android:textAlignment="gravity"

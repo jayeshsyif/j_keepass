@@ -14,8 +14,8 @@ import org.j_keepass.util.Util;
 
 public class PermissionCheckerAndGetter implements PermissionEvent {
     private static final int READ_EXTERNAL_STORAGE = 100;
-    private boolean IS_READ_EXTERNAL_STORAGE_RECEIVED = false;
-    private boolean IS_ALARM_PERMISSION_RECEIVED = false;
+    private Boolean IS_READ_EXTERNAL_STORAGE_RECEIVED = null;
+    private Boolean IS_ALARM_PERMISSION_RECEIVED = null;
 
     private PermissionCheckerAndGetter() {
     }
@@ -33,7 +33,10 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
     @Override
     public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, Action action) {
         Util.log("Inside check and get permission");
-        boolean isOK = IS_READ_EXTERNAL_STORAGE_RECEIVED;
+        boolean isOK = false;
+        if(IS_READ_EXTERNAL_STORAGE_RECEIVED != null) {
+            isOK = IS_READ_EXTERNAL_STORAGE_RECEIVED;
+        }
         Util.log("Inside check and get permission, First flag is " + isOK);
         if (!isOK) {
             Util.log("Show permission popup");
@@ -44,6 +47,7 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 }
+                notify(isOK, action);
             } else {
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
@@ -51,11 +55,19 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 }
+                notify(isOK, action);
             }
         }
-        IS_READ_EXTERNAL_STORAGE_RECEIVED = isOK;
-        Util.log("Inside check and get permission, return flag is " + IS_READ_EXTERNAL_STORAGE_RECEIVED);
-        if (IS_READ_EXTERNAL_STORAGE_RECEIVED) {
+        if (IS_READ_EXTERNAL_STORAGE_RECEIVED != null) {
+            Util.log("Inside check and get permission, return flag is " + IS_READ_EXTERNAL_STORAGE_RECEIVED);
+            notify(IS_READ_EXTERNAL_STORAGE_RECEIVED, action);
+        } else {
+            IS_READ_EXTERNAL_STORAGE_RECEIVED = isOK;
+        }
+    }
+
+    private void notify(Boolean isOk, Action action) {
+        if (isOk) {
             PermissionEventSource.getInstance().permissionGranted(action);
         } else {
             PermissionEventSource.getInstance().permissionDenied(action);
@@ -76,7 +88,10 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
     public void checkAndGetPermissionAlarm(View v, Activity activity, Action action) {
         int ALARM = 101;
         Util.log("Inside check and get permission alarm");
-        boolean isOK = IS_ALARM_PERMISSION_RECEIVED;
+        boolean isOK = false;
+        if(IS_ALARM_PERMISSION_RECEIVED != null) {
+            isOK = IS_ALARM_PERMISSION_RECEIVED;
+        }
         Util.log("Inside check and get permission alarm, First flag is " + isOK);
         if (!isOK) {
             Util.log("Show permission popup");
@@ -94,23 +109,23 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 }
+                notify(isOK, action);
             } else {
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, ALARM);
                     isOK = true;
                 }
-
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                     isOK = true;
                 }
+                notify(isOK, action);
             }
         }
-        IS_ALARM_PERMISSION_RECEIVED = isOK;
-        Util.log("Inside check and get permission alarm, return flag is " + IS_ALARM_PERMISSION_RECEIVED);
-        if (IS_ALARM_PERMISSION_RECEIVED) {
-            PermissionEventSource.getInstance().permissionGranted(action);
+        if (IS_ALARM_PERMISSION_RECEIVED != null) {
+            Util.log("Inside check and get permission alarm, return flag is " + IS_READ_EXTERNAL_STORAGE_RECEIVED);
+            notify(IS_ALARM_PERMISSION_RECEIVED, action);
         } else {
-            PermissionEventSource.getInstance().permissionDenied(action);
+            IS_ALARM_PERMISSION_RECEIVED = isOK;
         }
     }
 }

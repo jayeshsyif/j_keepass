@@ -86,7 +86,7 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         AtomicReference<ListGroupEntryAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> updateLoadingText(binding.getRoot().getContext().getString(R.string.loading)));
         executor.execute(this::showLoading);
-        executor.execute(() -> adapter.set(configureRecyclerView(binding.showGroupEntriesRecyclerView.getContext())));
+        executor.execute(() -> adapter.set(configureRecyclerView(binding.showGroupEntriesRecyclerView.getContext(), action)));
         executor.execute(() -> {
             if (Db.getInstance() != null && Db.getInstance().getRootGroupId() != null) {
                 listFromGroupId(gId, adapter.get(), action, query);
@@ -132,9 +132,12 @@ public class ListGroupEntryFragment extends Fragment implements LoadingEvent, Gr
         executorServices = new ArrayList<>();
     }
 
-    private ListGroupEntryAdapter configureRecyclerView(Context context) {
+    private ListGroupEntryAdapter configureRecyclerView(Context context, Action action) {
         Util.log("Configuration recycler view");
         ListGroupEntryAdapter adapter = new ListGroupEntryAdapter();
+        if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
+            adapter.setShowPath(true);
+        }
         try {
             requireActivity().runOnUiThread(() -> {
                 Util.log("Configuration recycler view inside ui thread");

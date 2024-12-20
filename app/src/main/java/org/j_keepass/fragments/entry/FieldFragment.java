@@ -64,9 +64,7 @@ public class FieldFragment extends Fragment implements LoadingEvent {
             if (showBundle != null && showBundle.length() > 0) {
                 show.set(showBundle);
             }
-            if (isEditBundle != null) {
-                isEdit.set(isEditBundle);
-            }
+            isEdit.set(isEditBundle);
         }
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
@@ -86,7 +84,7 @@ public class FieldFragment extends Fragment implements LoadingEvent {
     }
 
     private void showFields(ListFieldAdapter adapter, final String show) {
-        ArrayList<FieldData> fields = null;
+        ArrayList<FieldData> fields;
         if (show.equals("additional")) {
             fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId());
         } else if (show.equals("attachment")) {
@@ -115,13 +113,11 @@ public class FieldFragment extends Fragment implements LoadingEvent {
                 fd.value = "DUMMY";
                 fd.fieldValueType = FieldValueType.DUMMY;
                 fd.fieldNameType = FieldNameType.DUMMY;
-                if (fd.value != null && fd.value.length() > 0) {
-                    adapter.addValue(fd);
-                    try {
-                        requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
-                    } catch (Throwable e) {
-                        //ignore
-                    }
+                adapter.addValue(fd);
+                try {
+                    requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
+                } catch (Throwable e) {
+                    //ignore
                 }
             }
         }
