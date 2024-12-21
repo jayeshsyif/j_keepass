@@ -569,4 +569,23 @@ public class Db {
     public boolean pwdMatch(String newPwd) {
         return new String(pwd).equals(newPwd);
     }
+
+    public void deleteGroup(UUID gId, ContentResolver contentResolver) {
+        if (database != null) {
+            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            if (group != null) {
+                currentGroupId = group.getParent().getUuid();
+                database.deleteGroup(gId);
+                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+            }
+        }
+    }
+
+    public boolean isCurrentGroupRootGroup() {
+        boolean flag = false;
+        if (database != null) {
+            flag = database.getRootGroup().getUuid().equals(currentGroupId);
+        }
+        return flag;
+    }
 }

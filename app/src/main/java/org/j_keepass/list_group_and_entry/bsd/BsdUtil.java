@@ -12,13 +12,15 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.R;
-import org.j_keepass.db.events.DbAndFileOperations;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
+import org.j_keepass.events.reload.ReloadEvent;
+import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.operation.Db;
+import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
@@ -62,6 +64,33 @@ public class BsdUtil {
                     Utils.sleepFor3MSec();
                     Db.getInstance().deSetDatabase();
                     ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.LOCK);
+                });
+            });
+        }
+        LinearLayout groupEntryMoreOptionDeleteGroup = bsd.findViewById(R.id.groupEntryMoreOptionDeleteGroup);
+        if (groupEntryMoreOptionDeleteGroup != null) {
+            groupEntryMoreOptionDeleteGroup.setOnClickListener(view -> {
+                bsd.dismiss();
+                new org.j_keepass.util.confirm_alert.BsdUtil().show(view.getContext(), new ConfirmNotifier() {
+                    @Override
+                    public void onYes() {
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.deleting));
+                            LoadingEventSource.getInstance().showLoading();
+                            if (Db.getInstance().isCurrentGroupRootGroup()) {
+                                LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.canNotdeleteRoot));
+                            } else {
+                                Db.getInstance().deleteGroup(Db.getInstance().getCurrentGroupId(), activity.getContentResolver());
+                                ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNo() {
+                        // ignore
+                    }
                 });
             });
         }

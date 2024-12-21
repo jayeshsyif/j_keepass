@@ -85,10 +85,70 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/groupEntryMoreOptionChangePwd"
+        android:id="@+id/groupEntryMoreOptionEditGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/groupEntryMoreOptionAdd"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/createNewEntry"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/editGroupName"
+            android:textColor="?colorSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionDeleteGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionEditGroup"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/deleteGroup"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="@color/kp_red"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/deleteGroup"
+            android:textColor="?colorSecondary"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionChangePwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionDeleteGroup"
         android:padding="@dimen/kp_margin">
 
         <ImageButton

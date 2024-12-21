@@ -82,10 +82,13 @@
     <string name="dbRename">Rename</string>
     <string name="delete">Delete</string>
     <string name="deleting">Deleting</string>
+    <string name="canNotdeleteRoot">Can not delete root group/folder</string>
     <string name="changeDbPwd">Change Password</string>
     <string name="areYouSure">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="add">Add</string>
     <string name="change">Change</string>
+    <string name="editGroupName">Edit Group/Folder Name</string>
+    <string name="deleteGroup">Delete Group/Folder</string>
 </resources>

@@ -246,7 +246,13 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
     @Override
     public void reload(ReloadAction reloadAction) {
         if (reloadAction != null && reloadAction.name().equals(ReloadAction.GROUP_UPDATE.name())) {
-            binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
+            try {
+                runOnUiThread(() -> {
+                    binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
+                });
+            } catch (Throwable t) {
+                // ignore
+            }
         }
     }
 
