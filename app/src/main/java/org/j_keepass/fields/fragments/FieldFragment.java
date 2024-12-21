@@ -20,7 +20,7 @@ import org.j_keepass.fields.enums.FieldValueType;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.db.operation.Db;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;

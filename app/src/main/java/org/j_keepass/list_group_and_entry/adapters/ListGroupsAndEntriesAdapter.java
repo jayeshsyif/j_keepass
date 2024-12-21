@@ -16,7 +16,7 @@ import org.j_keepass.R;
 import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupAndEntriesItemViewBinding;
-import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.dtos.GroupEntryData;

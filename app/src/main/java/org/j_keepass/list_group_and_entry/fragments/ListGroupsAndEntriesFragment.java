@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListGroupsAndEntriesFragmentBinding;
-import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;

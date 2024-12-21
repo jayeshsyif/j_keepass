@@ -1,4 +1,4 @@
-package org.j_keepass.db.event;
+package org.j_keepass.db.events;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -9,8 +9,8 @@ import android.provider.OpenableColumns;
 
 import com.google.common.io.ByteStreams;
 
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.event.operations.Db;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
@@ -86,6 +86,7 @@ public class DbAndFileOperations {
     }
 
     public void writeDbToFile(File file, byte[] pwd, ContentResolver contentResolver, Database<?, ?, ?, ?> database) {
+        Utils.log("write db to file");
         Uri kdbxFileUri = Uri.fromFile(file);
         KdbxCreds creds = new KdbxCreds(pwd);
         OutputStream fileOutputStream = null;

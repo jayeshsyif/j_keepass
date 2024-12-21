@@ -1,8 +1,8 @@
-package org.j_keepass.db.event.operations;
+package org.j_keepass.db.operation;
 
 import android.content.ContentResolver;
 
-import org.j_keepass.db.event.DbAndFileOperations;
+import org.j_keepass.db.events.DbAndFileOperations;
 import org.j_keepass.fields.dtos.FieldData;
 import org.j_keepass.fields.enums.FieldNameType;
 import org.j_keepass.fields.enums.FieldValueType;
@@ -555,9 +555,18 @@ public class Db {
         new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
     }
 
+    public void updateDb(ContentResolver contentResolver, byte[] newPwd) {
+        new DbAndFileOperations().writeDbToFile(kdbxFile, newPwd, contentResolver, database);
+        pwd = newPwd;
+    }
+
     public void updateEntry(UUID eId) {
         if (listOfEntriesNotUpdatedInDb.contains(eId)) {
             listOfEntriesNotUpdatedInDb.remove(eId);
         }
+    }
+
+    public boolean pwdMatch(String newPwd) {
+        return new String(pwd).equals(newPwd);
     }
 }

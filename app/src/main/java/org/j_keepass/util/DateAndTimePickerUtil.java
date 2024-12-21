@@ -6,7 +6,7 @@ import android.app.TimePickerDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.fields.dtos.FieldData;
-import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.db.operation.Db;
 
 import java.util.Calendar;
 import java.util.Date;

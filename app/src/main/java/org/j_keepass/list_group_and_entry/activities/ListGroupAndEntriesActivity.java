@@ -17,7 +17,7 @@ import org.j_keepass.R;
 import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupsAndEntriesActivityLayoutBinding;
-import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;

@@ -25,7 +25,7 @@ import org.j_keepass.events.themes.ThemeEvent;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Utils;
 import org.j_keepass.list_db.bsd.BsdUtil;
-import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.list_db.util.themes.SetTheme;
 import org.j_keepass.list_db.util.themes.Theme;
 

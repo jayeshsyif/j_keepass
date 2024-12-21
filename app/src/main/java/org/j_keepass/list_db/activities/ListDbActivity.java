@@ -19,11 +19,11 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbActivityLayoutBinding;
-import org.j_keepass.db.event.DbAndFileOperations;
-import org.j_keepass.db.event.DbEvent;
-import org.j_keepass.db.event.DbEventSource;
-import org.j_keepass.db.event.operations.Db;
-import org.j_keepass.db.event.util.DummyDbDataUtil;
+import org.j_keepass.db.events.DbAndFileOperations;
+import org.j_keepass.db.events.DbEvent;
+import org.j_keepass.db.events.DbEventSource;
+import org.j_keepass.db.operation.Db;
+import org.j_keepass.db.util.DummyDbDataUtil;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;

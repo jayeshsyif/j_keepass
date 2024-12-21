@@ -1,4 +1,4 @@
-package org.j_keepass.db.event;
+package org.j_keepass.db.events;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package org.j_keepass.db.event.util;
+package org.j_keepass.db.util;
 
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.Entry;
