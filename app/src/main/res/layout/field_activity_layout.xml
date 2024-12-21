@@ -94,7 +94,7 @@
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/entryHomeBtn"
+                    android:id="@+id/entryBackBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -102,7 +102,7 @@
                     android:contentDescription="@string/createNewDatabaseDesc"
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
-                    android:src="@drawable/ic_home_fill0_wght300_grad_25_opsz24"
+                    android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
                     app:tint="?colorPrimary" />
 
                 <View
@@ -110,7 +110,7 @@
                     android:layout_width="@dimen/kp_always_1"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_toEndOf="@id/entryHomeBtn"
+                    android:layout_toEndOf="@id/entryBackBtn"
                     android:background="@drawable/background_transparent"
                     app:tint="?colorPrimary" />
 

@@ -78,9 +78,8 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     }
 
     private void configureClicks() {
-        binding.entryHomeBtn.setOnClickListener(view -> {
-            Db.getInstance().setCurrentGroupId(Db.getInstance().getRootGroupId());
-            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.HOME);
+        binding.entryBackBtn.setOnClickListener(view -> {
+            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
             Intent intent = new Intent(this, ListGroupAndEntriesActivity.class);
             startActivity(intent);
             finish();

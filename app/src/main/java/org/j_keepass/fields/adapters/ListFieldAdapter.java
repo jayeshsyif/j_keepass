@@ -76,7 +76,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             holder.fieldCardView.setVisibility(View.INVISIBLE);
         } else {
             holder.editText.setEnabled(isEditable);
-            holder.fieldCopy.setVisibility(isEditable && !isAttachment ? View.VISIBLE : View.GONE);
+            holder.fieldCopy.setVisibility(isEditable && !isCreatedOrExpiryDate ? View.VISIBLE : View.GONE);
 
             if (isCreatedOrExpiryDate || isDateOtherThenCreateAndExpire) {
                 holder.editText.setEnabled(false);
@@ -90,6 +90,13 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                     }
                 } else {
                     holder.fieldCopy.setVisibility(View.GONE);
+                }
+            } else if (isAttachment) {
+                holder.editText.setEnabled(false);
+                holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+                holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                if (isEditable) {
+                    holder.fieldCopy.setImageDrawable(holder.fieldCopy.getContext().getDrawable(R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
                 }
             } else {
                 if (!isPassword) {
@@ -117,7 +124,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                         String inputValue = holder.editText.getText().toString();
                         if (inputValue != null) {
                             holder.mItem.value = inputValue;
-                            Utils.log("Calling update field Value for "+holder.mItem.asString());
+                            Utils.log("Calling update field Value for " + holder.mItem.asString());
                             Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
                         }
                     }
