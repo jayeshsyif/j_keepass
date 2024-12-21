@@ -5,8 +5,8 @@ import android.app.TimePickerDialog;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import org.j_keepass.fragments.entry.dtos.FieldData;
-import org.j_keepass.util.db.Db;
+import org.j_keepass.fields.dtos.FieldData;
+import org.j_keepass.db.event.operations.Db;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,12 +21,12 @@ public class DateAndTimePickerUtil {
         DatePickerDialog datePickerDialog = new DatePickerDialog(editText.getContext(), (view, year, month, dayOfMonth) -> {
             currentCalender.set(year, month, dayOfMonth);
             AtomicReference<Date> selectedExpiryDate = new AtomicReference<>(currentCalender.getTime());
-            editText.setText(Util.convertDateToString(selectedExpiryDate.get()));
+            editText.setText(Utils.convertDateToString(selectedExpiryDate.get()));
             TimePickerDialog timePickerDialog = new TimePickerDialog(editText.getContext(), (view1, hourOfDay, minute) -> {
                 currentCalender.set(year, month, dayOfMonth, hourOfDay, minute);
                 selectedExpiryDate.set(currentCalender.getTime());
-                editText.setText(Util.convertDateToString(selectedExpiryDate.get()));
-                Util.log("Calling update field Value");
+                editText.setText(Utils.convertDateToString(selectedExpiryDate.get()));
+                Utils.log("Calling update field Value");
                 fieldData.value = editText.getText().toString();
                 Db.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), fieldData);
             }, toBeDisplayedDate.get(Calendar.HOUR_OF_DAY), toBeDisplayedDate.get(Calendar.MINUTE), true);

@@ -9,8 +9,8 @@ import android.provider.OpenableColumns;
 
 import com.google.common.io.ByteStreams;
 
-import org.j_keepass.util.Util;
-import org.j_keepass.util.db.Db;
+import org.j_keepass.util.Utils;
+import org.j_keepass.db.event.operations.Db;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
@@ -41,31 +41,31 @@ public class DbAndFileOperations {
     }
 
     public void createMainDirectory(String dirPath) {
-        Util.log("dirPath: " + dirPath);
+        Utils.log("dirPath: " + dirPath);
         if (dirPath == null) {
-            Util.log("Null dirPath: " + dirPath);
+            Utils.log("Null dirPath: " + dirPath);
         } else {
             File projDir = new File(dirPath);
             if (!projDir.exists()) {
                 projDir.mkdirs();
-                Util.log("Created dirPath: " + dirPath);
+                Utils.log("Created dirPath: " + dirPath);
             } else {
-                Util.log("Exists dirPath: " + dirPath);
+                Utils.log("Exists dirPath: " + dirPath);
             }
         }
     }
 
     public void createSubFilesDirectory(String subFilesDirPath) {
-        Util.log("subFilesDirPath: " + subFilesDirPath);
+        Utils.log("subFilesDirPath: " + subFilesDirPath);
         if (subFilesDirPath == null) {
-            Util.log("Null subFilesDirPath: " + subFilesDirPath);
+            Utils.log("Null subFilesDirPath: " + subFilesDirPath);
         } else {
             File subFilesDir = new File(subFilesDirPath);
             if (!subFilesDir.exists()) {
                 subFilesDir.mkdirs();
-                Util.log("Created subFilesDirPath: " + subFilesDirPath);
+                Utils.log("Created subFilesDirPath: " + subFilesDirPath);
             } else {
-                Util.log("Exists subFilesDirPath: " + subFilesDirPath);
+                Utils.log("Exists subFilesDirPath: " + subFilesDirPath);
             }
         }
     }
@@ -78,7 +78,7 @@ public class DbAndFileOperations {
             try {
                 fromTo.createNewFile();
             } catch (Throwable e) {
-                Util.log("unable to create, dir: " + dir + ", name " + dbName);
+                Utils.log("unable to create, dir: " + dir + ", name " + dbName);
                 fromTo = null;
             }
         }
@@ -93,13 +93,13 @@ public class DbAndFileOperations {
             fileOutputStream = contentResolver.openOutputStream(kdbxFileUri, "wt");
             database.save(creds, fileOutputStream);
         } catch (Throwable e) {
-            Util.log("unable to write db to file");
+            Utils.log("unable to write db to file");
         } finally {
             if (fileOutputStream != null) {
                 try {
                     fileOutputStream.close();
                 } catch (IOException e) {
-                    Util.log("unable to close fos while creating db to file");
+                    Utils.log("unable to close fos while creating db to file");
                 }
             }
         }
@@ -110,7 +110,7 @@ public class DbAndFileOperations {
             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             activity.grantUriPermission(activity.getPackageName(), uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         } catch (Throwable e) {
-            Util.log("unable to get permission to read file");
+            Utils.log("unable to get permission to read file");
         }
         String fileName = null;
         try {
@@ -119,7 +119,7 @@ public class DbAndFileOperations {
             returnCursor.moveToFirst();
             fileName = returnCursor.getString(nameIndex);
         } catch (Throwable e) {
-            Util.log("unable to get file name");
+            Utils.log("unable to get file name");
         }
         if (fileName != null) {
             File fromTo = new File(subDirPath + File.separator + fileName);
@@ -170,7 +170,7 @@ public class DbAndFileOperations {
 
 
     public void openDb(String dbName, String pwd, String fullPath, ContentResolver contentResolver) {
-        Util.log("Loading " + fullPath);
+        Utils.log("Loading " + fullPath);
         KdbxCreds creds = new KdbxCreds(pwd.getBytes());
         File kdbxFile = new File(fullPath);
         Uri kdbxFileUri = Uri.fromFile(kdbxFile);
@@ -184,7 +184,7 @@ public class DbAndFileOperations {
             try {
                 Database<?, ?, ?, ?> database = SimpleDatabase.load(creds, inputStream);
                 if (database != null) {
-                    Util.log("Load done");
+                    Utils.log("Load done");
                     Db.getInstance().setDatabase(database, kdbxFile, pwd.getBytes());
                     DbEventSource.getInstance().loadSuccessDb();
                 } else {

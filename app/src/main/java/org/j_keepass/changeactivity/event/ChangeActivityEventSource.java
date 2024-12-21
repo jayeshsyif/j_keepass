@@ -1,6 +1,6 @@
 package org.j_keepass.changeactivity.event;
 
-import org.j_keepass.util.Util;
+import org.j_keepass.util.Utils;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class ChangeActivityEventSource {
     }
 
     public void changeActivity(ChangeActivityEvent.Action action) {
-        Util.log("In listener reload");
+        Utils.log("In listener reload");
         for (ChangeActivityEvent listener : listeners) {
             listener.changeActivity(action);
         }
