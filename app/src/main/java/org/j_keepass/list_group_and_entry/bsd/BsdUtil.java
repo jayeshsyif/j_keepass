@@ -17,6 +17,8 @@ import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
+import org.j_keepass.events.permission.PermissionEvent;
+import org.j_keepass.events.permission.PermissionEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.util.Utils;
@@ -34,6 +36,14 @@ public class BsdUtil {
         if (groupEntryMenuText != null) {
             groupEntryMenuText.setText(name);
         }
+        LinearLayout groupEntryMoreOptionExportDb = bsd.findViewById(R.id.groupEntryMoreOptionExportDb);
+        if (groupEntryMoreOptionExportDb != null) {
+            groupEntryMoreOptionExportDb.setOnClickListener(view -> {
+                bsd.dismiss();
+                PermissionEventSource.getInstance().checkAndGetPermissionReadWriteStorage(view, activity, PermissionEvent.PermissionAction.EXPORT);
+            });
+        }
+
         LinearLayout groupEntryMoreOptionGenerateNewPassword = bsd.findViewById(R.id.groupEntryMoreOptionGenerateNewPassword);
         if (groupEntryMoreOptionGenerateNewPassword != null) {
             groupEntryMoreOptionGenerateNewPassword.setOnClickListener(view -> {

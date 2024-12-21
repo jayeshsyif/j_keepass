@@ -57,20 +57,10 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
 
     private void notify(Boolean isOk, PermissionAction permissionAction) {
         if (isOk) {
-            PermissionEventSource.getInstance().permissionGranted(permissionAction);
+            PermissionResultEventSource.getInstance().permissionGranted(permissionAction);
         } else {
-            PermissionEventSource.getInstance().permissionDenied(permissionAction);
+            PermissionResultEventSource.getInstance().permissionDenied(permissionAction);
         }
-    }
-
-    @Override
-    public void permissionDenied(PermissionAction permissionAction) {
-
-    }
-
-    @Override
-    public void permissionGranted(PermissionAction permissionAction) {
-
     }
 
     @Override

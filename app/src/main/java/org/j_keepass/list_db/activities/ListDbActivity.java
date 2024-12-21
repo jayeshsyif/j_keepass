@@ -1,6 +1,5 @@
 package org.j_keepass.list_db.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +28,8 @@ import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
 import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionEventSource;
+import org.j_keepass.events.permission.PermissionResultEvent;
+import org.j_keepass.events.permission.PermissionResultEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.events.themes.ThemeEvent;
@@ -48,7 +49,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbEvent, PermissionEvent, GenerateNewPwdEvent {
+public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbEvent, PermissionResultEvent, GenerateNewPwdEvent {
     private ListDbActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -62,7 +63,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         register();
         ExecutorService executor = getExecutor();
         executor.execute(this::configurePaths);
-        executor.execute(() -> PermissionEventSource.getInstance().checkAndGetPermissionAlarm(binding.getRoot(), this, PermissionAction.ALARM));
+        executor.execute(() -> PermissionEventSource.getInstance().checkAndGetPermissionAlarm(binding.getRoot(), this, PermissionEvent.PermissionAction.ALARM));
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureClicks);
         executor.execute(this::configureTabLayout);
@@ -73,7 +74,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         GenerateNewPasswordEventSource.getInstance().addListener(this);
         ThemeEventSource.getInstance().addListener(this);
         DbEventSource.getInstance().addListener(this);
-        PermissionEventSource.getInstance().addListener(this);
+        PermissionResultEventSource.getInstance().addListener(this);
     }
 
     private ExecutorService getExecutor() {
@@ -130,7 +131,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     private void unregister() {
         ThemeEventSource.getInstance().removeListener(this);
         DbEventSource.getInstance().removeListener(this);
-        PermissionEventSource.getInstance().removeListener(this);
+        PermissionResultEventSource.getInstance().removeListener(this);
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
     }
 
@@ -316,12 +317,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     }
 
     @Override
-    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionAction permissionAction) {
-        //ignore
-    }
-
-    @Override
-    public void permissionDenied(PermissionAction permissionAction) {
+    public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
         Utils.log("Landing Permission Not Granted");
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
@@ -331,23 +327,18 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     }
 
     @Override
-    public void permissionGranted(PermissionAction permissionAction) {
-        if (permissionAction != null && permissionAction.name().equals(PermissionAction.IMPORT.name())) {
+    public void permissionGranted(PermissionEvent.PermissionAction permissionAction) {
+        if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.IMPORT.name())) {
             Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             chooseFile.setType("application/octet-stream");
             chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
             chooseFile = Intent.createChooser(chooseFile, "Choose a file");
             startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
-        } else if (permissionAction != null && permissionAction.name().equals(PermissionAction.ALARM.name())) {
+        } else if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.ALARM.name())) {
             Utils.log("Landing Alarm Permission Granted, setting notification");
             new org.j_keepass.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
         }
-    }
-
-    @Override
-    public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionAction permissionAction) {
-        //ignore
     }
 
     @Override
@@ -358,16 +349,16 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         int ALARM = 101;
         if (requestCode == READ_EXTERNAL_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                PermissionEventSource.getInstance().permissionGranted(PermissionAction.IMPORT);
+                PermissionResultEventSource.getInstance().permissionGranted(PermissionEvent.PermissionAction.IMPORT);
             } else {
-                PermissionEventSource.getInstance().permissionDenied(PermissionAction.IMPORT);
+                PermissionResultEventSource.getInstance().permissionDenied(PermissionEvent.PermissionAction.IMPORT);
             }
         }
         if (requestCode == ALARM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                PermissionEventSource.getInstance().permissionGranted(PermissionAction.ALARM);
+                PermissionResultEventSource.getInstance().permissionGranted(PermissionEvent.PermissionAction.ALARM);
             } else {
-                PermissionEventSource.getInstance().permissionDenied(PermissionAction.ALARM);
+                PermissionResultEventSource.getInstance().permissionDenied(PermissionEvent.PermissionAction.ALARM);
             }
         }
 

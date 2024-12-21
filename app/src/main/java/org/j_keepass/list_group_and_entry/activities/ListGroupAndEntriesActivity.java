@@ -2,6 +2,7 @@ package org.j_keepass.list_group_and_entry.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
+import org.j_keepass.db.events.DbAndFileOperations;
 import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupsAndEntriesActivityLayoutBinding;
@@ -21,6 +23,9 @@ import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
+import org.j_keepass.events.permission.PermissionEvent;
+import org.j_keepass.events.permission.PermissionResultEvent;
+import org.j_keepass.events.permission.PermissionResultEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.events.themes.ThemeEvent;
@@ -34,14 +39,17 @@ import org.j_keepass.stats.fragments.StatsFragment;
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListGroupAndEntriesActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, ChangeActivityEvent, ReloadEvent {
+public class ListGroupAndEntriesActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, ChangeActivityEvent, ReloadEvent, PermissionResultEvent {
     private ListGroupsAndEntriesActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
+
+    public static final int PICK_FOLDER_OPEN_RESULT_CODE = 2;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,12 +101,14 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         GenerateNewPasswordEventSource.getInstance().addListener(this);
         ChangeActivityEventSource.getInstance().addListener(this);
         ReloadEventSource.getInstance().addListener(this);
+        PermissionResultEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
         ChangeActivityEventSource.getInstance().removeListener(this);
         ReloadEventSource.getInstance().removeListener(this);
+        PermissionResultEventSource.getInstance().removeListener(this);
     }
 
     @Override
@@ -320,4 +330,49 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         new org.j_keepass.list_group_and_entry.bsd.BsdUtil().showGroupEntryMoreOptionsMenu(context, this, Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
     }
 
+    @Override
+    public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
+        Utils.log("Landing Permission Not Granted");
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));
+            LoadingEventSource.getInstance().showLoading();
+        });
+    }
+
+    @Override
+    public void permissionGranted(PermissionEvent.PermissionAction permissionAction) {
+        if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.EXPORT.name())) {
+            Intent chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+            chooseFile.setType("*/*");
+            chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            chooseFile.putExtra(Intent.EXTRA_TITLE, new File(Db.getInstance().getDbName()).getName());
+
+            chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
+            startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Utils.log("requestCode " + requestCode);
+        if (requestCode == PICK_FOLDER_OPEN_RESULT_CODE) {
+            if (resultCode == -1) {
+                ExecutorService executor = getExecutor();
+                executor.execute(() -> exportDb(data.getData()));
+            }
+        }
+    }
+
+    private void exportDb(Uri dataUri) {
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.exporting));
+            LoadingEventSource.getInstance().showLoading();
+        });
+        executor.execute(() -> Db.getInstance().exportFile(dataUri, getContentResolver(), this));
+        executor.execute(() -> LoadingEventSource.getInstance().dismissLoading());
+    }
 }

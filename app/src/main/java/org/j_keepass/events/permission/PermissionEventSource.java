@@ -39,18 +39,6 @@ public class PermissionEventSource {
             listener.checkAndGetPermissionReadWriteStorage(v, activity, permissionAction);
         }
     }
-
-    public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
-        for (PermissionEvent listener : listeners) {
-            listener.permissionDenied(permissionAction);
-        }
-    }
-
-    public void permissionGranted(PermissionEvent.PermissionAction permissionAction) {
-        for (PermissionEvent listener : listeners) {
-            listener.permissionGranted(permissionAction);
-        }
-    }
     public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionEvent.PermissionAction permissionAction) {
         Utils.log("In listener got Check And Get Permission, listener count is "+listeners.size());
         if (listeners.size() == 0 || listeners.size() > 0) {

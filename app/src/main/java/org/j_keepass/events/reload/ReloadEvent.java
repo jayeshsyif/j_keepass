@@ -9,5 +9,6 @@ public interface ReloadEvent {
         IMPORT,
         EDIT,
         DELETE,
+        EXPORT,
     }
 }

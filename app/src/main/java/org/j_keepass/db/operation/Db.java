@@ -1,6 +1,7 @@
 package org.j_keepass.db.operation;
 
 import android.content.ContentResolver;
+import android.net.Uri;
 
 import org.j_keepass.db.events.DbAndFileOperations;
 import org.j_keepass.fields.dtos.FieldData;
@@ -9,6 +10,7 @@ import org.j_keepass.fields.enums.FieldValueType;
 import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryStatus;
 import org.j_keepass.list_db.dtos.GroupEntryType;
+import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.Utils;
 import org.linguafranca.pwdb.Database;
@@ -53,8 +55,8 @@ public class Db {
     }
 
     public String getDbName() {
-        if (database != null) {
-            return database.getName();
+        if (kdbxFile != null) {
+            return kdbxFile.getName();
         } else {
             return "Not Found!";
         }
@@ -597,5 +599,9 @@ public class Db {
                 new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
             }
         }
+    }
+
+    public void exportFile(Uri dataUri, ContentResolver contentResolver, ListGroupAndEntriesActivity activity) {
+        new DbAndFileOperations().exportFile(database, dataUri, pwd, contentResolver, activity);
     }
 }

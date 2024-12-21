@@ -5,8 +5,6 @@ import android.view.View;
 
 public interface PermissionEvent {
     void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionAction permissionAction);
-    void permissionDenied(PermissionAction permissionAction);
-    void permissionGranted(PermissionAction permissionAction);
     void checkAndGetPermissionAlarm(View v, Activity activity, PermissionAction permissionAction);
     enum PermissionAction {
         IMPORT,

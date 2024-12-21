@@ -10,6 +10,7 @@ import android.provider.OpenableColumns;
 import com.google.common.io.ByteStreams;
 
 import org.j_keepass.db.operation.Db;
+import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
 import org.j_keepass.util.Utils;
 import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
@@ -107,62 +108,66 @@ public class DbAndFileOperations {
     }
 
     public void importFile(String subDirPath, Uri uri, ContentResolver contentResolver, Activity activity) {
+        boolean proceed = true;
         try {
             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             activity.grantUriPermission(activity.getPackageName(), uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         } catch (Throwable e) {
+            proceed = false;
             Utils.log("unable to get permission to read file");
         }
-        String fileName = null;
-        try {
-            Cursor returnCursor = contentResolver.query(uri, null, null, null, null);
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            fileName = returnCursor.getString(nameIndex);
-        } catch (Throwable e) {
-            Utils.log("unable to get file name");
-        }
-        if (fileName != null) {
-            File fromTo = new File(subDirPath + File.separator + fileName);
-            if (fromTo.exists()) {
-                fromTo.delete();
-            } else {
-                try {
-                    fromTo.createNewFile();
-                    fromTo.setWritable(true, true);
-                    fromTo.setExecutable(true, true);
-                    fromTo.setReadable(true, true);
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-
-            InputStream inputStream = null;
+        if (proceed) {
+            String fileName = null;
             try {
-                inputStream = contentResolver.openInputStream(uri);
-            } catch (FileNotFoundException e) {
-                // ignore
-            }
-
-            FileOutputStream outputStream = null;
-            try {
-                outputStream = new FileOutputStream(fromTo);
-                ByteStreams.copy(inputStream, outputStream);
+                Cursor returnCursor = contentResolver.query(uri, null, null, null, null);
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                returnCursor.moveToFirst();
+                fileName = returnCursor.getString(nameIndex);
             } catch (Throwable e) {
-                // ignore
-            } finally {
-                if (outputStream != null) {
+                Utils.log("unable to get file name");
+            }
+            if (fileName != null) {
+                File fromTo = new File(subDirPath + File.separator + fileName);
+                if (fromTo.exists()) {
+                    fromTo.delete();
+                } else {
                     try {
-                        outputStream.close();
+                        fromTo.createNewFile();
+                        fromTo.setWritable(true, true);
+                        fromTo.setExecutable(true, true);
+                        fromTo.setReadable(true, true);
                     } catch (IOException e) {
                         // ignore
                     }
                 }
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (Exception e) {
-                        // ignore
+
+                InputStream inputStream = null;
+                try {
+                    inputStream = contentResolver.openInputStream(uri);
+                } catch (FileNotFoundException e) {
+                    // ignore
+                }
+
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(fromTo);
+                    ByteStreams.copy(inputStream, outputStream);
+                } catch (Throwable e) {
+                    // ignore
+                } finally {
+                    if (outputStream != null) {
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {
+                            // ignore
+                        }
+                    }
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (Exception e) {
+                            // ignore
+                        }
                     }
                 }
             }
@@ -200,6 +205,35 @@ public class DbAndFileOperations {
                     inputStream.close();
                 } catch (Exception e) {
                     // ignore
+                }
+            }
+        }
+    }
+
+    public void exportFile(Database<?, ?, ?, ?> database, Uri uri, byte[] pwd, ContentResolver contentResolver, ListGroupAndEntriesActivity activity) {
+        boolean proceed = true;
+        try {
+            contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            activity.grantUriPermission(activity.getPackageName(), uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (Throwable e) {
+            proceed = false;
+            Utils.log("unable to get permission to read file");
+        }
+        if (proceed) {
+            OutputStream fileOutputStream = null;
+            KdbxCreds creds = new KdbxCreds(pwd);
+            try {
+                fileOutputStream = activity.getContentResolver().openOutputStream(uri, "wt");
+                database.save(creds, fileOutputStream);
+            } catch (Throwable t) {
+                Utils.log("unable to export file");
+            } finally {
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (Exception e) {
+                        //do nothing
+                    }
                 }
             }
         }
