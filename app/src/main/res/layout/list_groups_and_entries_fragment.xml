@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/searchEntryView"
             android:visibility="gone"
-            tools:listitem="@layout/list_group_entriy_item_view"></androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/list_group_and_entries_item_view"></androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/noGroupEntryDeclarationView"

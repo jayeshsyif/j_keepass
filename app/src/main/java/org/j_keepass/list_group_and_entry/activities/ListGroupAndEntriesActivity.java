@@ -13,26 +13,26 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.j_keepass.fields.activities.FieldActivity;
 import org.j_keepass.R;
 import org.j_keepass.changeactivity.event.ChangeActivityEvent;
 import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
-import org.j_keepass.databinding.ListGroupEntryActivityLayoutBinding;
-import org.j_keepass.stats.fragments.StatsFragment;
-import org.j_keepass.list_group_and_entry.fragments.ListGroupsAndEntriesFragment;
-import org.j_keepass.list_db.activities.ListDbActivity;
+import org.j_keepass.databinding.ListGroupsAndEntriesActivityLayoutBinding;
+import org.j_keepass.db.event.operations.Db;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.events.themes.ThemeEvent;
-import org.j_keepass.util.SleepFor1Ms;
-import org.j_keepass.util.Utils;
+import org.j_keepass.fields.activities.FieldActivity;
+import org.j_keepass.list_db.activities.ListDbActivity;
 import org.j_keepass.list_db.bsd.BsdUtil;
-import org.j_keepass.db.event.operations.Db;
 import org.j_keepass.list_db.util.themes.SetTheme;
 import org.j_keepass.list_db.util.themes.Theme;
+import org.j_keepass.list_group_and_entry.fragments.ListGroupsAndEntriesFragment;
+import org.j_keepass.stats.fragments.StatsFragment;
+import org.j_keepass.util.SleepFor1Ms;
+import org.j_keepass.util.Utils;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -40,13 +40,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ListGroupAndEntriesActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, ChangeActivityEvent, ReloadEvent {
-    private ListGroupEntryActivityLayoutBinding binding;
+    private ListGroupsAndEntriesActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new SetTheme(this, false).run();
-        binding = ListGroupEntryActivityLayoutBinding.inflate(getLayoutInflater());
+        binding = ListGroupsAndEntriesActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         configureBackPressed();
         register();

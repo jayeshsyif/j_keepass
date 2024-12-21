@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
-import org.j_keepass.list_db.adapters.ListDbAdapter;
-import org.j_keepass.databinding.ListAllDatabaseFragmentBinding;
+import org.j_keepass.databinding.ListDbFragmentBinding;
 import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
+import org.j_keepass.list_db.adapters.ListDbAdapter;
 import org.j_keepass.util.Utils;
 
 import java.io.File;
@@ -30,13 +30,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
-    private ListAllDatabaseFragmentBinding binding;
+    private ListDbFragmentBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Utils.log("List db frag on create");
         super.onCreate(savedInstanceState);
-        binding = ListAllDatabaseFragmentBinding.inflate(getLayoutInflater());
+        binding = ListDbFragmentBinding.inflate(getLayoutInflater());
     }
 
     @Nullable

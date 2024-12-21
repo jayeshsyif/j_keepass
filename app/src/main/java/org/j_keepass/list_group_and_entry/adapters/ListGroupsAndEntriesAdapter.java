@@ -15,14 +15,14 @@ import com.google.android.material.imageview.ShapeableImageView;
 import org.j_keepass.R;
 import org.j_keepass.changeactivity.event.ChangeActivityEvent;
 import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
-import org.j_keepass.databinding.ListGroupEntriyItemViewBinding;
+import org.j_keepass.databinding.ListGroupAndEntriesItemViewBinding;
+import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryStatus;
 import org.j_keepass.list_db.dtos.GroupEntryType;
-import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.event.operations.Db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ListGroupsAndEntriesAdapter.ViewHolder(ListGroupEntriyItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ListGroupsAndEntriesAdapter.ViewHolder(ListGroupAndEntriesItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
         CardView groupEntryNameCardView;
         ShapeableImageView groupEntryImage;
 
-        public ViewHolder(@NonNull ListGroupEntriyItemViewBinding binding) {
+        public ViewHolder(@NonNull ListGroupAndEntriesItemViewBinding binding) {
             super(binding.getRoot());
             name = binding.groupName;
             groupEntryCountOrStatus = binding.groupEntryCountOrStatus;

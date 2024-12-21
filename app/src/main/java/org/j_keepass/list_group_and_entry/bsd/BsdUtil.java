@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 public class BsdUtil {
     public void showGroupEntryMoreOptionsMenu(Context context, Activity activity, String name) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
-        bsd.setContentView(R.layout.group_entry_more_option_list);
+        bsd.setContentView(R.layout.list_groups_entries_more_option_list);
         TextView groupEntryMenuText = bsd.findViewById(R.id.groupEntryMenuText);
         if (groupEntryMenuText != null) {
             groupEntryMenuText.setText(name);

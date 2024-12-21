@@ -45,7 +45,7 @@ public class BsdUtil {
 
     public void showLandingMoreOptionsMenu(Context context, Activity activity) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
-        bsd.setContentView(R.layout.landing_more_option_list);
+        bsd.setContentView(R.layout.list_db_more_option_list);
         LinearLayout landingMoreOptionChangeTheme = bsd.findViewById(R.id.landingMoreOptionChangeTheme);
         if (landingMoreOptionChangeTheme != null) {
             landingMoreOptionChangeTheme.setOnClickListener(view -> {
@@ -104,7 +104,7 @@ public class BsdUtil {
 
     public void showThemesMenu(Context context) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
-        bsd.setContentView(R.layout.theme_option_list);
+        bsd.setContentView(R.layout.list_themes);
         HashMap<String, Theme> map = ThemeUtil.getThemes();
         ArrayList<Theme> themes = new ArrayList<>();
         for (Map.Entry<String, Theme> entry : map.entrySet()) {
@@ -213,9 +213,7 @@ public class BsdUtil {
                 LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
                 LoadingEventSource.getInstance().showLoading();
             });
-            executor.execute(() -> {
-                GenerateNewPasswordEventSource.getInstance().generateNewPwd(useDigitMcb.isChecked(), useLowerCaseMcb.isChecked(), useUpperCaseMcb.isChecked(), useSymbolMcb.isChecked(), Float.valueOf(slider.getValue()).intValue());
-            });
+            executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd(useDigitMcb.isChecked(), useLowerCaseMcb.isChecked(), useUpperCaseMcb.isChecked(), useSymbolMcb.isChecked(), Float.valueOf(slider.getValue()).intValue()));
         });
         expandBsd(bsd);
         bsd.show();

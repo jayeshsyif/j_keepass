@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,13 +17,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
 import org.j_keepass.R;
-import org.j_keepass.databinding.LandingAndListDatabaseActivityLayoutBinding;
+import org.j_keepass.databinding.ListDbActivityLayoutBinding;
 import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.db.event.DbEvent;
 import org.j_keepass.db.event.DbEventSource;
-import org.j_keepass.list_db.fragments.ListDbFragment;
+import org.j_keepass.db.event.util.DummyDbDataUtil;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
@@ -31,12 +31,13 @@ import org.j_keepass.events.permission.PermissionEventSource;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.events.themes.ThemeEvent;
 import org.j_keepass.events.themes.ThemeEventSource;
-import org.j_keepass.util.SleepFor1Ms;
-import org.j_keepass.util.Utils;
 import org.j_keepass.list_db.bsd.BsdUtil;
-import org.j_keepass.db.event.util.DummyDbDataUtil;
+import org.j_keepass.list_db.fragments.ListDbFragment;
 import org.j_keepass.list_db.util.themes.SetTheme;
 import org.j_keepass.list_db.util.themes.Theme;
+import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
+import org.j_keepass.util.SleepFor1Ms;
+import org.j_keepass.util.Utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -46,7 +47,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbEvent, PermissionEvent, GenerateNewPwdEvent {
-    private LandingAndListDatabaseActivityLayoutBinding binding;
+    private ListDbActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
 
@@ -54,7 +55,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new SetTheme(this, true).run();
-        binding = LandingAndListDatabaseActivityLayoutBinding.inflate(getLayoutInflater());
+        binding = ListDbActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         register();
         ExecutorService executor = getExecutor();
@@ -257,45 +258,29 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
             if (proceed.get()) {
                 dirPath.set(new DbAndFileOperations().getDir(this));
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 subFilesDirPath.set(new DbAndFileOperations().getSubDir(this));
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 new DbAndFileOperations().createMainDirectory(dirPath.get());
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 new DbAndFileOperations().createSubFilesDirectory(subFilesDirPath.get());
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 proceed.set(Utils.checkCodecAvailable());
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 newDbFile.set(new DbAndFileOperations().createFile(subFilesDirPath.get(), dbNameAr.get()));
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 new DbAndFileOperations().writeDbToFile(newDbFile.get(), pwd.getBytes(StandardCharsets.UTF_8), getContentResolver(), new DummyDbDataUtil().getDummyDatabase());
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 LoadingEventSource.getInstance().dismissLoading();
             } else {
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.devInProgress));
             }
-        });
-        executor.execute(() -> {
             if (proceed.get()) {
                 ReloadEventSource.getInstance().reload();
             }
@@ -389,18 +374,25 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         Utils.log("requestCode " + requestCode);
         if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
             if (resultCode == -1) {
-                AtomicReference<String> dirPath = new AtomicReference<>("");
-                AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
                 ExecutorService executor = getExecutor();
                 executor.execute(() -> {
-                    LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.importing));
-                    LoadingEventSource.getInstance().showLoading();
+                    importDb(data.getData());
                 });
-                executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
-                executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
-                executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), data.getData(), getContentResolver(), this));
-                executor.execute(() -> ReloadEventSource.getInstance().reload());
             }
         }
+    }
+
+    private void importDb(Uri dataUri) {
+        AtomicReference<String> dirPath = new AtomicReference<>("");
+        AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.importing));
+            LoadingEventSource.getInstance().showLoading();
+        });
+        executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
+        executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
+        executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), dataUri, getContentResolver(), this));
+        executor.execute(() -> ReloadEventSource.getInstance().reload());
     }
 }

@@ -13,17 +13,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
-import org.j_keepass.list_group_and_entry.adapters.ListGroupsAndEntriesAdapter;
-import org.j_keepass.databinding.ListAllGroupEntryFragmentBinding;
-import org.j_keepass.list_group_and_entry.interfaces.Action;
-import org.j_keepass.list_db.dtos.GroupEntryData;
-import org.j_keepass.list_db.dtos.GroupEntryType;
+import org.j_keepass.databinding.ListGroupsAndEntriesFragmentBinding;
+import org.j_keepass.db.event.operations.Db;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
+import org.j_keepass.list_db.dtos.GroupEntryData;
+import org.j_keepass.list_db.dtos.GroupEntryType;
+import org.j_keepass.list_group_and_entry.adapters.ListGroupsAndEntriesAdapter;
+import org.j_keepass.list_group_and_entry.interfaces.Action;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.event.operations.Db;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -33,13 +33,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEvent, ReloadEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
-    private ListAllGroupEntryFragmentBinding binding;
+    private ListGroupsAndEntriesFragmentBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Utils.log("List db frag on create");
         super.onCreate(savedInstanceState);
-        binding = ListAllGroupEntryFragmentBinding.inflate(getLayoutInflater());
+        binding = ListGroupsAndEntriesFragmentBinding.inflate(getLayoutInflater());
     }
 
     @Nullable
