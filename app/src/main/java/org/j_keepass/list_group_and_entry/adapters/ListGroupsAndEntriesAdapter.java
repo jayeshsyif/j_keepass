@@ -17,6 +17,7 @@ import org.j_keepass.changeactivity.event.ChangeActivityEvent;
 import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupAndEntriesItemViewBinding;
 import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryStatus;
@@ -118,7 +119,7 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
             groupEntryNameCardView.setOnClickListener(view -> {
                 if (mItem.type.name().equals(GroupEntryType.GROUP.name())) {
                     Db.getInstance().setCurrentGroupId(mItem.id);
-                    ReloadEventSource.getInstance().reload();
+                    ReloadEventSource.getInstance().reload(ReloadAction.GROUP_UPDATE);
                 } else if (mItem.type.name().equals(GroupEntryType.ENTRY.name())) {
                     Db.getInstance().setCurrentEntryId(mItem.id);
                     ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.ENTRY_SELECTED);

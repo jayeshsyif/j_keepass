@@ -1,5 +1,6 @@
 package org.j_keepass.events.reload;
 
+import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.util.Utils;
 
 import java.util.ArrayList;
@@ -25,10 +26,10 @@ public class ReloadEventSource {
         listeners.remove(listener);
     }
 
-    public void reload() {
+    public void reload(ReloadAction action) {
         Utils.log("In listener reload");
         for (ReloadEvent listener : listeners) {
-            listener.reload();
+            listener.reload(action);
         }
     }
 }

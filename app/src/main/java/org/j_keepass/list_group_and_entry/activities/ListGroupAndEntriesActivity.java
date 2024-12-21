@@ -18,6 +18,7 @@ import org.j_keepass.changeactivity.event.ChangeActivityEvent;
 import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupsAndEntriesActivityLayoutBinding;
 import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
@@ -51,7 +52,6 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         configureBackPressed();
         register();
         ExecutorService executor = getExecutor();
-        executor.execute(() -> setGroup(Db.getInstance().getRootGroupId()));
         executor.execute(this::configureClicks);
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureTabLayout);
@@ -241,22 +241,24 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
     public void setGroup(UUID gId) {
         Db.getInstance().setCurrentGroupId(gId);
         binding.groupNameOnTop.setText(Db.getInstance().getGroupName(gId));
-        ReloadEventSource.getInstance().reload();
+        ReloadEventSource.getInstance().reload(ReloadAction.GROUP_UPDATE);
     }
 
     @Override
-    public void reload() {
-        binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
+    public void reload(ReloadAction action) {
+        if (action != null && action.name().equals(ReloadAction.GROUP_UPDATE.name())) {
+            binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
+        }
     }
 
     @Override
     public void changeActivity(Action action) {
-        if (action.name().equals(Action.ENTRY_SELECTED.name())) {
+        if (action != null && action.name().equals(Action.ENTRY_SELECTED.name())) {
             Intent intent = new Intent(this, FieldActivity.class);
             startActivity(intent);
             finish();
         }
-        if (action.name().equals(Action.LOCK.name())) {
+        if (action != null && action.name().equals(Action.LOCK.name())) {
             Db.getInstance().deSetDatabase();
             Intent intent = new Intent(this, ListDbActivity.class);
             startActivity(intent);

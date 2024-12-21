@@ -23,6 +23,7 @@ import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.db.event.DbEvent;
 import org.j_keepass.db.event.DbEventSource;
 import org.j_keepass.db.event.util.DummyDbDataUtil;
+import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
@@ -282,7 +283,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.devInProgress));
             }
             if (proceed.get()) {
-                ReloadEventSource.getInstance().reload();
+                ReloadEventSource.getInstance().reload(ReloadAction.CREATE_NEW);
             }
         });
     }
@@ -327,14 +328,14 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
 
     @Override
     public void permissionGranted(Action action) {
-        if (action.name().equals(Action.IMPORT.name())) {
+        if (action != null && action.name().equals(Action.IMPORT.name())) {
             Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             chooseFile.setType("application/octet-stream");
             chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
             chooseFile = Intent.createChooser(chooseFile, "Choose a file");
             startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
-        } else if (action.name().equals(Action.ALARM.name())) {
+        } else if (action != null && action.name().equals(Action.ALARM.name())) {
             Utils.log("Landing Alarm Permission Granted, setting notification");
             new org.j_keepass.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
         }
@@ -393,6 +394,6 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
         executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
         executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), dataUri, getContentResolver(), this));
-        executor.execute(() -> ReloadEventSource.getInstance().reload());
+        executor.execute(() -> ReloadEventSource.getInstance().reload(ReloadAction.IMPORT));
     }
 }

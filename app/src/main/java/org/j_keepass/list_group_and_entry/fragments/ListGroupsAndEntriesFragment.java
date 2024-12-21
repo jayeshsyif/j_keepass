@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListGroupsAndEntriesFragmentBinding;
 import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
@@ -55,6 +56,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
             if (show != null && show.equals("showEntryOnly")) {
                 showAllEntryOnly();
             } else {
+                ReloadEventSource.getInstance().reload(ReloadAction.GROUP_UPDATE);
                 setGroup(Db.getInstance().getCurrentGroupId());
             }
         }
@@ -113,8 +115,10 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
     }
 
     @Override
-    public void reload() {
-        show(Db.getInstance().getCurrentGroupId(), Action.ALL, null);
+    public void reload(ReloadAction action) {
+        if (action != null && (action.name().equals(ReloadAction.GROUP_UPDATE.name()))) {
+            show(Db.getInstance().getCurrentGroupId(), Action.ALL, null);
+        }
     }
 
     @Override
@@ -141,7 +145,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
     private ListGroupsAndEntriesAdapter configureRecyclerView(Context context, Action action) {
         Utils.log("Configuration recycler view");
         ListGroupsAndEntriesAdapter adapter = new ListGroupsAndEntriesAdapter();
-        if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
+        if (action != null && action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
             adapter.setShowPath(true);
         }
         try {
@@ -160,7 +164,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
 
     private void listFromGroupId(UUID gId, ListGroupsAndEntriesAdapter adapter, Action action, String query) {
         final long totalSubs;
-        if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
+        if (action != null && action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
             if (query == null) {
                 totalSubs = Db.getInstance().getAllEntriesCount();
             } else {
@@ -180,7 +184,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
             }
             updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [0/" + totalSubs + "]");
             ArrayList<GroupEntryData> subs;
-            if (action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
+            if (action != null && action.name().equals(Action.ALL_ENTRIES_ONLY.name())) {
                 if (query == null) {
                     subs = Db.getInstance().getAllEntries();
                 } else {

@@ -7,26 +7,58 @@
     android:orientation="vertical"
     android:padding="@dimen/kp_margin">
 
-    <TextView
-        android:id="@+id/groupEntryMenuText"
+    <TableLayout
+        android:id="@+id/groupEntryMenuTextTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/kp_margin"
         android:background="@drawable/tab_selected_indicator"
-        android:fontFamily="@font/spacemono_bold"
-        android:gravity="center_vertical"
-        android:padding="@dimen/kp_margin"
-        android:text="@string/menuText"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?colorSecondary"></TextView>
+        android:weightSum="100">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/groupEntryMenuText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="80"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center_vertical"
+                android:text="@string/groupName"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?colorSecondary" />
+
+            <ImageButton
+                android:id="@+id/databaseMoreOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginTop="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:layout_marginBottom="@dimen/kp_always_1"
+                android:layout_weight="20"
+                android:background="@drawable/background_transparent"
+                android:contentDescription="@string/moreOptionDesc"
+                android:minWidth="@dimen/kp_min_image_width"
+                android:minHeight="@dimen/kp_min_image_height"
+                android:src="@drawable/ic_more_hori_fill0_wght300_grad_25_opsz24"
+                android:textAlignment="center"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/dbNameText"
+                app:tint="?colorSecondary" />
+        </TableRow>
+    </TableLayout>
 
 
     <LinearLayout
         android:id="@+id/groupEntryMoreOptionCreateNewGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupEntryMenuText"
+        android:layout_below="@id/groupEntryMenuTextTable"
         android:padding="@dimen/kp_margin">
 
         <ImageButton
