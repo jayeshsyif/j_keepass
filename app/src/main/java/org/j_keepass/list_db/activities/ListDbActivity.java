@@ -23,12 +23,12 @@ import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.db.event.DbEvent;
 import org.j_keepass.db.event.DbEventSource;
 import org.j_keepass.db.event.util.DummyDbDataUtil;
-import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
 import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionEventSource;
+import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.events.themes.ThemeEvent;
 import org.j_keepass.events.themes.ThemeEventSource;
@@ -60,7 +60,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         setContentView(binding.getRoot());
         register();
         ExecutorService executor = getExecutor();
-        executor.execute(() -> PermissionEventSource.getInstance().checkAndGetPermissionAlarm(binding.getRoot(), this, Action.ALARM));
+        executor.execute(() -> PermissionEventSource.getInstance().checkAndGetPermissionAlarm(binding.getRoot(), this, PermissionAction.ALARM));
         executor.execute(new SleepFor1Ms());
         executor.execute(this::configureClicks);
         executor.execute(this::configureTabLayout);
@@ -283,7 +283,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.devInProgress));
             }
             if (proceed.get()) {
-                ReloadEventSource.getInstance().reload(ReloadAction.CREATE_NEW);
+                ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.CREATE_NEW);
             }
         });
     }
@@ -312,12 +312,12 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     }
 
     @Override
-    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, Action action) {
+    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionAction permissionAction) {
         //ignore
     }
 
     @Override
-    public void permissionDenied(Action action) {
+    public void permissionDenied(PermissionAction permissionAction) {
         Utils.log("Landing Permission Not Granted");
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
@@ -327,22 +327,22 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     }
 
     @Override
-    public void permissionGranted(Action action) {
-        if (action != null && action.name().equals(Action.IMPORT.name())) {
+    public void permissionGranted(PermissionAction permissionAction) {
+        if (permissionAction != null && permissionAction.name().equals(PermissionAction.IMPORT.name())) {
             Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             chooseFile.setType("application/octet-stream");
             chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
             chooseFile = Intent.createChooser(chooseFile, "Choose a file");
             startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
-        } else if (action != null && action.name().equals(Action.ALARM.name())) {
+        } else if (permissionAction != null && permissionAction.name().equals(PermissionAction.ALARM.name())) {
             Utils.log("Landing Alarm Permission Granted, setting notification");
             new org.j_keepass.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
         }
     }
 
     @Override
-    public void checkAndGetPermissionAlarm(View v, Activity activity, Action action) {
+    public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionAction permissionAction) {
         //ignore
     }
 
@@ -354,16 +354,16 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         int ALARM = 101;
         if (requestCode == READ_EXTERNAL_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                PermissionEventSource.getInstance().permissionGranted(Action.IMPORT);
+                PermissionEventSource.getInstance().permissionGranted(PermissionAction.IMPORT);
             } else {
-                PermissionEventSource.getInstance().permissionDenied(Action.IMPORT);
+                PermissionEventSource.getInstance().permissionDenied(PermissionAction.IMPORT);
             }
         }
         if (requestCode == ALARM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                PermissionEventSource.getInstance().permissionGranted(Action.ALARM);
+                PermissionEventSource.getInstance().permissionGranted(PermissionAction.ALARM);
             } else {
-                PermissionEventSource.getInstance().permissionDenied(Action.ALARM);
+                PermissionEventSource.getInstance().permissionDenied(PermissionAction.ALARM);
             }
         }
 
@@ -394,6 +394,6 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(this)));
         executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(this)));
         executor.execute(() -> new DbAndFileOperations().importFile(subFilesDirPath.get(), dataUri, getContentResolver(), this));
-        executor.execute(() -> ReloadEventSource.getInstance().reload(ReloadAction.IMPORT));
+        executor.execute(() -> ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.IMPORT));
     }
 }

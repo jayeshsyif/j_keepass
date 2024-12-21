@@ -1,4 +1,4 @@
-package org.j_keepass.changeactivity.event;
+package org.j_keepass.events.changeactivity;
 
 import org.j_keepass.util.Utils;
 
@@ -25,10 +25,10 @@ public class ChangeActivityEventSource {
         listeners.remove(listener);
     }
 
-    public void changeActivity(ChangeActivityEvent.Action action) {
+    public void changeActivity(ChangeActivityEvent.ChangeActivityAction changeActivityAction) {
         Utils.log("In listener reload");
         for (ChangeActivityEvent listener : listeners) {
-            listener.changeActivity(action);
+            listener.changeActivity(changeActivityAction);
         }
     }
 }

@@ -10,8 +10,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.j_keepass.R;
-import org.j_keepass.changeactivity.event.ChangeActivityEvent;
-import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
+import org.j_keepass.events.changeactivity.ChangeActivityEvent;
+import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.util.Utils;
@@ -50,7 +50,7 @@ public class BsdUtil {
                     LoadingEventSource.getInstance().showLoading();
                     Utils.sleepFor3MSec();
                     Db.getInstance().deSetDatabase();
-                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.LOCK);
+                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.LOCK);
                 });
             });
         }

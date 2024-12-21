@@ -14,11 +14,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
-import org.j_keepass.changeactivity.event.ChangeActivityEvent;
-import org.j_keepass.changeactivity.event.ChangeActivityEventSource;
+import org.j_keepass.events.changeactivity.ChangeActivityEvent;
+import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupsAndEntriesActivityLayoutBinding;
 import org.j_keepass.db.event.operations.Db;
-import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
@@ -66,7 +65,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
                 LoadingEventSource.getInstance().showLoading();
                 Utils.sleepFor3MSec();
                 Db.getInstance().deSetDatabase();
-                ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.Action.LOCK);
+                ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityAction.LOCK);
             });
         });
         binding.groupAndEntryHomeDatabaseBtn.setOnClickListener(view -> {
@@ -245,20 +244,20 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
     }
 
     @Override
-    public void reload(ReloadAction action) {
-        if (action != null && action.name().equals(ReloadAction.GROUP_UPDATE.name())) {
+    public void reload(ReloadAction reloadAction) {
+        if (reloadAction != null && reloadAction.name().equals(ReloadAction.GROUP_UPDATE.name())) {
             binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
         }
     }
 
     @Override
-    public void changeActivity(Action action) {
-        if (action != null && action.name().equals(Action.ENTRY_SELECTED.name())) {
+    public void changeActivity(ChangeActivityAction changeActivityAction) {
+        if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_SELECTED.name())) {
             Intent intent = new Intent(this, FieldActivity.class);
             startActivity(intent);
             finish();
         }
-        if (action != null && action.name().equals(Action.LOCK.name())) {
+        if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.LOCK.name())) {
             Db.getInstance().deSetDatabase();
             Intent intent = new Intent(this, ListDbActivity.class);
             startActivity(intent);

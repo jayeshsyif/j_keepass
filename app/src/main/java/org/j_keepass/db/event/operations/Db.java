@@ -4,8 +4,8 @@ import android.content.ContentResolver;
 
 import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.fields.dtos.FieldData;
-import org.j_keepass.fields.interfaces.FieldNameType;
-import org.j_keepass.fields.interfaces.FieldValueType;
+import org.j_keepass.fields.enums.FieldNameType;
+import org.j_keepass.fields.enums.FieldValueType;
 import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryStatus;
 import org.j_keepass.list_db.dtos.GroupEntryType;

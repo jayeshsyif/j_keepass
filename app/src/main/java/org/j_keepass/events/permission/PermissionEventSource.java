@@ -28,7 +28,7 @@ public class PermissionEventSource {
         listeners.remove(listener);
     }
 
-    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionEvent.Action action) {
+    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionEvent.PermissionAction permissionAction) {
         Utils.log("In listener got Check And Get Permission, listener count is "+listeners.size());
         if (listeners.size() == 0 || listeners.size() > 0) {
             if (!listeners.contains(PermissionCheckerAndGetter.getInstance())) {
@@ -36,22 +36,22 @@ public class PermissionEventSource {
             }
         }
         for (PermissionEvent listener : listeners) {
-            listener.checkAndGetPermissionReadWriteStorage(v, activity, action);
+            listener.checkAndGetPermissionReadWriteStorage(v, activity, permissionAction);
         }
     }
 
-    public void permissionDenied(PermissionEvent.Action action) {
+    public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
         for (PermissionEvent listener : listeners) {
-            listener.permissionDenied(action);
+            listener.permissionDenied(permissionAction);
         }
     }
 
-    public void permissionGranted(PermissionEvent.Action action) {
+    public void permissionGranted(PermissionEvent.PermissionAction permissionAction) {
         for (PermissionEvent listener : listeners) {
-            listener.permissionGranted(action);
+            listener.permissionGranted(permissionAction);
         }
     }
-    public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionEvent.Action action) {
+    public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionEvent.PermissionAction permissionAction) {
         Utils.log("In listener got Check And Get Permission, listener count is "+listeners.size());
         if (listeners.size() == 0 || listeners.size() > 0) {
             if (!listeners.contains(PermissionCheckerAndGetter.getInstance())) {
@@ -59,7 +59,7 @@ public class PermissionEventSource {
             }
         }
         for (PermissionEvent listener : listeners) {
-            listener.checkAndGetPermissionAlarm(v, activity, action);
+            listener.checkAndGetPermissionAlarm(v, activity, permissionAction);
         }
     }
 }

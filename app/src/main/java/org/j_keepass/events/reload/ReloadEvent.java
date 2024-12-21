@@ -1,7 +1,11 @@
 package org.j_keepass.events.reload;
 
-import org.j_keepass.events.interfaces.ReloadAction;
-
 public interface ReloadEvent {
-    void reload(ReloadAction reloadAction);
+    void reload(ReloadEvent.ReloadAction reloadAction);
+    enum ReloadAction {
+        GROUP_UPDATE,
+        HOME,
+        CREATE_NEW,
+        IMPORT,
+    }
 }

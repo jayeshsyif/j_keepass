@@ -29,7 +29,7 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
     }
 
     @Override
-    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, Action action) {
+    public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionAction permissionAction) {
         Utils.log("Inside check and get permission");
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             Utils.log("Show permission popup v2");
@@ -39,42 +39,42 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
             } else if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                notify(true, action);
+                notify(true, permissionAction);
             } else {
-                notify(false, action);
+                notify(false, permissionAction);
             }
         } else {
             Utils.log("Show permission popup v1");
             if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
             } else if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                notify(true, action);
+                notify(true, permissionAction);
             } else {
-                notify(false, action);
+                notify(false, permissionAction);
             }
         }
     }
 
-    private void notify(Boolean isOk, Action action) {
+    private void notify(Boolean isOk, PermissionAction permissionAction) {
         if (isOk) {
-            PermissionEventSource.getInstance().permissionGranted(action);
+            PermissionEventSource.getInstance().permissionGranted(permissionAction);
         } else {
-            PermissionEventSource.getInstance().permissionDenied(action);
+            PermissionEventSource.getInstance().permissionDenied(permissionAction);
         }
     }
 
     @Override
-    public void permissionDenied(Action action) {
+    public void permissionDenied(PermissionAction permissionAction) {
 
     }
 
     @Override
-    public void permissionGranted(Action action) {
+    public void permissionGranted(PermissionAction permissionAction) {
 
     }
 
     @Override
-    public void checkAndGetPermissionAlarm(View v, Activity activity, Action action) {
+    public void checkAndGetPermissionAlarm(View v, Activity activity, PermissionAction permissionAction) {
         int ALARM = 101;
         Utils.log("Inside check and get permission alarm");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
@@ -88,18 +88,18 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, ALARM);
             }
             if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                notify(true, action);
+                notify(true, permissionAction);
             }
         } else {
             if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
                 Utils.log("v1 Show permission popup first alarm requesting");
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, ALARM);
-                notify(true, action);
+                notify(true, permissionAction);
             } else if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
                 Utils.log("v1 Show permission popup first alarm granted, setting ok");
-                notify(true, action);
+                notify(true, permissionAction);
             } else {
-                notify(false, action);
+                notify(false, permissionAction);
             }
         }
     }

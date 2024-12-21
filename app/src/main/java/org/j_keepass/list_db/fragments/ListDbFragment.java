@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbFragmentBinding;
 import org.j_keepass.db.event.DbAndFileOperations;
-import org.j_keepass.events.interfaces.ReloadAction;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
@@ -209,8 +208,8 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
     }
 
     @Override
-    public void reload(ReloadAction action) {
-        if (action != null && (action.name().equals(ReloadAction.CREATE_NEW.name()) || action.name().equals(ReloadAction.IMPORT.name()))) {
+    public void reload(ReloadAction reloadAction) {
+        if (reloadAction != null && (reloadAction.name().equals(ReloadAction.CREATE_NEW.name()) || reloadAction.name().equals(ReloadAction.IMPORT.name()))) {
             ExecutorService executor = getExecutor();
             executor.execute(this::showDbs);
         }

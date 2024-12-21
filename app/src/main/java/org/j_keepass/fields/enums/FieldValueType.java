@@ -1,4 +1,4 @@
-package org.j_keepass.fields.interfaces;
+package org.j_keepass.fields.enums;
 
 public enum FieldValueType {
     TEXT,

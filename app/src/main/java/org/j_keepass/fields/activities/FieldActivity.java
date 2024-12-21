@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
-import org.j_keepass.events.interfaces.ReloadAction;
+import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.fields.fragments.FieldFragment;
 import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
 import org.j_keepass.events.loading.LoadingEventSource;
@@ -80,7 +80,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     private void configureClicks() {
         binding.entryHomeBtn.setOnClickListener(view -> {
             Db.getInstance().setCurrentGroupId(Db.getInstance().getRootGroupId());
-            ReloadEventSource.getInstance().reload(ReloadAction.HOME);
+            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.HOME);
             Intent intent = new Intent(this, ListGroupAndEntriesActivity.class);
             startActivity(intent);
             finish();

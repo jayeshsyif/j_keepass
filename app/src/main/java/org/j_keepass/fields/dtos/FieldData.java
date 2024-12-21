@@ -1,7 +1,7 @@
 package org.j_keepass.fields.dtos;
 
-import org.j_keepass.fields.interfaces.FieldNameType;
-import org.j_keepass.fields.interfaces.FieldValueType;
+import org.j_keepass.fields.enums.FieldNameType;
+import org.j_keepass.fields.enums.FieldValueType;
 
 import java.util.Date;
 import java.util.UUID;
