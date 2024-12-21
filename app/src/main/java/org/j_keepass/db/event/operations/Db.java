@@ -33,6 +33,8 @@ public class Db {
         return DB;
     }
 
+    private String appDirPath, appSubDir;
+
     private Database<?, ?, ?, ?> database;
 
     private UUID currentGroupId = null;
@@ -56,6 +58,22 @@ public class Db {
         } else {
             return "Not Found!";
         }
+    }
+
+    public String getAppDirPath() {
+        return appDirPath;
+    }
+
+    public void setAppDirPath(String appDirPath) {
+        this.appDirPath = appDirPath;
+    }
+
+    public String getAppSubDir() {
+        return appSubDir;
+    }
+
+    public void setAppSubDir(String appSubDir) {
+        this.appSubDir = appSubDir;
     }
 
     public String getRootGroupName() {

@@ -21,6 +21,9 @@
     <string name="declaration">Please export and save database before uninstallation of application</string>
     <string name="loading">Loading .....</string>
     <string name="opening">Opening .....</string>
+    <string name="changing">Changing .....</string>
+    <string name="unableToRename">Unable to edit rename to </string>
+    <string name="unableToDelete">Unable to delete  </string>
     <string name="locking">Locking .....</string>
     <string name="saving">Saving .....</string>
     <string name="notSaved">Not Saved</string>
@@ -72,4 +75,12 @@
     <string name="copy">Copy</string>
     <string name="edit">Edit</string>
     <string name="options">Options</string>
+    <string name="editDbName">Edit Name</string>
+    <string name="dbRename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="deleting">Deleting</string>
+    <string name="changeDbPwd">Change Password</string>
+    <string name="areYouSure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

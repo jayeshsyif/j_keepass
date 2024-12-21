@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <TableLayout
+        android:id="@+id/confirmAlertTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/kp_margin"
+        android:background="@drawable/tab_selected_indicator"
+        android:weightSum="100">
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="80"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center_vertical"
+                android:text="@string/areYouSure"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?colorSecondary" />
+
+            <ImageButton
+                android:id="@+id/databaseMoreOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginTop="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:layout_marginBottom="@dimen/kp_always_1"
+                android:layout_weight="20"
+                android:background="@drawable/background_transparent"
+                android:contentDescription="@string/moreOptionDesc"
+                android:minWidth="@dimen/kp_min_image_width"
+                android:minHeight="@dimen/kp_min_image_height"
+                android:src="@drawable/ic_close_fill0_wght300_grad_25_opsz24"
+                android:textAlignment="center"
+                app:layout_constraintStart_toEndOf="@id/dbNameText"
+                app:tint="@color/kp_red" />
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/confirmAlertTable"
+        android:layout_margin="@dimen/kp_margin"
+        android:weightSum="100">
+
+        <TableRow>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confirmYes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:backgroundTint="?colorPrimaryVariant"
+                android:fontFamily="@font/spacemono_bold"
+                android:text="@string/yes"
+                android:textAllCaps="true"
+                android:textColor="?colorSecondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confirmNo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="1"
+                android:backgroundTint="?colorPrimaryVariant"
+                android:fontFamily="@font/spacemono_bold"
+                android:text="@string/no"
+                android:textAllCaps="true"
+                android:textColor="?colorSecondary" />
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>

@@ -7,5 +7,7 @@ public interface ReloadEvent {
         HOME,
         CREATE_NEW,
         IMPORT,
+        EDIT,
+        DELETE,
     }
 }

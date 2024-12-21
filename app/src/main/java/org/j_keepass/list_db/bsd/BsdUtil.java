@@ -20,8 +20,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.j_keepass.R;
+import org.j_keepass.db.event.operations.Db;
+import org.j_keepass.events.reload.ReloadEvent;
+import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.adapters.ListThemesAdapter;
 import org.j_keepass.db.event.DbAndFileOperations;
 import org.j_keepass.db.event.DbEventSource;
@@ -33,7 +37,9 @@ import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.Utils;
 import org.j_keepass.list_db.util.themes.Theme;
 import org.j_keepass.list_db.util.themes.ThemeUtil;
+import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -157,12 +163,18 @@ public class BsdUtil {
         final TextInputEditText dbNameEt = bsd.findViewById(R.id.databaseName);
         if (dbNameEt != null) {
             dbNameEt.setText(dbName);
-            dbNameEt.setVisibility(View.GONE);
         }
+        final TextInputLayout databaseNameLayout = bsd.findViewById(R.id.databaseNameLayout);
+        databaseNameLayout.setVisibility(View.GONE);
         TextView dbNameText = bsd.findViewById(R.id.dbNameText);
         if (dbNameText != null) {
             dbNameText.setText(dbName);
         }
+        final ImageButton databaseMoreOption = bsd.findViewById(R.id.databaseMoreOption);
+        databaseMoreOption.setOnClickListener(view -> {
+            bsd.dismiss();
+            showMoreSelectedDbOptions(context, dbName, fullPath);
+        });
         final TextInputEditText dbPwd = bsd.findViewById(R.id.databasePassword);
         if (saveBtn != null) {
             saveBtn.setText(R.string.open);
@@ -180,6 +192,99 @@ public class BsdUtil {
                         LoadingEventSource.getInstance().showLoading();
                     });
                     executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), fullPath, view.getContext().getContentResolver()));
+                }
+            });
+        }
+        bsd.show();
+    }
+
+    public void showMoreSelectedDbOptions(Context context, String dbName, String fullPath) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.selected_db_more_option_list);
+        final LinearLayout selectedDbMoreOptionEditDbName = bsd.findViewById(R.id.selectedDbMoreOptionEditDbName);
+        selectedDbMoreOptionEditDbName.setOnClickListener(view -> {
+            bsd.dismiss();
+            showAskEditDbName(context, dbName, fullPath);
+        });
+        final LinearLayout selectedDbMoreOptionDeleteDb = bsd.findViewById(R.id.selectedDbMoreOptionDeleteDb);
+        selectedDbMoreOptionDeleteDb.setOnClickListener(view -> {
+            bsd.dismiss();
+            new org.j_keepass.util.confirm_alert.BsdUtil().show(view.getContext(), new ConfirmNotifier() {
+                @Override
+                public void onYes() {
+                    String deletingStr = view.getContext().getString(R.string.deleting);
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        LoadingEventSource.getInstance().updateLoadingText(deletingStr + " " + dbName);
+                        LoadingEventSource.getInstance().showLoading();
+                        try {
+                            Utils.sleepFor3MSec();
+                            File toDelete = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+                            toDelete.delete();
+                            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.EDIT);
+                        } catch (Throwable t) {
+                            String unableToRenameStr = view.getContext().getString(R.string.unableToDelete);
+                            LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + dbName);
+                        }
+                    });
+                }
+
+                @Override
+                public void onNo() {
+                    // ignore
+                }
+            });
+        });
+        expandBsd(bsd);
+        bsd.show();
+    }
+
+    public void showAskEditDbName(Context context, String dbName, String fullPath) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.db_enter_name_and_pwd);
+        expandBsd(bsd);
+        final MaterialButton saveBtn = bsd.findViewById(R.id.saveDatabase);
+        final TextInputEditText dbNameEt = bsd.findViewById(R.id.databaseName);
+        if (dbNameEt != null) {
+            dbNameEt.setText(dbName);
+        }
+        TextView dbNameText = bsd.findViewById(R.id.dbNameText);
+        if (dbNameText != null) {
+            dbNameText.setText(dbName);
+        }
+        final ImageButton databaseMoreOption = bsd.findViewById(R.id.databaseMoreOption);
+        databaseMoreOption.setOnClickListener(view -> {
+            bsd.dismiss();
+            showMoreSelectedDbOptions(context, dbName, fullPath);
+        });
+        final TextInputLayout dbPwd = bsd.findViewById(R.id.databasePasswordLayout);
+        dbPwd.setVisibility(View.GONE);
+        if (saveBtn != null) {
+            saveBtn.setText(R.string.open);
+            saveBtn.setOnClickListener(view -> {
+                Utils.log(" db change name is clicked");
+                if (dbNameEt != null && dbNameEt.getText() == null) {
+                    dbNameEt.requestFocus();
+                } else {
+                    hideKeyboard(view);
+                    bsd.dismiss();
+                    String newName = dbNameEt.getText().toString();
+                    String changingStr = view.getContext().getString(R.string.changing);
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        LoadingEventSource.getInstance().updateLoadingText(changingStr + " " + newName);
+                        LoadingEventSource.getInstance().showLoading();
+                        try {
+                            File to = new File(Db.getInstance().getAppSubDir() + File.separator + newName);
+                            File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+                            Utils.sleepFor3MSec();
+                            from.renameTo(to);
+                            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.EDIT);
+                        } catch (Throwable t) {
+                            String unableToRenameStr = view.getContext().getString(R.string.unableToRename);
+                            LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + newName);
+                        }
+                    });
                 }
             });
         }
@@ -204,7 +309,7 @@ public class BsdUtil {
         slider.setValue((float) length);
         newPasswordCopy.setOnClickListener(view -> {
             bsd.dismiss();
-            CopyUtil.copyToClipboard(view.getContext(),pwd,pwd);
+            CopyUtil.copyToClipboard(view.getContext(), pwd, pwd);
         });
         reGenerateNewPassword.setOnClickListener(view -> {
             bsd.dismiss();

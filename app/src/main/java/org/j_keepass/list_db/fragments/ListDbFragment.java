@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbFragmentBinding;
 import org.j_keepass.db.event.DbAndFileOperations;
+import org.j_keepass.db.event.operations.Db;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
@@ -56,17 +57,13 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
     }
 
     private void showDbs() {
-        AtomicReference<String> dirPath = new AtomicReference<>("");
-        AtomicReference<String> subFilesDirPath = new AtomicReference<>("");
         AtomicReference<ListDbAdapter> adapter = new AtomicReference<>();
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
-        executor.execute(() -> dirPath.set(new DbAndFileOperations().getDir(getActivity())));
-        executor.execute(() -> subFilesDirPath.set(new DbAndFileOperations().getSubDir(getActivity())));
-        executor.execute(() -> new DbAndFileOperations().createMainDirectory(dirPath.get()));
-        executor.execute(() -> new DbAndFileOperations().createSubFilesDirectory(subFilesDirPath.get()));
+        executor.execute(() -> new DbAndFileOperations().createMainDirectory(Db.getInstance().getAppDirPath()));
+        executor.execute(() -> new DbAndFileOperations().createSubFilesDirectory(Db.getInstance().getAppSubDir()));
         executor.execute(() -> adapter.set(configureRecyclerView(binding.showDbsRecyclerView.getContext())));
-        executor.execute(() -> showDbs(subFilesDirPath.get(), adapter.get()));
+        executor.execute(() -> showDbs(Db.getInstance().getAppSubDir(), adapter.get()));
         executor.execute(this::dismissLoading);
     }
 
@@ -209,7 +206,12 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
 
     @Override
     public void reload(ReloadAction reloadAction) {
-        if (reloadAction != null && (reloadAction.name().equals(ReloadAction.CREATE_NEW.name()) || reloadAction.name().equals(ReloadAction.IMPORT.name()))) {
+        ArrayList<String> supportedActions = new ArrayList<>();
+        supportedActions.add(ReloadAction.EDIT.name());
+        supportedActions.add(ReloadAction.CREATE_NEW.name());
+        supportedActions.add(ReloadAction.IMPORT.name());
+        supportedActions.add(ReloadAction.DELETE.name());
+        if (reloadAction != null && (supportedActions.contains(reloadAction.name()))) {
             ExecutorService executor = getExecutor();
             executor.execute(this::showDbs);
         }
