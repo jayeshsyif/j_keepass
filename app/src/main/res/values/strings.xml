@@ -82,7 +82,9 @@
     <string name="dbRename">Rename</string>
     <string name="delete">Delete</string>
     <string name="deleting">Deleting</string>
-    <string name="canNotdeleteRoot">Can not delete root group/folder</string>
+    <string name="canNotDeleteRoot">Can not delete root Group/Folder</string>
+    <string name="emptyGroupName">Group/Folder cannot be empty</string>
+    <string name="canNotEditGroupName">Group/Folder cannot be empty</string>
     <string name="changeDbPwd">Change Password</string>
     <string name="areYouSure">Are you sure?</string>
     <string name="yes">Yes</string>
@@ -91,4 +93,5 @@
     <string name="change">Change</string>
     <string name="editGroupName">Edit Group/Folder Name</string>
     <string name="deleteGroup">Delete Group/Folder</string>
+    <string name="enterGroupName">Enter Group/Folder Name</string>
 </resources>

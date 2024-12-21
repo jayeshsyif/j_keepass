@@ -588,4 +588,14 @@ public class Db {
         }
         return flag;
     }
+
+    public void updateGroupName(UUID currentGroupId, ContentResolver contentResolver, String gName) {
+        if (database != null) {
+            Group<?, ?, ?, ?> group = database.findGroup(currentGroupId);
+            if (group != null) {
+                group.setName(gName);
+                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+            }
+        }
+    }
 }

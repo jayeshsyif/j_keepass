@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    android:padding="@dimen/kp_margin">
+
+    <TableLayout
+        android:id="@+id/groupAddEditNameTextTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/kp_margin"
+        android:background="@drawable/tab_selected_indicator"
+        android:weightSum="100">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/groupAddEditNameText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_margin="@dimen/kp_margin"
+                android:layout_weight="80"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center_vertical"
+                android:text="@string/groupName"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?colorSecondary" />
+
+            <ImageButton
+                android:id="@+id/groupAddEditMoreOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginTop="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:layout_marginBottom="@dimen/kp_always_1"
+                android:layout_weight="20"
+                android:background="@drawable/background_transparent"
+                android:contentDescription="@string/moreOptionDesc"
+                android:minWidth="@dimen/kp_min_image_width"
+                android:minHeight="@dimen/kp_min_image_height"
+                android:src="@drawable/ic_more_hori_fill0_wght300_grad_25_opsz24"
+                android:textAlignment="center"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/dbNameText"
+                app:tint="?colorSecondary" />
+        </TableRow>
+    </TableLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/groupAddEditNameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupAddEditNameTextTable"
+        android:layout_margin="@dimen/kp_margin"
+        android:textColorHint="?colorSecondary"
+        app:boxStrokeColor="?colorSecondary"
+        app:hintTextColor="?colorSecondary"
+        app:passwordToggleEnabled="false"
+        app:passwordToggleTint="?colorOnPrimary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/groupAddEditName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimaryVariant"
+            android:fontFamily="@font/spacemono_regular"
+            android:hint="@string/enterGroupName"
+            android:inputType="text"
+            android:textColor="?colorSecondary"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addEditGroupNameBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupAddEditNameLayout"
+        android:layout_marginStart="@dimen/kp_margin"
+        android:layout_marginTop="@dimen/kp_margin"
+        android:layout_marginEnd="@dimen/kp_margin"
+        android:layout_marginBottom="@dimen/kp_margin"
+        android:backgroundTint="?colorPrimaryVariant"
+        android:fontFamily="@font/spacemono_bold"
+        android:text="@string/add"
+        android:textAllCaps="true"
+        android:textColor="?colorSecondary">
+
+    </com.google.android.material.button.MaterialButton>
+
+</RelativeLayout>

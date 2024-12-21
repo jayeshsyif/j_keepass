@@ -67,6 +67,13 @@ public class BsdUtil {
                 });
             });
         }
+        LinearLayout groupEntryMoreOptionEditGroup = bsd.findViewById(R.id.groupEntryMoreOptionEditGroup);
+        if (groupEntryMoreOptionEditGroup != null) {
+            groupEntryMoreOptionEditGroup.setOnClickListener(view -> {
+                bsd.dismiss();
+                showAskForEditGroupName(context, activity, name);
+            });
+        }
         LinearLayout groupEntryMoreOptionDeleteGroup = bsd.findViewById(R.id.groupEntryMoreOptionDeleteGroup);
         if (groupEntryMoreOptionDeleteGroup != null) {
             groupEntryMoreOptionDeleteGroup.setOnClickListener(view -> {
@@ -79,7 +86,7 @@ public class BsdUtil {
                             LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.deleting));
                             LoadingEventSource.getInstance().showLoading();
                             if (Db.getInstance().isCurrentGroupRootGroup()) {
-                                LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.canNotdeleteRoot));
+                                LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.canNotDeleteRoot));
                             } else {
                                 Db.getInstance().deleteGroup(Db.getInstance().getCurrentGroupId(), activity.getContentResolver());
                                 ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
@@ -90,6 +97,39 @@ public class BsdUtil {
                     @Override
                     public void onNo() {
                         // ignore
+                    }
+                });
+            });
+        }
+        expandBsd(bsd);
+        bsd.show();
+    }
+
+    private void showAskForEditGroupName(Context context, Activity activity, String name) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.add_or_edit_group);
+        TextInputEditText groupAddEditName = bsd.findViewById(R.id.groupAddEditName);
+        if (groupAddEditName != null) {
+            groupAddEditName.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
+        }
+        MaterialButton addEditGroupNameBtn = bsd.findViewById(R.id.addEditGroupNameBtn);
+        if (addEditGroupNameBtn != null) {
+            addEditGroupNameBtn.setText(context.getString(R.string.change));
+            addEditGroupNameBtn.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.changing));
+                    LoadingEventSource.getInstance().showLoading();
+                    if (groupAddEditName.getText() == null || groupAddEditName.getText().toString() == null || groupAddEditName.getText().toString().length() == 0) {
+                        LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.emptyGroupName));
+                    } else {
+                        try {
+                            Db.getInstance().updateGroupName(Db.getInstance().getCurrentGroupId(), activity.getContentResolver(), groupAddEditName.getText().toString());
+                            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
+                        } catch (Throwable t) {
+                            LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.canNotEditGroupName));
+                        }
                     }
                 });
             });
