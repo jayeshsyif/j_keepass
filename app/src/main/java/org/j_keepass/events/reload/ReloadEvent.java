@@ -10,5 +10,6 @@ public interface ReloadEvent {
         EDIT,
         DELETE,
         EXPORT,
+        ENTRY_ADDITIONAL_PROP_UPDATE
     }
 }

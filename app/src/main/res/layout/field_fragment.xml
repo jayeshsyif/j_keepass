@@ -31,16 +31,32 @@
                 android:background="?colorOnPrimary"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center"
-                android:textAllCaps="false"
                 android:text="@string/loading"
+                android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
                 android:textColor="?colorPrimary"></TextView>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+        <ImageButton
+            android:id="@+id/addAdditionalPropertyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/kp_margin"
+            android:background="?colorOnPrimary"
+            android:contentDescription="@string/generateNewDatabaseDesc"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:visibility="gone"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
+            app:tint="?colorPrimary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/entryFieldsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/addAdditionalPropertyBtn"
             android:visibility="gone"
             tools:listitem="@layout/list_db_item_view"></androidx.recyclerview.widget.RecyclerView>
 

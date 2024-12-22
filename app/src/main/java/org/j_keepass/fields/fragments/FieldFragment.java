@@ -12,8 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
+import org.j_keepass.events.reload.ReloadEvent;
+import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.fields.adapters.ListFieldAdapter;
 import org.j_keepass.databinding.FieldFragmentBinding;
+import org.j_keepass.fields.bsd.BsdUtil;
 import org.j_keepass.fields.dtos.FieldData;
 import org.j_keepass.fields.enums.FieldNameType;
 import org.j_keepass.fields.enums.FieldValueType;
@@ -27,11 +30,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class FieldFragment extends Fragment implements LoadingEvent {
+public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent {
 
     private FieldFragmentBinding binding;
 
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
+
+    String show = "base";
+    Boolean isEdit = false;
+    Boolean isNew = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,10 +49,12 @@ public class FieldFragment extends Fragment implements LoadingEvent {
 
     private void register() {
         LoadingEventSource.getInstance().addListener(this);
+        ReloadEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         LoadingEventSource.getInstance().removeListener(this);
+        ReloadEventSource.getInstance().removeListener(this);
     }
 
     @Nullable
@@ -55,24 +64,21 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         View view = binding.getRoot();
         register();
         Utils.log("Entry title is " + Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()));
-        AtomicReference<String> show = new AtomicReference<>("base");
-        AtomicReference<Boolean> isEdit = new AtomicReference<>(false);
-        AtomicReference<Boolean> isNew = new AtomicReference<>(false);
         Bundle bundle = getArguments();
         if (bundle != null) {
             String showBundle = bundle.getString("show");
             Boolean isEditBundle = bundle.getBoolean("isEdit");
             Boolean isNewBundle = bundle.getBoolean("isNew");
             if (showBundle != null && showBundle.length() > 0) {
-                show.set(showBundle);
+                show = showBundle;
             }
-            isEdit.set(isEditBundle);
-            isNew.set(isNewBundle);
+            isEdit = isEditBundle;
+            isNew = isNewBundle;
         }
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
         executor.execute(this::dismissLoading);
-        executor.execute(() -> setAdapterAndShowFields(show.get(), isEdit.get(), isNew.get()));
+        executor.execute(() -> setAdapterAndShowFields(show, isEdit, isNew));
         return view;
     }
 
@@ -82,11 +88,11 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         executor.execute(this::showLoading);
         AtomicReference<ListFieldAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> adapter.set(configureRecyclerView(binding.entryFieldsRecyclerView.getContext(), isEdit)));
-        executor.execute(() -> showFields(adapter.get(), show, isNew));
+        executor.execute(() -> showFields(adapter.get(), show, isEdit, isNew));
         executor.execute(this::dismissLoading);
     }
 
-    private void showFields(ListFieldAdapter adapter, final String show, final Boolean isNew) {
+    private void showFields(ListFieldAdapter adapter, final String show, final boolean isEdit, final Boolean isNew) {
         Utils.log("Entry show with " + show + " is edit as ");
         ArrayList<FieldData> fields;
         if (show.equals("additional")) {
@@ -123,6 +129,17 @@ public class FieldFragment extends Fragment implements LoadingEvent {
                 } catch (Throwable e) {
                     //ignore
                 }
+            }
+        } else if (isEdit || isNew) {
+            try {
+                requireActivity().runOnUiThread(() -> {
+                    binding.addAdditionalPropertyBtn.setVisibility(View.VISIBLE);
+                    binding.addAdditionalPropertyBtn.setOnClickListener(view -> {
+                        new BsdUtil().showAddNewProperty(binding.addAdditionalPropertyBtn.getContext(), Db.getInstance().getCurrentEntryId());
+                    });
+                });
+            } catch (Throwable e) {
+                //ignore
             }
         }
     }
@@ -200,6 +217,16 @@ public class FieldFragment extends Fragment implements LoadingEvent {
             });
         } catch (Exception e) {
             //ignore
+        }
+    }
+
+    @Override
+    public void reload(ReloadAction reloadAction) {
+        if (reloadAction.name().equals(ReloadAction.ENTRY_ADDITIONAL_PROP_UPDATE.name().toString())) {
+            ExecutorService executor = getExecutor();
+            executor.execute(this::showLoading);
+            executor.execute(this::dismissLoading);
+            executor.execute(() -> setAdapterAndShowFields(show, isEdit, isNew));
         }
     }
 }

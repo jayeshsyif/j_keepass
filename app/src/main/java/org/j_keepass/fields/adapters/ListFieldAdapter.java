@@ -20,6 +20,8 @@ import org.j_keepass.databinding.FieldItemViewBinding;
 import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
+import org.j_keepass.events.reload.ReloadEvent;
+import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.fields.dtos.FieldData;
 import org.j_keepass.fields.enums.FieldNameType;
 import org.j_keepass.fields.enums.FieldValueType;
@@ -69,6 +71,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         boolean isPassword = holder.mItem.fieldValueType == FieldValueType.PASSWORD;
         boolean isLargeText = holder.mItem.fieldValueType == FieldValueType.LARGE_TEXT;
         boolean isDateOtherThenCreateAndExpire = holder.mItem.fieldNameType == FieldNameType.DATE;
+        boolean isAdditionalProp = holder.mItem.fieldNameType == FieldNameType.ADDITIONAL;
         if (isDummy) {
             setDummyView(holder);
         } else {
@@ -81,6 +84,8 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                 configureForDate(holder, isExpiryDate, isEditable);
             } else if (isAttachment) {
                 configureForAttachment(holder, isEditable);
+            } else if (isAdditionalProp && isEditable) {
+                configureForAdditionalProp(holder, isEditable);
             } else {
                 configureForOtherTypes(holder, isPassword, isEditable);
             }
@@ -94,6 +99,26 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             if (isEditable) {
                 setupEditTextFocusListener(holder);
             }
+        }
+    }
+
+    private void configureForAdditionalProp(ViewHolder holder, boolean isEditable) {
+        holder.editText.setEnabled(false);
+        holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+        if (isEditable) {
+            holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
+            holder.fieldCopy.setOnClickListener(view -> {
+                String addingStr = view.getContext().getString(R.string.deleting);
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(addingStr);
+                    LoadingEventSource.getInstance().showLoading();
+                    Db.getInstance().addEntryDeleteAdditionalProperty(Db.getInstance().getCurrentEntryId(), holder.mItem.name);
+                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_ADDITIONAL_PROP_UPDATE);
+                });
+            });
         }
     }
 

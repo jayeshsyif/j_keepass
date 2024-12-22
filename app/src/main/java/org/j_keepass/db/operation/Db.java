@@ -639,4 +639,22 @@ public class Db {
             }
         }
     }
+
+    public void addEntryAdditionalProperty(UUID eId, String fieldName, String fieldValue) {
+        if (database != null) {
+            Entry entry = database.findEntry(eId);
+            if (entry != null) {
+                entry.setProperty(fieldName, fieldValue);
+            }
+        }
+    }
+
+    public void addEntryDeleteAdditionalProperty(UUID eId, String fieldName) {
+        if (database != null) {
+            Entry entry = database.findEntry(eId);
+            if (entry != null) {
+                entry.removeProperty(fieldName);
+            }
+        }
+    }
 }

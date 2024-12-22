@@ -99,4 +99,6 @@
     <string name="done">Done</string>
     <string name="addGroup">Add new Group/Folder</string>
     <string name="addEntry">Add New Entry</string>
+    <string name="enterAdditionalFieldName">Enter Additional Field Name</string>
+    <string name="enterAdditionalFieldValue">Enter Additional Field Value</string>
 </resources>
