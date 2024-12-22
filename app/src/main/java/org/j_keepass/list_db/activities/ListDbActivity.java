@@ -294,6 +294,11 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     }
 
     @Override
+    public void openingDb() {
+        shutDownExecutor();
+    }
+
+    @Override
     public void askPwdForDb(Context context, String dbName, String fullPath) {
         Utils.log("ask for db");
         try {

@@ -56,4 +56,11 @@ public class DbEventSource {
         }
     }
 
+    public void openingDb() {
+        Utils.log("In listener failed to open db");
+        for (DbEvent listener : listeners) {
+            listener.openingDb();
+        }
+    }
+
 }
