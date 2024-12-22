@@ -23,6 +23,8 @@ public class BsdUtil {
             bsd.dismiss();
             notifier.onNo();
         });
+        MaterialButton cancel = bsd.findViewById(R.id.confirmCancel);
+        cancel.setOnClickListener(v -> bsd.dismiss());
         expandBsd(bsd);
         bsd.show();
     }

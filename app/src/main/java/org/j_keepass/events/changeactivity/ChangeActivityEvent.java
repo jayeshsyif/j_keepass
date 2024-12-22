@@ -5,6 +5,8 @@ public interface ChangeActivityEvent {
     enum ChangeActivityAction {
         ENTRY_SELECTED,
         ENTRY_NEW,
-        LOCK
+        LOCK,
+        ENTRY_SELECTED_FOR_EDIT,
+        ENTRY_DELETED
     }
 }

@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
     android:orientation="vertical"
@@ -8,7 +8,7 @@
 
     <TableRow
         android:id="@+id/confirmAlertTable"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/kp_margin"
         android:background="@drawable/tab_selected_indicator"
@@ -26,6 +26,7 @@
             android:textColor="?colorSecondary" />
 
         <ImageButton
+            android:id="@+id/confirmCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -45,7 +46,7 @@
     </TableRow>
 
     <TableRow
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_below="@id/confirmAlertTable"

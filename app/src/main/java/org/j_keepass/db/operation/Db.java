@@ -586,6 +586,16 @@ public class Db {
             }
         }
     }
+    public void deleteEntry(UUID eId, ContentResolver contentResolver) {
+        if (database != null) {
+            Entry entry = database.findEntry(eId);
+            if (entry != null) {
+                currentEntryId = null;
+                database.deleteEntry(eId);
+                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+            }
+        }
+    }
 
     public boolean isCurrentGroupRootGroup() {
         boolean flag = false;

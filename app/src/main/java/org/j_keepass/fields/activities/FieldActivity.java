@@ -15,6 +15,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
+import org.j_keepass.events.changeactivity.ChangeActivityEvent;
+import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionResultEvent;
 import org.j_keepass.events.permission.PermissionResultEventSource;
@@ -39,7 +41,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, PermissionResultEvent {
+public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, PermissionResultEvent, ChangeActivityEvent {
     private FieldActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
@@ -79,14 +81,19 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     private void register() {
         GenerateNewPasswordEventSource.getInstance().addListener(this);
         PermissionResultEventSource.getInstance().addListener(this);
+        ChangeActivityEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
         PermissionResultEventSource.getInstance().removeListener(this);
+        ChangeActivityEventSource.getInstance().removeListener(this);
     }
 
     private void configureClicks() {
+        binding.entryMoreOption.setOnClickListener(view -> {
+            new org.j_keepass.fields.bsd.BsdUtil().showMoreOptions(view.getContext(), Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()), (isEdit || isNew), this);
+        });
         binding.entryBackBtn.setOnClickListener(view -> {
             ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
             Intent intent = new Intent(this, ListGroupAndEntriesActivity.class);
@@ -359,5 +366,14 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.done));
             ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
         });
+    }
+
+    @Override
+    public void changeActivity(ChangeActivityAction changeActivityAction) {
+        if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_SELECTED_FOR_EDIT.name())) {
+            runOnUiThread(() -> binding.entryEditBtn.performClick());
+        } else if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_DELETED.name())) {
+            runOnUiThread(() -> binding.entryBackBtn.performClick());
+        }
     }
 }

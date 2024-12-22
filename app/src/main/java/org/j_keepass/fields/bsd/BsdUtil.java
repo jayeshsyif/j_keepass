@@ -1,9 +1,12 @@
 package org.j_keepass.fields.bsd;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -12,9 +15,12 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.R;
 import org.j_keepass.db.operation.Db;
+import org.j_keepass.events.changeactivity.ChangeActivityEvent;
+import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
+import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -71,4 +77,53 @@ public class BsdUtil {
         }
     }
 
+    public void showMoreOptions(Context context, String eTitle, boolean isEditOrIsNew, Activity activity) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.selected_entry_more_option_list);
+        TextView selectedEntryMenuText = bsd.findViewById(R.id.selectedEntryMenuText);
+        if (selectedEntryMenuText != null) {
+            selectedEntryMenuText.setText(eTitle);
+        }
+        LinearLayout selectedEntryMoreOptionEdit = bsd.findViewById(R.id.selectedEntryMoreOptionEdit);
+        if (selectedEntryMoreOptionEdit != null) {
+            if (isEditOrIsNew) {
+                selectedEntryMoreOptionEdit.setVisibility(View.GONE);
+            } else {
+                selectedEntryMoreOptionEdit.setOnClickListener(view -> {
+                    bsd.dismiss();
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.opening));
+                        LoadingEventSource.getInstance().showLoading();
+                        ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_SELECTED_FOR_EDIT);
+                    });
+                });
+            }
+        }
+        LinearLayout selectedEntryMoreOptionDelete = bsd.findViewById(R.id.selectedEntryMoreOptionDelete);
+        if (selectedEntryMoreOptionDelete != null) {
+            selectedEntryMoreOptionDelete.setOnClickListener(view -> {
+                bsd.dismiss();
+                new org.j_keepass.util.confirm_alert.BsdUtil().show(view.getContext(), new ConfirmNotifier() {
+                    @Override
+                    public void onYes() {
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.deleting));
+                            LoadingEventSource.getInstance().showLoading();
+                            Db.getInstance().deleteEntry(Db.getInstance().getCurrentEntryId(), activity.getContentResolver());
+                            ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_DELETED);
+                        });
+                    }
+
+                    @Override
+                    public void onNo() {
+                        // ignore
+                    }
+                });
+            });
+        }
+        expandBsd(bsd);
+        bsd.show();
+    }
 }
