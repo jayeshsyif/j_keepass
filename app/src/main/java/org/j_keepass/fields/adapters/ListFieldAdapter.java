@@ -1,6 +1,8 @@
 package org.j_keepass.fields.adapters;
 
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -217,13 +219,22 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
     private void setupEditTextFocusListener(ViewHolder holder) {
         Utils.log("Got editable last - " + holder.mItem.name);
+        holder.editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        // Set focus change listener for the edit text
-        holder.editText.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus && holder.editText.getText() != null) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 holder.mItem.value = holder.editText.getText().toString();
                 Utils.log("Calling update field Value for " + holder.mItem.asString());
                 Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
