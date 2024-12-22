@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 public class BsdUtil {
     public void showAddNewProperty(Context context, UUID eId) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
-        bsd.setContentView(R.layout.add_or_edit_additional_property);
+        bsd.setContentView(R.layout.add_additional_property);
         TextInputEditText additionalPropertyFieldValue = bsd.findViewById(R.id.additionalPropertyFieldValue);
         TextInputEditText additionalPropertyFieldName = bsd.findViewById(R.id.additionalPropertyFieldName);
         MaterialButton saveAdditionalPropertyBtn = bsd.findViewById(R.id.saveAdditionalPropertyBtn);
@@ -46,7 +46,7 @@ public class BsdUtil {
                         LoadingEventSource.getInstance().updateLoadingText(addingStr);
                         LoadingEventSource.getInstance().showLoading();
                         Db.getInstance().addEntryAdditionalProperty(eId, additionalPropertyFieldName.getText().toString(), additionalPropertyFieldValue.getText().toString());
-                        ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_ADDITIONAL_PROP_UPDATE);
+                        ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
                     });
                 }
             });

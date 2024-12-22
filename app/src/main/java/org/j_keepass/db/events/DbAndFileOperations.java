@@ -16,6 +16,7 @@ import org.linguafranca.pwdb.Database;
 import org.linguafranca.pwdb.kdbx.KdbxCreds;
 import org.linguafranca.pwdb.kdbx.simple.SimpleDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -237,5 +238,68 @@ public class DbAndFileOperations {
                 }
             }
         }
+    }
+
+    public byte[] getFileIntoBytes(Uri dataUri, ContentResolver contentResolver, Activity activity) {
+        byte[] value = new byte[0];
+        boolean proceed = true;
+        try {
+            contentResolver.takePersistableUriPermission(dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            activity.grantUriPermission(activity.getPackageName(), dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (Throwable e) {
+            proceed = false;
+            Utils.log("unable to get permission to read file");
+        }
+        if (proceed) {
+            InputStream inputStream = null;
+            try {
+                inputStream = contentResolver.openInputStream(dataUri);
+            } catch (FileNotFoundException e) {
+                // ignore
+            }
+            if (inputStream != null) {
+                try {
+                    value = toByteArray(inputStream);
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+        return value;
+    }
+
+    private byte[] toByteArray(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+
+        while ((length = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        return outputStream.toByteArray();
+    }
+
+    public String getFileName(Uri dataUri, ContentResolver contentResolver, Activity activity) {
+        String fileName = "";
+        boolean proceed = true;
+        try {
+            contentResolver.takePersistableUriPermission(dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            activity.grantUriPermission(activity.getPackageName(), dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (Throwable e) {
+            proceed = false;
+            Utils.log("unable to get permission to read file");
+        }
+        if (proceed) {
+            try {
+                Cursor returnCursor = contentResolver.query(dataUri, null, null, null, null);
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                returnCursor.moveToFirst();
+                fileName = returnCursor.getString(nameIndex);
+            } catch (Throwable e) {
+                Utils.log("unable to get file name");
+            }
+        }
+        return fileName;
     }
 }

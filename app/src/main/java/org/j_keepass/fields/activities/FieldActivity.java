@@ -1,6 +1,7 @@
 package org.j_keepass.fields.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,9 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
+import org.j_keepass.events.permission.PermissionEvent;
+import org.j_keepass.events.permission.PermissionResultEvent;
+import org.j_keepass.events.permission.PermissionResultEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.fields.fragments.FieldFragment;
 import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
@@ -29,15 +33,16 @@ import org.j_keepass.db.operation.Db;
 import org.j_keepass.list_db.util.themes.SetTheme;
 import org.j_keepass.list_db.util.themes.Theme;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent {
+public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, PermissionResultEvent {
     private FieldActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
-
+    public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
     private boolean isEdit = false;
     private boolean isNew = false;
 
@@ -73,10 +78,12 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
 
     private void register() {
         GenerateNewPasswordEventSource.getInstance().addListener(this);
+        PermissionResultEventSource.getInstance().addListener(this);
     }
 
     private void unregister() {
         GenerateNewPasswordEventSource.getInstance().removeListener(this);
+        PermissionResultEventSource.getInstance().removeListener(this);
     }
 
     private void configureClicks() {
@@ -303,5 +310,54 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     public void updateEntry(UUID eId) {
         Db.getInstance().updateDb(getContentResolver());
         Db.getInstance().updateEntry(eId);
+    }
+
+    @Override
+    public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
+        Utils.log("Upload Permission Not Granted");
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));
+            LoadingEventSource.getInstance().showLoading();
+        });
+    }
+
+    @Override
+    public void permissionGranted(PermissionEvent.PermissionAction permissionAction) {
+        if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.IMPORT.name())) {
+            Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            chooseFile.setType("*/*");
+            chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+            chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+            startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+        } else if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.ALARM.name())) {
+            Utils.log("Landing Alarm Permission Granted, setting notification");
+            new org.j_keepass.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Utils.log("requestCode " + requestCode);
+        if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
+            if (resultCode == -1) {
+                ExecutorService executor = getExecutor();
+                executor.execute(() -> addBinaryProp(data.getData()));
+            }
+        }
+    }
+
+    private void addBinaryProp(Uri dataUri) {
+        Utils.log("File received for add binary prop");
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.attaching));
+            LoadingEventSource.getInstance().showLoading();
+            Db.getInstance().addBinaryProp(Db.getInstance().getCurrentEntryId(), dataUri, getContentResolver(), this);
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.done));
+            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
+        });
     }
 }

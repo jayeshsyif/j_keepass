@@ -1,5 +1,6 @@
 package org.j_keepass.db.operation;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.net.Uri;
 
@@ -654,6 +655,26 @@ public class Db {
             Entry entry = database.findEntry(eId);
             if (entry != null) {
                 entry.removeProperty(fieldName);
+            }
+        }
+    }
+
+    public void deleteEntryBinaryProperty(UUID eId, String fieldName) {
+        if (database != null) {
+            Entry entry = database.findEntry(eId);
+            if (entry != null) {
+                entry.removeBinaryProperty(fieldName);
+            }
+        }
+    }
+
+    public void addBinaryProp(UUID eId, Uri dataUri, ContentResolver contentResolver, Activity activity) {
+        if (database != null) {
+            Entry entry = database.findEntry(eId);
+            if (entry != null) {
+                byte[] propValue = new DbAndFileOperations().getFileIntoBytes(dataUri, contentResolver, activity);
+                String propName = new DbAndFileOperations().getFileName(dataUri, contentResolver, activity);
+                entry.setBinaryProperty(propName, propValue);
             }
         }
     }

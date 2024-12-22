@@ -2,12 +2,14 @@ package org.j_keepass.list_group_and_entry.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -218,7 +220,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             databaseTab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(true);
             databaseTab.setId(id);
-            Utils.log("Added tab with id "+id);
+            Utils.log("Added tab with id " + id);
             id++;
             runOnUiThread(() -> {
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
@@ -231,7 +233,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             databaseTab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
-            Utils.log("Added tab with id "+id);
+            Utils.log("Added tab with id " + id);
             id++;
             runOnUiThread(() -> {
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
@@ -244,14 +246,14 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             databaseTab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
-            Utils.log("Added tab with id "+id);
+            Utils.log("Added tab with id " + id);
             id++;
             runOnUiThread(() -> {
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
                 Utils.log("Added tab");
             });
         }
-        Utils.log("Added tab with max id "+id);
+        Utils.log("Added tab with max id " + id);
     }
 
     public void setGroup(UUID gId) {
@@ -388,5 +390,18 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         });
         executor.execute(() -> Db.getInstance().exportFile(dataUri, getContentResolver(), this));
         executor.execute(() -> LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.done)));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Utils.log("Permission requestCode " + requestCode);
+        if (requestCode == PICK_FOLDER_OPEN_RESULT_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                PermissionResultEventSource.getInstance().permissionGranted(PermissionEvent.PermissionAction.EXPORT);
+            } else {
+                PermissionResultEventSource.getInstance().permissionDenied(PermissionEvent.PermissionAction.EXPORT);
+            }
+        }
     }
 }

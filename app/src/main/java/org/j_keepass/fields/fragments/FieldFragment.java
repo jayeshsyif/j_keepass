@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
+import org.j_keepass.events.permission.PermissionEvent;
+import org.j_keepass.events.permission.PermissionEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.fields.adapters.ListFieldAdapter;
@@ -133,9 +135,20 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
         } else if (isEdit || isNew) {
             try {
                 requireActivity().runOnUiThread(() -> {
-                    binding.addAdditionalPropertyBtn.setVisibility(View.VISIBLE);
-                    binding.addAdditionalPropertyBtn.setOnClickListener(view -> {
-                        new BsdUtil().showAddNewProperty(binding.addAdditionalPropertyBtn.getContext(), Db.getInstance().getCurrentEntryId());
+                    binding.addAdditionalOrBinaryPropertyBtn.setVisibility(View.VISIBLE);
+                    binding.addAdditionalOrBinaryPropertyBtn.setOnClickListener(view -> {
+                        if (show.equals("additional")) {
+                            new BsdUtil().showAddNewProperty(binding.addAdditionalOrBinaryPropertyBtn.getContext(), Db.getInstance().getCurrentEntryId());
+                        } else if (show.equals("attachment")) {
+                            String uploadFileToAttachStr = view.getContext().getString(R.string.uploadFileToAttach);
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            executor.execute(() -> {
+                                LoadingEventSource.getInstance().updateLoadingText(uploadFileToAttachStr);
+                                LoadingEventSource.getInstance().showLoading();
+                                PermissionEventSource.getInstance().checkAndGetPermissionReadWriteStorage(view, getActivity(), PermissionEvent.PermissionAction.IMPORT);
+                            });
+
+                        }
                     });
                 });
             } catch (Throwable e) {
@@ -222,7 +235,7 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
 
     @Override
     public void reload(ReloadAction reloadAction) {
-        if (reloadAction.name().equals(ReloadAction.ENTRY_ADDITIONAL_PROP_UPDATE.name().toString())) {
+        if (reloadAction.name().equals(ReloadAction.ENTRY_PROP_UPDATE.name().toString())) {
             ExecutorService executor = getExecutor();
             executor.execute(this::showLoading);
             executor.execute(this::dismissLoading);

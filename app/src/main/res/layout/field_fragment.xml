@@ -38,7 +38,7 @@
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <ImageButton
-            android:id="@+id/addAdditionalPropertyBtn"
+            android:id="@+id/addAdditionalOrBinaryPropertyBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -56,7 +56,7 @@
             android:id="@+id/entryFieldsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/addAdditionalPropertyBtn"
+            android:layout_below="@id/addAdditionalOrBinaryPropertyBtn"
             android:visibility="gone"
             tools:listitem="@layout/list_db_item_view"></androidx.recyclerview.widget.RecyclerView>
 

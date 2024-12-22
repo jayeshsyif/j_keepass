@@ -9,6 +9,7 @@ public interface PermissionEvent {
     enum PermissionAction {
         IMPORT,
         EXPORT,
-        ALARM
+        ALARM,
+        UPLOAD
     }
 }

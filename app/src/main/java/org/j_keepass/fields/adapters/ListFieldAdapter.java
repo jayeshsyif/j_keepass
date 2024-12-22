@@ -116,7 +116,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                     LoadingEventSource.getInstance().updateLoadingText(addingStr);
                     LoadingEventSource.getInstance().showLoading();
                     Db.getInstance().addEntryDeleteAdditionalProperty(Db.getInstance().getCurrentEntryId(), holder.mItem.name);
-                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_ADDITIONAL_PROP_UPDATE);
+                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
                 });
             });
         }
@@ -160,6 +160,16 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
         if (isEditable) {
             holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
+            holder.fieldCopy.setOnClickListener(view -> {
+                String deletingStr = view.getContext().getString(R.string.deleting);
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(deletingStr);
+                    LoadingEventSource.getInstance().showLoading();
+                    Db.getInstance().deleteEntryBinaryProperty(Db.getInstance().getCurrentEntryId(), holder.mItem.value);
+                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
+                });
+            });
         }
     }
 
