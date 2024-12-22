@@ -1,6 +1,7 @@
 package org.j_keepass.list_db.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbFragmentBinding;
 import org.j_keepass.db.events.DbAndFileOperations;
+import org.j_keepass.db.events.DbEventSource;
 import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
@@ -46,8 +48,14 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
         Utils.log("List db frag on create view");
         View view = binding.getRoot();
         register();
-        ExecutorService executor = getExecutor();
-        executor.execute(this::showDbs);
+        if (getArguments() != null) {
+            Uri data = getArguments().getParcelable("openFileData");
+            String fileName = new DbAndFileOperations().getFileName(data, getActivity().getContentResolver(), getActivity());
+            DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), fileName, data);
+        } else {
+            ExecutorService executor = getExecutor();
+            executor.execute(this::showDbs);
+        }
         return view;
     }
 

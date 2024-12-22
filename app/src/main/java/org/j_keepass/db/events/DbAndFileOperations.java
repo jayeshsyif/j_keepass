@@ -186,7 +186,7 @@ public class DbAndFileOperations {
         try {
             inputStream = contentResolver.openInputStream(kdbxFileUri);
         } catch (FileNotFoundException e) {
-            // ignore
+            DbEventSource.getInstance().failedToOpenDb("File not found.");
         }
         if (inputStream != null) {
             try {
@@ -194,6 +194,40 @@ public class DbAndFileOperations {
                 if (database != null) {
                     Utils.log("Load done");
                     Db.getInstance().setDatabase(database, kdbxFile, pwd.getBytes());
+                    DbEventSource.getInstance().loadSuccessDb();
+                } else {
+                    DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
+                }
+            } catch (NoClassDefFoundError e) {
+                DbEventSource.getInstance().failedToOpenDb("" + e.getMessage());
+            } catch (Exception e) {
+                DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    public void openDb(String dbName, String pwd, Uri kdbxFileUri, ContentResolver contentResolver) {
+        Utils.log("Loading " + dbName);
+        DbEventSource.getInstance().openingDb();
+        KdbxCreds creds = new KdbxCreds(pwd.getBytes());
+        InputStream inputStream = null;
+        try {
+            inputStream = contentResolver.openInputStream(kdbxFileUri);
+        } catch (FileNotFoundException e) {
+            DbEventSource.getInstance().failedToOpenDb("File not found.");
+        }
+        if (inputStream != null) {
+            try {
+                Database<?, ?, ?, ?> database = SimpleDatabase.load(creds, inputStream);
+                if (database != null) {
+                    Utils.log("Load done");
+                    Db.getInstance().setDatabase(database, new File(kdbxFileUri.getPath()), pwd.getBytes());
                     DbEventSource.getInstance().loadSuccessDb();
                 } else {
                     DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
@@ -302,5 +336,17 @@ public class DbAndFileOperations {
             }
         }
         return fileName;
+    }
+
+    public String getFilePath(Uri dataUri, ContentResolver contentResolver, Activity activity) {
+        String filePath = "";
+        try {
+            contentResolver.takePersistableUriPermission(dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            activity.grantUriPermission(activity.getPackageName(), dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            filePath = dataUri.getPath();
+        } catch (Throwable e) {
+            Utils.log("unable to get permission to read file");
+        }
+        return filePath;
     }
 }

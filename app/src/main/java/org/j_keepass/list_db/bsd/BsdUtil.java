@@ -199,6 +199,46 @@ public class BsdUtil {
         bsd.show();
     }
 
+    public void showAskPwdForDb(Context context, String dbName, Uri data) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.db_enter_name_and_pwd);
+        expandBsd(bsd);
+        final MaterialButton saveBtn = bsd.findViewById(R.id.saveDatabase);
+        final TextInputEditText dbNameEt = bsd.findViewById(R.id.databaseName);
+        if (dbNameEt != null) {
+            dbNameEt.setText(dbName);
+        }
+        final TextInputLayout databaseNameLayout = bsd.findViewById(R.id.databaseNameLayout);
+        databaseNameLayout.setVisibility(View.GONE);
+        TextView dbNameText = bsd.findViewById(R.id.dbNameText);
+        if (dbNameText != null) {
+            dbNameText.setText(dbName);
+        }
+        final ImageButton databaseMoreOption = bsd.findViewById(R.id.dbMoreOption);
+        databaseMoreOption.setVisibility(View.INVISIBLE);
+        final TextInputEditText dbPwd = bsd.findViewById(R.id.databasePassword);
+        if (saveBtn != null) {
+            saveBtn.setText(R.string.open);
+            saveBtn.setOnClickListener(view -> {
+                Utils.log(" ask pass db btn is clicked");
+                if (dbPwd != null && dbPwd.getText() == null) {
+                    dbPwd.requestFocus();
+                } else {
+                    hideKeyboard(view);
+                    bsd.dismiss();
+                    String openingStr = view.getContext().getString(R.string.opening);
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        LoadingEventSource.getInstance().updateLoadingText(openingStr + " " + dbName);
+                        LoadingEventSource.getInstance().showLoading();
+                    });
+                    executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), data, view.getContext().getContentResolver()));
+                }
+            });
+        }
+        bsd.show();
+    }
+
     public void showMoreSelectedDbOptions(Context context, String dbName, String fullPath) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.selected_db_more_option_list);

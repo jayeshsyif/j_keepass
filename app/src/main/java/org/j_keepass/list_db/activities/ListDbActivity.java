@@ -54,6 +54,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +146,14 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
                     tab.setIcon(R.drawable.ic_database_fill1_wght300_grad_25_opsz24);
                     if (!isFinishing() && !isDestroyed()) {
                         Utils.log("Tab selected, frag counts are " + getSupportFragmentManager().getFragments().size());
-                        getSupportFragmentManager().beginTransaction().replace(R.id.landingFragmentContainerView, new ListDbFragment()).commit();
+                        ListDbFragment listDbFragment = new ListDbFragment();
+                        if (getIntent() != null && getIntent().getData() != null) {
+                            Uri data = getIntent().getData();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("openFileData",data);
+                            listDbFragment.setArguments(bundle);
+                        }
+                        getSupportFragmentManager().beginTransaction().replace(R.id.landingFragmentContainerView, listDbFragment).commit();
                         Utils.log("Tab selected done");
                     }
                 }
@@ -309,6 +317,16 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     }
 
     @Override
+    public void askPwdForDb(Context context, String dbName, Uri data) {
+        Utils.log("ask for db");
+        try {
+            new BsdUtil().showAskPwdForDb(context, dbName, data);
+        } catch (Throwable e) {
+            //ignore
+        }
+    }
+
+    @Override
     public void failedToOpenDb(String errorMsg) {
         LoadingEventSource.getInstance().updateLoadingText(errorMsg);
         LoadingEventSource.getInstance().showLoading();
@@ -316,6 +334,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
 
     @Override
     public void loadSuccessDb() {
+        Utils.log(" load success Db");
         Intent intent = new Intent(this, ListGroupAndEntriesActivity.class);
         startActivity(intent);
         finish();
