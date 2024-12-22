@@ -83,6 +83,7 @@
     <string name="dbRename">Rename</string>
     <string name="delete">Delete</string>
     <string name="deleting">Deleting</string>
+    <string name="askForImportDb">Do you want to import?</string>
     <string name="uploadFileToAttach">Please select file to attach</string>
     <string name="attaching">Attaching .....</string>
     <string name="canNotDeleteRoot">Can not delete root Group/Folder</string>

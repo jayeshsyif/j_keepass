@@ -2,6 +2,8 @@ package org.j_keepass.util.confirm_alert;
 
 import android.content.Context;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -11,8 +13,16 @@ import org.j_keepass.R;
 
 public class BsdUtil {
     public void show(Context context, ConfirmNotifier notifier) {
+        show(context, null, notifier);
+    }
+
+    public void show(Context context, String customText, ConfirmNotifier notifier) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.confirm_alert);
+        TextView confirmAlertText = bsd.findViewById(R.id.confirmAlertText);
+        if (confirmAlertText != null && customText != null) {
+            confirmAlertText.setText(customText);
+        }
         MaterialButton yes = bsd.findViewById(R.id.confirmYes);
         yes.setOnClickListener(v -> {
             bsd.dismiss();
@@ -23,7 +33,7 @@ public class BsdUtil {
             bsd.dismiss();
             notifier.onNo();
         });
-        MaterialButton cancel = bsd.findViewById(R.id.confirmCancel);
+        ImageButton cancel = bsd.findViewById(R.id.confirmCancel);
         cancel.setOnClickListener(v -> bsd.dismiss());
         expandBsd(bsd);
         bsd.show();

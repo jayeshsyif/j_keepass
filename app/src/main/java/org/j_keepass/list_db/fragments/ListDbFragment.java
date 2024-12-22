@@ -23,6 +23,8 @@ import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.adapters.ListDbAdapter;
 import org.j_keepass.util.Utils;
+import org.j_keepass.util.confirm_alert.BsdUtil;
+import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,13 +52,33 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
         register();
         if (getArguments() != null) {
             Uri data = getArguments().getParcelable("openFileData");
-            String fileName = new DbAndFileOperations().getFileName(data, getActivity().getContentResolver(), getActivity());
-            DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), fileName, data);
+            new BsdUtil().show(view.getContext(), view.getContext().getString(R.string.askForImportDb), new ConfirmNotifier() {
+                @Override
+                public void onYes() {
+                    importDb(data);
+                }
+
+                @Override
+                public void onNo() {
+                    String fileName = new DbAndFileOperations().getFileName(data, getActivity().getContentResolver(), getActivity());
+                    DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), fileName, data);
+                }
+            });
         } else {
             ExecutorService executor = getExecutor();
             executor.execute(this::showDbs);
         }
         return view;
+    }
+
+    private void importDb(Uri dataUri) {
+        ExecutorService executor = getExecutor();
+        executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.importing));
+            LoadingEventSource.getInstance().showLoading();
+        });
+        executor.execute(() -> new DbAndFileOperations().importFile(Db.getInstance().getAppSubDir(), dataUri, getActivity().getContentResolver(), getActivity()));
+        executor.execute(() -> ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.IMPORT));
     }
 
     private void register() {
