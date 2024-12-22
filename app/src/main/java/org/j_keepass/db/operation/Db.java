@@ -586,6 +586,7 @@ public class Db {
             }
         }
     }
+
     public void deleteEntry(UUID eId, ContentResolver contentResolver) {
         if (database != null) {
             Entry entry = database.findEntry(eId);
@@ -687,5 +688,16 @@ public class Db {
                 entry.setBinaryProperty(propName, propValue);
             }
         }
+    }
+
+    public UUID getParentGroupName(UUID eId) {
+        UUID gId = null;
+        if (database != null) {
+            Entry entry = database.findEntry(eId);
+            if (entry != null) {
+                gId = entry.getParent().getUuid();
+            }
+        }
+        return gId;
     }
 }

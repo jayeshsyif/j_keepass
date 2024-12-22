@@ -27,6 +27,7 @@ import org.j_keepass.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroupsAndEntriesAdapter.ViewHolder> {
@@ -92,6 +93,11 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
             String path = holder.mItem.path.substring(1).replace("/", DOT_SYMBOL_CODE);
             holder.path.setVisibility(View.VISIBLE);
             holder.path.setText(path);
+            holder.path.setOnClickListener(view -> {
+                UUID fId = Db.getInstance().getParentGroupName(holder.mItem.id);
+                Db.getInstance().setCurrentGroupId(fId);
+                ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.NAV_GROUP);
+            });
         } else {
             holder.path.setVisibility(View.GONE);
         }

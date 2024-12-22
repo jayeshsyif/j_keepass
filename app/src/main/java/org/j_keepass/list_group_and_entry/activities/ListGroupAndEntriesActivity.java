@@ -270,6 +270,25 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             } catch (Throwable t) {
                 // ignore
             }
+        } else if (reloadAction != null && reloadAction.name().equals(ReloadAction.NAV_GROUP.name())) {
+            try {
+                runOnUiThread(() -> {
+                    TabLayout.Tab selectedTab = binding.groupAndEntryTabLayout.getTabAt(0);
+                    if (selectedTab != null) {
+                        selectedTab.select();
+                        shutDownExecutor();
+                        if (!isFinishing() && !isDestroyed()) {
+                            ListGroupsAndEntriesFragment listGroupsAndEntriesFragment = new ListGroupsAndEntriesFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("show", "showAll");
+                            listGroupsAndEntriesFragment.setArguments(bundle);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.groupAndEntryFragmentContainerView, listGroupsAndEntriesFragment).commit();
+                        }
+                    }
+                });
+            } catch (Throwable t) {
+                // ignore
+            }
         }
     }
 
