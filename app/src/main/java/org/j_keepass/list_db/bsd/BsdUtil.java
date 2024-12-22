@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -52,21 +53,21 @@ public class BsdUtil {
     public void showLandingMoreOptionsMenu(Context context, Activity activity) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.list_db_more_option_list);
-        LinearLayout landingMoreOptionChangeTheme = bsd.findViewById(R.id.landingMoreOptionChangeTheme);
+        TableRow landingMoreOptionChangeTheme = bsd.findViewById(R.id.landingMoreOptionChangeTheme);
         if (landingMoreOptionChangeTheme != null) {
             landingMoreOptionChangeTheme.setOnClickListener(view -> {
                 bsd.dismiss();
                 showThemesMenu(context);
             });
         }
-        LinearLayout landingMoreOptionCreateDb = bsd.findViewById(R.id.landingMoreOptionCreateDb);
+        TableRow landingMoreOptionCreateDb = bsd.findViewById(R.id.landingMoreOptionCreateDb);
         if (landingMoreOptionCreateDb != null) {
             landingMoreOptionCreateDb.setOnClickListener(view -> {
                 bsd.dismiss();
                 showCreateDbBsd(view.getContext());
             });
         }
-        LinearLayout landingMoreOptionGenerateNewPassword = bsd.findViewById(R.id.landingMoreOptionGenerateNewPassword);
+        TableRow landingMoreOptionGenerateNewPassword = bsd.findViewById(R.id.landingMoreOptionGenerateNewPassword);
         if (landingMoreOptionGenerateNewPassword != null) {
             landingMoreOptionGenerateNewPassword.setOnClickListener(view -> {
                 bsd.dismiss();
@@ -79,7 +80,7 @@ public class BsdUtil {
             });
         }
 
-        LinearLayout landingMoreOptionInfo = bsd.findViewById(R.id.landingMoreOptionInfo);
+        TableRow landingMoreOptionInfo = bsd.findViewById(R.id.landingMoreOptionInfo);
         if (landingMoreOptionInfo != null) {
             landingMoreOptionInfo.setOnClickListener(view -> {
                 bsd.dismiss();
@@ -87,7 +88,7 @@ public class BsdUtil {
             });
         }
 
-        LinearLayout landingMoreOptionImportDb = bsd.findViewById(R.id.landingMoreOptionImportDb);
+        TableRow landingMoreOptionImportDb = bsd.findViewById(R.id.landingMoreOptionImportDb);
         if (landingMoreOptionImportDb != null) {
             landingMoreOptionImportDb.setOnClickListener(view -> {
                 bsd.dismiss();
@@ -170,7 +171,7 @@ public class BsdUtil {
         if (dbNameText != null) {
             dbNameText.setText(dbName);
         }
-        final ImageButton databaseMoreOption = bsd.findViewById(R.id.databaseMoreOption);
+        final ImageButton databaseMoreOption = bsd.findViewById(R.id.dbMoreOption);
         databaseMoreOption.setOnClickListener(view -> {
             bsd.dismiss();
             showMoreSelectedDbOptions(context, dbName, fullPath);
@@ -201,12 +202,12 @@ public class BsdUtil {
     public void showMoreSelectedDbOptions(Context context, String dbName, String fullPath) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.selected_db_more_option_list);
-        final LinearLayout selectedDbMoreOptionEditDbName = bsd.findViewById(R.id.selectedDbMoreOptionEditDbName);
+        final TableRow selectedDbMoreOptionEditDbName = bsd.findViewById(R.id.selectedDbMoreOptionEditDbName);
         selectedDbMoreOptionEditDbName.setOnClickListener(view -> {
             bsd.dismiss();
             showAskEditDbName(context, dbName, fullPath);
         });
-        final LinearLayout selectedDbMoreOptionDeleteDb = bsd.findViewById(R.id.selectedDbMoreOptionDeleteDb);
+        final TableRow selectedDbMoreOptionDeleteDb = bsd.findViewById(R.id.selectedDbMoreOptionDeleteDb);
         selectedDbMoreOptionDeleteDb.setOnClickListener(view -> {
             bsd.dismiss();
             new org.j_keepass.util.confirm_alert.BsdUtil().show(view.getContext(), new ConfirmNotifier() {
@@ -252,7 +253,7 @@ public class BsdUtil {
         if (dbNameText != null) {
             dbNameText.setText(dbName);
         }
-        final ImageButton databaseMoreOption = bsd.findViewById(R.id.databaseMoreOption);
+        final ImageButton databaseMoreOption = bsd.findViewById(R.id.dbMoreOption);
         databaseMoreOption.setOnClickListener(view -> {
             bsd.dismiss();
             showMoreSelectedDbOptions(context, dbName, fullPath);

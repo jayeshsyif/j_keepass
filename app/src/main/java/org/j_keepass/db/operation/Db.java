@@ -37,7 +37,7 @@ public class Db {
 
     private String appDirPath, appSubDir;
 
-    private Database<?, ?, ?, ?> database;
+    private Database database;
 
     private UUID currentGroupId = null;
 
@@ -47,7 +47,7 @@ public class Db {
     private byte[] pwd = null;
     private File kdbxFile = null;
 
-    public void setDatabase(Database<?, ?, ?, ?> database, File kdbxFile, byte[] pwd) {
+    public void setDatabase(Database database, File kdbxFile, byte[] pwd) {
         this.database = database;
         this.kdbxFile = kdbxFile;
         this.pwd = pwd;
@@ -97,7 +97,7 @@ public class Db {
     public UUID getParentGroupId(UUID gId) {
         UUID pGid = null;
         if (database != null) {
-            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            Group group = database.findGroup(gId);
             if (group != null && group.getParent() != null) {
                 pGid = group.getParent().getUuid();
             }
@@ -108,7 +108,7 @@ public class Db {
     public String getGroupName(UUID gId) {
         String name = "";
         if (database != null) {
-            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            Group group = database.findGroup(gId);
             if (group != null) {
                 name = group.getName();
             }
@@ -119,7 +119,7 @@ public class Db {
     public String getEntryTitle(UUID gId) {
         String title = "";
         if (database != null) {
-            Entry<?, ?, ?, ?> entry = database.findEntry(gId);
+            Entry entry = database.findEntry(gId);
             if (entry != null) {
                 title = entry.getTitle();
             }
@@ -130,7 +130,7 @@ public class Db {
     public long getSubGroupsCount(UUID gId) {
         long gCount = 0;
         if (database != null) {
-            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            Group group = database.findGroup(gId);
             if (group != null) {
                 gCount = group.getGroupsCount();
             }
@@ -141,7 +141,7 @@ public class Db {
     public long getSubEntriesCount(UUID gId) {
         long gCount = 0;
         if (database != null) {
-            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            Group group = database.findGroup(gId);
             if (group != null) {
                 gCount = group.getEntriesCount();
             }
@@ -176,7 +176,7 @@ public class Db {
         List<?> entries = database.findEntries(entry -> true);
         if (entries != null) {
             for (int eCount = 0; eCount < entries.size(); eCount++) {
-                Entry<?, ?, ?, ?> entry = (Entry<?, ?, ?, ?>) entries.get(eCount);
+                Entry entry = (Entry) entries.get(eCount);
                 GroupEntryData data = new GroupEntryData();
                 data.id = entry.getUuid();
                 data.name = entry.getTitle();
@@ -197,7 +197,7 @@ public class Db {
         List<?> entries = database.findEntries(entry -> entry.match(query));
         if (entries != null) {
             for (int eCount = 0; eCount < entries.size(); eCount++) {
-                Entry<?, ?, ?, ?> entry = (Entry<?, ?, ?, ?>) entries.get(eCount);
+                Entry entry = (Entry) entries.get(eCount);
                 GroupEntryData data = new GroupEntryData();
                 data.id = entry.getUuid();
                 data.name = entry.getTitle();
@@ -214,10 +214,10 @@ public class Db {
 
     public ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId) {
         ArrayList<GroupEntryData> list = new ArrayList<>();
-        Date currentDate = Calendar.getInstance().getTime();
-        Group<?, ?, ?, ?> group = database.findGroup(gId);
+        Group group = database.findGroup(gId);
         if (group != null) {
-            for (Group<?, ?, ?, ?> suGroup : group.getGroups()) {
+            ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
+            for (Group suGroup : gList) {
                 GroupEntryData data = new GroupEntryData();
                 data.id = suGroup.getUuid();
                 data.name = suGroup.getName();
@@ -225,7 +225,8 @@ public class Db {
                 data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
                 list.add(data);
             }
-            for (Entry<?, ?, ?, ?> suEntry : group.getEntries()) {
+            ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
+            for (Entry suEntry : eList) {
                 GroupEntryData data = new GroupEntryData();
                 data.id = suEntry.getUuid();
                 data.name = suEntry.getTitle();
@@ -311,13 +312,13 @@ public class Db {
     public ArrayList<FieldData> getFields(UUID eId) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
-            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            Entry entry = database.findEntry(eId);
             fields = getFields(entry);
         }
         return fields;
     }
 
-    private ArrayList<FieldData> getFields(Entry<?, ?, ?, ?> entry) {
+    private ArrayList<FieldData> getFields(Entry entry) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (entry != null) {
             {
@@ -438,7 +439,7 @@ public class Db {
         this.currentEntryId = currentEntryId;
     }
 
-    public ArrayList<FieldData> getAdditionalFields(Entry<?, ?, ?, ?> entry) {
+    public ArrayList<FieldData> getAdditionalFields(Entry entry) {
         ArrayList<String> ignoreFields = new ArrayList<>() {{
             add("username".toLowerCase());
             add("password".toLowerCase());
@@ -449,7 +450,8 @@ public class Db {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (entry != null) {
             if (entry.getPropertyNames().size() > 0) {
-                for (String pn : entry.getPropertyNames()) {
+                ArrayList<String> pList = (ArrayList<String>) entry.getPropertyNames();
+                for (String pn : pList) {
                     Utils.log("Additional property found " + pn);
                     if (!ignoreFields.contains(pn.toLowerCase())) {
                         FieldData fd = new FieldData();
@@ -472,7 +474,7 @@ public class Db {
     public ArrayList<FieldData> getAdditionalFields(UUID eId) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
-            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            Entry entry = database.findEntry(eId);
             fields = getAdditionalFields(entry);
         }
         return fields;
@@ -481,10 +483,11 @@ public class Db {
     public ArrayList<FieldData> getAttachments(UUID eId) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
-            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            Entry entry = database.findEntry(eId);
             if (entry != null) {
                 if (entry.getBinaryPropertyNames().size() > 0) {
-                    for (String bn : entry.getBinaryPropertyNames()) {
+                    ArrayList<String> bList = (ArrayList<String>) entry.getBinaryPropertyNames();
+                    for (String bn : bList) {
                         Utils.log("binary property found " + bn);
                         FieldData fd = new FieldData();
                         fd.name = FieldNameType.ATTACHMENT.toString();
@@ -505,7 +508,7 @@ public class Db {
     public boolean updateEntryField(UUID eId, FieldData fieldData) {
         boolean isUpdated = false;
         if (database != null) {
-            Entry<?, ?, ?, ?> entry = database.findEntry(eId);
+            Entry entry = database.findEntry(eId);
             if (entry != null) {
                 updateEntryField(entry, fieldData);
                 isUpdated = true;
@@ -516,7 +519,7 @@ public class Db {
         return isUpdated;
     }
 
-    private boolean updateEntryField(Entry<?, ?, ?, ?> entry, FieldData fieldData) {
+    private boolean updateEntryField(Entry entry, FieldData fieldData) {
         Utils.log("Update actual field data " + fieldData.asString());
         boolean isUpdated = false;
         if (database != null) {
@@ -574,7 +577,7 @@ public class Db {
 
     public void deleteGroup(UUID gId, ContentResolver contentResolver) {
         if (database != null) {
-            Group<?, ?, ?, ?> group = database.findGroup(gId);
+            Group group = database.findGroup(gId);
             if (group != null) {
                 currentGroupId = group.getParent().getUuid();
                 database.deleteGroup(gId);
@@ -593,7 +596,7 @@ public class Db {
 
     public void updateGroupName(UUID currentGroupId, ContentResolver contentResolver, String gName) {
         if (database != null) {
-            Group<?, ?, ?, ?> group = database.findGroup(currentGroupId);
+            Group group = database.findGroup(currentGroupId);
             if (group != null) {
                 group.setName(gName);
                 new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
@@ -603,5 +606,20 @@ public class Db {
 
     public void exportFile(Uri dataUri, ContentResolver contentResolver, ListGroupAndEntriesActivity activity) {
         new DbAndFileOperations().exportFile(database, dataUri, pwd, contentResolver, activity);
+    }
+
+    public void addGroup(UUID currentGroupId, ContentResolver contentResolver, String gName) {
+        if (database != null) {
+            Group group = database.newGroup();
+            if (group != null) {
+                group.setName(gName);
+                Group pGroup = database.findGroup(currentGroupId);
+                if (pGroup != null) {
+                    pGroup.addGroup(group);
+                    group.setParent(pGroup);
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+                }
+            }
+        }
     }
 }

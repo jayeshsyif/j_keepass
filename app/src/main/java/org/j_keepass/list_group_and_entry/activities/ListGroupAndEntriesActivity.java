@@ -89,6 +89,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
         });
         binding.groupMoreOption.setOnClickListener(view -> showMenu(view.getContext()));
+        binding.groupAndEntryAddNewBtn.setOnClickListener(view -> new org.j_keepass.list_group_and_entry.bsd.BsdUtil().showAskForAddNewItems(view.getContext(), this, Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId())));
     }
 
     private ExecutorService getExecutor() {
@@ -373,6 +374,6 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             LoadingEventSource.getInstance().showLoading();
         });
         executor.execute(() -> Db.getInstance().exportFile(dataUri, getContentResolver(), this));
-        executor.execute(() -> LoadingEventSource.getInstance().dismissLoading());
+        executor.execute(() -> LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.done)));
     }
 }

@@ -92,7 +92,7 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
             mDbModifiedDate = binding.dbModifiedDate;
             cardView = binding.databaseNameCardView;
             mImage = binding.image;
-            mDatabaseMoreOption = binding.databaseMoreOption;
+            mDatabaseMoreOption = binding.dbMoreOption;
             cardView.setOnClickListener(view -> {
                 if (mItem.lastModified != -1) {
                     DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), mItem.dbName, mItem.fullPath);

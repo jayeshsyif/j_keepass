@@ -78,6 +78,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             holder.editText.setEnabled(isEditable);
             holder.fieldCopy.setVisibility(isEditable && !isCreatedOrExpiryDate ? View.VISIBLE : View.GONE);
 
+            Utils.log("Got "+holder.mItem.name);
             if (isCreatedOrExpiryDate || isDateOtherThenCreateAndExpire) {
                 holder.editText.setEnabled(false);
                 holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
@@ -85,6 +86,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                 if (isExpiryDate) {
                     Utils.setExpiryText(holder.expiryStatus, Db.getInstance().getStatus(holder.mItem.expiryDate));
                     if (isEditable) {
+                        holder.fieldCopy.setVisibility(View.VISIBLE);
                         holder.fieldCopy.setImageDrawable(holder.fieldCopy.getContext().getDrawable(R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
                         holder.fieldCopy.setOnClickListener(view -> new DateAndTimePickerUtil().showDateAndTimePicker(holder.editText, holder.mItem.expiryDate, holder.mItem));
                     }

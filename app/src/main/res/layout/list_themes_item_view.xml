@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/kp_wb_blue"
         android:fontFamily="@font/spacemono_regular"
-        android:contentDescription="@string/empty"
+        android:contentDescription="@string/themes"
         android:gravity="center_vertical">
 
     </ImageButton>

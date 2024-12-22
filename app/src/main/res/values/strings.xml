@@ -91,8 +91,12 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="add">Add</string>
+    <string name="adding">Adding .....</string>
     <string name="change">Change</string>
     <string name="editGroupName">Edit Group/Folder Name</string>
     <string name="deleteGroup">Delete Group/Folder</string>
     <string name="enterGroupName">Enter Group/Folder Name</string>
+    <string name="done">Done</string>
+    <string name="addGroup">Add new Group/Folder</string>
+    <string name="addEntry">Add New Entry</string>
 </resources>

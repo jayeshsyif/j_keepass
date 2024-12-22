@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -84,6 +85,13 @@ public class BsdUtil {
                 showAskForEditGroupName(context, activity, name);
             });
         }
+        LinearLayout groupEntryMoreOptionAdd = bsd.findViewById(R.id.groupEntryMoreOptionAdd);
+        if (groupEntryMoreOptionAdd != null) {
+            groupEntryMoreOptionAdd.setOnClickListener(view -> {
+                bsd.dismiss();
+                showAskForAddNewItems(context, activity, name);
+            });
+        }
         LinearLayout groupEntryMoreOptionDeleteGroup = bsd.findViewById(R.id.groupEntryMoreOptionDeleteGroup);
         if (groupEntryMoreOptionDeleteGroup != null) {
             groupEntryMoreOptionDeleteGroup.setOnClickListener(view -> {
@@ -107,6 +115,50 @@ public class BsdUtil {
                     @Override
                     public void onNo() {
                         // ignore
+                    }
+                });
+            });
+        }
+        expandBsd(bsd);
+        bsd.show();
+    }
+
+    public void showAskForAddNewItems(Context context, Activity activity, String name) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.add_more_option_list);
+        TableRow addMoreMoreAddNewGroup = bsd.findViewById(R.id.addMoreMoreAddNewGroup);
+        addMoreMoreAddNewGroup.setOnClickListener(view -> {
+            bsd.dismiss();
+            showAskFoAddGroup(context, activity, name);
+        });
+        TableRow addMoreMoreAddNewEntry = bsd.findViewById(R.id.addMoreMoreAddNewEntry);
+
+        expandBsd(bsd);
+        bsd.show();
+    }
+
+    private void showAskFoAddGroup(Context context, Activity activity, String name) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.add_or_edit_group);
+        TextInputEditText groupAddEditName = bsd.findViewById(R.id.groupAddEditName);
+        MaterialButton addEditGroupNameBtn = bsd.findViewById(R.id.addEditGroupNameBtn);
+        if (addEditGroupNameBtn != null) {
+            addEditGroupNameBtn.setText(context.getString(R.string.add));
+            addEditGroupNameBtn.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.adding));
+                    LoadingEventSource.getInstance().showLoading();
+                    if (groupAddEditName != null && groupAddEditName.getText() == null || groupAddEditName.getText().toString() == null || groupAddEditName.getText().toString().length() == 0) {
+                        LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.emptyGroupName));
+                    } else {
+                        try {
+                            Db.getInstance().addGroup(Db.getInstance().getCurrentGroupId(), activity.getContentResolver(), groupAddEditName.getText().toString());
+                            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
+                        } catch (Throwable t) {
+                            LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.canNotEditGroupName));
+                        }
                     }
                 });
             });

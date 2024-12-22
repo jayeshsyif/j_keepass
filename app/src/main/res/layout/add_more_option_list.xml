@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="?colorPrimary"
     android:orientation="vertical"
     android:padding="@dimen/kp_margin">
 
-
     <TableRow
-        android:id="@+id/selectedDbMoreOptionMenuTextTable"
+        android:id="@+id/addMoreMenuTextTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/kp_margin"
@@ -17,25 +16,22 @@
         android:weightSum="100">
 
         <TextView
-            android:id="@+id/selectedDbMoreOptionMenuText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/kp_margin"
             android:layout_weight="80"
             android:fontFamily="@font/spacemono_bold"
             android:gravity="center_vertical"
-            android:text="@string/options"
+            android:text="@string/add"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?colorSecondary" />
 
         <ImageButton
-            android:id="@+id/selectedDbMoreOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/kp_always_1"
             android:layout_marginTop="@dimen/kp_always_1"
-            android:layout_marginEnd="@dimen/kp_always_1"
             android:layout_marginBottom="@dimen/kp_always_1"
             android:layout_weight="20"
             android:background="@drawable/background_transparent"
@@ -49,59 +45,66 @@
             app:tint="?colorSecondary" />
     </TableRow>
 
+
     <TableRow
-        android:id="@+id/selectedDbMoreOptionEditDbName"
+        android:id="@+id/addMoreMoreAddNewGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/selectedDbMoreOptionMenuTextTable"
-        android:layout_margin="@dimen/kp_margin">
+        android:layout_below="@id/addMoreMenuTextTable"
+        android:padding="@dimen/kp_margin">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/editDbName"
+            android:contentDescription="@string/createNewGroup"
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
-            android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_folder_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
             app:tint="?colorSecondary"></ImageButton>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/spacemono_regular"
-            android:gravity="center_vertical"
-            android:text="@string/dbRename"
-            android:textColor="?colorSecondary"></TextView>
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/selectedDbMoreOptionDeleteDb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/selectedDbMoreOptionEditDbName"
-        android:layout_margin="@dimen/kp_margin">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/editDbName"
-            android:minWidth="@dimen/kp_min_image_width"
-            android:minHeight="@dimen/kp_min_image_height"
-            android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
-            android:textAlignment="gravity"
-            app:tint="@color/kp_red"></ImageButton>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
-            android:text="@string/delete"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/addGroup"
             android:textColor="?colorSecondary"></TextView>
     </TableRow>
+
+    <TableRow
+        android:id="@+id/addMoreMoreAddNewEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addMoreMoreAddNewGroup"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/createNewEntry"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_key_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"></ImageButton>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/addEntry"
+            android:textColor="?colorSecondary" />
+    </TableRow>
+
+
 </RelativeLayout>

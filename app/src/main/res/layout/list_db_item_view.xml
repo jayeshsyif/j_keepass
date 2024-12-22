@@ -57,10 +57,10 @@
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textColor="?colorSecondary"
-                app:layout_constraintEnd_toStartOf="@id/databaseMoreOption"></TextView>
+                app:layout_constraintEnd_toStartOf="@id/dbMoreOption"></TextView>
 
             <ImageButton
-                android:id="@+id/databaseMoreOption"
+                android:id="@+id/dbMoreOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -83,7 +83,7 @@
                 android:id="@+id/dbModifiedDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/databaseMoreOption"
+                android:layout_below="@id/dbMoreOption"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="@dimen/kp_always_1"
                 android:layout_marginTop="@dimen/kp_always_1"
