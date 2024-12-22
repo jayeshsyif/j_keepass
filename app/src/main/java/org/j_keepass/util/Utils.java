@@ -1,6 +1,7 @@
 package org.j_keepass.util;
 
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -147,26 +148,35 @@ public class Utils {
 
     public static void setExpiryText(TextView tv, Pair<GroupEntryStatus, Long> statusLongPair) {
         if (statusLongPair.first != null) {
-            if (statusLongPair.first.name().equals(GroupEntryStatus.EXPIRED.name())) {
-                String text = tv.getContext().getString(R.string.expiredInDays);
-                text = text.replace("{0}", "" + statusLongPair.second);
-                tv.setVisibility(View.VISIBLE);
-                tv.setText(text);
-                tv.setTextColor(tv.getContext().getResources().getColor(R.color.kp_red));
-            } else if (statusLongPair.first.name().equals(GroupEntryStatus.EXPIRING_SOON.name())) {
-                String text = tv.getContext().getString(R.string.expiringSoonInDays);
-                text = text.replace("{0}", "" + statusLongPair.second);
-                tv.setVisibility(View.VISIBLE);
-                tv.setText(text);
-                tv.setTextColor(tv.getContext().getResources().getColor(R.color.kp_coral));
-            } else if (statusLongPair.first.name().equals(GroupEntryStatus.OK.name())) {
-                tv.setVisibility(View.VISIBLE);
-                String text = tv.getContext().getString(R.string.expiringInDays);
-                text = text.replace("{0}", "" + statusLongPair.second);
-                tv.setText(text);
-            } else {
-                tv.setVisibility(View.GONE);
+            Context context = tv.getContext();
+            String text;
+            int color;
+
+            switch (statusLongPair.first) {
+                case EXPIRED:
+                    text = context.getString(R.string.expiredInDays).replace("{0}", String.valueOf(statusLongPair.second));
+                    color = R.color.kp_red;
+                    break;
+                case EXPIRING_SOON:
+                    text = context.getString(R.string.expiringSoonInDays).replace("{0}", String.valueOf(statusLongPair.second));
+                    color = R.color.kp_coral;
+                    break;
+                case OK:
+                    text = context.getString(R.string.expiringInDays).replace("{0}", String.valueOf(statusLongPair.second));
+                    color = 0; // No specific color needed for OK status
+                    break;
+                default:
+                    tv.setVisibility(View.GONE);
+                    return; // Exit early if no relevant status
+            }
+
+            tv.setVisibility(View.VISIBLE);
+            tv.setText(text);
+
+            if (color != 0) {
+                tv.setTextColor(context.getResources().getColor(color));
             }
         }
+
     }
 }

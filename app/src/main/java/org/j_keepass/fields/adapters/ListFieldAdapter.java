@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,16 +17,20 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.FieldItemViewBinding;
+import org.j_keepass.db.operation.Db;
+import org.j_keepass.events.loading.LoadingEventSource;
+import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.fields.dtos.FieldData;
 import org.j_keepass.fields.enums.FieldNameType;
 import org.j_keepass.fields.enums.FieldValueType;
 import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.DateAndTimePickerUtil;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.operation.Db;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.ViewHolder> {
@@ -33,20 +38,12 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
     List<FieldData> mValues = new ArrayList<>();
     private boolean isEditable = false;
 
-    public boolean isEditable() {
-        return isEditable;
-    }
-
     public void setEditable(boolean editable) {
         isEditable = editable;
     }
 
     public void addValue(FieldData fieldData) {
         mValues.add(fieldData);
-    }
-
-    public void setValues(List<FieldData> mValues) {
-        this.mValues = mValues;
     }
 
     @NonNull
@@ -72,69 +69,128 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         boolean isPassword = holder.mItem.fieldValueType == FieldValueType.PASSWORD;
         boolean isLargeText = holder.mItem.fieldValueType == FieldValueType.LARGE_TEXT;
         boolean isDateOtherThenCreateAndExpire = holder.mItem.fieldNameType == FieldNameType.DATE;
-
         if (isDummy) {
-            holder.editText.setEnabled(false);
-            holder.fieldCardView.setVisibility(View.INVISIBLE);
+            setDummyView(holder);
         } else {
-            holder.editText.setEnabled(isEditable);
+            configureEditText(holder, isEditable);
             holder.fieldCopy.setVisibility(isEditable && !isCreatedOrExpiryDate ? View.VISIBLE : View.GONE);
 
             Utils.log("Got " + holder.mItem.name);
+
             if (isCreatedOrExpiryDate || isDateOtherThenCreateAndExpire) {
-                holder.editText.setEnabled(false);
-                holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
-                holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                if (isExpiryDate) {
-                    Utils.setExpiryText(holder.expiryStatus, Db.getInstance().getStatus(holder.mItem.expiryDate));
-                    if (isEditable) {
-                        holder.fieldCopy.setVisibility(View.VISIBLE);
-                        holder.fieldCopy.setImageDrawable(holder.fieldCopy.getContext().getDrawable(R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
-                        holder.fieldCopy.setOnClickListener(view -> new DateAndTimePickerUtil().showDateAndTimePicker(holder.editText, holder.mItem.expiryDate, holder.mItem));
-                    }
-                } else {
-                    holder.fieldCopy.setVisibility(View.GONE);
-                }
+                configureForDate(holder, isExpiryDate, isEditable);
             } else if (isAttachment) {
-                holder.editText.setEnabled(false);
-                holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
-                holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                if (isEditable) {
-                    holder.fieldCopy.setImageDrawable(holder.fieldCopy.getContext().getDrawable(R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
-                }
+                configureForAttachment(holder, isEditable);
             } else {
-                if (!isPassword) {
-                    holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
-                    holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                }
+                configureForOtherTypes(holder, isPassword, isEditable);
             }
 
             if (isLargeText) {
-                holder.editText.setLines(10);
-                holder.editText.setEms(10);
-                holder.editText.setSingleLine(false);
-                holder.editText.setInputType(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE);
-                holder.editText.setHorizontallyScrolling(false);
-                holder.editText.setMaxLines(Integer.MAX_VALUE);
+                configureLargeText(holder);
             }
 
-            if (!isEditable && !isAttachment && !isCreatedOrExpiryDate && !isDateOtherThenCreateAndExpire) {
-                holder.fieldCopy.setVisibility(View.VISIBLE);
-                holder.fieldCopy.setOnClickListener(view -> CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value));
-            }
+            handleNonEditableState(holder, isEditable, isAttachment, isCreatedOrExpiryDate, isDateOtherThenCreateAndExpire);
+
             if (isEditable) {
-                holder.editText.setOnFocusChangeListener((view, hasFocus) -> {
-                    if (!hasFocus && holder.editText.getText() != null) {
-                        String inputValue = holder.editText.getText().toString();
-                        if (inputValue != null) {
-                            holder.mItem.value = inputValue;
-                            Utils.log("Calling update field Value for " + holder.mItem.asString());
-                            Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
-                        }
-                    }
-                });
+                setupEditTextFocusListener(holder);
             }
         }
+    }
+
+    private void setDummyView(ViewHolder holder) {
+        holder.editText.setEnabled(false);
+        holder.fieldCardView.setVisibility(View.INVISIBLE);
+    }
+
+    private void configureEditText(ViewHolder holder, boolean isEditable) {
+        holder.editText.setEnabled(isEditable);
+    }
+
+    private void configureForDate(ViewHolder holder, boolean isExpiryDate, boolean isEditable) {
+        holder.editText.setEnabled(false);
+        holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+        if (isExpiryDate) {
+            Utils.setExpiryText(holder.expiryStatus, Db.getInstance().getStatus(holder.mItem.expiryDate));
+            if (isEditable) {
+                setupFieldCopyForExpiry(holder);
+            }
+        } else {
+            Utils.log("Got and hiding copy for " + holder.mItem.name);
+            holder.fieldCopy.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupFieldCopyForExpiry(ViewHolder holder) {
+        holder.fieldCopy.setVisibility(View.VISIBLE);
+        holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_calendar_month_fill0_wght300_grad_25_opsz24));
+        holder.fieldCopy.setOnClickListener(view -> new DateAndTimePickerUtil().showDateAndTimePicker(holder.editText, holder.mItem.expiryDate, holder.mItem));
+    }
+
+    private void configureForAttachment(ViewHolder holder, boolean isEditable) {
+        holder.editText.setEnabled(false);
+        holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+        if (isEditable) {
+            holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
+        }
+    }
+
+    private void configureForOtherTypes(ViewHolder holder, boolean isPassword, boolean isEditable) {
+        if (isPassword && isEditable) {
+            Utils.log("Got other pwd as " + holder.mItem.name);
+            setupFieldCopyForPassword(holder);
+        } else {
+            Utils.log("Got other than pwd as " + holder.mItem.name);
+            holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            holder.fieldCopy.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupFieldCopyForPassword(ViewHolder holder) {
+        holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_password_fill0_wght300_grad_25_opsz24));
+
+        // Use a single thread executor for loading operations
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        holder.fieldCopy.setOnClickListener(view -> executor.execute(() -> {
+            LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
+            LoadingEventSource.getInstance().showLoading();
+            GenerateNewPasswordEventSource.getInstance().generateNewPwd();
+        }));
+    }
+
+    private void configureLargeText(ViewHolder holder) {
+        holder.editText.setLines(10);
+        holder.editText.setEms(10);
+        holder.editText.setSingleLine(false);
+        holder.editText.setInputType(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE);
+        holder.editText.setHorizontallyScrolling(false);
+        holder.editText.setMaxLines(Integer.MAX_VALUE);
+    }
+
+    private void handleNonEditableState(ViewHolder holder, boolean isEditable, boolean isAttachment, boolean isCreatedOrExpiryDate, boolean isDateOtherThenCreateAndExpire) {
+        if (!isEditable && !isAttachment && !isCreatedOrExpiryDate && !isDateOtherThenCreateAndExpire) {
+            Utils.log("Got !editable - " + holder.mItem.name);
+            holder.fieldCopy.setVisibility(View.VISIBLE);
+            holder.fieldCopy.setOnClickListener(view -> CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value));
+        }
+    }
+
+    private void setupEditTextFocusListener(ViewHolder holder) {
+        Utils.log("Got editable last - " + holder.mItem.name);
+
+        // Set focus change listener for the edit text
+        holder.editText.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus && holder.editText.getText() != null) {
+                holder.mItem.value = holder.editText.getText().toString();
+                Utils.log("Calling update field Value for " + holder.mItem.asString());
+                Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
+            }
+        });
     }
 
 

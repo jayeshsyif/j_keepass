@@ -18,7 +18,7 @@ public class DbEventSource {
         return SOURCE;
     }
 
-    private ArrayList<DbEvent> listeners = new ArrayList<>();
+    private final ArrayList<DbEvent> listeners = new ArrayList<>();
 
     public void addListener(DbEvent listener) {
         listeners.add(listener);

@@ -1,5 +1,6 @@
 package org.j_keepass.list_group_and_entry.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import org.j_keepass.R;
-import org.j_keepass.events.changeactivity.ChangeActivityEvent;
-import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupAndEntriesItemViewBinding;
 import org.j_keepass.db.operation.Db;
+import org.j_keepass.events.changeactivity.ChangeActivityEvent;
+import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.dtos.GroupEntryData;
-import org.j_keepass.list_db.dtos.GroupEntryStatus;
 import org.j_keepass.list_db.dtos.GroupEntryType;
 import org.j_keepass.util.Pair;
 import org.j_keepass.util.Utils;
@@ -32,20 +32,12 @@ import java.util.List;
 public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroupsAndEntriesAdapter.ViewHolder> {
 
     List<GroupEntryData> mValues = new ArrayList<>();
-    private static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " \u21B3 ";
-    private static final String DOT_SYMBOL_CODE = " \u2192 ";
+    private static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " ↳ ";
+    private static final String DOT_SYMBOL_CODE = " → ";
     boolean showPath = false;
 
     public void addValue(GroupEntryData groupEntryData) {
         mValues.add(groupEntryData);
-    }
-
-    public void setValues(List<GroupEntryData> mValues) {
-        this.mValues = mValues;
-    }
-
-    public boolean isShowPath() {
-        return showPath;
     }
 
     public void setShowPath(boolean showPath) {
@@ -62,29 +54,46 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.name.setText(holder.mItem.name);
-        if (holder.mItem.type.name().toString().equals(GroupEntryType.DUMMY.name().toString())) {
+        String itemTypeName = holder.mItem.type.name();
+        Context context = holder.groupEntryImage.getContext();
+        boolean isEntryUpdated = !Db.getInstance().isEntryNotUpdatedInDb(holder.mItem.id);
+
+        // Handle visibility for DUMMY type
+        if (itemTypeName.equals(GroupEntryType.DUMMY.name())) {
             holder.groupEntryNameCardView.setVisibility(View.INVISIBLE);
-        } else if (holder.mItem.type.name().toString().equals(GroupEntryType.ENTRY.name().toString())) {
-            if (showPath && holder.mItem.path != null) {
-                holder.path.setVisibility(View.VISIBLE);
-                String path = holder.mItem.path.substring(1, holder.mItem.path.length());
-                path = path.replace("/", DOT_SYMBOL_CODE);
-                holder.path.setText(path);
-            } else {
-                holder.path.setVisibility(View.GONE);
-            }
+            return; // Exit early to avoid unnecessary checks
+        }
+
+        // Handle ENTRY type
+        if (itemTypeName.equals(GroupEntryType.ENTRY.name())) {
+            handleEntryType(holder, showPath);
+
             holder.groupEntryImage.setImageResource(R.drawable.ic_key_fill1_wght300_grad_25_opsz24);
-            holder.groupEntryImage.setColorFilter(ContextCompat.getColor(holder.groupEntryImage.getContext(), R.color.kp_green_2));
-            if (Db.getInstance().isEntryNotUpdatedInDb(holder.mItem.id)) {
-                holder.groupEntryCountOrStatus.setText(holder.groupEntryCountOrStatus.getContext().getString(R.string.notSaved));
+            holder.groupEntryImage.setColorFilter(ContextCompat.getColor(context, R.color.kp_green_2));
+
+            // Update status text based on entry update status
+            if (isEntryUpdated) {
+                Utils.setExpiryText(holder.groupEntryCountOrStatus, new Pair<>(holder.mItem.status, holder.mItem.daysToExpire));
             } else {
-                Pair<GroupEntryStatus, Long> statusLongPair = new Pair<>();
-                statusLongPair.first = holder.mItem.status;
-                statusLongPair.second = holder.mItem.daysToExpire;
-                Utils.setExpiryText(holder.groupEntryCountOrStatus, statusLongPair);
+                holder.groupEntryCountOrStatus.setText(context.getString(R.string.notSaved));
+                holder.groupEntryCountOrStatus.setTextColor(ContextCompat.getColor(context, R.color.kp_red));
             }
-        } else if (holder.mItem.type.name().toString().equals(GroupEntryType.GROUP.name().toString())) {
-            holder.groupEntryCountOrStatus.setText("" + holder.mItem.subCount + SUB_DIRECTORY_ARROW_SYMBOL_CODE);
+        }
+        // Handle GROUP type
+        else if (itemTypeName.equals(GroupEntryType.GROUP.name())) {
+            String text = holder.mItem.subCount + SUB_DIRECTORY_ARROW_SYMBOL_CODE;
+            holder.groupEntryCountOrStatus.setText(text);
+        }
+    }
+
+    // Method to handle ENTRY type logic
+    private void handleEntryType(ViewHolder holder, boolean showPath) {
+        if (showPath && holder.mItem.path != null) {
+            String path = holder.mItem.path.substring(1).replace("/", DOT_SYMBOL_CODE);
+            holder.path.setVisibility(View.VISIBLE);
+            holder.path.setText(path);
+        } else {
+            holder.path.setVisibility(View.GONE);
         }
     }
 

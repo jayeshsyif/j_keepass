@@ -15,11 +15,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
-import org.j_keepass.db.events.DbAndFileOperations;
-import org.j_keepass.events.changeactivity.ChangeActivityEvent;
-import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.databinding.ListGroupsAndEntriesActivityLayoutBinding;
 import org.j_keepass.db.operation.Db;
+import org.j_keepass.events.changeactivity.ChangeActivityEvent;
+import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
@@ -77,8 +76,11 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             });
         });
         binding.groupAndEntryHomeDatabaseBtn.setOnClickListener(view -> {
-            binding.groupAndEntryTabLayout.getTabAt(0).select();
-            setGroup(Db.getInstance().getRootGroupId());
+            TabLayout.Tab selectedTab = binding.groupAndEntryTabLayout.getTabAt(0);
+            if (selectedTab != null) {
+                selectedTab.select();
+                setGroup(Db.getInstance().getRootGroupId());
+            }
         });
         binding.groupAndEntryGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
@@ -158,7 +160,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         binding.groupAndEntryTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Utils.log("Tab selected " + tab.getId() + " " + tab.getText().toString());
+                Utils.log("Tab selected " + tab.getId());
                 tab.view.setBackgroundResource(R.drawable.tab_selected_indicator);
                 if (tab.getId() == 0) {
                     tab.setIcon(R.drawable.ic_list_fill1_wght300_grad_25_opsz24);
@@ -216,6 +218,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             databaseTab.setIcon(R.drawable.ic_list_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(true);
             databaseTab.setId(id);
+            Utils.log("Added tab with id "+id);
             id++;
             runOnUiThread(() -> {
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
@@ -228,6 +231,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             databaseTab.setIcon(R.drawable.ic_key_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
+            Utils.log("Added tab with id "+id);
             id++;
             runOnUiThread(() -> {
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
@@ -240,12 +244,14 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             databaseTab.setIcon(R.drawable.ic_graph_fill0_wght300_grad_25_opsz24);
             databaseTab.view.setSelected(false);
             databaseTab.setId(id);
+            Utils.log("Added tab with id "+id);
             id++;
             runOnUiThread(() -> {
                 binding.groupAndEntryTabLayout.addTab(databaseTab, databaseTab.getId());
                 Utils.log("Added tab");
             });
         }
+        Utils.log("Added tab with max id "+id);
     }
 
     public void setGroup(UUID gId) {
@@ -258,9 +264,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
     public void reload(ReloadAction reloadAction) {
         if (reloadAction != null && reloadAction.name().equals(ReloadAction.GROUP_UPDATE.name())) {
             try {
-                runOnUiThread(() -> {
-                    binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId()));
-                });
+                runOnUiThread(() -> binding.groupNameOnTop.setText(Db.getInstance().getGroupName(Db.getInstance().getCurrentGroupId())));
             } catch (Throwable t) {
                 // ignore
             }

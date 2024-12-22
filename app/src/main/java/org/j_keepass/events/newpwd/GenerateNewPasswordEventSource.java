@@ -53,7 +53,11 @@ public class GenerateNewPasswordEventSource {
     public void showNewPwd(String newPwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         Utils.log("In listener show new pwd");
         for (GenerateNewPwdEvent listener : listeners) {
-            listener.showNewPwd(newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            try {
+                listener.showNewPwd(newPwd, useDigit, useLowerCase, useUpperCase, useSymbol, length);
+            } catch (Throwable t) {
+                // ignore
+            }
         }
     }
 

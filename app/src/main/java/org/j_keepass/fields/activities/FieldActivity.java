@@ -95,6 +95,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             executor.execute(() -> runOnUiThread(() -> {
                 Intent intent = new Intent(this, FieldActivity.class);
                 intent.putExtra("isEdit", true);
+                updateCacheEntry(Db.getInstance().getCurrentEntryId());
                 startActivity(intent);
                 finish();
             }));
@@ -116,7 +117,6 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             executor.execute(() -> updateEntry(Db.getInstance().getCurrentEntryId()));
             executor.execute(() -> runOnUiThread(() -> {
                 Intent intent = new Intent(this, ListGroupAndEntriesActivity.class);
-                intent.putExtra("isEdit", true);
                 startActivity(intent);
                 finish();
             }));
@@ -159,6 +159,9 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                         bundle.putString("show", "base");
                         bundle.putBoolean("isEdit", isEdit);
                         bundle.putBoolean("isNew", isNew);
+                        if (isEdit || isNew) {
+                            updateCacheEntry(Db.getInstance().getCurrentEntryId());
+                        }
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
