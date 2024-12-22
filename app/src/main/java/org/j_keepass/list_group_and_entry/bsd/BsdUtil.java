@@ -132,7 +132,11 @@ public class BsdUtil {
             showAskFoAddGroup(context, activity, name);
         });
         TableRow addMoreMoreAddNewEntry = bsd.findViewById(R.id.addMoreMoreAddNewEntry);
-
+        addMoreMoreAddNewEntry.setOnClickListener(view -> {
+            bsd.dismiss();
+            Db.getInstance().getAndSetNewEntry(Db.getInstance().getCurrentGroupId());
+            ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_NEW);
+        });
         expandBsd(bsd);
         bsd.show();
     }

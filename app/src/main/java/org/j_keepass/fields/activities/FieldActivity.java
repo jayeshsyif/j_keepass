@@ -39,6 +39,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
 
     private boolean isEdit = false;
+    private boolean isNew = false;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         Intent intent = getIntent();
         isEdit = intent.getBooleanExtra("isEdit", false);
+        isNew = intent.getBooleanExtra("isNew", false);
         if (isEdit) {
             binding.entryEditBtn.setVisibility(View.GONE);
             binding.entrySaveBtn.setVisibility(View.VISIBLE);
@@ -156,6 +158,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                         Bundle bundle = new Bundle();
                         bundle.putString("show", "base");
                         bundle.putBoolean("isEdit", isEdit);
+                        bundle.putBoolean("isNew", isNew);
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
@@ -166,6 +169,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                         Bundle bundle = new Bundle();
                         bundle.putString("show", "additional");
                         bundle.putBoolean("isEdit", isEdit);
+                        bundle.putBoolean("isNew", isNew);
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }
@@ -176,6 +180,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                         Bundle bundle = new Bundle();
                         bundle.putString("show", "attachment");
                         bundle.putBoolean("isEdit", isEdit);
+                        bundle.putBoolean("isNew", isNew);
                         fieldFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.entryFragmentContainerView, fieldFragment).commit();
                     }

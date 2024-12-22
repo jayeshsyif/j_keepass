@@ -4,6 +4,7 @@ public interface ChangeActivityEvent {
     void changeActivity(ChangeActivityAction changeActivityAction);
     enum ChangeActivityAction {
         ENTRY_SELECTED,
+        ENTRY_NEW,
         LOCK
     }
 }

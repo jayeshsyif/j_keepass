@@ -309,16 +309,16 @@ public class Db {
         return currentGroupId;
     }
 
-    public ArrayList<FieldData> getFields(UUID eId) {
+    public ArrayList<FieldData> getFields(UUID eId, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
             Entry entry = database.findEntry(eId);
-            fields = getFields(entry);
+            fields = getFields(entry, isNew);
         }
         return fields;
     }
 
-    private ArrayList<FieldData> getFields(Entry entry) {
+    private ArrayList<FieldData> getFields(Entry entry, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (entry != null) {
             {
@@ -328,7 +328,7 @@ public class Db {
                 fd.fieldNameType = FieldNameType.TITLE;
                 fd.value = entry.getTitle();
                 fd.fieldValueType = FieldValueType.TEXT;
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -339,7 +339,7 @@ public class Db {
                 fd.value = entry.getUsername();
                 fd.fieldNameType = FieldNameType.USERNAME;
                 fd.fieldValueType = FieldValueType.TEXT;
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -350,7 +350,7 @@ public class Db {
                 fd.value = entry.getPassword();
                 fd.fieldValueType = FieldValueType.PASSWORD;
                 fd.fieldNameType = FieldNameType.PASSWORD;
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -361,7 +361,7 @@ public class Db {
                 fd.fieldNameType = FieldNameType.URL;
                 fd.value = entry.getUrl();
                 fd.fieldValueType = FieldValueType.URL;
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -372,7 +372,7 @@ public class Db {
                 fd.fieldNameType = FieldNameType.NOTES;
                 fd.value = entry.getNotes();
                 fd.fieldValueType = FieldValueType.LARGE_TEXT;
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -383,7 +383,7 @@ public class Db {
                 fd.value = Utils.convertDateToString(entry.getCreationTime());
                 fd.fieldValueType = FieldValueType.TEXT;
                 fd.fieldNameType = FieldNameType.CREATED_DATE;
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -395,7 +395,7 @@ public class Db {
                 fd.fieldValueType = FieldValueType.TEXT;
                 fd.fieldNameType = FieldNameType.EXPIRY_DATE;
                 fd.expiryDate = entry.getExpiryTime();
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -407,7 +407,7 @@ public class Db {
                 fd.fieldValueType = FieldValueType.TEXT;
                 fd.fieldNameType = FieldNameType.DATE;
                 fd.expiryDate = entry.getExpiryTime();
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -419,7 +419,7 @@ public class Db {
                 fd.fieldValueType = FieldValueType.TEXT;
                 fd.fieldNameType = FieldNameType.DATE;
                 fd.expiryDate = entry.getExpiryTime();
-                if (fd.value != null && fd.value.length() > 0) {
+                if (isNew || (fd.value != null && fd.value.length() > 0)) {
                     fields.add(fd);
                 }
             }
@@ -439,7 +439,7 @@ public class Db {
         this.currentEntryId = currentEntryId;
     }
 
-    public ArrayList<FieldData> getAdditionalFields(Entry entry) {
+    public ArrayList<FieldData> getAdditionalFields(Entry entry, boolean isNew) {
         ArrayList<String> ignoreFields = new ArrayList<>() {{
             add("username".toLowerCase());
             add("password".toLowerCase());
@@ -460,7 +460,7 @@ public class Db {
                         fd.value = entry.getProperty(pn);
                         fd.fieldNameType = FieldNameType.ADDITIONAL;
                         fd.fieldValueType = FieldValueType.TEXT;
-                        if (fd.value != null && fd.value.length() > 0) {
+                        if (isNew || (fd.value != null && fd.value.length() > 0)) {
                             Utils.log("Additional property added " + pn);
                             fields.add(fd);
                         }
@@ -471,16 +471,16 @@ public class Db {
         return fields;
     }
 
-    public ArrayList<FieldData> getAdditionalFields(UUID eId) {
+    public ArrayList<FieldData> getAdditionalFields(UUID eId, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
             Entry entry = database.findEntry(eId);
-            fields = getAdditionalFields(entry);
+            fields = getAdditionalFields(entry, isNew);
         }
         return fields;
     }
 
-    public ArrayList<FieldData> getAttachments(UUID eId) {
+    public ArrayList<FieldData> getAttachments(UUID eId, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
         if (database != null) {
             Entry entry = database.findEntry(eId);
@@ -494,7 +494,7 @@ public class Db {
                         fd.value = bn;
                         fd.fieldNameType = FieldNameType.ATTACHMENT;
                         fd.fieldValueType = FieldValueType.ATTACHMENT;
-                        if (fd.value != null && fd.value.length() > 0) {
+                        if (isNew || (fd.value != null && fd.value.length() > 0)) {
                             fields.add(fd);
                         }
                     }
@@ -619,6 +619,23 @@ public class Db {
                     group.setParent(pGroup);
                     new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
                 }
+            }
+        }
+    }
+
+    public void getAndSetNewEntry(UUID currentGroupId) {
+        if (database != null) {
+            Group group = database.findGroup(currentGroupId);
+            if (group != null) {
+                Entry newEntry = database.newEntry();
+                newEntry.setTitle("");
+                newEntry.setUsername("");
+                newEntry.setPassword("");
+                newEntry.setUrl("");
+                newEntry.setNotes("");
+                newEntry.setExpiryTime(Calendar.getInstance().getTime());
+                group.addEntry(newEntry);
+                currentEntryId = newEntry.getUuid();
             }
         }
     }

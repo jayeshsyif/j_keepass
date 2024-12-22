@@ -57,42 +57,45 @@ public class FieldFragment extends Fragment implements LoadingEvent {
         Utils.log("Entry title is " + Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()));
         AtomicReference<String> show = new AtomicReference<>("base");
         AtomicReference<Boolean> isEdit = new AtomicReference<>(false);
+        AtomicReference<Boolean> isNew = new AtomicReference<>(false);
         Bundle bundle = getArguments();
         if (bundle != null) {
             String showBundle = bundle.getString("show");
             Boolean isEditBundle = bundle.getBoolean("isEdit");
+            Boolean isNewBundle = bundle.getBoolean("isNew");
             if (showBundle != null && showBundle.length() > 0) {
                 show.set(showBundle);
             }
             isEdit.set(isEditBundle);
+            isNew.set(isNewBundle);
         }
         ExecutorService executor = getExecutor();
         executor.execute(this::showLoading);
         executor.execute(this::dismissLoading);
-        executor.execute(() -> setAdapterAndShowFields(show.get(), isEdit.get()));
+        executor.execute(() -> setAdapterAndShowFields(show.get(), isEdit.get(), isNew.get()));
         return view;
     }
 
-    private void setAdapterAndShowFields(final String show, final Boolean isEdit) {
+    private void setAdapterAndShowFields(final String show, final Boolean isEdit, final Boolean isNew) {
         ExecutorService executor = getExecutor();
         executor.execute(() -> updateLoadingText(binding.getRoot().getContext().getString(R.string.loading)));
         executor.execute(this::showLoading);
         AtomicReference<ListFieldAdapter> adapter = new AtomicReference<>();
         executor.execute(() -> adapter.set(configureRecyclerView(binding.entryFieldsRecyclerView.getContext(), isEdit)));
-        executor.execute(() -> showFields(adapter.get(), show));
+        executor.execute(() -> showFields(adapter.get(), show, isNew));
         executor.execute(this::dismissLoading);
     }
 
-    private void showFields(ListFieldAdapter adapter, final String show) {
+    private void showFields(ListFieldAdapter adapter, final String show, final Boolean isNew) {
         Utils.log("Entry show with " + show + " is edit as ");
         ArrayList<FieldData> fields;
         if (show.equals("additional")) {
-            fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId());
+            fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId(), isNew);
         } else if (show.equals("attachment")) {
-            fields = Db.getInstance().getAttachments(Db.getInstance().getCurrentEntryId());
+            fields = Db.getInstance().getAttachments(Db.getInstance().getCurrentEntryId(), isNew);
         } else {
             //base
-            fields = Db.getInstance().getFields(Db.getInstance().getCurrentEntryId());
+            fields = Db.getInstance().getFields(Db.getInstance().getCurrentEntryId(), isNew);
         }
         if (fields != null && fields.size() > 0) {
             requireActivity().runOnUiThread(() -> {

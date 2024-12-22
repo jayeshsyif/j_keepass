@@ -58,8 +58,10 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.editText.setHint(holder.mItem.name);
-        holder.editText.setText(holder.mItem.value);
+        if (holder.mItem.value != null && holder.mItem.value.length() > 0) {
+            holder.editText.setHint(holder.mItem.name);
+            holder.editText.setText(holder.mItem.value);
+        }
         holder.editTextLayout.setHint(holder.mItem.name);
 
         boolean isDummy = holder.mItem.fieldValueType == FieldValueType.DUMMY;
@@ -78,7 +80,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             holder.editText.setEnabled(isEditable);
             holder.fieldCopy.setVisibility(isEditable && !isCreatedOrExpiryDate ? View.VISIBLE : View.GONE);
 
-            Utils.log("Got "+holder.mItem.name);
+            Utils.log("Got " + holder.mItem.name);
             if (isCreatedOrExpiryDate || isDateOtherThenCreateAndExpire) {
                 holder.editText.setEnabled(false);
                 holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);

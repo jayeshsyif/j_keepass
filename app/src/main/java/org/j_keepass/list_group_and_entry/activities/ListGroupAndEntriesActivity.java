@@ -271,6 +271,15 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
     public void changeActivity(ChangeActivityAction changeActivityAction) {
         if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_SELECTED.name())) {
             Intent intent = new Intent(this, FieldActivity.class);
+            intent.putExtra("isEdit", false);
+            intent.putExtra("isNew", false);
+            startActivity(intent);
+            finish();
+        }
+        if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_NEW.name())) {
+            Intent intent = new Intent(this, FieldActivity.class);
+            intent.putExtra("isEdit", true);
+            intent.putExtra("isNew", true);
             startActivity(intent);
             finish();
         }
