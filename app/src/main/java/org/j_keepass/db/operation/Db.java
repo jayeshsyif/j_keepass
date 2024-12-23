@@ -214,6 +214,10 @@ public class Db {
     }
 
     public ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId) {
+        return getSubGroupsAndEntries(gId, true);
+    }
+
+    private ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId, boolean addEntries) {
         ArrayList<GroupEntryData> list = new ArrayList<>();
         Group group = database.findGroup(gId);
         if (group != null) {
@@ -226,20 +230,26 @@ public class Db {
                 data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
                 list.add(data);
             }
-            ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
-            for (Entry suEntry : eList) {
-                GroupEntryData data = new GroupEntryData();
-                data.id = suEntry.getUuid();
-                data.name = suEntry.getTitle();
-                data.type = GroupEntryType.ENTRY;
-                data.path = suEntry.getPath();
-                Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
-                data.status = statusLongPair.first;
-                data.daysToExpire = statusLongPair.second;
-                list.add(data);
+            if (addEntries) {
+                ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
+                for (Entry suEntry : eList) {
+                    GroupEntryData data = new GroupEntryData();
+                    data.id = suEntry.getUuid();
+                    data.name = suEntry.getTitle();
+                    data.type = GroupEntryType.ENTRY;
+                    data.path = suEntry.getPath();
+                    Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
+                    data.status = statusLongPair.first;
+                    data.daysToExpire = statusLongPair.second;
+                    list.add(data);
+                }
             }
         }
         return list;
+    }
+
+    public ArrayList<GroupEntryData> getSubGroupsOnly(UUID gId) {
+        return getSubGroupsAndEntries(gId, false);
     }
 
     public Pair<GroupEntryStatus, Long> getStatus(Date date) {
@@ -700,5 +710,92 @@ public class Db {
             }
         }
         return gId;
+    }
+
+    public void copyGroup(UUID selectedGidToCopy, UUID toGroupId, Activity activity) {
+        if (database != null) {
+            Group selectedGroupToCopy = database.findGroup(selectedGidToCopy);
+            Group toGroup = database.findGroup(toGroupId);
+            if (selectedGroupToCopy != null && toGroup != null) {
+                toGroup.addGroup(copyGroup(selectedGroupToCopy));
+                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+            }
+        }
+    }
+
+    public void moveGroup(UUID selectedGidToMove, UUID toGroupId, Activity activity) {
+        if (database != null) {
+            Group selectedGroupToMove = database.findGroup(selectedGidToMove);
+            Group toGroup = database.findGroup(toGroupId);
+            if (selectedGroupToMove != null && toGroup != null) {
+                if (selectedGidToMove != getRootGroupId()) {
+                    selectedGroupToMove.getParent().removeGroup(selectedGroupToMove);
+                    toGroup.addGroup(selectedGroupToMove);
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+                }
+            }
+        }
+    }
+
+    private Group copyGroup(Group g) {
+        Group c = database.newGroup();
+        c.setName(g.getName());
+        c.setIcon(g.getIcon());
+        try {
+            ArrayList<Group> subG = (ArrayList<Group>) g.getGroups();
+            if (subG != null) {
+                for (Group sg : subG) {
+                    c.addGroup(copyGroup(sg));
+                }
+            }
+        } catch (ClassCastException ce) {
+            // ignore
+        }
+        try {
+            ArrayList<Entry> subE = (ArrayList<Entry>) g.getEntries();
+            if (subE != null) {
+                for (Entry se : subE) {
+                    c.addEntry(copyEntry(se));
+                }
+            }
+        } catch (ClassCastException ce) {
+            // ignore
+        }
+
+        return c;
+    }
+
+    private Entry copyEntry(Entry e) {
+        Entry c = database.newEntry();
+        c.setExpiryTime(e.getExpiryTime());
+        c.setTitle(e.getTitle());
+        c.setNotes(e.getNotes());
+        c.setPassword(e.getPassword());
+        c.setExpires(e.getExpires());
+        c.setIcon(e.getIcon());
+        c.setUrl(e.getUrl());
+        c.setUsername(e.getUsername());
+        try {
+            ArrayList<String> props = (ArrayList<String>) e.getPropertyNames();
+            if (props != null) {
+                for (String p : props) {
+                    c.setProperty(p, e.getProperty(p));
+                }
+            }
+        } catch (ClassCastException ce) {
+            // ignore
+        }
+        try {
+            ArrayList<String> bprops = (ArrayList<String>) e.getBinaryPropertyNames();
+            if (bprops != null) {
+                for (String bp : bprops) {
+                    c.setProperty(bp, e.getProperty(bp));
+                }
+            }
+        } catch (ClassCastException ce) {
+            // ignore
+        }
+        return c;
+
     }
 }

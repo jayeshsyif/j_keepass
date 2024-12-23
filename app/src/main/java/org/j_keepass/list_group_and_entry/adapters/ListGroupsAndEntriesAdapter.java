@@ -65,6 +65,16 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
             return; // Exit early to avoid unnecessary checks
         }
 
+        holder.groupEntryNameCardView.setOnClickListener(view -> {
+            if (holder.mItem.type.name().equals(GroupEntryType.GROUP.name())) {
+                Db.getInstance().setCurrentGroupId(holder.mItem.id);
+                ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
+            } else if (holder.mItem.type.name().equals(GroupEntryType.ENTRY.name())) {
+                Db.getInstance().setCurrentEntryId(holder.mItem.id);
+                ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_SELECTED);
+            }
+        });
+
         // Handle ENTRY type
         if (itemTypeName.equals(GroupEntryType.ENTRY.name())) {
             handleEntryType(holder, showPath);
@@ -131,15 +141,6 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
             groupEntryNameCardView = binding.groupEntryNameCardView;
             groupEntryImage = binding.groupEntryImage;
             path = binding.path;
-            groupEntryNameCardView.setOnClickListener(view -> {
-                if (mItem.type.name().equals(GroupEntryType.GROUP.name())) {
-                    Db.getInstance().setCurrentGroupId(mItem.id);
-                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
-                } else if (mItem.type.name().equals(GroupEntryType.ENTRY.name())) {
-                    Db.getInstance().setCurrentEntryId(mItem.id);
-                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_SELECTED);
-                }
-            });
         }
     }
 }

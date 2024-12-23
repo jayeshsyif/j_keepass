@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/kp_margin"
+    android:background="?colorPrimary">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/groupEntryNameCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/kp_always_5"
+        android:background="?colorPrimary"
+        android:backgroundTint="?colorPrimary"
+        app:cardBackgroundColor="?colorPrimary"
+        app:cardCornerRadius="@dimen/kp_card_view_radius">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimaryVariant"
+            android:padding="@dimen/kp_margin">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/groupEntryImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/background_transparent"
+                android:src="@drawable/ic_folder_fill1_wght300_grad_25_opsz24"
+                android:textAlignment="center"
+                app:tint="@color/kp_yellow" />
+
+            <TextView
+                android:id="@+id/groupName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/kp_margin"
+                android:layout_marginTop="@dimen/kp_margin"
+                android:layout_marginEnd="@dimen/kp_margin"
+                android:layout_marginBottom="@dimen/kp_margin"
+                android:layout_toEndOf="@id/groupEntryImage"
+                android:ellipsize="end"
+                android:fontFamily="@font/spacemono_regular"
+                android:gravity="center_vertical"
+                android:maxEms="@integer/max_ems"
+                android:singleLine="true"
+                android:text="@string/groupName"
+                android:textAlignment="gravity"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:textColor="?colorSecondary"
+                app:layout_constraintEnd_toStartOf="@id/groupEntryArrow"></TextView>
+
+            <ImageButton
+                android:id="@+id/groupEntryArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginTop="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:layout_marginBottom="@dimen/kp_always_1"
+                android:background="@drawable/background_transparent"
+                android:contentDescription="@string/moreOptionDesc"
+                android:minWidth="@dimen/kp_min_image_width"
+                android:minHeight="@dimen/kp_min_image_height"
+                android:src="@drawable/ic_arrow_forward_fill0_wght300_grad_25_opsz24"
+                android:textAlignment="center"
+                app:layout_constraintStart_toEndOf="@id/groupName"
+                app:tint="?colorSecondary" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -11,6 +11,7 @@ public interface ReloadEvent {
         DELETE,
         EXPORT,
         ENTRY_PROP_UPDATE,
-        NAV_GROUP
+        NAV_GROUP,
+        COPY_MOVE_GROUP_UPDATE,
     }
 }

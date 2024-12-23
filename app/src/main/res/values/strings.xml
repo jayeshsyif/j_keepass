@@ -104,4 +104,11 @@
     <string name="addEntry">Add New Entry</string>
     <string name="enterAdditionalFieldName">Enter Additional Field Name</string>
     <string name="enterAdditionalFieldValue">Enter Additional Field Value</string>
+    <string name="copyOrMoveGroupName">Copy or Move Group/Folder</string>
+    <string name="copyHere">Copy Here</string>
+    <string name="moveHere">Move Here</string>
+    <string name="copyOrMoveSelectedFolderName">"Selected Location: "</string>
+    <string name="copying">Copying .....</string>
+    <string name="moving">Moving .....</string>
+    <string name="canNotMoveRootFolder">Cannot move root folder</string>
 </resources>

@@ -3,9 +3,13 @@ package org.j_keepass.list_group_and_entry.bsd;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -13,6 +17,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.j_keepass.R;
+import org.j_keepass.copy_or_move.adapter.ListGroupsForCopyMoveAdapter;
 import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
@@ -22,10 +27,12 @@ import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
+import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.util.Utils;
 import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -85,6 +92,13 @@ public class BsdUtil {
                 showAskForEditGroupName(context, activity, name);
             });
         }
+        LinearLayout groupEntryMoreOptionCopyOrMoveGroup = bsd.findViewById(R.id.groupEntryMoreOptionCopyOrMoveGroup);
+        if (groupEntryMoreOptionCopyOrMoveGroup != null) {
+            groupEntryMoreOptionCopyOrMoveGroup.setOnClickListener(view -> {
+                bsd.dismiss();
+                showAskForCopyOrMove(context, activity, name, "Group");
+            });
+        }
         LinearLayout groupEntryMoreOptionAdd = bsd.findViewById(R.id.groupEntryMoreOptionAdd);
         if (groupEntryMoreOptionAdd != null) {
             groupEntryMoreOptionAdd.setOnClickListener(view -> {
@@ -118,6 +132,94 @@ public class BsdUtil {
                     }
                 });
             });
+        }
+        expandBsd(bsd);
+        bsd.show();
+    }
+
+    private void showAskForCopyOrMove(Context context, Activity activity, String name, String type) {
+        final BottomSheetDialog bsd = new BottomSheetDialog(context);
+        bsd.setContentView(R.layout.copy_or_move);
+        RecyclerView showFolderForCopyMoveRecyclerView = bsd.findViewById(R.id.showFolderForCopyMoveRecyclerView);
+        String selectedStr = context.getString(R.string.copyOrMoveSelectedFolderName);
+        TextView selectedFolderNameForCopyMove = bsd.findViewById(R.id.selectedFolderNameForCopyMove);
+        if (selectedFolderNameForCopyMove != null) {
+            selectedFolderNameForCopyMove.setText(selectedStr + " " + Db.getInstance().getGroupName(Db.getInstance().getRootGroupId()));
+        }
+        ListGroupsForCopyMoveAdapter adapter = new ListGroupsForCopyMoveAdapter();
+        ReloadEvent reloadEvent = reloadAction -> {
+            if (reloadAction != null && reloadAction.name().equals(ReloadEvent.ReloadAction.COPY_MOVE_GROUP_UPDATE.name())) {
+                activity.runOnUiThread(() -> {
+                    Utils.log("Copy or move folder update is received.");
+                    showFolderForCopyMoveRecyclerView.removeAllViews();
+                    if (selectedFolderNameForCopyMove != null) {
+                        selectedFolderNameForCopyMove.setText(selectedStr + " " + adapter.getSelectedGName());
+                    }
+                    ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsOnly(adapter.getSelectedGid());
+                    if (subs != null) {
+                        adapter.removeAll();
+                        for (final GroupEntryData data : subs) {
+                            adapter.addValue(data);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        };
+        adapter.setReloadEvent(reloadEvent);
+        if (showFolderForCopyMoveRecyclerView != null) {
+            activity.runOnUiThread(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.loading));
+                LoadingEventSource.getInstance().showLoading();
+                showFolderForCopyMoveRecyclerView.removeAllViews();
+                showFolderForCopyMoveRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                showFolderForCopyMoveRecyclerView.setAdapter(adapter);
+                adapter.setSelectedGid(Db.getInstance().getRootGroupId());
+                ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsOnly(Db.getInstance().getRootGroupId());
+                if (subs != null) {
+                    for (final GroupEntryData data : subs) {
+                        adapter.addValue(data);
+                    }
+                    adapter.notifyDataSetChanged();
+                    LoadingEventSource.getInstance().dismissLoading();
+                }
+            });
+        }
+        MaterialButton confirmCopyHere = bsd.findViewById(R.id.confirmCopyHere);
+        if (confirmCopyHere != null) {
+            confirmCopyHere.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.copying));
+                    LoadingEventSource.getInstance().showLoading();
+                    Db.getInstance().copyGroup(Db.getInstance().getCurrentGroupId(), adapter.getSelectedGid(), activity);
+                    Db.getInstance().setCurrentGroupId(adapter.getSelectedGid());
+                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
+                });
+            });
+        }
+        MaterialButton confirmMoveHere = bsd.findViewById(R.id.confirmMoveHere);
+        if (confirmMoveHere != null) {
+            confirmMoveHere.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.moving));
+                    LoadingEventSource.getInstance().showLoading();
+                    if(Db.getInstance().getCurrentGroupId() != Db.getInstance().getRootGroupId()) {
+                        Db.getInstance().moveGroup(Db.getInstance().getCurrentGroupId(), adapter.getSelectedGid(), activity);
+                        Db.getInstance().setCurrentGroupId(adapter.getSelectedGid());
+                        ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
+                    } else {
+                        LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.canNotMoveRootFolder));
+                    }
+                });
+            });
+        }
+        ImageButton copyOrMoveMenuCancelBtn = bsd.findViewById(R.id.copyOrMoveMenuCancelBtn);
+        if (copyOrMoveMenuCancelBtn != null) {
+            copyOrMoveMenuCancelBtn.setOnClickListener(view -> bsd.dismiss());
         }
         expandBsd(bsd);
         bsd.show();

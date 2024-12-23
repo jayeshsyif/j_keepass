@@ -18,7 +18,9 @@ public class ReloadEventSource {
     private ArrayList<ReloadEvent> listeners = new ArrayList<>();
 
     public void addListener(ReloadEvent listener) {
+        Utils.log("In listener reload, adding listener "+ listener.getClass().getName());
         listeners.add(listener);
+        Utils.log("In listener reload, count "+ listeners.size());
     }
 
     public void removeListener(ReloadEvent listener) {
@@ -26,8 +28,9 @@ public class ReloadEventSource {
     }
 
     public void reload(ReloadEvent.ReloadAction reloadAction) {
-        Utils.log("In listener reload");
+        Utils.log("In listener reload, count "+ listeners.size());
         for (ReloadEvent listener : listeners) {
+            Utils.log("In listener reload, listener is  "+ listener.getClass().getName());
             listener.reload(reloadAction);
         }
     }
