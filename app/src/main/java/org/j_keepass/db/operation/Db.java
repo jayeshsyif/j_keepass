@@ -21,6 +21,8 @@ import org.linguafranca.pwdb.Group;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -242,26 +244,32 @@ public class Db {
             Group group = database.findGroup(gId);
             if (group != null) {
                 ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
-                for (Group suGroup : gList) {
-                    GroupEntryData data = new GroupEntryData();
-                    data.id = suGroup.getUuid();
-                    data.name = suGroup.getName();
-                    data.type = GroupEntryType.GROUP;
-                    data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
-                    list.add(data);
+                if (gList != null) {
+                    Collections.sort(gList, (g1, g2) -> g1.getName().compareTo(g2.getName()));
+                    for (Group suGroup : gList) {
+                        GroupEntryData data = new GroupEntryData();
+                        data.id = suGroup.getUuid();
+                        data.name = suGroup.getName();
+                        data.type = GroupEntryType.GROUP;
+                        data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
+                        list.add(data);
+                    }
                 }
                 if (addEntries) {
                     ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
-                    for (Entry suEntry : eList) {
-                        GroupEntryData data = new GroupEntryData();
-                        data.id = suEntry.getUuid();
-                        data.name = suEntry.getTitle();
-                        data.type = GroupEntryType.ENTRY;
-                        data.path = suEntry.getPath();
-                        Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
-                        data.status = statusLongPair.first;
-                        data.daysToExpire = statusLongPair.second;
-                        list.add(data);
+                    if (eList != null) {
+                        Collections.sort(eList, (e1, e2) -> e1.getTitle().compareTo(e2.getTitle()));
+                        for (Entry suEntry : eList) {
+                            GroupEntryData data = new GroupEntryData();
+                            data.id = suEntry.getUuid();
+                            data.name = suEntry.getTitle();
+                            data.type = GroupEntryType.ENTRY;
+                            data.path = suEntry.getPath();
+                            Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
+                            data.status = statusLongPair.first;
+                            data.daysToExpire = statusLongPair.second;
+                            list.add(data);
+                        }
                     }
                 }
             }
