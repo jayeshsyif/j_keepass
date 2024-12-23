@@ -131,9 +131,13 @@ public class Db {
     public long getSubGroupsCount(UUID gId) {
         long gCount = 0;
         if (database != null) {
-            Group group = database.findGroup(gId);
-            if (group != null) {
-                gCount = group.getGroupsCount();
+            try {
+                Group group = database.findGroup(gId);
+                if (group != null) {
+                    gCount = group.getGroupsCount();
+                }
+            } catch (Throwable t) {
+                //ignore
             }
         }
         return gCount;
@@ -153,9 +157,13 @@ public class Db {
     public long getAllEntriesCount() {
         long eCount = 0;
         if (database != null) {
-            List<?> entries = database.findEntries(entry -> true);
-            if (entries != null) {
-                eCount = entries.size();
+            try {
+                List<?> entries = database.findEntries(entry -> true);
+                if (entries != null) {
+                    eCount = entries.size();
+                }
+            } catch (Throwable t) {
+                //ignore
             }
         }
         return eCount;
@@ -164,9 +172,13 @@ public class Db {
     public long getAllEntriesCount(String query) {
         long eCount = 0;
         if (database != null) {
-            List<?> entries = database.findEntries(entry -> entry.match(query));
-            if (entries != null) {
-                eCount = entries.size();
+            try {
+                List<?> entries = database.findEntries(entry -> entry.match(query));
+                if (entries != null) {
+                    eCount = entries.size();
+                }
+            } catch (Throwable t) {
+                //ignore
             }
         }
         return eCount;
@@ -174,41 +186,48 @@ public class Db {
 
     public ArrayList<GroupEntryData> getAllEntries() {
         ArrayList<GroupEntryData> list = new ArrayList<>();
-        List<?> entries = database.findEntries(entry -> true);
-        if (entries != null) {
-            for (int eCount = 0; eCount < entries.size(); eCount++) {
-                Entry entry = (Entry) entries.get(eCount);
-                GroupEntryData data = new GroupEntryData();
-                data.id = entry.getUuid();
-                data.name = entry.getTitle();
-                data.type = GroupEntryType.ENTRY;
-                data.path = entry.getPath();
-                Pair<GroupEntryStatus, Long> statusLongPair = getStatus(entry.getExpiryTime());
-                data.status = statusLongPair.first;
-                data.daysToExpire = statusLongPair.second;
-                list.add(data);
+        try {
+            List<?> entries = database.findEntries(entry -> true);
+            if (entries != null) {
+                for (int eCount = 0; eCount < entries.size(); eCount++) {
+                    Entry entry = (Entry) entries.get(eCount);
+                    GroupEntryData data = new GroupEntryData();
+                    data.id = entry.getUuid();
+                    data.name = entry.getTitle();
+                    data.type = GroupEntryType.ENTRY;
+                    data.path = entry.getPath();
+                    Pair<GroupEntryStatus, Long> statusLongPair = getStatus(entry.getExpiryTime());
+                    data.status = statusLongPair.first;
+                    data.daysToExpire = statusLongPair.second;
+                    list.add(data);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return list;
     }
 
     public ArrayList<GroupEntryData> getAllEntries(String query) {
         ArrayList<GroupEntryData> list = new ArrayList<>();
-        Date currentDate = Calendar.getInstance().getTime();
-        List<?> entries = database.findEntries(entry -> entry.match(query));
-        if (entries != null) {
-            for (int eCount = 0; eCount < entries.size(); eCount++) {
-                Entry entry = (Entry) entries.get(eCount);
-                GroupEntryData data = new GroupEntryData();
-                data.id = entry.getUuid();
-                data.name = entry.getTitle();
-                data.type = GroupEntryType.ENTRY;
-                data.path = entry.getPath();
-                Pair<GroupEntryStatus, Long> statusLongPair = getStatus(entry.getExpiryTime());
-                data.status = statusLongPair.first;
-                data.daysToExpire = statusLongPair.second;
-                list.add(data);
+        try {
+            List<?> entries = database.findEntries(entry -> entry.match(query));
+            if (entries != null) {
+                for (int eCount = 0; eCount < entries.size(); eCount++) {
+                    Entry entry = (Entry) entries.get(eCount);
+                    GroupEntryData data = new GroupEntryData();
+                    data.id = entry.getUuid();
+                    data.name = entry.getTitle();
+                    data.type = GroupEntryType.ENTRY;
+                    data.path = entry.getPath();
+                    Pair<GroupEntryStatus, Long> statusLongPair = getStatus(entry.getExpiryTime());
+                    data.status = statusLongPair.first;
+                    data.daysToExpire = statusLongPair.second;
+                    list.add(data);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return list;
     }
@@ -219,31 +238,35 @@ public class Db {
 
     private ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId, boolean addEntries) {
         ArrayList<GroupEntryData> list = new ArrayList<>();
-        Group group = database.findGroup(gId);
-        if (group != null) {
-            ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
-            for (Group suGroup : gList) {
-                GroupEntryData data = new GroupEntryData();
-                data.id = suGroup.getUuid();
-                data.name = suGroup.getName();
-                data.type = GroupEntryType.GROUP;
-                data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
-                list.add(data);
-            }
-            if (addEntries) {
-                ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
-                for (Entry suEntry : eList) {
+        try {
+            Group group = database.findGroup(gId);
+            if (group != null) {
+                ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
+                for (Group suGroup : gList) {
                     GroupEntryData data = new GroupEntryData();
-                    data.id = suEntry.getUuid();
-                    data.name = suEntry.getTitle();
-                    data.type = GroupEntryType.ENTRY;
-                    data.path = suEntry.getPath();
-                    Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
-                    data.status = statusLongPair.first;
-                    data.daysToExpire = statusLongPair.second;
+                    data.id = suGroup.getUuid();
+                    data.name = suGroup.getName();
+                    data.type = GroupEntryType.GROUP;
+                    data.subCount = suGroup.getGroupsCount() + suGroup.getEntriesCount();
                     list.add(data);
                 }
+                if (addEntries) {
+                    ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
+                    for (Entry suEntry : eList) {
+                        GroupEntryData data = new GroupEntryData();
+                        data.id = suEntry.getUuid();
+                        data.name = suEntry.getTitle();
+                        data.type = GroupEntryType.ENTRY;
+                        data.path = suEntry.getPath();
+                        Pair<GroupEntryStatus, Long> statusLongPair = getStatus(suEntry.getExpiryTime());
+                        data.status = statusLongPair.first;
+                        data.daysToExpire = statusLongPair.second;
+                        list.add(data);
+                    }
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return list;
     }
@@ -275,15 +298,19 @@ public class Db {
     public long getAllExpiredEntriesCount() {
         Date currentDate = Calendar.getInstance().getTime();
         long eCount = 0;
-        if (database != null) {
-            List<?> entries = database.findEntries(entry -> {
-                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
-                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                return daysToExpire <= 0;
-            });
-            if (entries != null) {
-                eCount = entries.size();
+        try {
+            if (database != null) {
+                List<?> entries = database.findEntries(entry -> {
+                    long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                    long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                    return daysToExpire <= 0;
+                });
+                if (entries != null) {
+                    eCount = entries.size();
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return eCount;
     }
@@ -291,15 +318,19 @@ public class Db {
     public long getAllExpiringSoonEntriesCount() {
         Date currentDate = Calendar.getInstance().getTime();
         long eCount = 0;
-        if (database != null) {
-            List<?> entries = database.findEntries(entry -> {
-                long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
-                long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                return (daysToExpire > 0 && daysToExpire <= 10);
-            });
-            if (entries != null) {
-                eCount = entries.size();
+        try {
+            if (database != null) {
+                List<?> entries = database.findEntries(entry -> {
+                    long diff = entry.getExpiryTime().getTime() - currentDate.getTime();
+                    long daysToExpire = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                    return (daysToExpire > 0 && daysToExpire <= 10);
+                });
+                if (entries != null) {
+                    eCount = entries.size();
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return eCount;
     }
@@ -322,9 +353,13 @@ public class Db {
 
     public ArrayList<FieldData> getFields(UUID eId, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            fields = getFields(entry, isNew);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                fields = getFields(entry, isNew);
+            }
+        } catch (Throwable t) {
+            //ignore
         }
         return fields;
     }
@@ -484,34 +519,42 @@ public class Db {
 
     public ArrayList<FieldData> getAdditionalFields(UUID eId, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            fields = getAdditionalFields(entry, isNew);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                fields = getAdditionalFields(entry, isNew);
+            }
+        } catch (Throwable t) {
+            //ignore
         }
         return fields;
     }
 
     public ArrayList<FieldData> getAttachments(UUID eId, boolean isNew) {
         ArrayList<FieldData> fields = new ArrayList<>();
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                if (entry.getBinaryPropertyNames().size() > 0) {
-                    ArrayList<String> bList = (ArrayList<String>) entry.getBinaryPropertyNames();
-                    for (String bn : bList) {
-                        Utils.log("binary property found " + bn);
-                        FieldData fd = new FieldData();
-                        fd.name = FieldNameType.ATTACHMENT.toString();
-                        fd.value = bn;
-                        fd.fileInBytes = entry.getBinaryProperty(bn);
-                        fd.fieldNameType = FieldNameType.ATTACHMENT;
-                        fd.fieldValueType = FieldValueType.ATTACHMENT;
-                        if (isNew || (fd.value != null && fd.value.length() > 0)) {
-                            fields.add(fd);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    if (entry.getBinaryPropertyNames().size() > 0) {
+                        ArrayList<String> bList = (ArrayList<String>) entry.getBinaryPropertyNames();
+                        for (String bn : bList) {
+                            Utils.log("binary property found " + bn);
+                            FieldData fd = new FieldData();
+                            fd.name = FieldNameType.ATTACHMENT.toString();
+                            fd.value = bn;
+                            fd.fileInBytes = entry.getBinaryProperty(bn);
+                            fd.fieldNameType = FieldNameType.ATTACHMENT;
+                            fd.fieldValueType = FieldValueType.ATTACHMENT;
+                            if (isNew || (fd.value != null && fd.value.length() > 0)) {
+                                fields.add(fd);
+                            }
                         }
                     }
                 }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return fields;
     }
@@ -519,14 +562,18 @@ public class Db {
 
     public boolean updateEntryField(UUID eId, FieldData fieldData) {
         boolean isUpdated = false;
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                updateEntryField(entry, fieldData);
-                isUpdated = true;
-            } else {
-                Utils.log("entry is null");
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    updateEntryField(entry, fieldData);
+                    isUpdated = true;
+                } else {
+                    Utils.log("entry is null");
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return isUpdated;
     }
@@ -588,24 +635,32 @@ public class Db {
     }
 
     public void deleteGroup(UUID gId, ContentResolver contentResolver) {
-        if (database != null) {
-            Group group = database.findGroup(gId);
-            if (group != null) {
-                currentGroupId = group.getParent().getUuid();
-                database.deleteGroup(gId);
-                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+        try {
+            if (database != null) {
+                Group group = database.findGroup(gId);
+                if (group != null) {
+                    currentGroupId = group.getParent().getUuid();
+                    database.deleteGroup(gId);
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void deleteEntry(UUID eId, ContentResolver contentResolver) {
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                currentEntryId = null;
-                database.deleteEntry(eId);
-                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    currentEntryId = null;
+                    database.deleteEntry(eId);
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
@@ -618,122 +673,166 @@ public class Db {
     }
 
     public void updateGroupName(UUID currentGroupId, ContentResolver contentResolver, String gName) {
-        if (database != null) {
-            Group group = database.findGroup(currentGroupId);
-            if (group != null) {
-                group.setName(gName);
-                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+        try {
+            if (database != null) {
+                Group group = database.findGroup(currentGroupId);
+                if (group != null) {
+                    group.setName(gName);
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void exportFile(Uri dataUri, ContentResolver contentResolver, ListGroupAndEntriesActivity activity) {
-        new DbAndFileOperations().exportFile(database, dataUri, pwd, contentResolver, activity);
+        try {
+            new DbAndFileOperations().exportFile(database, dataUri, pwd, contentResolver, activity);
+        } catch (Throwable t) {
+            //ignore
+        }
     }
 
     public void addGroup(UUID currentGroupId, ContentResolver contentResolver, String gName) {
-        if (database != null) {
-            Group group = database.newGroup();
-            if (group != null) {
-                group.setName(gName);
-                Group pGroup = database.findGroup(currentGroupId);
-                if (pGroup != null) {
-                    pGroup.addGroup(group);
-                    group.setParent(pGroup);
-                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+        try {
+            if (database != null) {
+                Group group = database.newGroup();
+                if (group != null) {
+                    group.setName(gName);
+                    Group pGroup = database.findGroup(currentGroupId);
+                    if (pGroup != null) {
+                        pGroup.addGroup(group);
+                        group.setParent(pGroup);
+                        new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
+                    }
                 }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void getAndSetNewEntry(UUID currentGroupId) {
-        if (database != null) {
-            Group group = database.findGroup(currentGroupId);
-            if (group != null) {
-                Entry newEntry = database.newEntry();
-                newEntry.setTitle("");
-                newEntry.setUsername("");
-                newEntry.setPassword("");
-                newEntry.setUrl("");
-                newEntry.setNotes("");
-                newEntry.setExpiryTime(Calendar.getInstance().getTime());
-                group.addEntry(newEntry);
-                currentEntryId = newEntry.getUuid();
+        try {
+            if (database != null) {
+                Group group = database.findGroup(currentGroupId);
+                if (group != null) {
+                    Entry newEntry = database.newEntry();
+                    newEntry.setTitle("");
+                    newEntry.setUsername("");
+                    newEntry.setPassword("");
+                    newEntry.setUrl("");
+                    newEntry.setNotes("");
+                    newEntry.setExpiryTime(Calendar.getInstance().getTime());
+                    group.addEntry(newEntry);
+                    currentEntryId = newEntry.getUuid();
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void addEntryAdditionalProperty(UUID eId, String fieldName, String fieldValue) {
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                entry.setProperty(fieldName, fieldValue);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    entry.setProperty(fieldName, fieldValue);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void addEntryDeleteAdditionalProperty(UUID eId, String fieldName) {
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                entry.removeProperty(fieldName);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    entry.removeProperty(fieldName);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void deleteEntryBinaryProperty(UUID eId, String fieldName) {
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                entry.removeBinaryProperty(fieldName);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    entry.removeBinaryProperty(fieldName);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void addBinaryProp(UUID eId, Uri dataUri, ContentResolver contentResolver, Activity activity) {
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                byte[] propValue = new DbAndFileOperations().getFileIntoBytes(dataUri, contentResolver, activity);
-                String propName = new DbAndFileOperations().getFileName(dataUri, contentResolver, activity);
-                entry.setBinaryProperty(propName, propValue);
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    byte[] propValue = new DbAndFileOperations().getFileIntoBytes(dataUri, contentResolver, activity);
+                    String propName = new DbAndFileOperations().getFileName(dataUri, contentResolver, activity);
+                    entry.setBinaryProperty(propName, propValue);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public UUID getParentGroupName(UUID eId) {
         UUID gId = null;
-        if (database != null) {
-            Entry entry = database.findEntry(eId);
-            if (entry != null) {
-                gId = entry.getParent().getUuid();
+        try {
+            if (database != null) {
+                Entry entry = database.findEntry(eId);
+                if (entry != null) {
+                    gId = entry.getParent().getUuid();
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
         return gId;
     }
 
     public void copyGroup(UUID selectedGidToCopy, UUID toGroupId, Activity activity) {
-        if (database != null) {
-            Group selectedGroupToCopy = database.findGroup(selectedGidToCopy);
-            Group toGroup = database.findGroup(toGroupId);
-            if (selectedGroupToCopy != null && toGroup != null) {
-                toGroup.addGroup(copyGroup(selectedGroupToCopy));
-                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+        try {
+            if (database != null) {
+                Group selectedGroupToCopy = database.findGroup(selectedGidToCopy);
+                Group toGroup = database.findGroup(toGroupId);
+                if (selectedGroupToCopy != null && toGroup != null) {
+                    toGroup.addGroup(copyGroup(selectedGroupToCopy));
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void moveGroup(UUID selectedGidToMove, UUID toGroupId, Activity activity) {
-        if (database != null) {
-            Group selectedGroupToMove = database.findGroup(selectedGidToMove);
-            Group toGroup = database.findGroup(toGroupId);
-            if (selectedGroupToMove != null && toGroup != null) {
-                if (selectedGidToMove != getRootGroupId()) {
-                    selectedGroupToMove.getParent().removeGroup(selectedGroupToMove);
-                    toGroup.addGroup(selectedGroupToMove);
-                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+        try {
+            if (database != null) {
+                Group selectedGroupToMove = database.findGroup(selectedGidToMove);
+                Group toGroup = database.findGroup(toGroupId);
+                if (selectedGroupToMove != null && toGroup != null) {
+                    if (selectedGidToMove != getRootGroupId()) {
+                        selectedGroupToMove.getParent().removeGroup(selectedGroupToMove);
+                        toGroup.addGroup(selectedGroupToMove);
+                        new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+                    }
                 }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
@@ -800,25 +899,33 @@ public class Db {
     }
 
     public void copyEntry(UUID entryId, UUID toGroupId, Activity activity) {
-        if (database != null) {
-            Entry selectedEntryToCopy = database.findEntry(entryId);
-            Group toGroup = database.findGroup(toGroupId);
-            if (selectedEntryToCopy != null && toGroup != null) {
-                toGroup.addEntry(copyEntry(selectedEntryToCopy));
-                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+        try {
+            if (database != null) {
+                Entry selectedEntryToCopy = database.findEntry(entryId);
+                Group toGroup = database.findGroup(toGroupId);
+                if (selectedEntryToCopy != null && toGroup != null) {
+                    toGroup.addEntry(copyEntry(selectedEntryToCopy));
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 
     public void moveEntry(UUID entryId, UUID toGroupId, Activity activity) {
-        if (database != null) {
-            Entry selectedEntryToCopy = database.findEntry(entryId);
-            Group toGroup = database.findGroup(toGroupId);
-            if (selectedEntryToCopy != null && toGroup != null) {
-                selectedEntryToCopy.getParent().removeEntry(selectedEntryToCopy);
-                toGroup.addEntry(selectedEntryToCopy);
-                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+        try {
+            if (database != null) {
+                Entry selectedEntryToCopy = database.findEntry(entryId);
+                Group toGroup = database.findGroup(toGroupId);
+                if (selectedEntryToCopy != null && toGroup != null) {
+                    selectedEntryToCopy.getParent().removeEntry(selectedEntryToCopy);
+                    toGroup.addEntry(selectedEntryToCopy);
+                    new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+                }
             }
+        } catch (Throwable t) {
+            //ignore
         }
     }
 }
