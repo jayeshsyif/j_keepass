@@ -113,10 +113,10 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
                 binding.entryTitleView.setVisibility(View.GONE);
             });
             for (final FieldData fd : fields) {
+                Utils.sleepFor1MSec();
                 adapter.addValue(fd);
                 try {
                     requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
-                    Utils.sleepFor1MSec();
                 } catch (Throwable e) {
                     //ignore
                 }

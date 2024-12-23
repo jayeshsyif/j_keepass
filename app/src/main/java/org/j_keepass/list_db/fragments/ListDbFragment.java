@@ -139,6 +139,7 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
                 int fCount = 1;
                 String loadingStr = getString(R.string.loading);
                 for (File f : files) {
+                    Utils.sleepFor1MSec();
                     updateLoadingText(loadingStr + " [" + fCount + "/" + files.length + "]");
                     Utils.log("Db is " + f.getName());
                     ListDbAdapter.DbData d = adapter.getDbDatObj();
@@ -151,7 +152,6 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
                     } catch (Exception e) {
                         //ignore
                     }
-                    Utils.sleepFor3MSec();
                     fCount++;
                 }
                 try {

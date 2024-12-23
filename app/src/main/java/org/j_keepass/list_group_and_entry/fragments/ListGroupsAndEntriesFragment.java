@@ -196,6 +196,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
             int subCountAdded = 0;
             Utils.log("Got groupsAndEntriesAction as " + groupsAndEntriesAction.name());
             for (final GroupEntryData data : subs) {
+                Utils.sleepFor1MSec();
                 Utils.log("Got " + data.name);
                 adapter.addValue(data);
                 Utils.log("Adding " + data.name);
@@ -206,7 +207,6 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
                     //ignore
                 }
                 updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
-                Utils.sleepFor1MSec();
             }
             {
                 //dummy
