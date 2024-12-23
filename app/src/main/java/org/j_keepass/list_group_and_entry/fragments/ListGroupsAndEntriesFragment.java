@@ -152,6 +152,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
                 Utils.log("Configuration recycler view inside ui thread");
                 binding.showGroupEntriesRecyclerView.removeAllViews();
                 binding.showGroupEntriesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                binding.showGroupEntriesRecyclerView.setItemAnimator(adapter.getItemAnimator());
                 binding.showGroupEntriesRecyclerView.setAdapter(adapter);
                 Utils.log("Configuration recycler view done");
             });

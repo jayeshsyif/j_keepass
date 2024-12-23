@@ -116,6 +116,7 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
                 adapter.addValue(fd);
                 try {
                     requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
+                    Utils.sleepFor1MSec();
                 } catch (Throwable e) {
                     //ignore
                 }
@@ -169,6 +170,7 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
                 Utils.log("Configuration recycler view inside ui thread");
                 binding.entryFieldsRecyclerView.removeAllViews();
                 binding.entryFieldsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                binding.entryFieldsRecyclerView.setItemAnimator(adapter.getItemAnimator());
                 binding.entryFieldsRecyclerView.setAdapter(adapter);
                 Utils.log("Configuration recycler view done");
             });

@@ -6,12 +6,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -49,6 +52,10 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
     public void addValue(FieldData fieldData) {
         mValues.add(fieldData);
+    }
+
+    public ListFieldAdapterAnimator getItemAnimator() {
+        return new ListFieldAdapterAnimator();
     }
 
     @NonNull
@@ -281,6 +288,20 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             fieldCopy = binding.fieldCopy;
             fieldCardView = binding.fieldCardView;
             expiryStatus = binding.expiryStatus;
+        }
+    }
+
+    class ListFieldAdapterAnimator extends DefaultItemAnimator {
+
+        @Override
+        public boolean animateAdd(RecyclerView.ViewHolder holder) {
+            setAnimation(((ListFieldAdapter.ViewHolder) holder).fieldCardView);
+            return false;
+        }
+
+        private void setAnimation(CardView view) {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(view.getContext(), R.anim.anim_bottom), 0.5f); //0.5f == time between appearance of listview items.
+            view.setLayoutAnimation(lac);
         }
     }
 }

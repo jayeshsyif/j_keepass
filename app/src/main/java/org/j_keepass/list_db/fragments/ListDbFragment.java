@@ -113,6 +113,7 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
                     binding.showDbsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                     adapter.setLayoutType("List");
                 }
+                binding.showDbsRecyclerView.setItemAnimator(adapter.getItemAnimator());
                 binding.showDbsRecyclerView.setAdapter(adapter);
                 Utils.log("Configuration recycler view done");
             });

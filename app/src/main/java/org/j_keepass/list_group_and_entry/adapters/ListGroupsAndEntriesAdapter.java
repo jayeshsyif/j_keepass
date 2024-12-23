@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
@@ -20,6 +23,7 @@ import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
+import org.j_keepass.list_db.adapters.ListDbAdapter;
 import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryType;
 import org.j_keepass.util.Pair;
@@ -43,6 +47,10 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
 
     public void setShowPath(boolean showPath) {
         this.showPath = showPath;
+    }
+
+    public ListGroupsAndEntriesAdapterAnimator getItemAnimator() {
+        return new ListGroupsAndEntriesAdapterAnimator();
     }
 
     @NonNull
@@ -113,6 +121,7 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
         }
     }
 
+
     @Override
     public int getItemCount() {
         return mValues.size();
@@ -141,6 +150,20 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
             groupEntryNameCardView = binding.groupEntryNameCardView;
             groupEntryImage = binding.groupEntryImage;
             path = binding.path;
+        }
+    }
+
+    class ListGroupsAndEntriesAdapterAnimator extends DefaultItemAnimator {
+
+        @Override
+        public boolean animateAdd(RecyclerView.ViewHolder holder) {
+            setAnimation(((ListGroupsAndEntriesAdapter.ViewHolder) holder).groupEntryNameCardView);
+            return false;
+        }
+
+        private void setAnimation(CardView view) {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(view.getContext(), R.anim.anim_bottom), 0.5f); //0.5f == time between appearance of listview items.
+            view.setLayoutAnimation(lac);
         }
     }
 }

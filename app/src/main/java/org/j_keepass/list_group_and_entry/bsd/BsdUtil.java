@@ -148,6 +148,7 @@ public class BsdUtil {
             selectedFolderNameForCopyMove.setText(selectedStr + " " + Db.getInstance().getGroupName(Db.getInstance().getRootGroupId()));
         }
         ListGroupsForCopyMoveAdapter adapter = new ListGroupsForCopyMoveAdapter();
+        showFolderForCopyMoveRecyclerView.setItemAnimator(adapter.getItemAnimator());
         ReloadEvent reloadEvent = reloadAction -> {
             if (reloadAction != null && reloadAction.name().equals(ReloadEvent.ReloadAction.COPY_MOVE_GROUP_UPDATE.name())) {
                 activity.runOnUiThread(() -> {

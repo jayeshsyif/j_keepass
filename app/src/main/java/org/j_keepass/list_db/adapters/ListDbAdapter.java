@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
@@ -26,8 +27,6 @@ import java.util.List;
 public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder> {
 
     List<DbData> mValues = new ArrayList<>();
-    boolean animationFlag = false;
-
     private String layoutType = "List";
 
     public void setLayoutType(String layoutType) {
@@ -53,7 +52,6 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         } else {
             vh = new ViewHolder(ListDbItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
-        setAnimation(vh.cardView);
         return vh;
     }
 
@@ -85,11 +83,9 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         });
     }
 
-    private void setAnimation(CardView view) {
-        if (animationFlag) {
-            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(view.getContext(), R.anim.anim_bottom), 0.5f); //0.5f == time between appearance of listview items.
-            view.setLayoutAnimation(lac);
-        }
+
+    public ListDbAdapterAnimator getItemAnimator() {
+        return new ListDbAdapterAnimator();
     }
 
     @Override
@@ -101,7 +97,7 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
 
         TextView mDbName;
         TextView mDbModifiedDate;
-        CardView cardView;
+        public CardView cardView;
         public DbData mItem;
         ShapeableImageView mImage;
         ImageButton mDatabaseMoreOption;
@@ -137,6 +133,20 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         @Override
         public String toString() {
             return "DbData{" + "dbName='" + dbName + '\'' + ", lastModified=" + lastModified + ", fullPath='" + fullPath + '\'' + '}';
+        }
+    }
+
+    class ListDbAdapterAnimator extends DefaultItemAnimator {
+
+        @Override
+        public boolean animateAdd(RecyclerView.ViewHolder holder) {
+            setAnimation(((ListDbAdapter.ViewHolder) holder).cardView);
+            return false;
+        }
+
+        private void setAnimation(CardView view) {
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(view.getContext(), R.anim.anim_bottom), 0.5f); //0.5f == time between appearance of listview items.
+            view.setLayoutAnimation(lac);
         }
     }
 }
