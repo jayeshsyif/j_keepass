@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/kp_margin"
     android:background="?colorPrimary">
@@ -27,7 +27,7 @@
                 android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:background="@drawable/background_transparent"
@@ -39,13 +39,11 @@
                 android:id="@+id/databaseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerInParent="true"
+                android:layout_below="@id/image"
                 android:layout_marginStart="@dimen/kp_margin"
                 android:layout_marginTop="@dimen/kp_margin"
                 android:layout_marginEnd="@dimen/kp_margin"
                 android:layout_marginBottom="@dimen/kp_margin"
-                android:layout_toEndOf="@id/image"
                 android:ellipsize="end"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center_vertical"
@@ -56,15 +54,31 @@
                 android:textAlignment="gravity"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
+                android:textColor="?colorSecondary"></TextView>
+
+            <TextView
+                android:id="@+id/dbModifiedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/databaseName"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginTop="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:layout_marginBottom="@dimen/kp_always_1"
+                android:fontFamily="@font/spacemono_regular"
+                android:gravity="center"
+                android:text="@string/modifiedDate"
+                android:textAlignment="gravity"
+                android:textAllCaps="false"
                 android:textColor="?colorSecondary"
-                app:layout_constraintEnd_toStartOf="@id/dbMoreOption"></TextView>
+                android:textSize="@dimen/kp_extra_small_text_size" />
 
             <ImageButton
                 android:id="@+id/dbMoreOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/databaseName"
                 android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/kp_always_1"
                 android:layout_marginTop="@dimen/kp_always_1"
@@ -79,23 +93,6 @@
                 app:layout_constraintStart_toEndOf="@id/databaseName"
                 app:tint="?colorSecondary" />
 
-            <TextView
-                android:id="@+id/dbModifiedDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/dbMoreOption"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/kp_always_1"
-                android:layout_marginTop="@dimen/kp_always_1"
-                android:layout_marginEnd="@dimen/kp_always_1"
-                android:layout_marginBottom="@dimen/kp_always_1"
-                android:fontFamily="@font/spacemono_regular"
-                android:gravity="center_vertical"
-                android:text="@string/modifiedDate"
-                android:textAlignment="gravity"
-                android:textAllCaps="false"
-                android:textColor="?colorSecondary"
-                android:textSize="@dimen/kp_extra_small_text_size" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

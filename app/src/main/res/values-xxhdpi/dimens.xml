@@ -1,0 +1,13 @@
+<resources>
+    <dimen name="kp_always_1">1pt</dimen>
+    <dimen name="kp_always_5">5pt</dimen>
+    <dimen name="kp_min_height">15pt</dimen>
+    <dimen name="kp_min_width">15pt</dimen>
+    <dimen name="kp_card_view_radius">2pt</dimen>
+    <dimen name="kp_always_2_dp">2dp</dimen>
+    <dimen name="kp_always_5_dp">5dp</dimen>
+    <dimen name="kp_margin">2pt</dimen>
+    <dimen name="kp_extra_small_text_size">5pt</dimen>
+    <dimen name="kp_min_image_height">48dp</dimen>
+    <dimen name="kp_min_image_width">48dp</dimen>
+</resources>

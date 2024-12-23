@@ -16,6 +16,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbItemViewBinding;
+import org.j_keepass.databinding.ListDbItemViewGridBinding;
 import org.j_keepass.db.events.DbEventSource;
 import org.j_keepass.util.Utils;
 
@@ -26,6 +27,12 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
 
     List<DbData> mValues = new ArrayList<>();
     boolean animationFlag = false;
+
+    private String layoutType = "List";
+
+    public void setLayoutType(String layoutType) {
+        this.layoutType = layoutType;
+    }
 
     public void setValues() {
         DbData d = new DbData();
@@ -40,7 +47,12 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewHolder vh = new ViewHolder(ListDbItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder vh;
+        if (layoutType.equals("Grid")) {
+            vh = new ViewHolder(ListDbItemViewGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        } else {
+            vh = new ViewHolder(ListDbItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        }
         setAnimation(vh.cardView);
         return vh;
     }
@@ -66,6 +78,11 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
             holder.mImage.setVisibility(View.GONE);
             holder.mDatabaseMoreOption.setVisibility(View.GONE);
         }
+        holder.cardView.setOnClickListener(view -> {
+            if (holder.mItem.lastModified != -1) {
+                DbEventSource.getInstance().askPwdForDb(holder.cardView.getContext(), holder.mItem.dbName, holder.mItem.fullPath);
+            }
+        });
     }
 
     private void setAnimation(CardView view) {
@@ -96,11 +113,15 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
             cardView = binding.databaseNameCardView;
             mImage = binding.image;
             mDatabaseMoreOption = binding.dbMoreOption;
-            cardView.setOnClickListener(view -> {
-                if (mItem.lastModified != -1) {
-                    DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), mItem.dbName, mItem.fullPath);
-                }
-            });
+        }
+
+        public ViewHolder(@NonNull ListDbItemViewGridBinding binding) {
+            super(binding.getRoot());
+            mDbName = binding.databaseName;
+            mDbModifiedDate = binding.dbModifiedDate;
+            cardView = binding.databaseNameCardView;
+            mImage = binding.image;
+            mDatabaseMoreOption = binding.dbMoreOption;
         }
     }
 

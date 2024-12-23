@@ -10,6 +10,7 @@
     <string name="menuText">Menu</string>
 
     <string name="database">Database</string>
+    <string name="longDatabaseName">Database a long one with long text, lets see how much it prints and shows on UI, aaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbb cccccccccccccccccccccc ddddddddddddddddddddddd eeeeeeeeeeeeeeeeeeee fffffffffffff</string>
     <string name="createNewDatabase">Create New Database</string>
     <string name="create">Create</string>
     <string name="open">Open</string>

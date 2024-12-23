@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
@@ -104,7 +105,14 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
             requireActivity().runOnUiThread(() -> {
                 Utils.log("Configuration recycler view inside ui thread");
                 binding.showDbsRecyclerView.removeAllViews();
-                binding.showDbsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                boolean isGrid = false;
+                if (isGrid) {
+                    binding.showDbsRecyclerView.setLayoutManager(new GridLayoutManager(context,2));
+                    adapter.setLayoutType("Grid");
+                } else {
+                    binding.showDbsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    adapter.setLayoutType("List");
+                }
                 binding.showDbsRecyclerView.setAdapter(adapter);
                 Utils.log("Configuration recycler view done");
             });
