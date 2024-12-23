@@ -10,6 +10,7 @@ public class FieldData {
     public UUID eId;
     public String name;
     public String value;
+    public byte[] fileInBytes;
     public FieldNameType fieldNameType;
     public FieldValueType fieldValueType;
     public Date expiryDate;

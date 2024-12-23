@@ -27,6 +27,7 @@ import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.fields.dtos.FieldData;
 import org.j_keepass.fields.enums.FieldNameType;
 import org.j_keepass.fields.enums.FieldValueType;
+import org.j_keepass.util.ByteArrayOpener;
 import org.j_keepass.util.CopyUtil;
 import org.j_keepass.util.DateAndTimePickerUtil;
 import org.j_keepass.util.Utils;
@@ -96,7 +97,13 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                 configureLargeText(holder);
             }
 
-            handleNonEditableState(holder, isEditable, isAttachment, isCreatedOrExpiryDate, isDateOtherThenCreateAndExpire);
+            if (!isEditable && !isCreatedOrExpiryDate && !isDateOtherThenCreateAndExpire) {
+                Utils.log("Got !editable - " + holder.mItem.name);
+                holder.fieldCopy.setVisibility(View.VISIBLE);
+                if (!isAttachment) {
+                    holder.fieldCopy.setOnClickListener(view -> CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value));
+                }
+            }
 
             if (isEditable) {
                 setupEditTextFocusListener(holder);
@@ -172,6 +179,18 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
                     ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
                 });
             });
+        } else {
+            holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_open_with_fill0_wght300_grad_25_opsz24));
+            holder.fieldCopy.setOnClickListener(view -> {
+                String openingStr = view.getContext().getString(R.string.opening);
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(openingStr);
+                    LoadingEventSource.getInstance().showLoading();
+                    ByteArrayOpener.openByteArrayWithOtherApp(view.getContext(), holder.mItem.fileInBytes, holder.mItem.value);
+                    LoadingEventSource.getInstance().dismissLoading();
+                });
+            });
         }
     }
 
@@ -207,14 +226,6 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         holder.editText.setInputType(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE);
         holder.editText.setHorizontallyScrolling(false);
         holder.editText.setMaxLines(Integer.MAX_VALUE);
-    }
-
-    private void handleNonEditableState(ViewHolder holder, boolean isEditable, boolean isAttachment, boolean isCreatedOrExpiryDate, boolean isDateOtherThenCreateAndExpire) {
-        if (!isEditable && !isAttachment && !isCreatedOrExpiryDate && !isDateOtherThenCreateAndExpire) {
-            Utils.log("Got !editable - " + holder.mItem.name);
-            holder.fieldCopy.setVisibility(View.VISIBLE);
-            holder.fieldCopy.setOnClickListener(view -> CopyUtil.copyToClipboard(view.getContext(), holder.mItem.name, holder.mItem.value));
-        }
     }
 
     private void setupEditTextFocusListener(ViewHolder holder) {

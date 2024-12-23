@@ -385,4 +385,5 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             runOnUiThread(() -> binding.entryBackBtn.performClick());
         }
     }
+
 }

@@ -493,6 +493,7 @@ public class Db {
                         FieldData fd = new FieldData();
                         fd.name = FieldNameType.ATTACHMENT.toString();
                         fd.value = bn;
+                        fd.fileInBytes = entry.getBinaryProperty(bn);
                         fd.fieldNameType = FieldNameType.ATTACHMENT;
                         fd.fieldValueType = FieldValueType.ATTACHMENT;
                         if (isNew || (fd.value != null && fd.value.length() > 0)) {

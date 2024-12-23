@@ -96,10 +96,12 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
 
     private void showFields(ListFieldAdapter adapter, final String show, final boolean isEdit, final Boolean isNew) {
         Utils.log("Entry show with " + show + " is edit as ");
+        boolean isAdditional = "additional".equals(show);
+        boolean isAttachment = "attachment".equals(show);
         ArrayList<FieldData> fields;
-        if (show.equals("additional")) {
+        if (isAdditional) {
             fields = Db.getInstance().getAdditionalFields(Db.getInstance().getCurrentEntryId(), isNew);
-        } else if (show.equals("attachment")) {
+        } else if (isAttachment) {
             fields = Db.getInstance().getAttachments(Db.getInstance().getCurrentEntryId(), isNew);
         } else {
             //base
@@ -132,14 +134,15 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
                     //ignore
                 }
             }
-        } else if (isEdit || isNew) {
+        }
+        if ((isAdditional || isAttachment) && (isEdit || isNew)) {
             try {
                 requireActivity().runOnUiThread(() -> {
                     binding.addAdditionalOrBinaryPropertyBtn.setVisibility(View.VISIBLE);
                     binding.addAdditionalOrBinaryPropertyBtn.setOnClickListener(view -> {
-                        if (show.equals("additional")) {
+                        if (isAdditional) {
                             new BsdUtil().showAddNewProperty(binding.addAdditionalOrBinaryPropertyBtn.getContext(), Db.getInstance().getCurrentEntryId());
-                        } else if (show.equals("attachment")) {
+                        } else if (isAttachment) {
                             String uploadFileToAttachStr = view.getContext().getString(R.string.uploadFileToAttach);
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> {
