@@ -7,6 +7,7 @@ public interface ChangeActivityEvent {
         ENTRY_NEW,
         LOCK,
         ENTRY_SELECTED_FOR_EDIT,
-        ENTRY_DELETED
+        ENTRY_DELETED,
+        ENTRY_COPIED_MOVED,
     }
 }

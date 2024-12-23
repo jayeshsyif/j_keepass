@@ -23,7 +23,7 @@
             android:layout_weight="80"
             android:fontFamily="@font/spacemono_bold"
             android:gravity="center_vertical"
-            android:text="@string/copyOrMoveGroupName"
+            android:text="@string/copyOrMoveGroup"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?colorSecondary" />
 

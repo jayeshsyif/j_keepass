@@ -798,4 +798,27 @@ public class Db {
         return c;
 
     }
+
+    public void copyEntry(UUID entryId, UUID toGroupId, Activity activity) {
+        if (database != null) {
+            Entry selectedEntryToCopy = database.findEntry(entryId);
+            Group toGroup = database.findGroup(toGroupId);
+            if (selectedEntryToCopy != null && toGroup != null) {
+                toGroup.addEntry(copyEntry(selectedEntryToCopy));
+                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+            }
+        }
+    }
+
+    public void moveEntry(UUID entryId, UUID toGroupId, Activity activity) {
+        if (database != null) {
+            Entry selectedEntryToCopy = database.findEntry(entryId);
+            Group toGroup = database.findGroup(toGroupId);
+            if (selectedEntryToCopy != null && toGroup != null) {
+                selectedEntryToCopy.getParent().removeEntry(selectedEntryToCopy);
+                toGroup.addEntry(selectedEntryToCopy);
+                new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
+            }
+        }
+    }
 }

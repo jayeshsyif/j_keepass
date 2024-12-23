@@ -381,7 +381,9 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     public void changeActivity(ChangeActivityAction changeActivityAction) {
         if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_SELECTED_FOR_EDIT.name())) {
             runOnUiThread(() -> binding.entryEditBtn.performClick());
-        } else if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_DELETED.name())) {
+        } else if (changeActivityAction != null &&
+                (changeActivityAction.name().equals(ChangeActivityAction.ENTRY_DELETED.name())
+                || changeActivityAction.name().equals(ChangeActivityAction.ENTRY_COPIED_MOVED.name()) )) {
             runOnUiThread(() -> binding.entryBackBtn.performClick());
         }
     }

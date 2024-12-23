@@ -140,7 +140,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
-            android:text="@string/copyOrMoveGroupName"
+            android:text="@string/copyOrMoveGroup"
             android:textColor="?colorSecondary" />
     </LinearLayout>
 

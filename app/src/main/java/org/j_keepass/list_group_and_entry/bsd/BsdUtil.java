@@ -138,6 +138,7 @@ public class BsdUtil {
     }
 
     private void showAskForCopyOrMove(Context context, Activity activity, String name, String type) {
+        Utils.log("Copy move for " + name + "With type " + type);
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.copy_or_move);
         RecyclerView showFolderForCopyMoveRecyclerView = bsd.findViewById(R.id.showFolderForCopyMoveRecyclerView);
@@ -207,7 +208,7 @@ public class BsdUtil {
                 executor.execute(() -> {
                     LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.moving));
                     LoadingEventSource.getInstance().showLoading();
-                    if(Db.getInstance().getCurrentGroupId() != Db.getInstance().getRootGroupId()) {
+                    if (Db.getInstance().getCurrentGroupId() != Db.getInstance().getRootGroupId()) {
                         Db.getInstance().moveGroup(Db.getInstance().getCurrentGroupId(), adapter.getSelectedGid(), activity);
                         Db.getInstance().setCurrentGroupId(adapter.getSelectedGid());
                         ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
