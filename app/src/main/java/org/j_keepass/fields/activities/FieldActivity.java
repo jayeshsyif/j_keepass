@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -15,27 +16,26 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.FieldActivityLayoutBinding;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
+import org.j_keepass.events.loading.LoadingEventSource;
+import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
+import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
 import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionResultEvent;
 import org.j_keepass.events.permission.PermissionResultEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
-import org.j_keepass.fields.fragments.FieldFragment;
-import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
-import org.j_keepass.events.loading.LoadingEventSource;
-import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
-import org.j_keepass.events.newpwd.GenerateNewPwdEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.events.themes.ThemeEvent;
-import org.j_keepass.util.SleepFor1Ms;
-import org.j_keepass.util.Utils;
+import org.j_keepass.fields.fragments.FieldFragment;
 import org.j_keepass.list_db.bsd.BsdUtil;
-import org.j_keepass.db.operation.Db;
 import org.j_keepass.list_db.util.themes.SetTheme;
 import org.j_keepass.list_db.util.themes.Theme;
+import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
+import org.j_keepass.util.SleepFor1Ms;
+import org.j_keepass.util.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -53,6 +53,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
         new SetTheme(this, false).run();
         binding = FieldActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        configureBackPressed();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         Intent intent = getIntent();
         isEdit = intent.getBooleanExtra("isEdit", false);
@@ -90,10 +91,18 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
         ChangeActivityEventSource.getInstance().removeListener(this);
     }
 
+    private void configureBackPressed() {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                binding.entryBackBtn.performClick();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
     private void configureClicks() {
-        binding.entryMoreOption.setOnClickListener(view -> {
-            new org.j_keepass.fields.bsd.BsdUtil().showMoreOptions(view.getContext(), Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()), (isEdit || isNew), this);
-        });
+        binding.entryMoreOption.setOnClickListener(view -> new org.j_keepass.fields.bsd.BsdUtil().showMoreOptions(view.getContext(), Db.getInstance().getEntryTitle(Db.getInstance().getCurrentEntryId()), (isEdit || isNew), this));
         binding.entryBackBtn.setOnClickListener(view -> {
             ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.GROUP_UPDATE);
             Intent intent = new Intent(this, ListGroupAndEntriesActivity.class);

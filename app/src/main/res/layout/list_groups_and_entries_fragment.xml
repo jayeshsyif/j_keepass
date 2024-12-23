@@ -26,13 +26,13 @@
             <TextView
                 android:id="@+id/loadingTextView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="?colorOnPrimary"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center"
-                android:text="@string/loading"
                 android:textAllCaps="false"
+                android:text="@string/loading"
                 android:textAppearance="?android:attr/textAppearanceButton"
                 android:textColor="?colorPrimary"></TextView>
         </com.google.android.material.bottomnavigation.BottomNavigationView>

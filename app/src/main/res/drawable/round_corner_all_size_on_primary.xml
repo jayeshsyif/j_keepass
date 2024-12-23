@@ -5,7 +5,7 @@
         android:angle="270"
         android:endColor="?colorOnPrimary"
         android:startColor="?colorOnPrimary" />
-    <corners android:radius="@dimen/kp_card_view_radius" />
+    <corners android:radius="@dimen/kp_margin" />
     <stroke
         android:width="0.1dp"
         android:color="?colorOnPrimary" />

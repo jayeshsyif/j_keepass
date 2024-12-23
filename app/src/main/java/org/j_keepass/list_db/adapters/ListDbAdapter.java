@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 
+import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbItemViewBinding;
 import org.j_keepass.db.events.DbEventSource;
 import org.j_keepass.util.Utils;
@@ -39,7 +41,7 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ViewHolder vh = new ViewHolder(ListDbItemViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-        setAnimation(vh.itemView);
+        setAnimation(vh.cardView);
         return vh;
     }
 
@@ -66,9 +68,10 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         }
     }
 
-    private void setAnimation(View view) {
+    private void setAnimation(CardView view) {
         if (animationFlag) {
-            view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in));
+            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(view.getContext(), R.anim.anim_bottom), 0.5f); //0.5f == time between appearance of listview items.
+            view.setLayoutAnimation(lac);
         }
     }
 
@@ -112,11 +115,7 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
 
         @Override
         public String toString() {
-            return "DbData{" +
-                    "dbName='" + dbName + '\'' +
-                    ", lastModified=" + lastModified +
-                    ", fullPath='" + fullPath + '\'' +
-                    '}';
+            return "DbData{" + "dbName='" + dbName + '\'' + ", lastModified=" + lastModified + ", fullPath='" + fullPath + '\'' + '}';
         }
     }
 }

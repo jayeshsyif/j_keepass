@@ -323,12 +323,12 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
                 Utils.log("On back selected tab pos is " + binding.groupAndEntryTabLayout.getSelectedTabPosition());
                 if (binding.groupAndEntryTabLayout.getSelectedTabPosition() == 0) {
                     if (Db.getInstance().getRootGroupId().equals(Db.getInstance().getCurrentGroupId())) {
-                        finish();
+                        ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityAction.LOCK);
                     } else {
                         setGroup(Db.getInstance().getParentGroupId(Db.getInstance().getCurrentGroupId()));
                     }
                 } else {
-                    finish();
+                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.NAV_GROUP);
                 }
             }
         };
