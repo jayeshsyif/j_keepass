@@ -136,7 +136,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center"
-                android:text="@string/changeLogsVer11Text"
+                android:text="@string/changeLogsVerText"
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?colorSecondary"

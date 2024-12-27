@@ -48,7 +48,7 @@
     <string name="generateNewPassword">Generate New Password</string>
     <string name="developer">Developed by Jayesh Ganatra</string>
     <string name="credit">Credit: KeePass Password Safe (https://keepass.info/)</string>
-    <string name="changeLogsVer11Text">Version 11 (Build 46)</string>
+    <string name="changeLogsVerText">Version 11.1 (Build 47)</string>
 
     <string name="devInProgress">Development yet to be done!</string>
     <string name="permissionNotGranted">Permission Not Granted! Please Try again.</string>
