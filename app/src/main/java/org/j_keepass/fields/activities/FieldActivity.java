@@ -270,6 +270,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                 Utils.log("Added tab");
             });
         }
+        Utils.log("Max id after Adding tabs "+id);
     }
 
     @Override

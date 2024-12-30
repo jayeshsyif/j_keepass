@@ -21,7 +21,7 @@ import java.util.Date;
 public class Utils {
 
     private static final String TAG = "JKEEPASS";
-    private static final boolean LOG_FLAG = false;
+    private static final boolean LOG_FLAG = true;
 
     static public byte[] object2Bytes(Object o) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

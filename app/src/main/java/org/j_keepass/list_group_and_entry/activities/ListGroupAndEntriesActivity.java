@@ -144,11 +144,9 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             setTheme(theme.getResId());
             AppCompatDelegate.setDefaultNightMode(theme.getMode());
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (theme.isLightTheme()) {
-                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                        }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (theme.isLightTheme()) {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                     }
                 }
             } catch (Exception e) {

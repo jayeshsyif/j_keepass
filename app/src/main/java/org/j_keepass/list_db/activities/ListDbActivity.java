@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,8 +54,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbEvent, PermissionResultEvent, GenerateNewPwdEvent {
     private ListDbActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
-    public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
 
+    private ActivityResultLauncher<Intent> importLauncher = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         new SetTheme(this, true).run();
         binding = ListDbActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        importLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> onActivityResult(result.getResultCode(), result.getData()));
         register();
         ExecutorService executor = getExecutor();
         executor.execute(this::configurePaths);
@@ -150,7 +153,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
                         if (getIntent() != null && getIntent().getData() != null) {
                             Uri data = getIntent().getData();
                             Bundle bundle = new Bundle();
-                            bundle.putParcelable("openFileData",data);
+                            bundle.putParcelable("openFileData", data);
                             listDbFragment.setArguments(bundle);
                         }
                         getSupportFragmentManager().beginTransaction().replace(R.id.landingFragmentContainerView, listDbFragment).commit();
@@ -191,11 +194,9 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
             setTheme(theme.getResId());
             AppCompatDelegate.setDefaultNightMode(theme.getMode());
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (theme.isLightTheme()) {
-                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                        }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (theme.isLightTheme()) {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                     }
                 }
             } catch (Exception e) {
@@ -358,7 +359,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
             chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
             chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-            startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+            importLauncher.launch(chooseFile);
         } else if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.ALARM.name())) {
             Utils.log("Landing Alarm Permission Granted, setting notification");
             new org.j_keepass.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
@@ -388,15 +389,11 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Utils.log("requestCode " + requestCode);
-        if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
-            if (resultCode == -1) {
-                ExecutorService executor = getExecutor();
-                executor.execute(() -> importDb(data.getData()));
-            }
+    public void onActivityResult(int resultCode, Intent data) {
+        Utils.log("import result code is  " + resultCode);
+        if (resultCode == -1) {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> importDb(data.getData()));
         }
     }
 

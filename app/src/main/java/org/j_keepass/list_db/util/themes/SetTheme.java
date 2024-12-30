@@ -31,7 +31,7 @@ public class SetTheme {
         String sThemeId = "wbs";
         try {
             SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
+            //SharedPreferences.Editor editor = sharedPref.edit();
             String savedSTheme = sharedPref.getString("sTheme", null);
             Utils.log("sTheme from shared: " + savedSTheme);
             if (savedSTheme != null) {

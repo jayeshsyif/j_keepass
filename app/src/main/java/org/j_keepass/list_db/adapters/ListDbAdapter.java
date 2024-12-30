@@ -33,16 +33,6 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         this.layoutType = layoutType;
     }
 
-    public void setValues() {
-        DbData d = new DbData();
-        d.dbName = "TEST - DB";
-        mValues.add(d);
-    }
-
-    public void addValue(DbData dbData) {
-        mValues.add(dbData);
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,8 +58,12 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mDbName.setText(mValues.get(position).dbName);
-        holder.mDbModifiedDate.setText("Modified: " + Utils.convertDateToStringOnlyDate(mValues.get(position).lastModified) + " ");
+        configure(holder, holder.mItem);
+    }
+
+    private void configure(ViewHolder holder, DbData mItem) {
+        holder.mDbName.setText(mItem.dbName);
+        holder.mDbModifiedDate.setText(holder.mDbModifiedDate.getContext().getString(R.string.modifiedDate, Utils.convertDateToStringOnlyDate(mItem.lastModified)));
         if (holder.mItem.lastModified == -1) {
             holder.cardView.setVisibility(View.INVISIBLE);
             holder.mDbModifiedDate.setVisibility(View.GONE);
@@ -83,7 +77,6 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         });
     }
 
-
     public ListDbAdapterAnimator getItemAnimator() {
         return new ListDbAdapterAnimator();
     }
@@ -93,7 +86,7 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView mDbName;
         TextView mDbModifiedDate;
@@ -121,22 +114,27 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
         }
     }
 
-    public DbData getDbDatObj() {
-        return new DbData();
+    public void insert(String dbName, long lastModified, String fullPath) {
+        DbData data = new DbData();
+        data.dbName = dbName;
+        data.lastModified = lastModified;
+        data.fullPath = fullPath;
+        mValues.add(data);
     }
 
-    public class DbData {
+    private static class DbData {
         public String dbName;
         public long lastModified;
         public String fullPath;
 
+        @NonNull
         @Override
         public String toString() {
             return "DbData{" + "dbName='" + dbName + '\'' + ", lastModified=" + lastModified + ", fullPath='" + fullPath + '\'' + '}';
         }
     }
 
-    class ListDbAdapterAnimator extends DefaultItemAnimator {
+    private static class ListDbAdapterAnimator extends DefaultItemAnimator {
 
         @Override
         public boolean animateAdd(RecyclerView.ViewHolder holder) {

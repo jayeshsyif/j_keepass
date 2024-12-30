@@ -1,5 +1,6 @@
 package org.j_keepass.list_db.fragments;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -23,6 +25,7 @@ import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.list_db.adapters.ListDbAdapter;
+import org.j_keepass.util.ProgressIndicator;
 import org.j_keepass.util.Utils;
 import org.j_keepass.util.confirm_alert.BsdUtil;
 import org.j_keepass.util.confirm_alert.ConfirmNotifier;
@@ -32,11 +35,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListDbFragmentBinding binding;
+    boolean showInGrid = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,8 +66,14 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
 
                 @Override
                 public void onNo() {
-                    String fileName = new DbAndFileOperations().getFileName(data, getActivity().getContentResolver(), getActivity());
-                    DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), fileName, data);
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        ContentResolver contentResolver = activity.getContentResolver();
+                        if (contentResolver != null) {
+                            String fileName = new DbAndFileOperations().getFileName(data, contentResolver, activity);
+                            DbEventSource.getInstance().askPwdForDb(binding.getRoot().getContext(), fileName, data);
+                        }
+                    }
                 }
             });
         } else {
@@ -78,7 +89,15 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.importing));
             LoadingEventSource.getInstance().showLoading();
         });
-        executor.execute(() -> new DbAndFileOperations().importFile(Db.getInstance().getAppSubDir(), dataUri, getActivity().getContentResolver(), getActivity()));
+        executor.execute(() -> {
+            FragmentActivity activity = getActivity();
+            if (activity != null) {
+                ContentResolver contentResolver = activity.getContentResolver();
+                if (contentResolver != null) {
+                    new DbAndFileOperations().importFile(Db.getInstance().getAppSubDir(), dataUri, contentResolver, activity);
+                }
+            }
+        });
         executor.execute(() -> ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.IMPORT));
     }
 
@@ -105,9 +124,8 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
             requireActivity().runOnUiThread(() -> {
                 Utils.log("Configuration recycler view inside ui thread");
                 binding.showDbsRecyclerView.removeAllViews();
-                boolean isGrid = false;
-                if (isGrid) {
-                    binding.showDbsRecyclerView.setLayoutManager(new GridLayoutManager(context,2));
+                if (showInGrid) {
+                    binding.showDbsRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
                     adapter.setLayoutType("Grid");
                 } else {
                     binding.showDbsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -136,39 +154,24 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
                     binding.showDbsRecyclerView.setVisibility(View.VISIBLE);
                     binding.dbDeclarationTextView.setText(R.string.declaration);
                 });
-                int fCount = 1;
+                int total = files.length;
                 String loadingStr = getString(R.string.loading);
+                ProgressIndicator pi = new ProgressIndicator() {
+                    @Override
+                    public void onDone() {
+                        // ignore
+                    }
+
+                    @Override
+                    public void onUpdate(int progress) {
+                        updateLoadingText(loadingStr + " [" + progress + "/" + total + "]");
+                    }
+                };
+                AtomicInteger fCount = new AtomicInteger(1);
                 for (File f : files) {
-                    Utils.sleepFor1MSec();
-                    updateLoadingText(loadingStr + " [" + fCount + "/" + files.length + "]");
-                    Utils.log("Db is " + f.getName());
-                    ListDbAdapter.DbData d = adapter.getDbDatObj();
-                    d.lastModified = f.lastModified();
-                    d.dbName = f.getName();
-                    d.fullPath = f.getAbsolutePath();
-                    adapter.addValue(d);
-                    try {
-                        requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
-                    } catch (Exception e) {
-                        //ignore
-                    }
-                    fCount++;
+                    showDbOnUiUsingAdapter(f, adapter, pi, fCount);
                 }
-                try {
-                    ListDbAdapter.DbData d = adapter.getDbDatObj();
-                    d.lastModified = -1;
-                    d.dbName = getString(R.string.declaration);
-                    d.fullPath = "";
-                    Utils.log(d.toString());
-                    adapter.addValue(d);
-                    try {
-                        requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
-                    } catch (Exception e) {
-                        //ignore
-                    }
-                } catch (Exception e) {
-                    //ignore
-                }
+                addDummyForSpacing(adapter, pi);
             } else {
                 Utils.log("No Dbs");
                 try {
@@ -177,6 +180,37 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
                     //ignore
                 }
             }
+        }
+    }
+
+    private void showDbOnUiUsingAdapter(File f, ListDbAdapter adapter, ProgressIndicator pi, AtomicInteger fCount) {
+        Utils.sleepFor1MSec();
+        Utils.log("Db is " + f.getName());
+        adapter.insert(f.getName(), f.lastModified(), f.getAbsolutePath());
+        try {
+            requireActivity().runOnUiThread(() -> {
+                adapter.notifyItemInserted(adapter.getItemCount());
+                pi.onUpdate(fCount.get());
+                fCount.getAndIncrement();
+            });
+        } catch (Exception e) {
+            //ignore
+        }
+    }
+
+    private void addDummyForSpacing(ListDbAdapter adapter, ProgressIndicator pi) {
+        try {
+            adapter.insert(getString(R.string.declaration), -1, "");
+            try {
+                requireActivity().runOnUiThread(() -> {
+                    adapter.notifyItemInserted(adapter.getItemCount());
+                    pi.onDone();
+                });
+            } catch (Exception e) {
+                //ignore
+            }
+        } catch (Exception e) {
+            //ignore
         }
     }
 

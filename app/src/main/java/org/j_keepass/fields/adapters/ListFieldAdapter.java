@@ -95,7 +95,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             } else if (isAttachment) {
                 configureForAttachment(holder, isEditable);
             } else if (isAdditionalProp && isEditable) {
-                configureForAdditionalProp(holder, isEditable);
+                configureForAdditionalProp(holder);
             } else {
                 configureForOtherTypes(holder, isPassword, isEditable);
             }
@@ -118,24 +118,22 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         }
     }
 
-    private void configureForAdditionalProp(ViewHolder holder, boolean isEditable) {
+    private void configureForAdditionalProp(ViewHolder holder) {
         holder.editText.setEnabled(false);
         holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
         holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
-        if (isEditable) {
-            holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
-            holder.fieldCopy.setOnClickListener(view -> {
-                String addingStr = view.getContext().getString(R.string.deleting);
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                executor.execute(() -> {
-                    LoadingEventSource.getInstance().updateLoadingText(addingStr);
-                    LoadingEventSource.getInstance().showLoading();
-                    Db.getInstance().addEntryDeleteAdditionalProperty(Db.getInstance().getCurrentEntryId(), holder.mItem.name);
-                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
-                });
+        holder.fieldCopy.setImageDrawable(AppCompatResources.getDrawable(holder.fieldCopy.getContext(), R.drawable.ic_delete_fill0_wght300_grad_25_opsz24));
+        holder.fieldCopy.setOnClickListener(view -> {
+            String addingStr = view.getContext().getString(R.string.deleting);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                LoadingEventSource.getInstance().updateLoadingText(addingStr);
+                LoadingEventSource.getInstance().showLoading();
+                Db.getInstance().addEntryDeleteAdditionalProperty(Db.getInstance().getCurrentEntryId(), holder.mItem.name);
+                ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.ENTRY_PROP_UPDATE);
             });
-        }
+        });
     }
 
     private void setDummyView(ViewHolder holder) {
@@ -245,9 +243,11 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                holder.mItem.value = holder.editText.getText().toString();
-                Utils.log("Calling update field Value for " + holder.mItem.asString());
-                Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
+                if (holder.editText != null && holder.editText.getText() != null) {
+                    holder.mItem.value = holder.editText.getText().toString();
+                    Utils.log("Calling update field Value for " + holder.mItem.asString());
+                    Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
+                }
             }
 
             @Override
@@ -273,7 +273,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         return position;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
         public FieldData mItem;
         TextInputEditText editText;
         TextInputLayout editTextLayout;
@@ -291,7 +291,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         }
     }
 
-    class ListFieldAdapterAnimator extends DefaultItemAnimator {
+    protected static class ListFieldAdapterAnimator extends DefaultItemAnimator {
 
         @Override
         public boolean animateAdd(RecyclerView.ViewHolder holder) {

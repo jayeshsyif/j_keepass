@@ -29,7 +29,7 @@
     <string name="locking">Locking .....</string>
     <string name="saving">Saving .....</string>
     <string name="notSaved">Not Saved</string>
-    <string name="modifiedDate">modified: 24/10/24</string>
+    <string name="modifiedDate">modified: %1$s</string>
     <string name="themes">Themes</string>
     <string name="enterDatabaseName">Enter File/Database name</string>
     <string name="save">Save</string>

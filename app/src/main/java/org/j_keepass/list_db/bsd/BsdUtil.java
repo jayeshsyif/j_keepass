@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -24,20 +23,20 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.j_keepass.R;
-import org.j_keepass.db.operation.Db;
-import org.j_keepass.events.reload.ReloadEvent;
-import org.j_keepass.events.reload.ReloadEventSource;
-import org.j_keepass.list_db.adapters.ListThemesAdapter;
 import org.j_keepass.db.events.DbAndFileOperations;
 import org.j_keepass.db.events.DbEventSource;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.newpwd.GenerateNewPasswordEventSource;
 import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionEventSource;
-import org.j_keepass.util.CopyUtil;
-import org.j_keepass.util.Utils;
+import org.j_keepass.events.reload.ReloadEvent;
+import org.j_keepass.events.reload.ReloadEventSource;
+import org.j_keepass.list_db.adapters.ListThemesAdapter;
 import org.j_keepass.list_db.util.themes.Theme;
 import org.j_keepass.list_db.util.themes.ThemeUtil;
+import org.j_keepass.util.CopyUtil;
+import org.j_keepass.util.Utils;
 import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.io.File;

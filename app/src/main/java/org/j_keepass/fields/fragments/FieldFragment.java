@@ -12,20 +12,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.j_keepass.R;
+import org.j_keepass.databinding.FieldFragmentBinding;
+import org.j_keepass.db.operation.Db;
+import org.j_keepass.events.loading.LoadingEvent;
+import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.events.permission.PermissionEvent;
 import org.j_keepass.events.permission.PermissionEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
 import org.j_keepass.fields.adapters.ListFieldAdapter;
-import org.j_keepass.databinding.FieldFragmentBinding;
 import org.j_keepass.fields.bsd.BsdUtil;
 import org.j_keepass.fields.dtos.FieldData;
 import org.j_keepass.fields.enums.FieldNameType;
 import org.j_keepass.fields.enums.FieldValueType;
-import org.j_keepass.events.loading.LoadingEvent;
-import org.j_keepass.events.loading.LoadingEventSource;
 import org.j_keepass.util.Utils;
-import org.j_keepass.db.operation.Db;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -69,8 +69,8 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
         Bundle bundle = getArguments();
         if (bundle != null) {
             String showBundle = bundle.getString("show");
-            Boolean isEditBundle = bundle.getBoolean("isEdit");
-            Boolean isNewBundle = bundle.getBoolean("isNew");
+            boolean isEditBundle = bundle.getBoolean("isEdit");
+            boolean isNewBundle = bundle.getBoolean("isNew");
             if (showBundle != null && showBundle.length() > 0) {
                 show = showBundle;
             }
@@ -143,7 +143,8 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
                     binding.addAdditionalOrBinaryPropertyBtn.setOnClickListener(view -> {
                         if (isAdditional) {
                             new BsdUtil().showAddNewProperty(binding.addAdditionalOrBinaryPropertyBtn.getContext(), Db.getInstance().getCurrentEntryId());
-                        } else if (isAttachment) {
+                        }
+                        if (isAttachment) {
                             String uploadFileToAttachStr = view.getContext().getString(R.string.uploadFileToAttach);
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> {
@@ -240,7 +241,7 @@ public class FieldFragment extends Fragment implements LoadingEvent, ReloadEvent
 
     @Override
     public void reload(ReloadAction reloadAction) {
-        if (reloadAction.name().equals(ReloadAction.ENTRY_PROP_UPDATE.name().toString())) {
+        if (reloadAction.name().equals(ReloadAction.ENTRY_PROP_UPDATE.name())) {
             ExecutorService executor = getExecutor();
             executor.execute(this::showLoading);
             executor.execute(this::dismissLoading);
