@@ -45,7 +45,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/kp_margin"
             android:background="?colorOnPrimary"
-            android:contentDescription="@string/generateNewDatabaseDesc"
+            android:contentDescription="@string/generateNewDbDesc"
             android:minWidth="@dimen/kp_min_image_width"
             android:visibility="gone"
             android:minHeight="@dimen/kp_min_image_height"

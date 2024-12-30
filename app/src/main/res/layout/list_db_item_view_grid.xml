@@ -50,7 +50,7 @@
                 android:maxEms="@integer/max_ems"
                 android:maxLines="@integer/max_lines"
                 android:singleLine="true"
-                android:text="@string/longDatabaseName"
+                android:text="@string/db"
                 android:textAlignment="gravity"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"

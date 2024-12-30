@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/createNewDatabase"
+            android:contentDescription="@string/createNewDb"
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
             android:padding="@dimen/kp_margin"
@@ -74,7 +74,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
-            android:text="@string/createNewDatabase"
+            android:text="@string/createNewDb"
             android:textColor="?colorSecondary"></TextView>
     </TableRow>
 
@@ -90,7 +90,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/importNewDatabase"
+            android:contentDescription="@string/importNewDb"
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
             android:padding="@dimen/kp_margin"
@@ -104,7 +104,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
-            android:text="@string/importNewDatabase"
+            android:text="@string/importNewDb"
             android:textColor="?colorSecondary"></TextView>
     </TableRow>
 
@@ -134,7 +134,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
-            android:text="@string/generateNewPassword"
+            android:text="@string/generateNewPwd"
             android:textColor="?colorSecondary"></TextView>
     </TableRow>
 

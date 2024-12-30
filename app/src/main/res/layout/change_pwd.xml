@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimaryVariant"
             android:fontFamily="@font/spacemono_regular"
-            android:hint="@string/enterOldPassword"
+            android:hint="@string/enterOldPwd"
             android:inputType="textPassword"
             android:textColor="?colorSecondary"
             android:textCursorDrawable="@null" />
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimaryVariant"
             android:fontFamily="@font/spacemono_regular"
-            android:hint="@string/enterNewPassword"
+            android:hint="@string/enterNewPwd"
             android:inputType="textPassword"
             android:textColor="?colorSecondary"
             android:textCursorDrawable="@null" />

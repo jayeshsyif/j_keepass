@@ -74,7 +74,7 @@ public class BsdUtil {
                 bsd.dismiss();
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
-                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPwd));
                     LoadingEventSource.getInstance().showLoading();
                 });
                 executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
@@ -415,7 +415,7 @@ public class BsdUtil {
                 bsd.dismiss();
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
-                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPwd));
                     LoadingEventSource.getInstance().showLoading();
                 });
                 if (useDigitMcb != null && useLowerCaseMcb != null && useUpperCaseMcb != null && useSymbolMcb != null && slider != null) {

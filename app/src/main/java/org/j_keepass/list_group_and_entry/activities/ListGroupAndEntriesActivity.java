@@ -87,7 +87,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         binding.groupAndEntryGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
             executor.execute(() -> {
-                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPwd));
                 LoadingEventSource.getInstance().showLoading();
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());

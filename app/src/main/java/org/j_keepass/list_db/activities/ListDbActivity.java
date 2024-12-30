@@ -112,7 +112,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         binding.landingGenerateNewPasswordBtn.setOnClickListener(view -> {
             ExecutorService executor = getExecutor();
             executor.execute(() -> {
-                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
+                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPwd));
                 LoadingEventSource.getInstance().showLoading();
             });
             executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
@@ -177,7 +177,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     private void addTabs() {
         Utils.log("creating tab");
         TabLayout.Tab databaseTab = binding.landingTabLayout.newTab();
-        databaseTab.setText(R.string.database);
+        databaseTab.setText(R.string.db);
         databaseTab.setIcon(R.drawable.ic_database_fill0_wght300_grad_25_opsz24);
         databaseTab.view.setSelected(true);
         databaseTab.setId(0);
@@ -262,15 +262,15 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         AtomicBoolean proceed = new AtomicBoolean(true);
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
-            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.creatingNewDatabase));
+            LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.creatingNewDb));
             LoadingEventSource.getInstance().showLoading();
         });
         executor.execute(() -> {
             if (dbNameAr.get() == null || dbNameAr.get().length() == 0) {
-                LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterDatabaseName));
+                LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterDbName));
                 proceed.set(false);
             } else if (pwd == null || pwd.length() == 0) {
-                LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterPassword));
+                LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterPwd));
                 proceed.set(false);
             } else if (!dbName.endsWith("kdbx")) {
                 dbNameAr.set(dbName + ".kdbx");

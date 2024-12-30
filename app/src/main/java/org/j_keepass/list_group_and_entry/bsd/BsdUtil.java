@@ -58,7 +58,7 @@ public class BsdUtil {
                 bsd.dismiss();
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
-                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPwd));
                     LoadingEventSource.getInstance().showLoading();
                 });
                 executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd());
@@ -321,16 +321,16 @@ public class BsdUtil {
                 LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.changing));
                 LoadingEventSource.getInstance().showLoading();
                 if (oldPwd.getText() == null || oldPwd.getText().toString() == null || oldPwd.getText().toString().length() == 0) {
-                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterOldPassword));
+                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterOldPwd));
                 } else if (newPwd.getText() == null || newPwd.getText().toString() == null || newPwd.getText().toString().length() == 0) {
-                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterNewPassword));
+                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterNewPwd));
                 } else {
                     if (Db.getInstance().pwdMatch(oldPwd.getText().toString())) {
                         Utils.sleepFor3MSec();
                         Db.getInstance().updateDb(activity.getContentResolver(), newPwd.getText().toString().getBytes(StandardCharsets.UTF_8));
                         LoadingEventSource.getInstance().dismissLoading();
                     } else {
-                        LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.passwordNotMatch));
+                        LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.pwdNotMatch));
                     }
                 }
             });

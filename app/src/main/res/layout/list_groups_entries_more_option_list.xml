@@ -216,7 +216,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/exportDatabase"
+            android:contentDescription="@string/exportDb"
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
             android:padding="@dimen/kp_margin"
@@ -230,7 +230,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
-            android:text="@string/exportDatabase"
+            android:text="@string/exportDb"
             android:textColor="?colorSecondary"></TextView>
     </LinearLayout>
 
@@ -260,7 +260,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
-            android:text="@string/generateNewPassword"
+            android:text="@string/generateNewPwd"
             android:textColor="?colorSecondary"></TextView>
     </LinearLayout>
 

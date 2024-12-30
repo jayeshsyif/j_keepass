@@ -218,7 +218,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         holder.fieldCopy.setOnClickListener(view -> executor.execute(() -> {
-            LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPassword));
+            LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.generatingNewPwd));
             LoadingEventSource.getInstance().showLoading();
             GenerateNewPasswordEventSource.getInstance().generateNewPwd();
         }));

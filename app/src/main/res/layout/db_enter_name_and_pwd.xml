@@ -23,7 +23,7 @@
             android:layout_weight="80"
             android:fontFamily="@font/spacemono_bold"
             android:gravity="center_vertical"
-            android:text="@string/createNewDatabase"
+            android:text="@string/createNewDb"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?colorSecondary" />
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimaryVariant"
             android:fontFamily="@font/spacemono_regular"
-            android:hint="@string/enterDatabaseName"
+            android:hint="@string/enterDbName"
             android:inputType="text"
             android:textColor="?colorSecondary"
             android:textCursorDrawable="@null" />
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimaryVariant"
             android:fontFamily="@font/spacemono_regular"
-            android:hint="@string/enterPassword"
+            android:hint="@string/enterPwd"
             android:inputType="textPassword"
             android:textColor="?colorSecondary"
             android:textCursorDrawable="@null" />
