@@ -49,6 +49,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbEvent, PermissionResultEvent, GenerateNewPwdEvent {
@@ -258,7 +259,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
     public void createDb(final String dbName, final String pwd) {
         AtomicReference<String> dbNameAr = new AtomicReference<>(dbName);
         AtomicReference<File> newDbFile = new AtomicReference<>();
-        AtomicReference<Boolean> proceed = new AtomicReference<>(true);
+        AtomicBoolean proceed = new AtomicBoolean(true);
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.creatingNewDatabase));
