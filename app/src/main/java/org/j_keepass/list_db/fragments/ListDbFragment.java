@@ -184,8 +184,8 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
     }
 
     private void showDbOnUiUsingAdapter(File f, ListDbAdapter adapter, ProgressIndicator pi, AtomicInteger fCount) {
-        Utils.sleepFor1MSec();
         Utils.log("Db is " + f.getName());
+        Utils.sleepFor1MSec();
         adapter.insert(f.getName(), f.lastModified(), f.getAbsolutePath());
         try {
             requireActivity().runOnUiThread(() -> {

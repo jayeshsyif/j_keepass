@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,11 +54,14 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
 
     public static final int PICK_FOLDER_OPEN_RESULT_CODE = 2;
 
+    private ActivityResultLauncher<Intent> exportLauncher = null;
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new SetTheme(this, false).run();
         binding = ListGroupsAndEntriesActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        exportLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> onActivityResult(result.getResultCode(), result.getData()));
         configureBackPressed();
         register();
         ExecutorService executor = getExecutor();
@@ -383,7 +388,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             chooseFile.putExtra(Intent.EXTRA_TITLE, new File(Db.getInstance().getDbName()).getName());
 
             chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
-            startActivityForResult(chooseFile, PICK_FOLDER_OPEN_RESULT_CODE);
+            exportLauncher.launch(chooseFile);
         }
     }
 
@@ -396,6 +401,13 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
                 ExecutorService executor = getExecutor();
                 executor.execute(() -> exportDb(data.getData()));
             }
+        }
+    }
+
+    public void onActivityResult(int resultCode, Intent data) {
+        if (resultCode == -1) {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> exportDb(data.getData()));
         }
     }
 

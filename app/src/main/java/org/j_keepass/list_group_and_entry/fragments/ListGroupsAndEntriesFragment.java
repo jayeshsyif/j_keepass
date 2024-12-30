@@ -23,12 +23,14 @@ import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryType;
 import org.j_keepass.list_group_and_entry.adapters.ListGroupsAndEntriesAdapter;
 import org.j_keepass.list_group_and_entry.enums.GroupsAndEntriesAction;
+import org.j_keepass.util.ProgressIndicator;
 import org.j_keepass.util.Utils;
 
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEvent, ReloadEvent {
@@ -94,7 +96,6 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
                 listFromGroupId(gId, adapter.get(), groupsAndEntriesAction, query);
             }
         });
-        executor.execute(this::dismissLoading);
     }
 
     private ExecutorService getExecutor() {
@@ -164,6 +165,7 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
 
     private void listFromGroupId(UUID gId, ListGroupsAndEntriesAdapter adapter, GroupsAndEntriesAction groupsAndEntriesAction, String query) {
         final long totalSubs;
+        String loadingStr = binding.getRoot().getContext().getString(R.string.loading);
         if (groupsAndEntriesAction != null && groupsAndEntriesAction.name().equals(GroupsAndEntriesAction.ALL_ENTRIES_ONLY.name())) {
             if (query == null) {
                 totalSubs = Db.getInstance().getAllEntriesCount();
@@ -182,7 +184,19 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
             } catch (Throwable e) {
                 //ignore
             }
-            updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [0/" + totalSubs + "]");
+            updateLoadingText(loadingStr + " [0/" + totalSubs + "]");
+            ProgressIndicator pi = new ProgressIndicator() {
+                @Override
+                public void onUpdate(int progress) {
+                    Utils.log("On update " + progress);
+                    updateLoadingText(loadingStr + " [" + progress + "/" + totalSubs + "]");
+                }
+
+                @Override
+                public void onDone() {
+                    dismissLoading();
+                }
+            };
             ArrayList<GroupEntryData> subs;
             if (groupsAndEntriesAction != null && groupsAndEntriesAction.name().equals(GroupsAndEntriesAction.ALL_ENTRIES_ONLY.name())) {
                 if (query == null) {
@@ -193,31 +207,32 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
             } else {
                 subs = Db.getInstance().getSubGroupsAndEntries(gId);
             }
-            int subCountAdded = 0;
-            Utils.log("Got groupsAndEntriesAction as " + groupsAndEntriesAction.name());
+            AtomicInteger subCountAdded = new AtomicInteger(0);
             for (final GroupEntryData data : subs) {
                 Utils.sleepFor1MSec();
-                Utils.log("Got " + data.name);
                 adapter.addValue(data);
-                Utils.log("Adding " + data.name);
-                subCountAdded++;
                 try {
-                    requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
+                    requireActivity().runOnUiThread(() -> {
+                        adapter.notifyItemInserted(adapter.getItemCount());
+                        subCountAdded.getAndIncrement();
+                        pi.onUpdate(subCountAdded.get());
+                    });
                 } catch (Throwable e) {
                     //ignore
                 }
-                updateLoadingText(binding.showGroupEntriesRecyclerView.getContext().getString(R.string.loading) + " [" + subCountAdded + "/" + totalSubs + "]");
             }
-            {
-                //dummy
-                GroupEntryData dummyData = new GroupEntryData();
-                dummyData.type = GroupEntryType.DUMMY;
-                adapter.addValue(dummyData);
-                try {
-                    requireActivity().runOnUiThread(() -> adapter.notifyItemInserted(adapter.getItemCount()));
-                } catch (Throwable e) {
-                    //ignore
-                }
+            try {
+                Utils.sleepFor1MSec();
+                requireActivity().runOnUiThread(() -> {
+                    //dummy
+                    GroupEntryData dummyData = new GroupEntryData();
+                    dummyData.type = GroupEntryType.DUMMY;
+                    adapter.addValue(dummyData);
+                    adapter.notifyItemInserted(adapter.getItemCount());
+                    pi.onDone();
+                });
+            } catch (Throwable e) {
+                //ignore
             }
         } else {
             try {

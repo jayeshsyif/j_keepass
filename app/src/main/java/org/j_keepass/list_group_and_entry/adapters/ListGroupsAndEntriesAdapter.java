@@ -23,7 +23,6 @@ import org.j_keepass.events.changeactivity.ChangeActivityEvent;
 import org.j_keepass.events.changeactivity.ChangeActivityEventSource;
 import org.j_keepass.events.reload.ReloadEvent;
 import org.j_keepass.events.reload.ReloadEventSource;
-import org.j_keepass.list_db.adapters.ListDbAdapter;
 import org.j_keepass.list_db.dtos.GroupEntryData;
 import org.j_keepass.list_db.dtos.GroupEntryType;
 import org.j_keepass.util.Pair;
@@ -62,6 +61,11 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+        configure(holder);
+
+    }
+
+    private void configure(ViewHolder holder) {
         holder.name.setText(holder.mItem.name);
         String itemTypeName = holder.mItem.type.name();
         Context context = holder.groupEntryImage.getContext();
@@ -137,7 +141,7 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
         return position;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public GroupEntryData mItem;
         TextView name, groupEntryCountOrStatus, path;
         CardView groupEntryNameCardView;
@@ -153,7 +157,7 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
         }
     }
 
-    class ListGroupsAndEntriesAdapterAnimator extends DefaultItemAnimator {
+    static class ListGroupsAndEntriesAdapterAnimator extends DefaultItemAnimator {
 
         @Override
         public boolean animateAdd(RecyclerView.ViewHolder holder) {
