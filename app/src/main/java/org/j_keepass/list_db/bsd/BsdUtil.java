@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -42,6 +43,7 @@ import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -116,7 +118,11 @@ public class BsdUtil {
         for (Map.Entry<String, Theme> entry : map.entrySet()) {
             themes.add(entry.getValue());
         }
-        Collections.sort(themes, (t1, t2) -> Integer.compare(t1.getPos(), t2.getPos()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(themes, Comparator.comparingInt(Theme::getPos));
+        } else {
+            Collections.sort(themes, (t1, t2) -> compareInt(t1.getPos(), t2.getPos()));
+        }
         ListThemesAdapter adapter = new ListThemesAdapter();
         adapter.setValues(themes);
         adapter.setBsd(bsd);
@@ -130,6 +136,10 @@ public class BsdUtil {
         bsd.show();
     }
 
+    private int compareInt(int pos1, int pos2) {
+        return Integer.compare(pos1, pos2);
+    }
+
     public void showCreateDbBsd(Context context) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.db_enter_name_and_pwd);
@@ -140,15 +150,17 @@ public class BsdUtil {
         if (saveBtn != null) {
             saveBtn.setText(R.string.create);
             saveBtn.setOnClickListener(view -> {
-                Utils.log("Create new db btn is clicked");
-                if (dbName != null && dbName.getText() == null) {
-                    dbName.requestFocus();
-                } else if (dbPwd != null && dbPwd.getText() == null) {
-                    dbPwd.requestFocus();
-                } else {
-                    hideKeyboard(view);
-                    bsd.dismiss();
-                    DbEventSource.getInstance().createDb(dbName.getText().toString(), dbPwd.getText().toString());
+                if (dbName != null && dbPwd != null) {
+                    Utils.log("Create new db btn is clicked");
+                    if (dbName.getText() == null || dbName.getText().toString().length() == 0) {
+                        dbName.requestFocus();
+                    } else if (dbPwd.getText() == null || dbPwd.getText().toString().length() == 0) {
+                        dbPwd.requestFocus();
+                    } else {
+                        hideKeyboard(view);
+                        bsd.dismiss();
+                        DbEventSource.getInstance().createDb(dbName.getText().toString(), dbPwd.getText().toString());
+                    }
                 }
             });
         }
@@ -165,33 +177,39 @@ public class BsdUtil {
             dbNameEt.setText(dbName);
         }
         final TextInputLayout databaseNameLayout = bsd.findViewById(R.id.databaseNameLayout);
-        databaseNameLayout.setVisibility(View.GONE);
+        if (databaseNameLayout != null) {
+            databaseNameLayout.setVisibility(View.GONE);
+        }
         TextView dbNameText = bsd.findViewById(R.id.dbNameText);
         if (dbNameText != null) {
             dbNameText.setText(dbName);
         }
         final ImageButton databaseMoreOption = bsd.findViewById(R.id.dbMoreOption);
-        databaseMoreOption.setOnClickListener(view -> {
-            bsd.dismiss();
-            showMoreSelectedDbOptions(context, dbName, fullPath);
-        });
+        if (databaseMoreOption != null) {
+            databaseMoreOption.setOnClickListener(view -> {
+                bsd.dismiss();
+                showMoreSelectedDbOptions(context, dbName, fullPath);
+            });
+        }
         final TextInputEditText dbPwd = bsd.findViewById(R.id.databasePassword);
         if (saveBtn != null) {
             saveBtn.setText(R.string.open);
             saveBtn.setOnClickListener(view -> {
                 Utils.log(" ask pass db btn is clicked");
-                if (dbPwd != null && dbPwd.getText() == null) {
-                    dbPwd.requestFocus();
-                } else {
-                    hideKeyboard(view);
-                    bsd.dismiss();
-                    String openingStr = view.getContext().getString(R.string.opening);
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> {
-                        LoadingEventSource.getInstance().updateLoadingText(openingStr + " " + dbName);
-                        LoadingEventSource.getInstance().showLoading();
-                    });
-                    executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), fullPath, view.getContext().getContentResolver()));
+                if (dbPwd != null) {
+                    if (dbPwd.getText() == null || dbPwd.getText().toString().length() == 0) {
+                        dbPwd.requestFocus();
+                    } else {
+                        hideKeyboard(view);
+                        bsd.dismiss();
+                        String openingStr = view.getContext().getString(R.string.opening);
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            LoadingEventSource.getInstance().updateLoadingText(openingStr + " " + dbName);
+                            LoadingEventSource.getInstance().showLoading();
+                        });
+                        executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), fullPath, view.getContext().getContentResolver()));
+                    }
                 }
             });
         }
@@ -208,30 +226,36 @@ public class BsdUtil {
             dbNameEt.setText(dbName);
         }
         final TextInputLayout databaseNameLayout = bsd.findViewById(R.id.databaseNameLayout);
-        databaseNameLayout.setVisibility(View.GONE);
+        if (databaseNameLayout != null) {
+            databaseNameLayout.setVisibility(View.GONE);
+        }
         TextView dbNameText = bsd.findViewById(R.id.dbNameText);
         if (dbNameText != null) {
             dbNameText.setText(dbName);
         }
         final ImageButton databaseMoreOption = bsd.findViewById(R.id.dbMoreOption);
-        databaseMoreOption.setVisibility(View.INVISIBLE);
+        if (databaseMoreOption != null) {
+            databaseMoreOption.setVisibility(View.INVISIBLE);
+        }
         final TextInputEditText dbPwd = bsd.findViewById(R.id.databasePassword);
         if (saveBtn != null) {
             saveBtn.setText(R.string.open);
             saveBtn.setOnClickListener(view -> {
                 Utils.log(" ask pass db btn is clicked");
-                if (dbPwd != null && dbPwd.getText() == null) {
-                    dbPwd.requestFocus();
-                } else {
-                    hideKeyboard(view);
-                    bsd.dismiss();
-                    String openingStr = view.getContext().getString(R.string.opening);
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> {
-                        LoadingEventSource.getInstance().updateLoadingText(openingStr + " " + dbName);
-                        LoadingEventSource.getInstance().showLoading();
-                    });
-                    executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), data, view.getContext().getContentResolver()));
+                if (dbPwd != null) {
+                    if (dbPwd.getText() == null || dbPwd.getText().toString().length() == 0) {
+                        dbPwd.requestFocus();
+                    } else {
+                        hideKeyboard(view);
+                        bsd.dismiss();
+                        String openingStr = view.getContext().getString(R.string.opening);
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            LoadingEventSource.getInstance().updateLoadingText(openingStr + " " + dbName);
+                            LoadingEventSource.getInstance().showLoading();
+                        });
+                        executor.execute(() -> new DbAndFileOperations().openDb(dbName, dbPwd.getText().toString(), data, view.getContext().getContentResolver()));
+                    }
                 }
             });
         }
@@ -242,39 +266,48 @@ public class BsdUtil {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.selected_db_more_option_list);
         final TableRow selectedDbMoreOptionEditDbName = bsd.findViewById(R.id.selectedDbMoreOptionEditDbName);
-        selectedDbMoreOptionEditDbName.setOnClickListener(view -> {
-            bsd.dismiss();
-            showAskEditDbName(context, dbName, fullPath);
-        });
-        final TableRow selectedDbMoreOptionDeleteDb = bsd.findViewById(R.id.selectedDbMoreOptionDeleteDb);
-        selectedDbMoreOptionDeleteDb.setOnClickListener(view -> {
-            bsd.dismiss();
-            new org.j_keepass.util.confirm_alert.BsdUtil().show(view.getContext(), new ConfirmNotifier() {
-                @Override
-                public void onYes() {
-                    String deletingStr = view.getContext().getString(R.string.deleting);
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> {
-                        LoadingEventSource.getInstance().updateLoadingText(deletingStr + " " + dbName);
-                        LoadingEventSource.getInstance().showLoading();
-                        try {
-                            Utils.sleepFor3MSec();
-                            File toDelete = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
-                            toDelete.delete();
-                            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.EDIT);
-                        } catch (Throwable t) {
-                            String unableToRenameStr = view.getContext().getString(R.string.unableToDelete);
-                            LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + dbName);
-                        }
-                    });
-                }
-
-                @Override
-                public void onNo() {
-                    // ignore
-                }
+        if (selectedDbMoreOptionEditDbName != null) {
+            selectedDbMoreOptionEditDbName.setOnClickListener(view -> {
+                bsd.dismiss();
+                showAskEditDbName(context, dbName, fullPath);
             });
-        });
+        }
+        final TableRow selectedDbMoreOptionDeleteDb = bsd.findViewById(R.id.selectedDbMoreOptionDeleteDb);
+        if (selectedDbMoreOptionDeleteDb != null) {
+            selectedDbMoreOptionDeleteDb.setOnClickListener(view -> {
+                bsd.dismiss();
+                new org.j_keepass.util.confirm_alert.BsdUtil().show(view.getContext(), new ConfirmNotifier() {
+                    @Override
+                    public void onYes() {
+                        String deletingStr = view.getContext().getString(R.string.deleting);
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            LoadingEventSource.getInstance().updateLoadingText(deletingStr + " " + dbName);
+                            LoadingEventSource.getInstance().showLoading();
+                            try {
+                                Utils.sleepFor3MSec();
+                                File toDelete = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+                                boolean isDeleted = toDelete.delete();
+                                if (isDeleted) {
+                                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.EDIT);
+                                } else {
+                                    String unableToRenameStr = view.getContext().getString(R.string.unableToDelete);
+                                    LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + dbName);
+                                }
+                            } catch (Throwable t) {
+                                String unableToRenameStr = view.getContext().getString(R.string.unableToDelete);
+                                LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + dbName);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNo() {
+                        // ignore
+                    }
+                });
+            });
+        }
         expandBsd(bsd);
         bsd.show();
     }
@@ -293,38 +326,49 @@ public class BsdUtil {
             dbNameText.setText(dbName);
         }
         final ImageButton databaseMoreOption = bsd.findViewById(R.id.dbMoreOption);
-        databaseMoreOption.setOnClickListener(view -> {
-            bsd.dismiss();
-            showMoreSelectedDbOptions(context, dbName, fullPath);
-        });
+        if (databaseMoreOption != null) {
+            databaseMoreOption.setOnClickListener(view -> {
+                bsd.dismiss();
+                showMoreSelectedDbOptions(context, dbName, fullPath);
+            });
+        }
         final TextInputLayout dbPwd = bsd.findViewById(R.id.databasePasswordLayout);
-        dbPwd.setVisibility(View.GONE);
+        if (dbPwd != null) {
+            dbPwd.setVisibility(View.GONE);
+        }
         if (saveBtn != null) {
             saveBtn.setText(R.string.open);
             saveBtn.setOnClickListener(view -> {
                 Utils.log(" db change name is clicked");
-                if (dbNameEt != null && dbNameEt.getText() == null) {
-                    dbNameEt.requestFocus();
-                } else {
-                    hideKeyboard(view);
-                    bsd.dismiss();
-                    String newName = dbNameEt.getText().toString();
-                    String changingStr = view.getContext().getString(R.string.changing);
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> {
-                        LoadingEventSource.getInstance().updateLoadingText(changingStr + " " + newName);
-                        LoadingEventSource.getInstance().showLoading();
-                        try {
-                            File to = new File(Db.getInstance().getAppSubDir() + File.separator + newName);
-                            File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
-                            Utils.sleepFor3MSec();
-                            from.renameTo(to);
-                            ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.EDIT);
-                        } catch (Throwable t) {
-                            String unableToRenameStr = view.getContext().getString(R.string.unableToRename);
-                            LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + newName);
-                        }
-                    });
+                if (dbNameEt != null) {
+                    if (dbNameEt.getText() == null || dbNameEt.getText().toString().length() == 0) {
+                        dbNameEt.requestFocus();
+                    } else {
+                        hideKeyboard(view);
+                        bsd.dismiss();
+                        String newName = dbNameEt.getText().toString();
+                        String changingStr = view.getContext().getString(R.string.changing);
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            LoadingEventSource.getInstance().updateLoadingText(changingStr + " " + newName);
+                            LoadingEventSource.getInstance().showLoading();
+                            try {
+                                File to = new File(Db.getInstance().getAppSubDir() + File.separator + newName);
+                                File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+                                Utils.sleepFor3MSec();
+                                boolean isRenamed = from.renameTo(to);
+                                if (isRenamed) {
+                                    ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.EDIT);
+                                } else {
+                                    String unableToRenameStr = view.getContext().getString(R.string.unableToRename);
+                                    LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + newName);
+                                }
+                            } catch (Throwable t) {
+                                String unableToRenameStr = view.getContext().getString(R.string.unableToRename);
+                                LoadingEventSource.getInstance().updateLoadingText(unableToRenameStr + " " + newName);
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -334,32 +378,51 @@ public class BsdUtil {
     public void newPwdBsd(Context context, String pwd, boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.new_password);
-        ((TextView) bsd.findViewById(R.id.newPasswordTextView)).setText(pwd);
+        TextView newPasswordTextView = bsd.findViewById(R.id.newPasswordTextView);
+        if (newPasswordTextView != null) {
+            newPasswordTextView.setText(pwd);
+        }
         MaterialCheckBox useDigitMcb = bsd.findViewById(R.id.useDigit);
         MaterialCheckBox useLowerCaseMcb = bsd.findViewById(R.id.useLowerCase);
         MaterialCheckBox useUpperCaseMcb = bsd.findViewById(R.id.useUpperCase);
         MaterialCheckBox useSymbolMcb = bsd.findViewById(R.id.useSymbol);
         MaterialButton reGenerateNewPassword = bsd.findViewById(R.id.reGenerateNewPassword);
         ImageButton newPasswordCopy = bsd.findViewById(R.id.newPasswordCopy);
-        useDigitMcb.setChecked(useDigit);
-        useLowerCaseMcb.setChecked(useLowerCase);
-        useUpperCaseMcb.setChecked(useUpperCase);
-        useSymbolMcb.setChecked(useSymbol);
+        if (useDigitMcb != null) {
+            useDigitMcb.setChecked(useDigit);
+        }
+        if (useLowerCaseMcb != null) {
+            useLowerCaseMcb.setChecked(useLowerCase);
+        }
+        if (useUpperCaseMcb != null) {
+            useUpperCaseMcb.setChecked(useUpperCase);
+        }
+        if (useSymbolMcb != null) {
+            useSymbolMcb.setChecked(useSymbol);
+        }
         Slider slider = bsd.findViewById(R.id.newPasswordSlider);
-        slider.setValue((float) length);
-        newPasswordCopy.setOnClickListener(view -> {
-            bsd.dismiss();
-            CopyUtil.copyToClipboard(view.getContext(), pwd, pwd);
-        });
-        reGenerateNewPassword.setOnClickListener(view -> {
-            bsd.dismiss();
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
-                LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
-                LoadingEventSource.getInstance().showLoading();
+        if (slider != null) {
+            slider.setValue((float) length);
+        }
+        if (newPasswordCopy != null) {
+            newPasswordCopy.setOnClickListener(view -> {
+                bsd.dismiss();
+                CopyUtil.copyToClipboard(view.getContext(), pwd, pwd);
             });
-            executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd(useDigitMcb.isChecked(), useLowerCaseMcb.isChecked(), useUpperCaseMcb.isChecked(), useSymbolMcb.isChecked(), Float.valueOf(slider.getValue()).intValue()));
-        });
+        }
+        if (reGenerateNewPassword != null) {
+            reGenerateNewPassword.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.generatingNewPassword));
+                    LoadingEventSource.getInstance().showLoading();
+                });
+                if (useDigitMcb != null && useLowerCaseMcb != null && useUpperCaseMcb != null && useSymbolMcb != null && slider != null) {
+                    executor.execute(() -> GenerateNewPasswordEventSource.getInstance().generateNewPwd(useDigitMcb.isChecked(), useLowerCaseMcb.isChecked(), useUpperCaseMcb.isChecked(), useSymbolMcb.isChecked(), Float.valueOf(slider.getValue()).intValue()));
+                }
+            });
+        }
         expandBsd(bsd);
         bsd.show();
     }
@@ -367,26 +430,31 @@ public class BsdUtil {
     public void showInfo(Context context) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.info);
-        ImageButton link = bsd.findViewById(R.id.llink);
-        link.setOnClickListener(v -> {
-            bsd.dismiss();
-            Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.linkedin.com/in/jayesh-ganatra-76051056"));
-            context.startActivity(intent);
-        });
+        ImageButton linkedInLink = bsd.findViewById(R.id.linkedInLink);
+        if (linkedInLink != null) {
+            linkedInLink.setOnClickListener(v -> {
+                bsd.dismiss();
+                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.linkedin.com/in/jayesh-ganatra-76051056"));
+                context.startActivity(intent);
+            });
+        }
+        ImageButton cvLink = bsd.findViewById(R.id.cvLink);
+        if (cvLink != null) {
+            cvLink.setOnClickListener(v -> {
+                bsd.dismiss();
+                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://flowcv.me/jayesh-ganatra"));
+                context.startActivity(intent);
+            });
+        }
 
-        ImageButton elink = bsd.findViewById(R.id.elink);
-        elink.setOnClickListener(v -> {
-            bsd.dismiss();
-            Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://flowcv.me/jayesh-ganatra"));
-            context.startActivity(intent);
-        });
-
-        ImageButton glink = bsd.findViewById(R.id.glink);
-        glink.setOnClickListener(v -> {
-            bsd.dismiss();
-            Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://play.google.com/store/apps/dev?id=7560962222107226464"));
-            context.startActivity(intent);
-        });
+        ImageButton playStoreLink = bsd.findViewById(R.id.playStoreLink);
+        if (playStoreLink != null) {
+            playStoreLink.setOnClickListener(v -> {
+                bsd.dismiss();
+                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://play.google.com/store/apps/dev?id=7560962222107226464"));
+                context.startActivity(intent);
+            });
+        }
         expandBsd(bsd);
         bsd.show();
     }

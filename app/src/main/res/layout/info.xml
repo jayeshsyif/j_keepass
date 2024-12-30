@@ -62,7 +62,7 @@
 
 
                     <ImageButton
-                        android:id="@+id/llink"
+                        android:id="@+id/linkedInLink"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
@@ -76,7 +76,7 @@
                         app:tint="?colorOnPrimary" />
 
                     <ImageButton
-                        android:id="@+id/elink"
+                        android:id="@+id/cvLink"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
@@ -90,7 +90,7 @@
                         app:tint="?colorOnPrimary" />
 
                     <ImageButton
-                        android:id="@+id/glink"
+                        android:id="@+id/playStoreLink"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/kp_margin"
