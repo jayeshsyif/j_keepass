@@ -12,8 +12,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.imageview.ShapeableImageView;
-
 import org.j_keepass.R;
 import org.j_keepass.databinding.CopyOrMoveItemViewBinding;
 import org.j_keepass.events.reload.ReloadEvent;
@@ -28,7 +26,7 @@ import java.util.UUID;
 
 public class ListGroupsForCopyMoveAdapter extends RecyclerView.Adapter<ListGroupsForCopyMoveAdapter.ViewHolder> {
 
-    List<GroupEntryData> mValues = new ArrayList<>();
+    final List<GroupEntryData> mValues = new ArrayList<>();
 
     private UUID selectedGid;
     private String selectedGName;
@@ -105,23 +103,15 @@ public class ListGroupsForCopyMoveAdapter extends RecyclerView.Adapter<ListGroup
         return mValues;
     }
 
-    public int remove(GroupEntryData d) {
-        int pos = mValues.indexOf(d);
-        mValues.remove(pos);
-        return pos;
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public GroupEntryData mItem;
-        TextView name;
-        CardView groupEntryNameCardView;
-        ShapeableImageView groupEntryImage;
+        final TextView name;
+        final CardView groupEntryNameCardView;
 
         public ViewHolder(@NonNull CopyOrMoveItemViewBinding binding) {
             super(binding.getRoot());
             name = binding.groupName;
             groupEntryNameCardView = binding.groupEntryNameCardView;
-            groupEntryImage = binding.groupEntryImage;
         }
     }
 

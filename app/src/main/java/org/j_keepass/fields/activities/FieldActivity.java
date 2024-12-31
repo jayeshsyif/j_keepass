@@ -332,7 +332,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
 
     @Override
     public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
-        Utils.log("Upload Permission Not Granted");
+        Utils.log("Upload Permission Not Granted for action "+permissionAction.name());
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));

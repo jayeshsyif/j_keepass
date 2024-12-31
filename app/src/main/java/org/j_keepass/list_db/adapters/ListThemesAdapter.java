@@ -64,8 +64,8 @@ public class ListThemesAdapter extends RecyclerView.Adapter<ListThemesAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        RelativeLayout themeColor1;
-        ImageButton themeColor2;
+        final RelativeLayout themeColor1;
+        final ImageButton themeColor2;
         public Theme mItem;
 
         public ViewHolder(@NonNull ListThemesItemViewBinding binding) {

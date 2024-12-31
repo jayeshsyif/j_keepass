@@ -370,7 +370,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
 
     @Override
     public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
-        Utils.log("Landing Permission Not Granted");
+        Utils.log("Landing Permission Not Granted for action "+permissionAction.name());
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));

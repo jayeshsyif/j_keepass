@@ -35,7 +35,7 @@ import java.util.UUID;
 
 public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroupsAndEntriesAdapter.ViewHolder> {
 
-    List<GroupEntryData> mValues = new ArrayList<>();
+    final List<GroupEntryData> mValues = new ArrayList<>();
     private static final String SUB_DIRECTORY_ARROW_SYMBOL_CODE = " ↳ ";
     private static final String DOT_SYMBOL_CODE = " → ";
     boolean showPath = false;
@@ -143,9 +143,11 @@ public class ListGroupsAndEntriesAdapter extends RecyclerView.Adapter<ListGroups
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public GroupEntryData mItem;
-        TextView name, groupEntryCountOrStatus, path;
-        CardView groupEntryNameCardView;
-        ShapeableImageView groupEntryImage;
+        final TextView name;
+        final TextView groupEntryCountOrStatus;
+        final TextView path;
+        final CardView groupEntryNameCardView;
+        final ShapeableImageView groupEntryImage;
 
         public ViewHolder(@NonNull ListGroupAndEntriesItemViewBinding binding) {
             super(binding.getRoot());

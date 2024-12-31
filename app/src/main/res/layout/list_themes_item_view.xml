@@ -4,19 +4,20 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/kp_margin"
-    android:padding="@dimen/kp_margin"
-    android:background="@color/kp_wb_light_white">
+    android:background="@color/kp_wb_light_white"
+    android:padding="@dimen/kp_margin">
 
     <ImageButton
         android:id="@+id/themeColor2"
-        android:layout_width="@dimen/kp_min_image_height"
-        android:layout_height="@dimen/kp_min_image_width"
+        android:layout_width="@dimen/kp_min_image_width"
+        android:layout_height="@dimen/kp_min_image_height"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@color/kp_wb_blue"
-        android:fontFamily="@font/spacemono_regular"
         android:contentDescription="@string/themes"
-        android:gravity="center_vertical">
+        android:fontFamily="@font/spacemono_regular"
+        android:gravity="center_vertical"
+        android:padding="@dimen/kp_margin">
 
     </ImageButton>
 </RelativeLayout>

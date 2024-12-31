@@ -43,7 +43,7 @@ import java.util.concurrent.Executors;
 
 public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.ViewHolder> {
 
-    List<FieldData> mValues = new ArrayList<>();
+    final List<FieldData> mValues = new ArrayList<>();
     private boolean isEditable = false;
 
     public void setEditable(boolean editable) {
@@ -243,7 +243,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (holder.editText != null && holder.editText.getText() != null) {
+                if (holder.editText.getText() != null) {
                     holder.mItem.value = holder.editText.getText().toString();
                     Utils.log("Calling update field Value for " + holder.mItem.asString());
                     Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
@@ -275,11 +275,11 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         public FieldData mItem;
-        TextInputEditText editText;
-        TextInputLayout editTextLayout;
-        ImageButton fieldCopy;
-        CardView fieldCardView;
-        TextView expiryStatus;
+        final TextInputEditText editText;
+        final TextInputLayout editTextLayout;
+        final ImageButton fieldCopy;
+        final CardView fieldCardView;
+        final TextView expiryStatus;
 
         public ViewHolder(@NonNull FieldItemViewBinding binding) {
             super(binding.getRoot());

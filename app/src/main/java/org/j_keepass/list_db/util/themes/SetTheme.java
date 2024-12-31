@@ -8,8 +8,8 @@ import org.j_keepass.events.themes.ThemeEvent;
 import org.j_keepass.util.Utils;
 
 public class SetTheme {
-    Activity activity;
-    boolean loadFromShare;
+    final Activity activity;
+    final boolean loadFromShare;
     public static String sThemeId = "wbs";
 
 

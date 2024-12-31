@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEvent {
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
     private ListDbFragmentBinding binding;
-    boolean showInGrid = false;
+    final boolean showInGrid = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

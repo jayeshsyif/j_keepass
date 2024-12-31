@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder> {
 
-    List<DbData> mValues = new ArrayList<>();
+    final List<DbData> mValues = new ArrayList<>();
     private String layoutType = "List";
 
     public void setLayoutType(String layoutType) {
@@ -88,12 +88,12 @@ public class ListDbAdapter extends RecyclerView.Adapter<ListDbAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mDbName;
-        TextView mDbModifiedDate;
-        public CardView cardView;
+        final TextView mDbName;
+        final TextView mDbModifiedDate;
+        public final CardView cardView;
         public DbData mItem;
-        ShapeableImageView mImage;
-        ImageButton mDatabaseMoreOption;
+        final ShapeableImageView mImage;
+        final ImageButton mDatabaseMoreOption;
 
         public ViewHolder(@NonNull ListDbItemViewBinding binding) {
             super(binding.getRoot());
