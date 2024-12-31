@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Db {
     private static final Db DB = new Db();
 
@@ -57,11 +58,7 @@ public class Db {
     }
 
     public String getDbName() {
-        if (kdbxFile != null) {
-            return kdbxFile.getName();
-        } else {
-            return "Not Found!";
-        }
+        return (kdbxFile != null) ? kdbxFile.getName() : "Not Found!";
     }
 
     public String getAppDirPath() {
@@ -78,14 +75,6 @@ public class Db {
 
     public void setAppSubDir(String appSubDir) {
         this.appSubDir = appSubDir;
-    }
-
-    public String getRootGroupName() {
-        if (database != null) {
-            return database.getRootGroup().getName();
-        } else {
-            return "Not Found!";
-        }
     }
 
     public UUID getRootGroupId() {
@@ -237,6 +226,10 @@ public class Db {
         return getSubGroupsAndEntries(gId, true);
     }
 
+    private int compareString(String s1, String s2) {
+        return s1.compareTo(s2);
+    }
+
     private ArrayList<GroupEntryData> getSubGroupsAndEntries(UUID gId, boolean addEntries) {
         ArrayList<GroupEntryData> list = new ArrayList<>();
         try {
@@ -244,7 +237,7 @@ public class Db {
             if (group != null) {
                 ArrayList<Group<?, ?, ?, ?>> gList = (ArrayList<Group<?, ?, ?, ?>>) group.getGroups();
                 if (gList != null) {
-                    Collections.sort(gList, (g1, g2) -> g1.getName().compareTo(g2.getName()));
+                    Collections.sort(gList, (g1, g2) -> compareString(g1.getName(), g2.getName()));
                     for (Group suGroup : gList) {
                         GroupEntryData data = new GroupEntryData();
                         data.id = suGroup.getUuid();
@@ -257,7 +250,7 @@ public class Db {
                 if (addEntries) {
                     ArrayList<Entry<?, ?, ?, ?>> eList = (ArrayList<Entry<?, ?, ?, ?>>) group.getEntries();
                     if (eList != null) {
-                        Collections.sort(eList, (e1, e2) -> e1.getTitle().compareTo(e2.getTitle()));
+                        Collections.sort(eList, (e1, e2) -> compareString(e1.getTitle(), e2.getTitle()));
                         for (Entry suEntry : eList) {
                             GroupEntryData data = new GroupEntryData();
                             data.id = suEntry.getUuid();
@@ -561,33 +554,29 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
         return fields;
     }
 
 
-    public boolean updateEntryField(UUID eId, FieldData fieldData) {
-        boolean isUpdated = false;
+    public void updateEntryField(UUID eId, FieldData fieldData) {
         try {
             if (database != null) {
                 Entry entry = database.findEntry(eId);
                 if (entry != null) {
                     updateEntryField(entry, fieldData);
-                    isUpdated = true;
                 } else {
                     Utils.log("entry is null");
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
-        return isUpdated;
     }
 
-    private boolean updateEntryField(Entry entry, FieldData fieldData) {
+    private void updateEntryField(Entry entry, FieldData fieldData) {
         Utils.log("Update actual field data " + fieldData.asString());
-        boolean isUpdated = false;
         if (database != null) {
             if (entry != null) {
                 if (fieldData.fieldNameType.name().equals(FieldNameType.USERNAME.name())) {
@@ -604,12 +593,9 @@ public class Db {
                     entry.setExpiryTime(Utils.convertStringToDate(fieldData.value));
                 } else if (fieldData.fieldNameType.name().equals(FieldNameType.ADDITIONAL.name())) {
                     entry.setProperty(fieldData.name, fieldData.value);
-                } else if (fieldData.fieldNameType.name().equals(FieldNameType.ATTACHMENT.name())) {
                 }
-                isUpdated = true;
             }
         }
-        return isUpdated;
     }
 
     public void updateCacheEntry(UUID eId) {
@@ -632,9 +618,7 @@ public class Db {
     }
 
     public void updateEntry(UUID eId) {
-        if (listOfEntriesNotUpdatedInDb.contains(eId)) {
-            listOfEntriesNotUpdatedInDb.remove(eId);
-        }
+        listOfEntriesNotUpdatedInDb.remove(eId);
     }
 
     public boolean pwdMatch(String newPwd) {
@@ -645,14 +629,14 @@ public class Db {
         try {
             if (database != null) {
                 Group group = database.findGroup(gId);
-                if (group != null) {
+                if (group != null && group.getParent() != null) {
                     currentGroupId = group.getParent().getUuid();
                     database.deleteGroup(gId);
                     new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, contentResolver, database);
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -667,7 +651,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -689,7 +673,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -697,7 +681,7 @@ public class Db {
         try {
             new DbAndFileOperations().exportFile(database, dataUri, pwd, contentResolver, activity);
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -716,7 +700,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -737,7 +721,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -750,7 +734,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -763,7 +747,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -776,7 +760,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -791,7 +775,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -800,12 +784,12 @@ public class Db {
         try {
             if (database != null) {
                 Entry entry = database.findEntry(eId);
-                if (entry != null) {
+                if (entry != null && entry.getParent() != null) {
                     gId = entry.getParent().getUuid();
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
         return gId;
     }
@@ -821,7 +805,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -831,7 +815,7 @@ public class Db {
                 Group selectedGroupToMove = database.findGroup(selectedGidToMove);
                 Group toGroup = database.findGroup(toGroupId);
                 if (selectedGroupToMove != null && toGroup != null) {
-                    if (selectedGidToMove != getRootGroupId()) {
+                    if (selectedGidToMove != getRootGroupId() && selectedGroupToMove.getParent() != null) {
                         selectedGroupToMove.getParent().removeGroup(selectedGroupToMove);
                         toGroup.addGroup(selectedGroupToMove);
                         new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
@@ -839,7 +823,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -892,9 +876,9 @@ public class Db {
             // ignore
         }
         try {
-            ArrayList<String> bprops = (ArrayList<String>) e.getBinaryPropertyNames();
-            if (bprops != null) {
-                for (String bp : bprops) {
+            ArrayList<String> bProps = (ArrayList<String>) e.getBinaryPropertyNames();
+            if (bProps != null) {
+                for (String bp : bProps) {
                     c.setProperty(bp, e.getProperty(bp));
                 }
             }
@@ -916,7 +900,7 @@ public class Db {
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 
@@ -925,14 +909,14 @@ public class Db {
             if (database != null) {
                 Entry selectedEntryToCopy = database.findEntry(entryId);
                 Group toGroup = database.findGroup(toGroupId);
-                if (selectedEntryToCopy != null && toGroup != null) {
+                if (selectedEntryToCopy != null && toGroup != null && selectedEntryToCopy.getParent() != null) {
                     selectedEntryToCopy.getParent().removeEntry(selectedEntryToCopy);
                     toGroup.addEntry(selectedEntryToCopy);
                     new DbAndFileOperations().writeDbToFile(kdbxFile, pwd, activity.getContentResolver(), database);
                 }
             }
         } catch (Throwable t) {
-            //ignore
+            Utils.ignoreError(t);
         }
     }
 }
