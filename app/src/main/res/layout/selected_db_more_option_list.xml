@@ -66,7 +66,7 @@
             android:minHeight="@dimen/kp_min_image_height"
             android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:text="@string/dbRename"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
     <TableRow
@@ -94,7 +94,7 @@
             android:minHeight="@dimen/kp_min_image_height"
             android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="@color/kp_red"></ImageButton>
+            app:tint="@color/kp_red"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -102,6 +102,6 @@
             android:fontFamily="@font/spacemono_regular"
             android:gravity="center_vertical"
             android:text="@string/delete"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 </RelativeLayout>

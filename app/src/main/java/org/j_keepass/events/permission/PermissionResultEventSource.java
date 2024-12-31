@@ -13,7 +13,7 @@ public class PermissionResultEventSource {
         return SOURCE;
     }
 
-    private ArrayList<PermissionResultEvent> listeners = new ArrayList<>();
+    private final ArrayList<PermissionResultEvent> listeners = new ArrayList<>();
 
     public void addListener(PermissionResultEvent listener) {
         listeners.add(listener);

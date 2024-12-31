@@ -26,7 +26,7 @@
 
     <style name="Theme.J_KeePass.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.J_KeePass.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
+    <style name="Theme.J_KeePass.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:textColor">?colorPrimary</item>

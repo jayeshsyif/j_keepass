@@ -12,7 +12,6 @@ import java.util.List;
 
 public class PieChartView extends View {
     private Paint paint;
-    private Paint textPaint;
     private List<Float> values;
     private List<Integer> colors;
     private List<String> text;
@@ -22,10 +21,6 @@ public class PieChartView extends View {
     public PieChartView(Context context, List<Float> values, List<Integer> colors, List<String> text, int textColor, float textSize) {
         super(context);
         paint = new Paint();
-        textPaint = new Paint();
-        textPaint.setColor(textColor);
-        textPaint.setTextSize(textSize);
-        textPaint.setTextAlign(Paint.Align.CENTER);
         this.colors = colors;
         this.values = values;
         this.text = text;
@@ -52,8 +47,8 @@ public class PieChartView extends View {
 
         float startAngle = 0f;
         float radius = Math.min(getWidth(), getHeight()) / 2f - 20; // Padding
-        float cx = getWidth() / 2; // Center x
-        float cy = getHeight() / 2; // Center y
+        float cx = getWidth() / 2.0f; // Center x
+        float cy = getHeight() / 2.0f; // Center y
 
         for (int i = 0; i < values.size(); i++) {
             float sweepAngle = (values.get(i) / total) * 360; // Calculate angle for each slice

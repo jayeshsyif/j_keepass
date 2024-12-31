@@ -15,7 +15,7 @@ public class GenerateNewPasswordEventSource {
         return SOURCE;
     }
 
-    private ArrayList<GenerateNewPwdEvent> listeners = new ArrayList<>();
+    private final ArrayList<GenerateNewPwdEvent> listeners = new ArrayList<>();
 
     public void addListener(GenerateNewPwdEvent listener) {
         listeners.add(listener);
@@ -27,10 +27,8 @@ public class GenerateNewPasswordEventSource {
 
     public void generateNewPwd() {
         Utils.log("In listener got generate New Pwd");
-        if (listeners.size() == 0 || listeners.size() > 0) {
-            if (!listeners.contains(PasswordGenerator.getInstance())) {
-                PasswordGenerator.register();
-            }
+        if (!listeners.contains(PasswordGenerator.getInstance())) {
+            PasswordGenerator.register();
         }
         for (GenerateNewPwdEvent listener : listeners) {
             listener.generateNewPwd();
@@ -39,10 +37,8 @@ public class GenerateNewPasswordEventSource {
 
     public void generateNewPwd(boolean useDigit, boolean useLowerCase, boolean useUpperCase, boolean useSymbol, int length) {
         Utils.log("In listener got generate New Pwd with all params");
-        if (listeners.size() == 0 || listeners.size() > 0) {
-            if (!listeners.contains(PasswordGenerator.getInstance())) {
-                PasswordGenerator.register();
-            }
+        if (!listeners.contains(PasswordGenerator.getInstance())) {
+            PasswordGenerator.register();
         }
         for (GenerateNewPwdEvent listener : listeners) {
             listener.generateNewPwd(useDigit, useLowerCase, useUpperCase, useSymbol, length);

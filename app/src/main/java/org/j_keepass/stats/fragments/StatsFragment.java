@@ -1,25 +1,21 @@
 package org.j_keepass.stats.fragments;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.StatsFragmentBinding;
+import org.j_keepass.db.operation.Db;
 import org.j_keepass.events.loading.LoadingEvent;
 import org.j_keepass.events.loading.LoadingEventSource;
-import org.j_keepass.util.Utils;
-import org.j_keepass.db.operation.Db;
 import org.j_keepass.stats.fragments.graph.PieChartView;
+import org.j_keepass.util.Utils;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -62,10 +58,10 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         ArrayList<Float> values = new ArrayList<>();
         ArrayList<String> text = new ArrayList<>();
         ArrayList<Integer> colors = new ArrayList<>();
-        final long totalEntries = Db.getInstance().getAllExpiredEntriesCount();
-        final long allExpiredEntriesCount = totalEntries;
+        final long totalEntries = Db.getInstance().getAllEntriesCount();
+        final long allExpiredEntriesCount = Db.getInstance().getAllExpiredEntriesCount();
         final long allExpiringSoonEntriesCount = Db.getInstance().getAllExpiringSoonEntriesCount();
-        final long ok = Db.getInstance().getAllEntriesCount() - (allExpiringSoonEntriesCount + allExpiredEntriesCount);
+        final long ok = totalEntries - (allExpiringSoonEntriesCount + allExpiredEntriesCount);
         try {
             requireActivity().runOnUiThread(() -> {
                 binding.expiredCountDisplay.setText(String.valueOf(allExpiredEntriesCount));
@@ -76,17 +72,17 @@ public class StatsFragment extends Fragment implements LoadingEvent {
             //ignore
         }
         if (allExpiredEntriesCount > 0) {
-            values.add(Float.valueOf(allExpiredEntriesCount));
+            values.add((float) allExpiredEntriesCount);
             colors.add(binding.graph.getResources().getColor(R.color.kp_red));
             text.add("Expired " + allExpiredEntriesCount);
         }
         if (allExpiringSoonEntriesCount > 0) {
-            values.add(Float.valueOf(allExpiringSoonEntriesCount));
+            values.add((float) allExpiringSoonEntriesCount);
             colors.add(binding.graph.getResources().getColor(R.color.kp_coral));
             text.add("Expiring Soon " + allExpiringSoonEntriesCount);
         }
         if (ok > 0) {
-            values.add(Float.valueOf(ok));
+            values.add((float) ok);
             colors.add(binding.graph.getResources().getColor(R.color.kp_green));
             text.add("Good " + ok);
         }
@@ -95,30 +91,16 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         Utils.log("Expiring Soon " + allExpiringSoonEntriesCount);
         Utils.log("Good " + ok);
 
-        //int textColor = getSecondaryColor(binding.graph.getContext());
         int textColor = binding.graph.getResources().getColor(R.color.kp_static_white);
         float textSize = 30;
 
         colors.add(binding.graph.getResources().getColor(R.color.kp_green));
         try {
             PieChartView pieChartView = new PieChartView(binding.graph.getContext(), values, colors, text, textColor, textSize);
-            requireActivity().runOnUiThread(() -> {
-                binding.graph.addView(pieChartView);
-            });
+            requireActivity().runOnUiThread(() -> binding.graph.addView(pieChartView));
         } catch (Throwable e) {
             //ignore
         }
-    }
-
-    public static int getSecondaryColor(Context context) {
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = context.getTheme();
-        boolean resolved = theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true);
-
-        if (resolved) {
-            return typedValue.resourceId != 0 ? ContextCompat.getColor(context, typedValue.resourceId) : typedValue.data;
-        }
-        return ContextCompat.getColor(context, R.color.kp_static_dark_blue); // Replace with your fallback color
     }
 
     private ExecutorService getExecutor() {

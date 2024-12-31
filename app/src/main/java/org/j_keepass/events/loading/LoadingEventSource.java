@@ -15,7 +15,7 @@ public class LoadingEventSource {
         return SOURCE;
     }
 
-    private ArrayList<LoadingEvent> listeners = new ArrayList<>();
+    private final ArrayList<LoadingEvent> listeners = new ArrayList<>();
 
     public void addListener(LoadingEvent listener) {
         listeners.add(listener);

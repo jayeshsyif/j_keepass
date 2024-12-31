@@ -79,7 +79,7 @@
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textColor="?colorSecondary"
-                app:layout_constraintEnd_toStartOf="@id/groupEntryArrow"></TextView>
+                app:layout_constraintEnd_toStartOf="@id/groupEntryArrow"/>
 
             <ImageButton
                 android:id="@+id/groupEntryArrow"

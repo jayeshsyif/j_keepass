@@ -34,7 +34,7 @@
                 android:text="@string/loading"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
-                android:textColor="?colorPrimary"></TextView>
+                android:textColor="?colorPrimary"/>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <ImageButton
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/addAdditionalOrBinaryPropertyBtn"
             android:visibility="gone"
-            tools:listitem="@layout/list_db_item_view"></androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/list_db_item_view"/>
 
         <TextView
             android:id="@+id/entryTitleView"
@@ -76,7 +76,7 @@
             android:gravity="center"
             android:text="@string/nothingHere"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
 
 
     </RelativeLayout>

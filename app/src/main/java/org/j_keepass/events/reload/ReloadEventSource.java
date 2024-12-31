@@ -15,7 +15,7 @@ public class ReloadEventSource {
         return SOURCE;
     }
 
-    private ArrayList<ReloadEvent> listeners = new ArrayList<>();
+    private final ArrayList<ReloadEvent> listeners = new ArrayList<>();
 
     public void addListener(ReloadEvent listener) {
         Utils.log("In listener reload, adding listener "+ listener.getClass().getName());

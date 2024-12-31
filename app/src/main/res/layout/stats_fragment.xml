@@ -33,7 +33,7 @@
                 android:text="@string/loading"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
-                android:textColor="?colorPrimary"></TextView>
+                android:textColor="?colorPrimary"/>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <TableLayout
@@ -60,7 +60,7 @@
                     android:text="@string/good"
                     android:textAllCaps="false"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?colorSecondary"></TextView>
+                    android:textColor="?colorSecondary"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/goodCountDisplay"
@@ -85,7 +85,7 @@
                     android:text="@string/expiringSoon"
                     android:textAllCaps="false"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?colorSecondary"></TextView>
+                    android:textColor="?colorSecondary"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/expiringSoonCountDisplay"

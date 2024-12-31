@@ -27,7 +27,9 @@ public class DateAndTimePickerUtil {
                 selectedExpiryDate.set(currentCalender.getTime());
                 editText.setText(Utils.convertDateToString(selectedExpiryDate.get()));
                 Utils.log("Calling update field Value");
-                fieldData.value = editText.getText().toString();
+                if (editText.getText() != null) {
+                    fieldData.value = editText.getText().toString();
+                }
                 Db.getInstance().updateEntryField(Db.getInstance().getCurrentEntryId(), fieldData);
             }, toBeDisplayedDate.get(Calendar.HOUR_OF_DAY), toBeDisplayedDate.get(Calendar.MINUTE), true);
             timePickerDialog.show();

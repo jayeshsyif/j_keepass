@@ -17,7 +17,7 @@ public class ThemeEventSource {
         return SOURCE;
     }
 
-    private ArrayList<ThemeEvent> listeners = new ArrayList<>();
+    private final ArrayList<ThemeEvent> listeners = new ArrayList<>();
 
     public void addListener(ThemeEvent listener) {
         listeners.add(listener);

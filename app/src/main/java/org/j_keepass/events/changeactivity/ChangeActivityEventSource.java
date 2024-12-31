@@ -15,7 +15,7 @@ public class ChangeActivityEventSource {
         return SOURCE;
     }
 
-    private ArrayList<ChangeActivityEvent> listeners = new ArrayList<>();
+    private final ArrayList<ChangeActivityEvent> listeners = new ArrayList<>();
 
     public void addListener(ChangeActivityEvent listener) {
         listeners.add(listener);

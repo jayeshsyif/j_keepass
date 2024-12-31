@@ -57,7 +57,7 @@
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textColor="?colorSecondary"
-                app:layout_constraintEnd_toStartOf="@id/dbMoreOption"></TextView>
+                app:layout_constraintEnd_toStartOf="@id/dbMoreOption"/>
 
             <ImageButton
                 android:id="@+id/dbMoreOption"

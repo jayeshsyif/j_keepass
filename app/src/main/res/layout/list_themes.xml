@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,12 +18,12 @@
         android:padding="@dimen/kp_margin"
         android:text="@string/themes"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?colorSecondary"></TextView>
+        android:textColor="?colorSecondary"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/showThemesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/themesTextView"
-        tools:listitem="@layout/list_themes_item_view"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/list_themes_item_view"/>
 </RelativeLayout>

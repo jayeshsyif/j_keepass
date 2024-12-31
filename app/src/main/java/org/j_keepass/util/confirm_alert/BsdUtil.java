@@ -24,17 +24,23 @@ public class BsdUtil {
             confirmAlertText.setText(customText);
         }
         MaterialButton yes = bsd.findViewById(R.id.confirmYes);
-        yes.setOnClickListener(v -> {
-            bsd.dismiss();
-            notifier.onYes();
-        });
+        if (yes != null) {
+            yes.setOnClickListener(v -> {
+                bsd.dismiss();
+                notifier.onYes();
+            });
+        }
         MaterialButton no = bsd.findViewById(R.id.confirmNo);
-        no.setOnClickListener(v -> {
-            bsd.dismiss();
-            notifier.onNo();
-        });
+        if (no != null) {
+            no.setOnClickListener(v -> {
+                bsd.dismiss();
+                notifier.onNo();
+            });
+        }
         ImageButton cancel = bsd.findViewById(R.id.confirmCancel);
-        cancel.setOnClickListener(v -> bsd.dismiss());
+        if (cancel != null) {
+            cancel.setOnClickListener(v -> bsd.dismiss());
+        }
         expandBsd(bsd);
         bsd.show();
     }

@@ -20,7 +20,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.j_keepass.R;
 import org.j_keepass.databinding.ListDbActivityLayoutBinding;
-import org.j_keepass.db.events.DbAndFileOperations;
+import org.j_keepass.db.operation.DbAndFileOperations;
 import org.j_keepass.db.events.DbEvent;
 import org.j_keepass.db.events.DbEventSource;
 import org.j_keepass.db.operation.Db;

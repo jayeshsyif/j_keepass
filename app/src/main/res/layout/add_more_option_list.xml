@@ -64,7 +64,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_folder_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -73,7 +73,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/addGroup"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
     <TableRow
@@ -94,7 +94,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_key_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"

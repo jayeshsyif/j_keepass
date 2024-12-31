@@ -54,7 +54,7 @@
                 android:textAlignment="gravity"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
-                android:textColor="?colorSecondary"></TextView>
+                android:textColor="?colorSecondary"/>
 
             <TextView
                 android:id="@+id/dbModifiedDate"

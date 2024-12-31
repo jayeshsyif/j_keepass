@@ -66,7 +66,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -75,7 +75,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/createNewDb"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
     <TableRow
@@ -96,7 +96,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -105,7 +105,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/importNewDb"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
     <TableRow
@@ -126,7 +126,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -135,7 +135,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/generateNewPwd"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
     <TableRow
@@ -156,7 +156,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_theme_24dp_5f6368_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -165,7 +165,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/changeTheme"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
 
@@ -187,7 +187,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -197,7 +197,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/info"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </TableRow>
 
 </RelativeLayout>

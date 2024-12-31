@@ -71,7 +71,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -80,7 +80,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/edit"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </LinearLayout>
 
     <LinearLayout
@@ -101,7 +101,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_copy_or_move_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"></ImageButton>
+            app:tint="?colorSecondary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -131,7 +131,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_delete_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="@color/kp_red"></ImageButton>
+            app:tint="@color/kp_red"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -140,7 +140,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/delete"
-            android:textColor="?colorSecondary"></TextView>
+            android:textColor="?colorSecondary"/>
     </LinearLayout>
 
 </RelativeLayout>

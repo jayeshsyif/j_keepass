@@ -1,4 +1,4 @@
-package org.j_keepass.db.events;
+package org.j_keepass.db.operation;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -9,7 +9,7 @@ import android.provider.OpenableColumns;
 
 import com.google.common.io.ByteStreams;
 
-import org.j_keepass.db.operation.Db;
+import org.j_keepass.db.events.DbEventSource;
 import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity;
 import org.j_keepass.util.Utils;
 import org.linguafranca.pwdb.Database;
