@@ -57,7 +57,7 @@
         android:gravity="center"
         android:text="@string/copyOrMoveSelectedFolderName"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?colorSecondary"></TextView>
+        android:textColor="?colorSecondary"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/showFolderForCopyMoveRecyclerView"
@@ -66,7 +66,7 @@
         android:layout_above="@id/confirmCopyOrMoveHereRow"
         android:layout_below="@id/selectedFolderNameForCopyMove"
         android:visibility="visible"
-        tools:listitem="@layout/copy_or_move_item_view"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/copy_or_move_item_view"/>
 
     <TableRow
         android:id="@+id/confirmCopyOrMoveHereRow"
@@ -85,7 +85,8 @@
             android:fontFamily="@font/spacemono_bold"
             android:text="@string/copyHere"
             android:textAllCaps="true"
-            android:textColor="?colorPrimary" />
+            android:textColor="?colorPrimary"
+            tools:ignore="VisualLintButtonSize" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/confirmMoveHere"
@@ -97,7 +98,8 @@
             android:fontFamily="@font/spacemono_bold"
             android:text="@string/moveHere"
             android:textAllCaps="true"
-            android:textColor="?colorPrimary" />
+            android:textColor="?colorPrimary"
+            tools:ignore="VisualLintButtonSize" />
     </TableRow>
 
 

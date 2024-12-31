@@ -45,12 +45,16 @@ public class DbAndFileOperations {
     public void createMainDirectory(String dirPath) {
         Utils.log("dirPath: " + dirPath);
         if (dirPath == null) {
-            Utils.log("Null dirPath: " + dirPath);
+            Utils.log("Null dirPath: ");
         } else {
             File projDir = new File(dirPath);
             if (!projDir.exists()) {
-                projDir.mkdirs();
-                Utils.log("Created dirPath: " + dirPath);
+                boolean isDone = projDir.mkdirs();
+                if (isDone) {
+                    Utils.log("Created dirPath: " + dirPath);
+                } else {
+                    Utils.log("Not Created dirPath: " + dirPath);
+                }
             } else {
                 Utils.log("Exists dirPath: " + dirPath);
             }
@@ -60,12 +64,16 @@ public class DbAndFileOperations {
     public void createSubFilesDirectory(String subFilesDirPath) {
         Utils.log("subFilesDirPath: " + subFilesDirPath);
         if (subFilesDirPath == null) {
-            Utils.log("Null subFilesDirPath: " + subFilesDirPath);
+            Utils.log("Null subFilesDirPath: ");
         } else {
             File subFilesDir = new File(subFilesDirPath);
             if (!subFilesDir.exists()) {
-                subFilesDir.mkdirs();
-                Utils.log("Created subFilesDirPath: " + subFilesDirPath);
+                boolean isDone = subFilesDir.mkdirs();
+                if (isDone) {
+                    Utils.log("Created subFilesDirPath: " + subFilesDirPath);
+                } else {
+                    Utils.log("Not Created subFilesDirPath: " + subFilesDirPath);
+                }
             } else {
                 Utils.log("Exists subFilesDirPath: " + subFilesDirPath);
             }
@@ -75,10 +83,16 @@ public class DbAndFileOperations {
     public File createFile(String dir, String dbName) {
         File fromTo = new File(dir + File.separator + dbName);
         if (fromTo.exists()) {
-            fromTo.delete();
+            boolean isDone = fromTo.delete();
+            if (isDone) {
+                Utils.log("Deleted dir: " + dir + ", name " + dbName);
+            }
         } else {
             try {
-                fromTo.createNewFile();
+                boolean isDone = fromTo.createNewFile();
+                if (!isDone) {
+                    Utils.log("unable to create, dir: " + dir + ", name " + dbName);
+                }
             } catch (Throwable e) {
                 Utils.log("unable to create, dir: " + dir + ", name " + dbName);
                 fromTo = null;
@@ -119,26 +133,43 @@ public class DbAndFileOperations {
         }
         if (proceed) {
             String fileName = null;
-            try {
-                Cursor returnCursor = contentResolver.query(uri, null, null, null, null);
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                returnCursor.moveToFirst();
-                fileName = returnCursor.getString(nameIndex);
+            try (Cursor returnCursor = contentResolver.query(uri, null, null, null, null)) {
+                if (returnCursor != null) {
+                    int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    returnCursor.moveToFirst();
+                    fileName = returnCursor.getString(nameIndex);
+                }
             } catch (Throwable e) {
                 Utils.log("unable to get file name");
             }
             if (fileName != null) {
                 File fromTo = new File(subDirPath + File.separator + fileName);
                 if (fromTo.exists()) {
-                    fromTo.delete();
+                    boolean isDone = fromTo.delete();
+                    if (!isDone) {
+                        Utils.log("unable to delete");
+                    }
                 } else {
                     try {
-                        fromTo.createNewFile();
-                        fromTo.setWritable(true, true);
-                        fromTo.setExecutable(true, true);
-                        fromTo.setReadable(true, true);
+                        boolean isDone;
+                        isDone = fromTo.createNewFile();
+                        if (!isDone) {
+                            Utils.log("unable to create new file");
+                        }
+                        isDone = fromTo.setWritable(true, true);
+                        if (!isDone) {
+                            Utils.log("unable to set writable");
+                        }
+                        isDone = fromTo.setExecutable(true, true);
+                        if (!isDone) {
+                            Utils.log("unable to set executable");
+                        }
+                        isDone = fromTo.setReadable(true, true);
+                        if (!isDone) {
+                            Utils.log("unable to set readable");
+                        }
                     } catch (IOException e) {
-                        // ignore
+                        Utils.ignoreError(e);
                     }
                 }
 
@@ -146,28 +177,29 @@ public class DbAndFileOperations {
                 try {
                     inputStream = contentResolver.openInputStream(uri);
                 } catch (FileNotFoundException e) {
-                    // ignore
+                    Utils.ignoreError(e);
                 }
-
                 FileOutputStream outputStream = null;
                 try {
-                    outputStream = new FileOutputStream(fromTo);
-                    ByteStreams.copy(inputStream, outputStream);
+                    if (inputStream != null) {
+                        outputStream = new FileOutputStream(fromTo);
+                        ByteStreams.copy(inputStream, outputStream);
+                    }
                 } catch (Throwable e) {
-                    // ignore
+                    Utils.ignoreError(e);
                 } finally {
                     if (outputStream != null) {
                         try {
                             outputStream.close();
                         } catch (IOException e) {
-                            // ignore
+                            Utils.ignoreError(e);
                         }
                     }
                     if (inputStream != null) {
                         try {
                             inputStream.close();
                         } catch (Exception e) {
-                            // ignore
+                            Utils.ignoreError(e);
                         }
                     }
                 }
@@ -177,7 +209,7 @@ public class DbAndFileOperations {
 
 
     public void openDb(String dbName, String pwd, String fullPath, ContentResolver contentResolver) {
-        Utils.log("Loading " + fullPath);
+        Utils.log("Loading " + fullPath + " with dbname as " + dbName);
         DbEventSource.getInstance().openingDb();
         KdbxCreds creds = new KdbxCreds(pwd.getBytes());
         File kdbxFile = new File(fullPath);
@@ -191,13 +223,9 @@ public class DbAndFileOperations {
         if (inputStream != null) {
             try {
                 Database<?, ?, ?, ?> database = SimpleDatabase.load(creds, inputStream);
-                if (database != null) {
-                    Utils.log("Load done");
-                    Db.getInstance().setDatabase(database, kdbxFile, pwd.getBytes());
-                    DbEventSource.getInstance().loadSuccessDb();
-                } else {
-                    DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
-                }
+                Utils.log("Load done");
+                Db.getInstance().setDatabase(database, kdbxFile, pwd.getBytes());
+                DbEventSource.getInstance().loadSuccessDb();
             } catch (NoClassDefFoundError e) {
                 DbEventSource.getInstance().failedToOpenDb("" + e.getMessage());
             } catch (Exception e) {
@@ -206,7 +234,7 @@ public class DbAndFileOperations {
                 try {
                     inputStream.close();
                 } catch (Exception e) {
-                    // ignore
+                    Utils.ignoreError(e);
                 }
             }
         }
@@ -225,12 +253,12 @@ public class DbAndFileOperations {
         if (inputStream != null) {
             try {
                 Database<?, ?, ?, ?> database = SimpleDatabase.load(creds, inputStream);
-                if (database != null) {
-                    Utils.log("Load done");
+                Utils.log("Load done");
+                if (kdbxFileUri.getPath() != null) {
                     Db.getInstance().setDatabase(database, new File(kdbxFileUri.getPath()), pwd.getBytes());
                     DbEventSource.getInstance().loadSuccessDb();
                 } else {
-                    DbEventSource.getInstance().failedToOpenDb("Please check password. No database found in kdbx File.");
+                    DbEventSource.getInstance().failedToOpenDb(" Path is null");
                 }
             } catch (NoClassDefFoundError e) {
                 DbEventSource.getInstance().failedToOpenDb("" + e.getMessage());
@@ -240,7 +268,7 @@ public class DbAndFileOperations {
                 try {
                     inputStream.close();
                 } catch (Exception e) {
-                    // ignore
+                    Utils.ignoreError(e);
                 }
             }
         }
@@ -256,22 +284,13 @@ public class DbAndFileOperations {
             Utils.log("unable to get permission to read file");
         }
         if (proceed) {
-            OutputStream fileOutputStream = null;
             KdbxCreds creds = new KdbxCreds(pwd);
-            try {
-                fileOutputStream = activity.getContentResolver().openOutputStream(uri, "wt");
+            try (OutputStream fileOutputStream = activity.getContentResolver().openOutputStream(uri, "wt")) {
                 database.save(creds, fileOutputStream);
             } catch (Throwable t) {
                 Utils.log("unable to export file");
-            } finally {
-                if (fileOutputStream != null) {
-                    try {
-                        fileOutputStream.close();
-                    } catch (Exception e) {
-                        //do nothing
-                    }
-                }
             }
+            //do nothing
         }
     }
 
@@ -290,13 +309,13 @@ public class DbAndFileOperations {
             try {
                 inputStream = contentResolver.openInputStream(dataUri);
             } catch (FileNotFoundException e) {
-                // ignore
+                Utils.ignoreError(e);
             }
             if (inputStream != null) {
                 try {
                     value = toByteArray(inputStream);
                 } catch (IOException e) {
-                    // ignore
+                    Utils.ignoreError(e);
                 }
             }
         }
@@ -326,27 +345,16 @@ public class DbAndFileOperations {
             Utils.log("unable to get permission to read file");
         }
         if (proceed) {
-            try {
-                Cursor returnCursor = contentResolver.query(dataUri, null, null, null, null);
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                returnCursor.moveToFirst();
-                fileName = returnCursor.getString(nameIndex);
+            try (Cursor returnCursor = contentResolver.query(dataUri, null, null, null, null)) {
+                if (returnCursor != null) {
+                    int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    returnCursor.moveToFirst();
+                    fileName = returnCursor.getString(nameIndex);
+                }
             } catch (Throwable e) {
                 Utils.log("unable to get file name");
             }
         }
         return fileName;
-    }
-
-    public String getFilePath(Uri dataUri, ContentResolver contentResolver, Activity activity) {
-        String filePath = "";
-        try {
-            contentResolver.takePersistableUriPermission(dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            activity.grantUriPermission(activity.getPackageName(), dataUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            filePath = dataUri.getPath();
-        } catch (Throwable e) {
-            Utils.log("unable to get permission to read file");
-        }
-        return filePath;
     }
 }

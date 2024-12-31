@@ -19,17 +19,22 @@ import org.j_keepass.util.Utils;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
+    private static final String CUSTOM_J_PROTECTED_BROADCAST = "android.intent.action.CUSTOM_J_PROTECTED_BROADCAST";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        org.j_keepass.notification.Util util = new org.j_keepass.notification.Util();
-        if (util.checkIsPermissionAvailable(context)) {
-            log("received alarm");
-            showNotification(context, util);
-            log("received alarm done");
-            //if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
-            {
-                util.startAlarmBroadcastReceiver(context);
+        if (intent != null && CUSTOM_J_PROTECTED_BROADCAST.equals(intent.getAction())) {
+            org.j_keepass.notification.Util util = new org.j_keepass.notification.Util();
+            if (util.checkIsPermissionAvailable(context)) {
+                log("received alarm");
+                showNotification(context, util);
+                log("received alarm done");
+                //if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
+                {
+                    util.startAlarmBroadcastReceiver(context);
+                }
+            } else {
+                log("received alarm, but not an authorized one");
             }
         }
     }

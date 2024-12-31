@@ -425,12 +425,10 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Utils.log("Permission requestCode " + requestCode);
-        if (requestCode == PICK_FOLDER_OPEN_RESULT_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                PermissionResultEventSource.getInstance().permissionGranted(PermissionEvent.PermissionAction.EXPORT);
-            } else {
-                PermissionResultEventSource.getInstance().permissionDenied(PermissionEvent.PermissionAction.EXPORT);
-            }
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            PermissionResultEventSource.getInstance().permissionGranted(PermissionEvent.PermissionAction.EXPORT);
+        } else {
+            PermissionResultEventSource.getInstance().permissionDenied(PermissionEvent.PermissionAction.EXPORT);
         }
     }
 }

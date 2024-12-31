@@ -9,57 +9,22 @@ import android.widget.TextView;
 import org.j_keepass.R;
 import org.j_keepass.list_db.dtos.GroupEntryStatus;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
     private static final String TAG = "JKEEPASS";
     private static final boolean LOG_FLAG = true;
-
-    static public byte[] object2Bytes(Object o) throws Exception {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(o);
-        return baos.toByteArray();
-    }
-
-    static public Object bytes2Object(byte raw[]) throws Exception, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(raw);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        Object o = ois.readObject();
-        return o;
-    }
-
-    static public boolean isUsable(String str) {
-        if (str == null || str.length() == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    private static final Locale locale = Locale.ENGLISH;
 
     static public String convertDateToString(Date d) {
         String dateStr;
         try {
-            DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a");
-            dateStr = df.format(d);
-        } catch (Exception e) {
-            dateStr = d.toString();
-        }
-        return dateStr;
-    }
-
-    static public String convertDateToStringOtherFormat(Date d) {
-        String dateStr;
-        try {
-            DateFormat df = new SimpleDateFormat("E, dd/M/yy, hh:mm: a");
+            DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a", locale);
             dateStr = df.format(d);
         } catch (Exception e) {
             dateStr = d.toString();
@@ -70,7 +35,7 @@ public class Utils {
     static public String convertDateToStringOnlyDate(Date d) {
         String dateStr;
         try {
-            DateFormat df = new SimpleDateFormat("dd/M/yy");
+            DateFormat df = new SimpleDateFormat("dd/M/yy", locale);
             dateStr = df.format(d);
         } catch (Exception e) {
             dateStr = d.toString();
@@ -81,7 +46,7 @@ public class Utils {
     static public Date convertStringToDate(String d) {
         Date date;
         try {
-            DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a");
+            DateFormat df = new SimpleDateFormat("E, dd MMM yyyy, hh:mm:ss a", locale);
             date = df.parse(d);
         } catch (Exception e) {
             date = Calendar.getInstance().getTime();
@@ -89,32 +54,16 @@ public class Utils {
         return date;
     }
 
-    static public String convertDateToString(Long dateInLong) {
-        return convertDateToString(new Date(dateInLong));
-    }
-
-    static public String convertDateToStringOtherFormat(Long dateInLong) {
-        return convertDateToStringOtherFormat(new Date(dateInLong));
-    }
-
     static public String convertDateToStringOnlyDate(Long dateInLong) {
         return convertDateToStringOnlyDate(new Date(dateInLong));
     }
 
-    static public void sleepInMilliSec(long millisec) {
+    static public void sleepInMilliSec(long ms) {
         try {
-            Thread.sleep(millisec);
+            Thread.sleep(ms);
         } catch (Exception e) {
             //ignore
         }
-    }
-
-    static public void sleepFor1Sec() {
-        sleepInMilliSec(1000);
-    }
-
-    static public void sleepForHalfSec() {
-        sleepInMilliSec(500);
     }
 
     static public void sleepFor1MSec() {
@@ -123,10 +72,6 @@ public class Utils {
 
     static public void sleepFor3MSec() {
         sleepInMilliSec(300);
-    }
-
-    static public void sleepFor5Sec() {
-        sleepInMilliSec(5000);
     }
 
     public static void log(String msg) {
@@ -153,21 +98,22 @@ public class Utils {
             int color;
 
             switch (statusLongPair.first) {
-                case EXPIRED:
+                case EXPIRED -> {
                     text = context.getString(R.string.expiredInDays).replace("{0}", String.valueOf(statusLongPair.second));
                     color = R.color.kp_red;
-                    break;
-                case EXPIRING_SOON:
+                }
+                case EXPIRING_SOON -> {
                     text = context.getString(R.string.expiringSoonInDays).replace("{0}", String.valueOf(statusLongPair.second));
                     color = R.color.kp_coral;
-                    break;
-                case OK:
+                }
+                case OK -> {
                     text = context.getString(R.string.expiringInDays).replace("{0}", String.valueOf(statusLongPair.second));
                     color = 0; // No specific color needed for OK status
-                    break;
-                default:
+                }
+                default -> {
                     tv.setVisibility(View.GONE);
                     return; // Exit early if no relevant status
+                }
             }
 
             tv.setVisibility(View.VISIBLE);
@@ -178,5 +124,9 @@ public class Utils {
             }
         }
 
+    }
+
+    public static void ignoreError(Throwable t) {
+        Utils.log("Ignoring error " + t.getMessage());
     }
 }

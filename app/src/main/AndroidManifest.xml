@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <permission
+        android:name="org.j_keepass.custom_j_permission"
+        android:protectionLevel="signature" />
 
     <application
         android:allowBackup="true"
@@ -100,12 +103,12 @@
             android:name=".list_group_and_entry.activities.ListGroupAndEntriesActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"/>
         <activity
             android:name=".fields.activities.FieldActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.J_KeePass.NoActionBar"></activity>
+            android:theme="@style/Theme.J_KeePass.NoActionBar"/>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -113,10 +116,12 @@
 
         <receiver
             android:name=".notification.AlarmBroadcastReceiver"
+            android:permission="org.j_keepass.custom_j_permission"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.CUSTOM_J_PROTECTED_BROADCAST" />
             </intent-filter>
         </receiver>
         <provider
@@ -130,6 +135,4 @@
         </provider>
 
     </application>
-
-
 </manifest>

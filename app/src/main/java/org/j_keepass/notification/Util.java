@@ -14,8 +14,10 @@ import org.j_keepass.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Util {
+    private static final Locale locale = Locale.ENGLISH;
     public void startAlarmBroadcastReceiver(Context context) {
         try {
             log("Start Alarm Broadcast Receiver");
@@ -33,27 +35,24 @@ public class Util {
                     log(" Cancelling ");
                     alarmManager.cancel(pendingIntent);
                     log(" Cancelled ");
-                    isAvailable = false;
                 }
-                if (!isAvailable) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(System.currentTimeMillis());
-                    calendar.set(Calendar.HOUR_OF_DAY, 10);
-                    calendar.set(Calendar.MINUTE, 00);
-                    calendar.set(Calendar.SECOND, 00);
-                    if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-                        calendar.add(Calendar.DAY_OF_MONTH, 1);
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-                        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                        String formattedDate = simpleDateFormat.format(calendar.getTime());
-                        log(" Not Available and Notification set. " + formattedDate);
-                        //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
-                    }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(Calendar.HOUR_OF_DAY, 10);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && alarmManager != null && pendingIntent != null) {
+                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+                    //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss",locale);
+                    String formattedDate = simpleDateFormat.format(calendar.getTime());
+                    log(" Not Available and Notification set. " + formattedDate);
+                    //ToastUtil.showToast(getLayoutInflater(), binding.getRoot().getRootView(), "" + (isCancelled ? " Cancelled and" : "") + " Notification set. " + formattedDate, binding.getRoot().findViewById(R.id.floatGenerateNewPassword));
                 } else {
-                    log("Notification is available and set to " + alarmManager);
+                    log(" Notification is not set, check version or manager / intent is null ");
                 }
             }
         } catch (Exception e) {
@@ -65,31 +64,27 @@ public class Util {
         log("checkIsPermissionAvailable inside broadcast receiver");
         boolean isOK = false;
         try {
-            if (!isOK) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    log("Tri checkIsPermissionAvailable inside broadcast receiver");
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
-                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                            isOK = true;
-                        } else {
-                            isOK = false;
-                        }
-                    }
-                } else {
-                    log("Non Tri checkIsPermissionAvailable inside broadcast receiver");
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
-                        isOK = true;
-                    } else {
-                        isOK = false;
-                    }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                log("Tri checkIsPermissionAvailable inside broadcast receiver");
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+                    isOK = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
                 }
+            } else {
+                log("Non Tri checkIsPermissionAvailable inside broadcast receiver");
+                isOK = ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED;
             }
         } catch (Exception e) {
+            ignoreError(e);
         }
         log("received check permission return is: " + isOK);
         return isOK;
     }
+
     private void log(String msg) {
         Utils.log(msg);
+    }
+
+    private void ignoreError(Throwable t) {
+        Utils.ignoreError(t);
     }
 }

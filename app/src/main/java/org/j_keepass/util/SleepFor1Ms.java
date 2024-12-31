@@ -7,6 +7,7 @@ public class SleepFor1Ms implements Runnable{
         try {
             Thread.sleep(100);
         } catch (Exception e) {
+            Utils.ignoreError(e);
         }
     }
 }
