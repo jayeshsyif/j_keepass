@@ -50,10 +50,6 @@ public class ListGroupsForCopyMoveAdapter extends RecyclerView.Adapter<ListGroup
         mValues.add(groupEntryData);
     }
 
-    public void removeAll() {
-        mValues = new ArrayList<>();
-    }
-
     public String getSelectedGName() {
         return selectedGName;
     }
@@ -105,7 +101,17 @@ public class ListGroupsForCopyMoveAdapter extends RecyclerView.Adapter<ListGroup
         this.reloadEvent = reloadEvent;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public List<GroupEntryData> getAll() {
+        return mValues;
+    }
+
+    public int remove(GroupEntryData d) {
+        int pos = mValues.indexOf(d);
+        mValues.remove(pos);
+        return pos;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public GroupEntryData mItem;
         TextView name;
         CardView groupEntryNameCardView;
@@ -119,7 +125,7 @@ public class ListGroupsForCopyMoveAdapter extends RecyclerView.Adapter<ListGroup
         }
     }
 
-    class ListGroupForCopyMoveAdapterAnimator extends DefaultItemAnimator {
+    private static class ListGroupForCopyMoveAdapterAnimator extends DefaultItemAnimator {
 
         @Override
         public boolean animateAdd(RecyclerView.ViewHolder holder) {

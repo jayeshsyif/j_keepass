@@ -108,7 +108,7 @@
     <string name="copyOrMoveEntry">Copy or Move Entry</string>
     <string name="copyHere">Copy Here</string>
     <string name="moveHere">Move Here</string>
-    <string name="copyOrMoveSelectedFolderName">"Selected Location: "</string>
+    <string name="copyOrMoveSelectedFolderName">"Selected Location: %1$s"</string>
     <string name="copying">Copying …</string>
     <string name="moving">Moving …</string>
     <string name="canNotMoveRootFolder">Cannot move root folder</string>

@@ -33,6 +33,8 @@ import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -96,7 +98,7 @@ public class BsdUtil {
         if (groupEntryMoreOptionCopyOrMoveGroup != null) {
             groupEntryMoreOptionCopyOrMoveGroup.setOnClickListener(view -> {
                 bsd.dismiss();
-                showAskForCopyOrMove(context, activity, name, "Group");
+                showAskForCopyOrMove(context, activity, name);
             });
         }
         LinearLayout groupEntryMoreOptionAdd = bsd.findViewById(R.id.groupEntryMoreOptionAdd);
@@ -137,33 +139,49 @@ public class BsdUtil {
         bsd.show();
     }
 
-    private void showAskForCopyOrMove(Context context, Activity activity, String name, String type) {
-        Utils.log("Copy move for " + name + "With type " + type);
+    private void showAskForCopyOrMove(Context context, Activity activity, String name) {
+        Utils.log("Copy move for " + name + "With type Group");
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.copy_or_move);
         RecyclerView showFolderForCopyMoveRecyclerView = bsd.findViewById(R.id.showFolderForCopyMoveRecyclerView);
-        String selectedStr = context.getString(R.string.copyOrMoveSelectedFolderName);
         TextView selectedFolderNameForCopyMove = bsd.findViewById(R.id.selectedFolderNameForCopyMove);
         if (selectedFolderNameForCopyMove != null) {
-            selectedFolderNameForCopyMove.setText(selectedStr + " " + Db.getInstance().getGroupName(Db.getInstance().getRootGroupId()));
+            selectedFolderNameForCopyMove.setText(context.getString(R.string.copyOrMoveSelectedFolderName, Db.getInstance().getGroupName(Db.getInstance().getRootGroupId())));
         }
         ListGroupsForCopyMoveAdapter adapter = new ListGroupsForCopyMoveAdapter();
-        showFolderForCopyMoveRecyclerView.setItemAnimator(adapter.getItemAnimator());
+        if (showFolderForCopyMoveRecyclerView != null) {
+            showFolderForCopyMoveRecyclerView.setItemAnimator(adapter.getItemAnimator());
+        }
         ReloadEvent reloadEvent = reloadAction -> {
             if (reloadAction != null && reloadAction.name().equals(ReloadEvent.ReloadAction.COPY_MOVE_GROUP_UPDATE.name())) {
                 activity.runOnUiThread(() -> {
                     Utils.log("Copy or move folder update is received.");
-                    showFolderForCopyMoveRecyclerView.removeAllViews();
+                    if (showFolderForCopyMoveRecyclerView != null) {
+                        showFolderForCopyMoveRecyclerView.removeAllViews();
+                    }
                     if (selectedFolderNameForCopyMove != null) {
-                        selectedFolderNameForCopyMove.setText(selectedStr + " " + adapter.getSelectedGName());
+                        selectedFolderNameForCopyMove.setText(context.getString(R.string.copyOrMoveSelectedFolderName, adapter.getSelectedGName()));
                     }
                     ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsOnly(adapter.getSelectedGid());
+                    List<GroupEntryData> prevSubs = adapter.getAll();
+                    if (prevSubs != null) {
+                        Iterator<GroupEntryData> iterator = prevSubs.iterator();
+                        int index = 0;
+                        while (iterator.hasNext()) {
+                            GroupEntryData d = iterator.next();
+                            index++;
+                            if (d != null) {
+                                iterator.remove();
+                            }
+                            adapter.notifyItemRemoved(index);
+                        }
+                    }
                     if (subs != null) {
-                        adapter.removeAll();
                         for (final GroupEntryData data : subs) {
                             adapter.addValue(data);
+                            adapter.notifyItemInserted(adapter.getItemCount());
+                            Utils.sleepFor1MSec();
                         }
-                        adapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -181,8 +199,8 @@ public class BsdUtil {
                 if (subs != null) {
                     for (final GroupEntryData data : subs) {
                         adapter.addValue(data);
+                        adapter.notifyItemInserted(adapter.getItemCount());
                     }
-                    adapter.notifyDataSetChanged();
                     LoadingEventSource.getInstance().dismissLoading();
                 }
             });
@@ -231,21 +249,26 @@ public class BsdUtil {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.add_more_option_list);
         TableRow addMoreMoreAddNewGroup = bsd.findViewById(R.id.addMoreMoreAddNewGroup);
-        addMoreMoreAddNewGroup.setOnClickListener(view -> {
-            bsd.dismiss();
-            showAskFoAddGroup(context, activity, name);
-        });
+        if (addMoreMoreAddNewGroup != null) {
+            addMoreMoreAddNewGroup.setOnClickListener(view -> {
+                bsd.dismiss();
+                showAskFoAddGroup(context, activity, name);
+            });
+        }
         TableRow addMoreMoreAddNewEntry = bsd.findViewById(R.id.addMoreMoreAddNewEntry);
-        addMoreMoreAddNewEntry.setOnClickListener(view -> {
-            bsd.dismiss();
-            Db.getInstance().getAndSetNewEntry(Db.getInstance().getCurrentGroupId());
-            ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_NEW);
-        });
+        if (addMoreMoreAddNewEntry != null) {
+            addMoreMoreAddNewEntry.setOnClickListener(view -> {
+                bsd.dismiss();
+                Db.getInstance().getAndSetNewEntry(Db.getInstance().getCurrentGroupId());
+                ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_NEW);
+            });
+        }
         expandBsd(bsd);
         bsd.show();
     }
 
     private void showAskFoAddGroup(Context context, Activity activity, String name) {
+        Utils.log("show ask for add group for name " + name);
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.add_or_edit_group);
         TextInputEditText groupAddEditName = bsd.findViewById(R.id.groupAddEditName);
@@ -258,7 +281,7 @@ public class BsdUtil {
                 executor.execute(() -> {
                     LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.adding));
                     LoadingEventSource.getInstance().showLoading();
-                    if (groupAddEditName != null && groupAddEditName.getText() == null || groupAddEditName.getText().toString() == null || groupAddEditName.getText().toString().length() == 0) {
+                    if (groupAddEditName == null || groupAddEditName.getText() == null || groupAddEditName.getText().toString().length() == 0) {
                         LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.emptyGroupName));
                     } else {
                         try {
@@ -276,6 +299,7 @@ public class BsdUtil {
     }
 
     private void showAskForEditGroupName(Context context, Activity activity, String name) {
+        Utils.log("Show ask for edit group name for name " + name);
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.add_or_edit_group);
         TextInputEditText groupAddEditName = bsd.findViewById(R.id.groupAddEditName);
@@ -291,7 +315,7 @@ public class BsdUtil {
                 executor.execute(() -> {
                     LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.changing));
                     LoadingEventSource.getInstance().showLoading();
-                    if (groupAddEditName.getText() == null || groupAddEditName.getText().toString() == null || groupAddEditName.getText().toString().length() == 0) {
+                    if (groupAddEditName == null || groupAddEditName.getText() == null || groupAddEditName.getText().toString().length() == 0) {
                         LoadingEventSource.getInstance().updateLoadingText(context.getString(R.string.emptyGroupName));
                     } else {
                         try {
@@ -309,32 +333,35 @@ public class BsdUtil {
     }
 
     private void showAskForChangePassword(Context context, String name, Activity activity) {
+        Utils.log("Show ask for change password for name " + name);
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.change_pwd);
         TextInputEditText oldPwd = bsd.findViewById(R.id.dbOldPwd);
         TextInputEditText newPwd = bsd.findViewById(R.id.dbNewPwd);
         MaterialButton change = bsd.findViewById(R.id.changePwdBtn);
-        change.setOnClickListener(view -> {
-            bsd.dismiss();
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
-                LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.changing));
-                LoadingEventSource.getInstance().showLoading();
-                if (oldPwd.getText() == null || oldPwd.getText().toString() == null || oldPwd.getText().toString().length() == 0) {
-                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterOldPwd));
-                } else if (newPwd.getText() == null || newPwd.getText().toString() == null || newPwd.getText().toString().length() == 0) {
-                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterNewPwd));
-                } else {
-                    if (Db.getInstance().pwdMatch(oldPwd.getText().toString())) {
-                        Utils.sleepFor3MSec();
-                        Db.getInstance().updateDb(activity.getContentResolver(), newPwd.getText().toString().getBytes(StandardCharsets.UTF_8));
-                        LoadingEventSource.getInstance().dismissLoading();
+        if (change != null) {
+            change.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.changing));
+                    LoadingEventSource.getInstance().showLoading();
+                    if (oldPwd == null || oldPwd.getText() == null || oldPwd.getText().toString().length() == 0) {
+                        LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterOldPwd));
+                    } else if (newPwd == null || newPwd.getText() == null || newPwd.getText().toString().length() == 0) {
+                        LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.enterNewPwd));
                     } else {
-                        LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.pwdNotMatch));
+                        if (Db.getInstance().pwdMatch(oldPwd.getText().toString())) {
+                            Utils.sleepFor3MSec();
+                            Db.getInstance().updateDb(activity.getContentResolver(), newPwd.getText().toString().getBytes(StandardCharsets.UTF_8));
+                            LoadingEventSource.getInstance().dismissLoading();
+                        } else {
+                            LoadingEventSource.getInstance().updateLoadingText(view.getContext().getString(R.string.pwdNotMatch));
+                        }
                     }
-                }
+                });
             });
-        });
+        }
         expandBsd(bsd);
         bsd.show();
     }

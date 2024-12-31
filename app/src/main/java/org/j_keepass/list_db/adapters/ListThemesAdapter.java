@@ -29,10 +29,6 @@ public class ListThemesAdapter extends RecyclerView.Adapter<ListThemesAdapter.Vi
         this.bsd = bsd;
     }
 
-    public void addValue(Theme theme) {
-        mValues.add(theme);
-    }
-
     public void setValues(List<Theme> mValues) {
         this.mValues = mValues;
     }

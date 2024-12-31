@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -44,15 +46,16 @@ import java.util.concurrent.Executors;
 public class FieldActivity extends AppCompatActivity implements ThemeEvent, GenerateNewPwdEvent, PermissionResultEvent, ChangeActivityEvent {
     private FieldActivityLayoutBinding binding;
     ArrayList<ExecutorService> executorServices = new ArrayList<>();
-    public static final int PICK_FILE_OPEN_RESULT_CODE = 1;
     private boolean isEdit = false;
     private boolean isNew = false;
+    private ActivityResultLauncher<Intent> importLauncher = null;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new SetTheme(this, false).run();
         binding = FieldActivityLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        importLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> onActivityResult(result.getResultCode(), result.getData()));
         configureBackPressed();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         Intent intent = getIntent();
@@ -270,7 +273,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
                 Utils.log("Added tab");
             });
         }
-        Utils.log("Max id after Adding tabs "+id);
+        Utils.log("Max id after Adding tabs " + id);
     }
 
     @Override
@@ -280,11 +283,9 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             setTheme(theme.getResId());
             AppCompatDelegate.setDefaultNightMode(theme.getMode());
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (theme.isLightTheme()) {
-                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                        }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (theme.isLightTheme()) {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                     }
                 }
             } catch (Exception e) {
@@ -345,24 +346,18 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             Intent chooseFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             chooseFile.setType("*/*");
             chooseFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-
             chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-            startActivityForResult(chooseFile, PICK_FILE_OPEN_RESULT_CODE);
+            importLauncher.launch(chooseFile);
         } else if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.ALARM.name())) {
             Utils.log("Landing Alarm Permission Granted, setting notification");
             new org.j_keepass.notification.Util().startAlarmBroadcastReceiver(binding.getRoot().getContext());
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Utils.log("requestCode " + requestCode);
-        if (requestCode == PICK_FILE_OPEN_RESULT_CODE) {
-            if (resultCode == -1) {
-                ExecutorService executor = getExecutor();
-                executor.execute(() -> addBinaryProp(data.getData()));
-            }
+    public void onActivityResult(int resultCode, Intent data) {
+        if (resultCode == -1) {
+            ExecutorService executor = getExecutor();
+            executor.execute(() -> addBinaryProp(data.getData()));
         }
     }
 
@@ -382,9 +377,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
     public void changeActivity(ChangeActivityAction changeActivityAction) {
         if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_SELECTED_FOR_EDIT.name())) {
             runOnUiThread(() -> binding.entryEditBtn.performClick());
-        } else if (changeActivityAction != null &&
-                (changeActivityAction.name().equals(ChangeActivityAction.ENTRY_DELETED.name())
-                || changeActivityAction.name().equals(ChangeActivityAction.ENTRY_COPIED_MOVED.name()) )) {
+        } else if (changeActivityAction != null && (changeActivityAction.name().equals(ChangeActivityAction.ENTRY_DELETED.name()) || changeActivityAction.name().equals(ChangeActivityAction.ENTRY_COPIED_MOVED.name()))) {
             runOnUiThread(() -> binding.entryBackBtn.performClick());
         }
     }

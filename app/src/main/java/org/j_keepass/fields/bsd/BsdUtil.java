@@ -30,6 +30,8 @@ import org.j_keepass.util.Utils;
 import org.j_keepass.util.confirm_alert.ConfirmNotifier;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -93,11 +95,10 @@ public class BsdUtil {
             selectedEntryMenuText.setText(eTitle);
         }
         LinearLayout selectedEntryMoreOptionCopyMove = bsd.findViewById(R.id.selectedEntryMoreOptionCopyMove);
-        if(selectedEntryMoreOptionCopyMove != null)
-        {
+        if (selectedEntryMoreOptionCopyMove != null) {
             selectedEntryMoreOptionCopyMove.setOnClickListener(view -> {
                 bsd.dismiss();
-                showAskForCopyOrMove(context, activity, eTitle, "Entry");
+                showAskForCopyOrMove(context, activity, eTitle);
             });
         }
         LinearLayout selectedEntryMoreOptionEdit = bsd.findViewById(R.id.selectedEntryMoreOptionEdit);
@@ -143,33 +144,49 @@ public class BsdUtil {
         bsd.show();
     }
 
-    private void showAskForCopyOrMove(Context context, Activity activity, String eTitle, String type) {
-        Utils.log("Copy move for " + eTitle + "With type " + type);
+    private void showAskForCopyOrMove(Context context, Activity activity, String eTitle) {
+        Utils.log("Copy move for " + eTitle + "With type entry");
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.copy_or_move);
         RecyclerView showFolderForCopyMoveRecyclerView = bsd.findViewById(R.id.showFolderForCopyMoveRecyclerView);
-        String selectedStr = context.getString(R.string.copyOrMoveSelectedFolderName);
         TextView selectedFolderNameForCopyMove = bsd.findViewById(R.id.selectedFolderNameForCopyMove);
         if (selectedFolderNameForCopyMove != null) {
-            selectedFolderNameForCopyMove.setText(selectedStr + " " + Db.getInstance().getGroupName(Db.getInstance().getRootGroupId()));
+            selectedFolderNameForCopyMove.setText(context.getString(R.string.copyOrMoveSelectedFolderName, Db.getInstance().getGroupName(Db.getInstance().getRootGroupId())));
         }
         ListGroupsForCopyMoveAdapter adapter = new ListGroupsForCopyMoveAdapter();
-        showFolderForCopyMoveRecyclerView.setItemAnimator(adapter.getItemAnimator());
+        if (showFolderForCopyMoveRecyclerView != null) {
+            showFolderForCopyMoveRecyclerView.setItemAnimator(adapter.getItemAnimator());
+        }
         ReloadEvent reloadEvent = reloadAction -> {
             if (reloadAction != null && reloadAction.name().equals(ReloadEvent.ReloadAction.COPY_MOVE_GROUP_UPDATE.name())) {
                 activity.runOnUiThread(() -> {
                     Utils.log("Copy or move folder update is received.");
-                    showFolderForCopyMoveRecyclerView.removeAllViews();
+                    if (showFolderForCopyMoveRecyclerView != null) {
+                        showFolderForCopyMoveRecyclerView.removeAllViews();
+                    }
                     if (selectedFolderNameForCopyMove != null) {
-                        selectedFolderNameForCopyMove.setText(selectedStr + " " + adapter.getSelectedGName());
+                        selectedFolderNameForCopyMove.setText(context.getString(R.string.copyOrMoveSelectedFolderName, adapter.getSelectedGName()));
                     }
                     ArrayList<GroupEntryData> subs = Db.getInstance().getSubGroupsOnly(adapter.getSelectedGid());
+                    List<GroupEntryData> prevSubs = adapter.getAll();
+                    if (prevSubs != null) {
+                        Iterator<GroupEntryData> iterator = prevSubs.iterator();
+                        int index = 0;
+                        while (iterator.hasNext()) {
+                            GroupEntryData d = iterator.next();
+                            index++;
+                            if (d != null) {
+                                iterator.remove();
+                            }
+                            adapter.notifyItemRemoved(index);
+                        }
+                    }
                     if (subs != null) {
-                        adapter.removeAll();
                         for (final GroupEntryData data : subs) {
                             adapter.addValue(data);
+                            adapter.notifyItemInserted(adapter.getItemCount());
+                            Utils.sleepFor1MSec();
                         }
-                        adapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -187,8 +204,8 @@ public class BsdUtil {
                 if (subs != null) {
                     for (final GroupEntryData data : subs) {
                         adapter.addValue(data);
+                        adapter.notifyItemInserted(adapter.getItemCount());
                     }
-                    adapter.notifyDataSetChanged();
                     LoadingEventSource.getInstance().dismissLoading();
                 }
             });
