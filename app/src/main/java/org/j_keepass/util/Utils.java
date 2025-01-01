@@ -18,7 +18,7 @@ import java.util.Locale;
 public class Utils {
 
     private static final String TAG = "JKEEPASS";
-    private static final boolean LOG_FLAG = false;
+    private static final boolean LOG_FLAG = true;
     private static final Locale locale = Locale.ENGLISH;
 
     static public String convertDateToString(Date d) {

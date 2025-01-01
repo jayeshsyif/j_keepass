@@ -19,7 +19,7 @@ import org.j_keepass.util.Utils;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
-    private static final String CUSTOM_J_PROTECTED_BROADCAST = "android.intent.action.CUSTOM_J_PROTECTED_BROADCAST";
+    private static final String CUSTOM_J_PROTECTED_BROADCAST = "android.intent.action.BOOT_COMPLETED";
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -33,10 +33,10 @@
                 android:text="@string/loading"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
-                android:textColor="?colorPrimary"/>
+                android:textColor="?colorPrimary" />
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-        <TableLayout
+        <TableRow
             android:id="@+id/statsDeclView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,84 +47,86 @@
             android:background="@drawable/background_transparent"
             android:visibility="visible">
 
-            <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/background_transparent"
+                android:contentDescription="@string/good"
+                android:fontFamily="@font/spacemono_regular"
+                android:gravity="center"
+                android:text="@string/good"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?colorSecondary"
+                tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_transparent"
-                    android:fontFamily="@font/spacemono_regular"
-                    android:gravity="center"
-                    android:text="@string/good"
-                    android:textAllCaps="false"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?colorSecondary"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/goodCountDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/kp_green"
+                android:contentDescription="@string/good"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center"
+                android:text="@string/zero"
+                android:textAlignment="center"
+                android:textColor="@color/kp_static_white"
+                tools:ignore="TextContrastCheck,DuplicateSpeakableText,DuplicateSpeakableTextCheck" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/goodCountDisplay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/kp_green"
-                    android:fontFamily="@font/spacemono_bold"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textColor="@color/kp_static_white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/background_transparent"
+                android:fontFamily="@font/spacemono_regular"
+                android:gravity="center"
+                android:text="@string/expiringSoon"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?colorSecondary" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_transparent"
-                    android:fontFamily="@font/spacemono_regular"
-                    android:gravity="center"
-                    android:text="@string/expiringSoon"
-                    android:textAllCaps="false"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?colorSecondary"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/expiringSoonCountDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/kp_coral"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center"
+                android:text="@string/zero"
+                android:textAlignment="center"
+                android:textColor="@color/kp_static_white"
+                tools:ignore="TextContrastCheck,DuplicateSpeakableText,DuplicateSpeakableTextCheck" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/expiringSoonCountDisplay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/kp_coral"
-                    android:fontFamily="@font/spacemono_bold"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textColor="@color/kp_static_white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/background_transparent"
+                android:fontFamily="@font/spacemono_regular"
+                android:gravity="center"
+                android:text="@string/expired"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?colorSecondary" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/background_transparent"
-                    android:fontFamily="@font/spacemono_regular"
-                    android:gravity="center"
-                    android:text="@string/expired"
-                    android:textAllCaps="false"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?colorSecondary" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/expiredCountDisplay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/kp_red"
-                    android:fontFamily="@font/spacemono_bold"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textAlignment="center"
-                    android:textColor="@color/kp_static_white" />
-            </TableRow>
-        </TableLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/expiredCountDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/kp_red"
+                android:fontFamily="@font/spacemono_bold"
+                android:gravity="center"
+                android:text="@string/zero"
+                android:textAlignment="center"
+                android:textColor="@color/kp_static_white" />
+        </TableRow>
 
         <RelativeLayout
             android:id="@+id/graph"

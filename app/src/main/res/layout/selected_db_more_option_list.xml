@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?colorPrimary"
     android:orientation="vertical"
     android:padding="@dimen/kp_margin">
@@ -64,6 +65,7 @@
             android:contentDescription="@string/editDbName"
             android:minWidth="@dimen/kp_min_image_width"
             android:minHeight="@dimen/kp_min_image_height"
+            tools:ignore="DuplicateSpeakableTextCheck"
             android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
             app:tint="?colorSecondary"/>

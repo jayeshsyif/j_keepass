@@ -113,4 +113,5 @@
     <string name="moving">Moving …</string>
     <string name="canNotMoveRootFolder">Cannot move root folder</string>
     <string name="link">Link</string>
+    <string name="zero">0</string>
 </resources>

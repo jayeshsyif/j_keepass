@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/themeColor1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -17,6 +18,7 @@
         android:contentDescription="@string/themes"
         android:fontFamily="@font/spacemono_regular"
         android:gravity="center_vertical"
+        tools:ignore="ImageContrastCheck"
         android:padding="@dimen/kp_margin">
 
     </ImageButton>
