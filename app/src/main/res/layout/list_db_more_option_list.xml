@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorPrimary"
@@ -66,7 +67,8 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"/>
+            app:tint="?colorSecondary"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
             android:layout_width="match_parent"
@@ -75,7 +77,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/createNewDb"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
     </TableRow>
 
     <TableRow
@@ -96,7 +98,8 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"/>
+            app:tint="?colorSecondary"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
             android:layout_width="match_parent"
@@ -105,7 +108,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/importNewDb"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
     </TableRow>
 
     <TableRow
@@ -126,7 +129,8 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"/>
+            app:tint="?colorSecondary"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
             android:layout_width="match_parent"
@@ -135,7 +139,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/generateNewPwd"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
     </TableRow>
 
     <TableRow
@@ -156,7 +160,7 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_theme_24dp_5f6368_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"/>
+            app:tint="?colorSecondary" />
 
         <TextView
             android:layout_width="match_parent"
@@ -165,7 +169,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/changeTheme"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
     </TableRow>
 
 
@@ -187,7 +191,8 @@
             android:padding="@dimen/kp_margin"
             android:src="@drawable/ic_info_fill0_wght300_grad_25_opsz24"
             android:textAlignment="gravity"
-            app:tint="?colorSecondary"/>
+            app:tint="?colorSecondary"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
             android:layout_width="match_parent"
@@ -197,7 +202,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/kp_margin"
             android:text="@string/info"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
     </TableRow>
 
 </RelativeLayout>

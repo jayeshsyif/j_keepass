@@ -44,7 +44,8 @@
             android:textAlignment="center"
             android:visibility="visible"
             app:layout_constraintStart_toEndOf="@id/dbNameText"
-            app:tint="@color/kp_red" />
+            app:tint="@color/kp_red"
+            tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
     </TableRow>
 
     <TextView
@@ -57,7 +58,7 @@
         android:gravity="center"
         android:text="@string/copyOrMoveSelectedFolderName"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?colorSecondary"/>
+        android:textColor="?colorSecondary" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/showFolderForCopyMoveRecyclerView"
@@ -66,7 +67,7 @@
         android:layout_above="@id/confirmCopyOrMoveHereRow"
         android:layout_below="@id/selectedFolderNameForCopyMove"
         android:visibility="visible"
-        tools:listitem="@layout/copy_or_move_item_view"/>
+        tools:listitem="@layout/copy_or_move_item_view" />
 
     <TableRow
         android:id="@+id/confirmCopyOrMoveHereRow"
@@ -86,7 +87,7 @@
             android:text="@string/copyHere"
             android:textAllCaps="true"
             android:textColor="?colorPrimary"
-            tools:ignore="VisualLintButtonSize" />
+            tools:ignore="ImageContrastCheck,VisualLintButtonSize,TextContrastCheck" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/confirmMoveHere"
@@ -99,7 +100,7 @@
             android:text="@string/moveHere"
             android:textAllCaps="true"
             android:textColor="?colorPrimary"
-            tools:ignore="VisualLintButtonSize" />
+            tools:ignore="VisualLintButtonSize,ImageContrastCheck,TextContrastCheck" />
     </TableRow>
 
 

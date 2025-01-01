@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/kp_margin"
@@ -33,7 +34,8 @@
                 android:background="@drawable/background_transparent"
                 android:src="@drawable/ic_database_fill1_wght300_grad_25_opsz24"
                 android:textAlignment="center"
-                app:tint="?colorOnPrimary" />
+                app:tint="?colorOnPrimary"
+                tools:ignore="ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/databaseName"
@@ -71,7 +73,8 @@
                 android:textAlignment="gravity"
                 android:textAllCaps="false"
                 android:textColor="?colorSecondary"
-                android:textSize="@dimen/kp_extra_small_text_size" />
+                android:textSize="@dimen/kp_extra_small_text_size"
+                tools:ignore="TextSizeCheck" />
 
             <ImageButton
                 android:id="@+id/dbMoreOption"

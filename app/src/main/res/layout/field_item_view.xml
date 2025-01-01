@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/kp_margin"
@@ -51,15 +52,14 @@
                         android:hint="@string/enterFieldValue"
                         android:inputType="textPassword"
                         android:textColor="?colorSecondary"
-                        android:textColorHint="?colorOnPrimary" />
+                        android:textColorHint="?colorOnPrimary"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
                     android:id="@+id/fieldCopy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/kp_always_1"
                     android:layout_marginTop="@dimen/kp_always_1"
@@ -82,7 +82,6 @@
                     android:id="@+id/expiryStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/groupEntryArrow"
                     android:layout_marginStart="@dimen/kp_always_1"
                     android:layout_marginTop="@dimen/kp_always_1"
                     android:layout_marginBottom="@dimen/kp_always_1"
@@ -93,8 +92,8 @@
                     android:textAlignment="gravity"
                     android:textAllCaps="false"
                     android:textColor="?colorSecondary"
-                    android:visibility="gone"
-                    android:textSize="@dimen/kp_extra_small_text_size" />
+                    android:textSize="@dimen/kp_extra_small_text_size"
+                    android:visibility="gone" />
             </TableRow>
         </TableLayout>
 

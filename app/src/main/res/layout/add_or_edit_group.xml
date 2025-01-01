@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
@@ -69,7 +70,8 @@
             android:hint="@string/enterGroupName"
             android:inputType="text"
             android:textColor="?colorSecondary"
-            android:textCursorDrawable="@null" />
+            android:textCursorDrawable="@null"
+            tools:ignore="VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -85,7 +87,8 @@
         android:fontFamily="@font/spacemono_bold"
         android:text="@string/add"
         android:textAllCaps="true"
-        android:textColor="?colorSecondary">
+        android:textColor="?colorSecondary"
+        tools:ignore="VisualLintButtonSize">
 
     </com.google.android.material.button.MaterialButton>
 

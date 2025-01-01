@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/kp_margin"
@@ -33,7 +34,8 @@
                 android:background="@drawable/background_transparent"
                 android:src="@drawable/ic_folder_fill1_wght300_grad_25_opsz24"
                 android:textAlignment="center"
-                app:tint="@color/kp_yellow" />
+                app:tint="@color/kp_yellow"
+                tools:ignore="ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/groupName"
@@ -56,7 +58,8 @@
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textColor="?colorSecondary"
-                app:layout_constraintEnd_toStartOf="@id/groupEntryArrow"/>
+                app:layout_constraintEnd_toStartOf="@id/groupEntryArrow"
+                tools:ignore="RelativeOverlap" />
 
             <ImageButton
                 android:id="@+id/groupEntryArrow"

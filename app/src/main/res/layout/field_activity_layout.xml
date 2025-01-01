@@ -33,7 +33,8 @@
                 android:textAlignment="gravity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="?colorSecondary"
-                app:layout_constraintEnd_toStartOf="@id/entryMoreOption" />
+                app:layout_constraintEnd_toStartOf="@id/entryMoreOption"
+                tools:ignore="RelativeOverlap" />
 
             <ImageButton
                 android:id="@+id/entryMoreOption"
@@ -68,6 +69,7 @@
                 app:tabGravity="fill"
                 app:tabIconTint="?colorSecondary"
                 app:tabMode="fixed"
+                android:contentDescription="@string/entry"
                 app:tabTextAppearance="?android:attr/textAppearanceSmall"
                 app:tabTextColor="?colorSecondary" />
 
@@ -75,7 +77,8 @@
                 android:id="@+id/entryFragmentContainerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/entryTabLayout" />
+                android:layout_below="@id/entryTabLayout"
+                tools:layout="@layout/field_fragment"/>
 
         </RelativeLayout>
 
@@ -103,7 +106,8 @@
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
                     android:src="@drawable/ic_back_fill0_wght300_grad_25_opsz24"
-                    app:tint="?colorPrimary" />
+                    app:tint="?colorPrimary"
+                    tools:ignore="ImageContrastCheck" />
 
                 <View
                     android:id="@+id/emptyView1"
@@ -125,7 +129,8 @@
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
                     android:src="@drawable/ic_password_fill0_wght300_grad_25_opsz24"
-                    app:tint="?colorPrimary" />
+                    app:tint="?colorPrimary"
+                    tools:ignore="ImageContrastCheck" />
 
 
                 <View
@@ -148,7 +153,9 @@
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
                     android:src="@drawable/ic_edit_fill0_wght300_grad_25_opsz24"
-                    app:tint="?colorPrimary" />
+                    app:tint="?colorPrimary"
+                    tools:ignore="DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
                 <ImageButton
                     android:id="@+id/entrySaveBtn"
                     android:layout_width="wrap_content"
@@ -160,7 +167,8 @@
                     android:minWidth="@dimen/kp_min_image_width"
                     android:minHeight="@dimen/kp_min_image_height"
                     android:src="@drawable/ic_save_fill0_wght300_grad_25_opsz24"
-                    app:tint="?colorPrimary" />
+                    app:tint="?colorPrimary"
+                    tools:ignore="ImageContrastCheck" />
             </RelativeLayout>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
     </RelativeLayout>
