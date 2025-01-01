@@ -1,5 +1,6 @@
 package org.j_keepass.list_group_and_entry.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowInsetsController;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -149,10 +152,8 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             setTheme(theme.getResId());
             AppCompatDelegate.setDefaultNightMode(theme.getMode());
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (theme.isLightTheme()) {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                    }
+                if (theme.isLightTheme()) {
+                    setSystemBarLight(this);
                 }
             } catch (Exception e) {
                 Utils.log("Error setting light status " + e.getMessage());
@@ -370,7 +371,7 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
 
     @Override
     public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
-        Utils.log("Landing Permission Not Granted for action "+permissionAction.name());
+        Utils.log("Landing Permission Not Granted for action " + permissionAction.name());
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));
@@ -429,6 +430,28 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
             PermissionResultEventSource.getInstance().permissionGranted(PermissionEvent.PermissionAction.EXPORT);
         } else {
             PermissionResultEventSource.getInstance().permissionDenied(PermissionEvent.PermissionAction.EXPORT);
+        }
+    }
+
+    public void setSystemBarLight(Activity activity) {
+        Window window = activity.getWindow();
+        View decorView = window.getDecorView();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For API level 30 and above
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                // Set light status bar
+                controller.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // For API level 23 to 29, fallback to old method
+            int flags = decorView.getSystemUiVisibility();
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decorView.setSystemUiVisibility(flags);
         }
     }
 }

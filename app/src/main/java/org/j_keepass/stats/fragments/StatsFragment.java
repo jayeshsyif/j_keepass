@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import org.j_keepass.R;
@@ -73,17 +74,17 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         }
         if (allExpiredEntriesCount > 0) {
             values.add((float) allExpiredEntriesCount);
-            colors.add(binding.graph.getResources().getColor(R.color.kp_red));
+            colors.add(ContextCompat.getColor(binding.graph.getContext(),R.color.kp_red));
             text.add("Expired " + allExpiredEntriesCount);
         }
         if (allExpiringSoonEntriesCount > 0) {
             values.add((float) allExpiringSoonEntriesCount);
-            colors.add(binding.graph.getResources().getColor(R.color.kp_coral));
+            colors.add(ContextCompat.getColor(binding.graph.getContext(),R.color.kp_coral));
             text.add("Expiring Soon " + allExpiringSoonEntriesCount);
         }
         if (ok > 0) {
             values.add((float) ok);
-            colors.add(binding.graph.getResources().getColor(R.color.kp_green));
+            colors.add(ContextCompat.getColor(binding.graph.getContext(),R.color.kp_green));
             text.add("Good " + ok);
         }
         Utils.log("Total " + totalEntries);
@@ -91,10 +92,10 @@ public class StatsFragment extends Fragment implements LoadingEvent {
         Utils.log("Expiring Soon " + allExpiringSoonEntriesCount);
         Utils.log("Good " + ok);
 
-        int textColor = binding.graph.getResources().getColor(R.color.kp_static_white);
+        int textColor = ContextCompat.getColor(binding.graph.getContext(),R.color.kp_static_white);
         float textSize = 30;
 
-        colors.add(binding.graph.getResources().getColor(R.color.kp_green));
+        colors.add(ContextCompat.getColor(binding.graph.getContext(),R.color.kp_green));
         try {
             PieChartView pieChartView = new PieChartView(binding.graph.getContext(), values, colors, text, textColor, textSize);
             requireActivity().runOnUiThread(() -> binding.graph.addView(pieChartView));

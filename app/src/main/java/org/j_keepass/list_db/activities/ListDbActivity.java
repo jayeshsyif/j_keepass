@@ -1,5 +1,6 @@
 package org.j_keepass.list_db.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowInsetsController;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -195,10 +198,8 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
             setTheme(theme.getResId());
             AppCompatDelegate.setDefaultNightMode(theme.getMode());
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (theme.isLightTheme()) {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                    }
+                if (theme.isLightTheme()) {
+                    setSystemBarLight(this);
                 }
             } catch (Exception e) {
                 Utils.log("Error setting light status " + e.getMessage());
@@ -266,10 +267,10 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
             LoadingEventSource.getInstance().showLoading();
         });
         executor.execute(() -> {
-            if (dbNameAr.get() == null || dbNameAr.get().length() == 0) {
+            if (dbNameAr.get() == null || dbNameAr.get().isEmpty()) {
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterDbName));
                 proceed.set(false);
-            } else if (pwd == null || pwd.length() == 0) {
+            } else if (pwd == null || pwd.isEmpty()) {
                 LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.enterPwd));
                 proceed.set(false);
             } else if (!dbName.endsWith("kdbx")) {
@@ -344,7 +345,7 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
 
     @Override
     public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
-        Utils.log("Landing Permission Not Granted for action "+permissionAction.name());
+        Utils.log("Landing Permission Not Granted for action " + permissionAction.name());
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));
@@ -406,5 +407,27 @@ public class ListDbActivity extends AppCompatActivity implements ThemeEvent, DbE
         });
         executor.execute(() -> new DbAndFileOperations().importFile(Db.getInstance().getAppSubDir(), dataUri, getContentResolver(), this));
         executor.execute(() -> ReloadEventSource.getInstance().reload(ReloadEvent.ReloadAction.IMPORT));
+    }
+
+    public void setSystemBarLight(Activity activity) {
+        Window window = activity.getWindow();
+        View decorView = window.getDecorView();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For API level 30 and above
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                // Set light status bar
+                controller.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // For API level 23 to 29, fallback to old method
+            int flags = decorView.getSystemUiVisibility();
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decorView.setSystemUiVisibility(flags);
+        }
     }
 }
