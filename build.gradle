@@ -8,7 +8,9 @@ tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
 }
 allprojects {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:deprecation"
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
     }
 }
