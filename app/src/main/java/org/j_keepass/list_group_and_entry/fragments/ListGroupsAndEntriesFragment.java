@@ -236,7 +236,10 @@ public class ListGroupsAndEntriesFragment extends Fragment implements LoadingEve
             }
         } else {
             try {
-                requireActivity().runOnUiThread(() -> binding.noGroupEntryDeclarationView.setVisibility(View.VISIBLE));
+                requireActivity().runOnUiThread(() -> {
+                    dismissLoading();
+                    binding.noGroupEntryDeclarationView.setVisibility(View.VISIBLE);
+                });
             } catch (Throwable e) {
                 //ignore
             }
