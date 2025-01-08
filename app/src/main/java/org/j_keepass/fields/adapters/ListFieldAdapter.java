@@ -3,6 +3,7 @@ package org.j_keepass.fields.adapters;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        if (holder.mItem.value != null && holder.mItem.value.length() > 0) {
+        if (holder.mItem.value != null && !holder.mItem.value.isEmpty()) {
             holder.editText.setHint(holder.mItem.name);
             holder.editText.setText(holder.mItem.value);
         }
@@ -147,6 +148,8 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
     private void configureForDate(ViewHolder holder, boolean isExpiryDate, boolean isEditable) {
         holder.editText.setEnabled(false);
+        holder.editText.setFocusable(false);
+        holder.editText.setClickable(false);
         holder.editTextLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
         holder.editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
@@ -235,6 +238,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
     private void setupEditTextFocusListener(ViewHolder holder) {
         Utils.log("Got editable last - " + holder.mItem.name);
+        holder.editText.setOnKeyListener((view, i, keyEvent) -> keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER);
         holder.editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -244,8 +248,8 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (holder.editText.getText() != null) {
-                    holder.mItem.value = holder.editText.getText().toString();
                     Utils.log("Calling update field Value for " + holder.mItem.asString());
+                    holder.mItem.value = holder.editText.getText().toString();
                     Db.getInstance().updateEntryField(holder.mItem.eId, holder.mItem);
                 }
             }
@@ -255,6 +259,7 @@ public class ListFieldAdapter extends RecyclerView.Adapter<ListFieldAdapter.View
 
             }
         });
+
     }
 
 
