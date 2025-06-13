@@ -34,7 +34,19 @@
                 android:text="@string/loading"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
-                android:textColor="?colorPrimary"/>
+                android:textColor="?colorPrimary" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:background="?colorOnPrimary"
+                android:indeterminate="true"
+                android:indeterminateBehavior="cycle"
+                app:indicatorColor="?colorPrimary"
+                app:trackCornerRadius="@dimen/kp_margin" />
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <ImageButton
@@ -47,9 +59,9 @@
             android:background="?colorOnPrimary"
             android:contentDescription="@string/generateNewDbDesc"
             android:minWidth="@dimen/kp_min_image_width"
-            android:visibility="gone"
             android:minHeight="@dimen/kp_min_image_height"
             android:src="@drawable/ic_add_fill0_wght300_grad_25_opsz24"
+            android:visibility="gone"
             app:tint="?colorPrimary" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -58,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/addAdditionalOrBinaryPropertyBtn"
             android:visibility="gone"
-            tools:listitem="@layout/list_db_item_view"/>
+            tools:listitem="@layout/list_db_item_view" />
 
         <TextView
             android:id="@+id/entryTitleView"
@@ -76,7 +88,7 @@
             android:gravity="center"
             android:text="@string/nothingHere"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
 
 
     </RelativeLayout>

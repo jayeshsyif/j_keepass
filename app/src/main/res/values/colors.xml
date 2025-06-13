@@ -127,4 +127,40 @@
     <color name="kp_brs_white">#d7d7d6</color>
     <!-- Black red skin -->
 
+
+    <!-- Stormy Morning skin-->
+    <color name="sm_light_grey">#384959</color>
+    <color name="sm_grey">#6A89A7</color>
+    <color name="sm_blue">#BDDDFC</color>
+    <color name="sm_white">#BDDDFC</color>
+    <!-- Stormy Morning skin -->
+
+    <!-- Mossy Hollow skin-->
+    <color name="mh_light_grey">#3D4127</color>
+    <color name="mh_grey">#636B2F</color>
+    <color name="mh_blue">#D4DE95</color>
+    <color name="mh_white">#D4DE95</color>
+    <!-- Mossy Hollow skin-->
+
+    <!-- night sand skin-->
+    <color name="ns_light_grey">#574A24</color>
+    <color name="ns_grey">#80775C</color>
+    <color name="ns_blue">#FAE8B4</color>
+    <color name="ns_white">#FAE8B4</color>
+    <!-- night sand skin-->
+
+    <!-- clear blue skin-->
+    <color name="cb_light_grey">#0B2E33</color>
+    <color name="cb_grey">#4F7C82</color>
+    <color name="cb_blue">#B8E3E9</color>
+    <color name="cb_white">#B8E3E9</color>
+    <!-- try skin-->
+
+    <!-- try skin-->
+    <color name="ty_light_grey">#0B2E33</color>
+    <color name="ty_grey">#4F7C82</color>
+    <color name="ty_blue">#B8E3E9</color>
+    <color name="ty_white">#B8E3E9</color>
+    <!-- try skin-->
+
 </resources>

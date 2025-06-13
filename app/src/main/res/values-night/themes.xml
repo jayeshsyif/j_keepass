@@ -169,6 +169,94 @@
         <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
     </style>
 
+    <style name="Theme.J_KeePass.sm" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/sm_light_grey</item>
+        <item name="colorPrimaryVariant">@color/sm_grey</item>
+        <item name="colorOnPrimary">@color/sm_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/sm_white</item>
+        <item name="colorSecondaryVariant">@color/sm_grey</item>
+        <item name="colorOnSecondary">@color/sm_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+    </style>
+
+    <style name="Theme.J_KeePass.mh" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/mh_light_grey</item>
+        <item name="colorPrimaryVariant">@color/mh_grey</item>
+        <item name="colorOnPrimary">@color/mh_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/mh_white</item>
+        <item name="colorSecondaryVariant">@color/mh_grey</item>
+        <item name="colorOnSecondary">@color/mh_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+    </style>
+
+    <style name="Theme.J_KeePass.ns" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/ns_light_grey</item>
+        <item name="colorPrimaryVariant">@color/ns_grey</item>
+        <item name="colorOnPrimary">@color/ns_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/ns_white</item>
+        <item name="colorSecondaryVariant">@color/ns_grey</item>
+        <item name="colorOnSecondary">@color/ns_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+    </style>
+
+    <style name="Theme.J_KeePass.cb" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/cb_light_grey</item>
+        <item name="colorPrimaryVariant">@color/cb_grey</item>
+        <item name="colorOnPrimary">@color/cb_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/cb_white</item>
+        <item name="colorSecondaryVariant">@color/cb_grey</item>
+        <item name="colorOnSecondary">@color/cb_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogDark</item>
+    </style>
+
     <style name="CustomDatePickerDialogDark" parent="ThemeOverlay.AppCompat.Dialog">
         <!-- Header background -->
         <item name="colorAccent">?colorOnPrimary</item>

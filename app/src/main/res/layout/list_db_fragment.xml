@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,10 +31,23 @@
                 android:background="?colorOnPrimary"
                 android:fontFamily="@font/spacemono_regular"
                 android:gravity="center"
-                android:textAllCaps="false"
                 android:text="@string/loading"
+                android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceButton"
-                android:textColor="?colorPrimary"/>
+                android:textColor="?colorPrimary" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginStart="@dimen/kp_always_1"
+                android:layout_marginEnd="@dimen/kp_always_1"
+                android:background="?colorOnPrimary"
+                android:indeterminate="true"
+                android:indeterminateBehavior="cycle"
+                app:indicatorColor="?colorPrimary"
+                app:trackCornerRadius="@dimen/kp_margin" />
+
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -41,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:listitem="@layout/list_db_item_view"/>
+            tools:listitem="@layout/list_db_item_view" />
 
         <TextView
             android:id="@+id/dbDeclarationTextView"
@@ -59,7 +73,7 @@
             android:gravity="center"
             android:text="@string/importOrCreateDb"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?colorSecondary"/>
+            android:textColor="?colorSecondary" />
 
 
     </RelativeLayout>

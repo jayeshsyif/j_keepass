@@ -164,10 +164,10 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
 
                     @Override
                     public void onUpdate(int progress) {
-                        updateLoadingText(loadingStr + " [" + progress + "/" + total + "]");
+                        LoadingEventSource.getInstance().updateLoadingText(loadingStr + " [" + progress + "/" + total + "]");
                     }
                 };
-                AtomicInteger fCount = new AtomicInteger(1);
+                AtomicInteger fCount = new AtomicInteger(0);
                 for (File f : files) {
                     showDbOnUiUsingAdapter(f, adapter, pi, fCount);
                 }
@@ -190,8 +190,9 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
         try {
             requireActivity().runOnUiThread(() -> {
                 adapter.notifyItemInserted(adapter.getItemCount());
-                pi.onUpdate(fCount.get());
                 fCount.getAndIncrement();
+                pi.onUpdate(fCount.get());
+                Utils.sleepFor1MSec();
             });
         } catch (Exception e) {
             //ignore

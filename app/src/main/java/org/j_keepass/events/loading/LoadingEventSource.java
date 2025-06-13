@@ -40,7 +40,7 @@ public class LoadingEventSource {
     }
 
     public void updateLoadingText(String text) {
-        Utils.log("In listener got show loading");
+        Utils.log("In listener got update loading with text");
         for (LoadingEvent listener : listeners) {
             listener.updateLoadingText(text);
         }

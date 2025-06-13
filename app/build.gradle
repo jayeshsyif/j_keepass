@@ -10,8 +10,8 @@ android {
         applicationId "org.j_keepass"
         minSdk 21
         targetSdk 34
-        versionCode 49
-        versionName "11.3"
+        versionCode 50
+        versionName "11.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,6 +42,7 @@ android {
             res.srcDirs = ['src/main/res']
         }
     }
+    buildToolsVersion '34.0.0'
 }
 
 dependencies {

@@ -46,6 +46,9 @@ public class SetTheme {
     private void changeToTheme(Activity activity, String sThemeId) {
         Utils.log("Change theme is called with : " + sThemeId);
         Theme themeToApply = ThemeUtil.getThemes().get(sThemeId);
+        if (themeToApply == null) {
+            themeToApply = ThemeUtil.getDefault();
+        }
         ((ThemeEvent) activity).applyTheme(themeToApply, false);
         Utils.log("Done Changing theme is called with : " + sThemeId);
     }

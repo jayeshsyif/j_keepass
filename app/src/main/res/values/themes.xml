@@ -194,6 +194,28 @@
         <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogLight</item>
     </style>
 
+    <style name="Theme.J_KeePass.ty" parent="Theme.MaterialComponents.Light.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/ty_light_grey</item>
+        <item name="colorPrimaryVariant">@color/ty_grey</item>
+        <item name="colorOnPrimary">@color/ty_blue</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/ty_white</item>
+        <item name="colorSecondaryVariant">@color/ty_grey</item>
+        <item name="colorOnSecondary">@color/ty_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialogLight</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialogLight</item>
+    </style>
+
     <style name="CustomDatePickerDialogLight" parent="ThemeOverlay.AppCompat.Dialog">
         <!-- Header background -->
         <item name="colorAccent">?colorOnPrimary</item>
@@ -212,6 +234,7 @@
         <item name="android:buttonBarNegativeButtonStyle">@style/CancelButtonStyleLight</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/OkButtonStyleLight</item>
     </style>
+
 
     <style name="CancelButtonStyleLight" parent="@android:style/Widget.Button">
         <item name="android:textColor">?colorSecondary</item>
