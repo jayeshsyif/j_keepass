@@ -106,6 +106,8 @@
     <string name="enterAdditionalFieldValue">Enter Additional Field Value</string>
     <string name="copyOrMoveGroup">Copy or Move Group/Folder</string>
     <string name="copyOrMoveEntry">Copy or Move Entry</string>
+    <string name="share">Share as Text</string>
+    <string name="sharing">Sharing …</string>
     <string name="copyHere">Copy Here</string>
     <string name="moveHere">Move Here</string>
     <string name="copyOrMoveSelectedFolderName">"Selected Location: %1$s"</string>

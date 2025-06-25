@@ -140,6 +140,16 @@ public class BsdUtil {
                 });
             });
         }
+        LinearLayout selectedEntryMoreOptionShare = bsd.findViewById(R.id.selectedEntryMoreOptionShare);
+        if (selectedEntryMoreOptionShare != null) {
+            selectedEntryMoreOptionShare.setOnClickListener(view -> {
+                bsd.dismiss();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    ChangeActivityEventSource.getInstance().changeActivity(ChangeActivityEvent.ChangeActivityAction.ENTRY_SHARE_AS_TEXT);
+                });
+            });
+        }
         expandBsd(bsd);
         bsd.show();
     }

@@ -33,7 +33,7 @@ public class LoadingEventSource {
     }
 
     public void dismissLoading() {
-        Utils.log("In listener got show loading");
+        Utils.log("In listener got dismiss loading");
         for (LoadingEvent listener : listeners) {
             listener.dismissLoading();
         }
@@ -45,4 +45,5 @@ public class LoadingEventSource {
             listener.updateLoadingText(text);
         }
     }
+
 }

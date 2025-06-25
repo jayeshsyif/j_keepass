@@ -9,5 +9,6 @@ public interface ChangeActivityEvent {
         ENTRY_SELECTED_FOR_EDIT,
         ENTRY_DELETED,
         ENTRY_COPIED_MOVED,
+        ENTRY_SHARE_AS_TEXT,
     }
 }

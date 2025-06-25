@@ -192,7 +192,6 @@ public class ListDbFragment extends Fragment implements LoadingEvent, ReloadEven
                 adapter.notifyItemInserted(adapter.getItemCount());
                 fCount.getAndIncrement();
                 pi.onUpdate(fCount.get());
-                Utils.sleepFor1MSec();
             });
         } catch (Exception e) {
             //ignore

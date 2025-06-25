@@ -918,4 +918,25 @@ public class Db {
             Utils.ignoreError(t);
         }
     }
+
+    public String entryToText(UUID entryId) {
+        StringBuilder text = new StringBuilder("");
+        try {
+            if (database != null) {
+                ArrayList<FieldData> fields = new ArrayList<>();
+                fields.addAll(getFields(entryId, false));
+                fields.addAll(getAdditionalFields(entryId, false));
+                for (FieldData fd : fields) {
+                    Utils.log("Adding to text "+fd.name);
+                    text.append(fd.name);
+                    text.append(" - ");
+                    text.append(fd.value);
+                    text.append("\r\n");
+                }
+            }
+        } catch (Throwable t) {
+            Utils.ignoreError(t);
+        }
+        return text.toString();
+    }
 }

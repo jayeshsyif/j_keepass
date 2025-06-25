@@ -1,7 +1,12 @@
 package org.j_keepass.fields.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -41,6 +47,8 @@ import org.j_keepass.list_group_and_entry.activities.ListGroupAndEntriesActivity
 import org.j_keepass.util.SleepFor1Ms;
 import org.j_keepass.util.Utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -331,7 +339,7 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
 
     @Override
     public void permissionDenied(PermissionEvent.PermissionAction permissionAction) {
-        Utils.log("Upload Permission Not Granted for action "+permissionAction.name());
+        Utils.log("Upload Permission Not Granted for action " + permissionAction.name());
         ExecutorService executor = getExecutor();
         executor.execute(() -> {
             LoadingEventSource.getInstance().updateLoadingText(binding.getRoot().getContext().getString(R.string.permissionNotGranted));
@@ -378,8 +386,62 @@ public class FieldActivity extends AppCompatActivity implements ThemeEvent, Gene
             runOnUiThread(() -> binding.entryEditBtn.performClick());
         } else if (changeActivityAction != null && (changeActivityAction.name().equals(ChangeActivityAction.ENTRY_DELETED.name()) || changeActivityAction.name().equals(ChangeActivityAction.ENTRY_COPIED_MOVED.name()))) {
             runOnUiThread(() -> binding.entryBackBtn.performClick());
+        } else if (changeActivityAction != null && changeActivityAction.name().equals(ChangeActivityAction.ENTRY_SHARE_AS_TEXT.name())) {
+            String entryAsText = Db.getInstance().entryToText(Db.getInstance().getCurrentEntryId());
+            if (entryAsText != null) {
+                LoadingEventSource.getInstance().dismissLoading();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, entryAsText);
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, "Sharing as Text");
+                startActivity(shareIntent);
+            } else {
+                LoadingEventSource.getInstance().updateLoadingText("Unable to share.");
+            }
+            /*Bitmap bitmap = getBitmapFromView(binding.entryFragmentContainerView);
+            try {
+                Uri uri = saveBitmapToFile(this, bitmap);
+                shareImage(uri);
+            } catch (Exception e) {
+            }*/
+
         }
     }
+
+    public Bitmap getBitmapFromView(View view) {
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas);
+        else
+            canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return returnedBitmap;
+    }
+
+    public Uri saveBitmapToFile(Context context, Bitmap bitmap) throws Exception {
+        File imagesFolder = new File(context.getCacheDir(), "images");
+        imagesFolder.mkdirs();
+        File file = new File(imagesFolder, "shared_image.png");
+
+        FileOutputStream stream = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        stream.flush();
+        stream.close();
+
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+    }
+
+    public void shareImage(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/png");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, "Share Image"));
+    }
+
+
     public void setSystemBarLight(Activity activity) {
         Window window = activity.getWindow();
         View decorView = window.getDecorView();
