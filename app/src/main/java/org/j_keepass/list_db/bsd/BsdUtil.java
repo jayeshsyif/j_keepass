@@ -272,6 +272,13 @@ public class BsdUtil {
                 showAskEditDbName(context, dbName, fullPath);
             });
         }
+        final TableRow selectedDbMoreOptionShare = bsd.findViewById(R.id.selectedDbMoreOptionShare);
+        if (selectedDbMoreOptionShare != null) {
+            selectedDbMoreOptionShare.setOnClickListener(view -> {
+                bsd.dismiss();
+                shareDb(context, dbName, fullPath);
+            });
+        }
         final TableRow selectedDbMoreOptionDeleteDb = bsd.findViewById(R.id.selectedDbMoreOptionDeleteDb);
         if (selectedDbMoreOptionDeleteDb != null) {
             selectedDbMoreOptionDeleteDb.setOnClickListener(view -> {
@@ -312,6 +319,15 @@ public class BsdUtil {
         bsd.show();
     }
 
+    public void shareDb(Context context, String dbName, String fullPath) {
+        File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, from.toURI());
+        sendIntent.setType("*/*");
+        Intent shareIntent = Intent.createChooser(sendIntent, "Sharing");
+        context.startActivity(shareIntent);
+    }
     public void showAskEditDbName(Context context, String dbName, String fullPath) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.db_enter_name_and_pwd);

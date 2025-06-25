@@ -390,6 +390,15 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
 
             chooseFile = Intent.createChooser(chooseFile, "Choose a folder");
             exportLauncher.launch(chooseFile);
+        } else if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.SHARE.name())) {
+            String dbName = Db.getInstance().getDbName();
+            File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, from.toURI());
+            sendIntent.setType("*/*");
+            Intent shareIntent = Intent.createChooser(sendIntent, "Sharing");
+            startActivity(shareIntent);
         }
     }
 

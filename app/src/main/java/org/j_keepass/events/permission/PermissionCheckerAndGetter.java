@@ -31,6 +31,10 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
     @Override
     public void checkAndGetPermissionReadWriteStorage(View v, Activity activity, PermissionAction permissionAction) {
         Utils.log("Inside check and get permission");
+        if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.SHARE.name())) {
+            notify(true, permissionAction);
+            return;
+        }
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             Utils.log("Show permission popup v2");
             if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
@@ -38,12 +42,14 @@ public class PermissionCheckerAndGetter implements PermissionEvent {
                 Utils.log("requesting popup v2");
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
-            } else notify(ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED, permissionAction);
+            } else
+                notify(ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED, permissionAction);
         } else {
             Utils.log("Show permission popup v1");
             if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_IMAGES}, READ_EXTERNAL_STORAGE);
-            } else notify(ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED, permissionAction);
+            } else
+                notify(ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED, permissionAction);
         }
     }
 

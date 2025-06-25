@@ -234,10 +234,41 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/groupEntryMoreOptionGenerateNewPassword"
+        android:id="@+id/groupEntryMoreOptionShareDb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/groupEntryMoreOptionExportDb"
+        android:padding="@dimen/kp_margin">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/exportDb"
+            android:minWidth="@dimen/kp_min_image_width"
+            android:minHeight="@dimen/kp_min_image_height"
+            android:padding="@dimen/kp_margin"
+            android:src="@drawable/ic_share_fill0_wght300_grad_25_opsz24"
+            android:textAlignment="gravity"
+            app:tint="?colorSecondary"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/spacemono_regular"
+            android:gravity="center_vertical"
+            android:padding="@dimen/kp_margin"
+            android:text="@string/share"
+            android:textColor="?colorSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupEntryMoreOptionGenerateNewPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupEntryMoreOptionShareDb"
         android:padding="@dimen/kp_margin">
 
         <ImageButton

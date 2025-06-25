@@ -53,6 +53,13 @@ public class BsdUtil {
                 PermissionEventSource.getInstance().checkAndGetPermissionReadWriteStorage(view, activity, PermissionEvent.PermissionAction.EXPORT);
             });
         }
+        LinearLayout groupEntryMoreOptionShareDb = bsd.findViewById(R.id.groupEntryMoreOptionShareDb);
+        if (groupEntryMoreOptionShareDb != null) {
+            groupEntryMoreOptionShareDb.setOnClickListener(view -> {
+                bsd.dismiss();
+                PermissionEventSource.getInstance().checkAndGetPermissionReadWriteStorage(view, activity, PermissionEvent.PermissionAction.SHARE);
+            });
+        }
 
         LinearLayout groupEntryMoreOptionGenerateNewPassword = bsd.findViewById(R.id.groupEntryMoreOptionGenerateNewPassword);
         if (groupEntryMoreOptionGenerateNewPassword != null) {
