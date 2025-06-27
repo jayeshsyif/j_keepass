@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -393,10 +394,12 @@ public class ListGroupAndEntriesActivity extends AppCompatActivity implements Th
         } else if (permissionAction != null && permissionAction.name().equals(PermissionEvent.PermissionAction.SHARE.name())) {
             String dbName = Db.getInstance().getDbName();
             File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+            Uri fileUri = FileProvider.getUriForFile(binding.getRoot().getContext(), binding.getRoot().getContext().getPackageName() + ".fileprovider", from);
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_STREAM, from.toURI());
+            sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
             sendIntent.setType("*/*");
+            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Intent shareIntent = Intent.createChooser(sendIntent, "Sharing");
             startActivity(shareIntent);
         }

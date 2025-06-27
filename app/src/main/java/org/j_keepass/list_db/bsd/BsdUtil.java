@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -321,13 +322,16 @@ public class BsdUtil {
 
     public void shareDb(Context context, String dbName, String fullPath) {
         File from = new File(Db.getInstance().getAppSubDir() + File.separator + dbName);
+        Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", from);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, from.toURI());
+        sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
         sendIntent.setType("*/*");
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Intent shareIntent = Intent.createChooser(sendIntent, "Sharing");
         context.startActivity(shareIntent);
     }
+
     public void showAskEditDbName(Context context, String dbName, String fullPath) {
         final BottomSheetDialog bsd = new BottomSheetDialog(context);
         bsd.setContentView(R.layout.db_enter_name_and_pwd);
